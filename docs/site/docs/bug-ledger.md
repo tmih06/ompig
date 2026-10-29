@@ -1057,6 +1057,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-dc003a9](#bf-dc003a9) | Automatic retry no longer treats digits inside a request id or another number (for example `req_011CU503xyz`… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-dc003a9-2](#bf-dc003a9-2) | Automatic retry now triggers for `stream disconnected before completion` errors that a proxy wrapping the… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-dc003a9-3](#bf-dc003a9-3) | Sign in with ChatGPT: a ChatGPT Business workspace usage-limit error… | Ompig's own defect | All platforms | 0.5.2 |
+| [BF-dc04276](#bf-dc04276) | fix(sdk): finish the SDK package rename in fixtures and tooling | Ompig's own defect | All platforms | Unreleased |
 | [BF-dc53412](#bf-dc53412) | A `pig_strip_bedrock_converse_stream` Piglet Binary no longer links the AWS SDK through the Bedrock retry… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-dca5763](#bf-dca5763) | A notification, status or message that an extension queues on `setImmediate` or `setTimeout(0)` from inside a… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-ddd4772](#bf-ddd4772) | fix(ai): a lone surrogate in a content block stays one code unit, as in JSON.parse | Ompig's own defect | All platforms | Unreleased |
@@ -1119,6 +1120,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-e75a8b9](#bf-e75a8b9) | The external editor (`ctrl+g`) now edits `prompt.md` inside a private `pi-editor-*` directory under the… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-e79c70e](#bf-e79c70e) | fix(ai): Codex WebSocket, OpenRouter images, pi-messages and replaced Anthropic bodies write JSON.stringify… | Ompig's own defect | All platforms | Unreleased |
 | [BF-e8489d4](#bf-e8489d4) | A key hint for an app action the user unbound shows no key, as in Pi, instead of the action's default key | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-e8900e6](#bf-e8900e6) | fix: satisfy the remaining CI gates | Ompig's own defect | All platforms | Unreleased |
 | [BF-e90ac19](#bf-e90ac19) | Very long streamed answers no longer slow down with their length: each streamed frame renders only the last… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-e9332c8](#bf-e9332c8) | fix(codingagent): session search re: reads patterns as V8 does | Ompig's own defect | All platforms | Unreleased |
 | [BF-e9392fd](#bf-e9392fd) | A Google Generative AI or Vertex request with no `contents` (a history of system messages only, or one user… | Ompig's own defect | All platforms | 0.5.0 |
@@ -15666,6 +15668,19 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Tests:** `ai/assistant_retry_test.go::TestIsRetryableAssistantErrorClassification`, `ai/openai_responses_chatgpt_upstream_test.go::TestOpenAIResponsesChatGPTUsageLimitUpstream`, `coding/cli/model_fallback_test.go::TestBuildModelParsesMaxThinkingSuffix`, `coding/cli/model_fallback_test.go::TestResolveModel_ExactCatalog_NoWarning`, `internal/codingagent/interactive_post_login_discovery_test.go::TestPostLoginModelSelectionRules`
 - **Release note:** Sign in with ChatGPT: a ChatGPT Business workspace usage-limit error (`subscription_sharing_workplace_individual_usage_limit_exceeded`) is not retried, and its message tells the user to ask their workspace admin to increase the limit. Carried forward from Pi cedefc53.
 
+### BF-dc04276
+
+**fix(sdk): finish the SDK package rename in fixtures and tooling**
+
+- **Source:** Ompig's own defect
+- **Symptom:** fix(sdk): finish the SDK package rename in fixtures and tooling
+- **Root cause:** Not recorded.
+- **User impact:** Behavior differed from Pi
+- **Platform:** All platforms
+- **Fixed in:** Unreleased
+- **Fix commits:** `dc04276f5d` (2026-10-29)
+- **Tests:** None recorded.
+
 ### BF-dc53412
 
 **A `pig_strip_bedrock_converse_stream` Piglet Binary no longer links the AWS SDK through the Bedrock retry…**
@@ -16522,6 +16537,19 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fix commits:** `e8489d4003` (2026-10-11), `fac470319e` (2026-10-11)
 - **Tests:** `internal/codingagent/extension_editor_test.go::TestExtensionEditorHandleInputMatchesPi`
 - **Release note:** A key hint for an app action the user unbound shows no key, as in Pi, instead of the action's default key. For example, the extension editor dialog showed `ctrl+g external editor` after `app.editor.external` was bound to `[]`; it now shows ` external editor` (`tui/keybinding_hints.go` AppKeyText, keybinding-hints.ts keyText; probe in `TestExtensionEditorHandleInputMatchesPi`, red before).
+
+### BF-e8900e6
+
+**fix: satisfy the remaining CI gates**
+
+- **Source:** Ompig's own defect
+- **Symptom:** fix: satisfy the remaining CI gates
+- **Root cause:** - Publish the fork's SDK module tags. The import paths were renamed with the fork, so github.com/tmih06/ompig/extensions/sdk must exist as a module; the tag also lets the root module require it without a replace directive, which module-size rejects and which made go install fail. - Fix the sdksurface Go fixture filter, which still matched the pre-rename import suffix and so found no Go conformance fixtures (224 false problems). - Make the removed-format-marker scan boundary-aware: the fork's live share endpoint contains the historical marker string as a substring. - Regenerate the vendored Pi bundles, the runtime pack, the interface inventories and the SDK surface document.
+- **User impact:** Behavior differed from Pi
+- **Platform:** All platforms
+- **Fixed in:** Unreleased
+- **Fix commits:** `e8900e605b` (2026-10-29)
+- **Tests:** None recorded.
 
 ### BF-e90ac19
 

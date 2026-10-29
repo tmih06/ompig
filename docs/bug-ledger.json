@@ -32092,6 +32092,25 @@
       ]
     },
     {
+      "id": "BF-dc04276",
+      "title": "fix(sdk): finish the SDK package rename in fixtures and tooling",
+      "symptom": "fix(sdk): finish the SDK package rename in fixtures and tooling",
+      "rootCause": "",
+      "rootCauseSource": "",
+      "userImpact": "Behavior differed from Pi",
+      "platform": "All platforms",
+      "class": "own",
+      "fixedIn": "Unreleased",
+      "origin": "commit",
+      "commits": [
+        {
+          "hash": "dc04276f5d",
+          "date": "2026-10-29"
+        }
+      ],
+      "tests": []
+    },
+    {
       "id": "BF-dc53412",
       "title": "A `pig_strip_bedrock_converse_stream` Piglet Binary no longer links the AWS SDK through the Bedrock retry…",
       "symptom": "A `pig_strip_bedrock_converse_stream` Piglet Binary no longer links the AWS SDK through the Bedrock retry delay.",
@@ -33713,6 +33732,25 @@
       "tests": [
         "internal/codingagent/extension_editor_test.go::TestExtensionEditorHandleInputMatchesPi"
       ]
+    },
+    {
+      "id": "BF-e8900e6",
+      "title": "fix: satisfy the remaining CI gates",
+      "symptom": "fix: satisfy the remaining CI gates",
+      "rootCause": "- Publish the fork's SDK module tags. The import paths were renamed with the fork, so github.com/tmih06/ompig/extensions/sdk must exist as a module; the tag also lets the root module require it without a replace directive, which module-size rejects and which made go install fail. - Fix the sdksurface Go fixture filter, which still matched the pre-rename import suffix and so found no Go conformance fixtures (224 false problems). - Make the removed-format-marker scan boundary-aware: the fork's live share endpoint contains the historical marker string as a substring. - Regenerate the vendored Pi bundles, the runtime pack, the interface inventories and the SDK surface document.",
+      "rootCauseSource": "commit",
+      "userImpact": "Behavior differed from Pi",
+      "platform": "All platforms",
+      "class": "own",
+      "fixedIn": "Unreleased",
+      "origin": "commit",
+      "commits": [
+        {
+          "hash": "e8900e605b",
+          "date": "2026-10-29"
+        }
+      ],
+      "tests": []
     },
     {
       "id": "BF-e90ac19",
