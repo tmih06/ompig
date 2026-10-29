@@ -110,6 +110,9 @@ type Entry struct {
 	CurrentArgs   string
 
 	Usage Usage
+	// DurationMs is the settled run time, which the roster shows as a span.
+	// A running agent has none until it settles; the hub shows active elapsed.
+	DurationMs int64
 	// ContextTokens and ContextWindow report window pressure when known.
 	ContextTokens int
 	ContextWindow int

@@ -150,11 +150,11 @@ func NewRunner(registry *Registry, jobs *Jobs, artifacts *Artifacts) *Runner {
 		jobs = NewJobs(0)
 	}
 	return &Runner{
-		registry:       registry,
-		jobs:           jobs,
-		artifacts:      artifacts,
-		Definitions:    map[string]Definition{},
-		DefaultAgent:   "task",
+		registry:     registry,
+		jobs:         jobs,
+		artifacts:    artifacts,
+		Definitions:  map[string]Definition{},
+		DefaultAgent: "task",
 		// ompig divergence (D209): omp's task.maxConcurrency default.
 		MaxConcurrency: 32,
 		MaxOutputBytes: defaultOutputCap,
@@ -437,6 +437,7 @@ func (r *Runner) finish(entry Entry, out Result, started time.Time) Result {
 		e.Aborted = out.Aborted
 		e.Model = out.Model
 		e.ThinkingLevel = out.ThinkingLevel
+		e.DurationMs = out.DurationMs
 		e.CurrentTool = ""
 		e.CurrentIntent = ""
 		e.CurrentArgs = ""

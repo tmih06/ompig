@@ -35,43 +35,42 @@ func newFixture(t *testing.T) (*subagent.Registry, *subagent.Jobs) {
 
 func newTestModel(t *testing.T, registry *subagent.Registry, jobs *subagent.Jobs) *Model {
 	t.Helper()
-	model := New(Options{Registry: registry, Jobs: jobs, Width: 100, Height: 10,
+	model := New(Options{Registry: registry, Jobs: jobs, Width: 100, Height: 30,
 		Now: func() time.Time { return time.Date(2026, 10, 29, 12, 0, 0, 0, time.UTC) }})
 	model.SetWide(false)
 	return model
 }
 
-// TestHubRendersRosterInOperationalOrder covers the roster: running agents come
-// first, then idle, then terminal, and each row carries status, activity,
-// tokens and elapsed time.
+// TestHubRendersRosterInOperationalOrder covers omp's roster: the header with
+// the status counts, and one entry per agent in status order, each with its
+// identity, task and metric lines.
 func TestHubRendersRosterInOperationalOrder(t *testing.T) {
 	registry, jobs := newFixture(t)
 	model := newTestModel(t, registry, jobs)
-	lines := model.Render(100)
-	text := strings.Join(lines, "\n")
+	text := stripAnsi(strings.Join(model.Render(120), "\n"))
 
-	if !strings.Contains(text, "Agent Hub") {
-		t.Fatalf("header missing:\n%s", text)
-	}
-	for _, want := range []string{"running", "idle", "aborted", "Scout", "Writer", "Broken", "grep", "1.5k"} {
+	// The roster carries identity, task and metrics; the current tool is the
+	// inspector's, not the roster's.
+	for _, want := range []string{"Roster", "Flat", "running", "idle", "aborted", "Scout", "Writer", "Broken", "$0.020"} {
 		if !strings.Contains(text, want) {
 			t.Errorf("rendered roster missing %q:\n%s", want, text)
 		}
 	}
-	scout, writer, broken := indexOf(text, "Scout"), indexOf(text, "Writer"), indexOf(text, "Broken")
+	scout, writer, broken := strings.Index(text, "Scout"), strings.Index(text, "Writer"), strings.Index(text, "Broken")
 	if !(scout < writer && writer < broken) {
 		t.Errorf("roster order Scout(%d) Writer(%d) Broken(%d) is not running→idle→aborted", scout, writer, broken)
 	}
 }
 
-// TestHubInspectorShowsUsageAndTool covers the wide pane's per-agent detail.
+// TestHubInspectorShowsUsageAndTool covers omp's inspector sections: status and
+// lifecycle, the model badge, then Task, Current, Usage and Lineage.
 func TestHubInspectorShowsUsageAndTool(t *testing.T) {
 	registry, jobs := newFixture(t)
 	model := newTestModel(t, registry, jobs)
 	model.SetWide(true)
 	model.Select("Scout")
-	text := strings.Join(model.Render(120), "\n")
-	for _, want := range []string{"status", "running", "model", "openai/gpt-5", "requests", "tools", "cost", "grep", "intent"} {
+	text := stripAnsi(strings.Join(model.Render(140), "\n"))
+	for _, want := range []string{"Scout", "running", "openai/gpt-5", "Task", "Current", "Usage", "Lineage", "Spawned by", "grep", "Searching callers", "req", "tools", "tok"} {
 		if !strings.Contains(text, want) {
 			t.Errorf("inspector missing %q:\n%s", want, text)
 		}
@@ -211,11 +210,15 @@ func TestHubRepaintsOnRegistryChange(t *testing.T) {
 	if paints <= before {
 		t.Error("a progress update did not repaint the hub")
 	}
-	text := ""
-	for _, line := range model.Render(80) {
-		text += line + "\n"
-	}
-	if !strings.Contains(text, "grep") || !strings.Contains(text, "900") {
+	text := stripAnsi(strings.Join(model.Render(120), "\n"))
+	// The current tool shows in the inspector, and the metrics move in the roster.
+	if !strings.Contains(text, "900") || !strings.Contains(text, "2 req") {
 		t.Errorf("the repainted roster is stale:\n%s", text)
+	}
+	model.SetWide(true)
+	model.Select("Live")
+	wide := stripAnsi(strings.Join(model.Render(140), "\n"))
+	if !strings.Contains(wide, "grep") {
+		t.Errorf("the repainted inspector is stale:\n%s", wide)
 	}
 }

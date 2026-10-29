@@ -15,6 +15,7 @@ import (
 
 	"github.com/tmih06/ompig/coding/subagent"
 	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Section selects which pane the hub shows.
@@ -214,6 +215,9 @@ func treeOrder(entries []subagent.Entry) []subagent.Entry {
 	return out
 }
 
+// theme is the active terminal theme.
+func (m *Model) theme() *tui.Theme { return tui.ActiveTheme() }
+
 // Selected returns the highlighted agent, if any.
 func (m *Model) Selected() (subagent.Entry, bool) {
 	if m.selected < 0 || m.selected >= len(m.entries) {
@@ -311,182 +315,343 @@ func (m *Model) Editing() bool { return m.editing }
 // Draft is the in-progress message.
 func (m *Model) Draft() string { return m.draft }
 
-// Render draws the hub.
+// Render draws the hub in omp's layout: a roster header with the counts, one
+// entry per agent (identity, task, metric columns), and the inspector beside it
+// on a wide terminal.
 func (m *Model) Render(width int) []string {
 	if width <= 0 {
 		width = m.opts.Width
 	}
 	m.reload()
-	lines := make([]string, 0, m.opts.Height+2)
-	lines = append(lines, m.header(width))
 	if m.sections == SectionActivity {
-		lines = append(lines, m.renderActivity(width)...)
-	} else if m.wide {
-		lines = append(lines, m.renderWide(width)...)
-	} else {
-		lines = append(lines, m.renderRoster(width)...)
+		return m.renderActivitySection(width)
 	}
-	lines = append(lines, m.footer(width))
+	if m.wide && width >= SPLIT_MIN_WIDTH {
+		return m.renderSplit(width)
+	}
+	return m.renderRosterSection(width)
+}
+
+// renderRosterSection is the single-pane roster: header, entries, footer.
+func (m *Model) renderRosterSection(width int) []string {
+	lines := append(m.summaryHeader(width), "")
+	budget := max(m.opts.Height-len(lines)-1, 1)
+	lines = append(lines, m.renderEntries(width, budget)...)
+	lines = append(lines, m.footerLine(width))
 	return lines
 }
 
-// header is the aggregate status line.
-func (m *Model) header(width int) string {
-	running, total := 0, len(m.entries)
-	var usage subagent.Usage
-	for _, entry := range m.entries {
-		if entry.Running() {
-			running++
-		}
-		usage.Add(entry.Usage)
-	}
-	mode := "agents"
-	if m.sections == SectionActivity {
-		mode = "activity"
-	}
-	text := fmt.Sprintf(" Agent Hub · %s · %d running · %d total · %s tokens · $%.2f",
-		mode, running, total, formatTokens(usage.Total), usage.Cost)
-	if m.filter != "" {
-		text += " · filter: " + m.filter
-	}
-	if m.tree {
-		text += " · tree"
-	}
-	return pad(text, width)
-}
-
-// footer is the key hint line.
-func (m *Model) footer(width int) string {
-	if m.editing {
-		return pad(" message "+fmt.Sprintf("%q", m.draft)+" · enter send · esc cancel", width)
-	}
-	return pad(" j/k select · enter focus · m message · r revive · x kill · t tree · 1/2 pane · / filter · esc close", width)
-}
-
-// renderRoster draws the flat roster.
-func (m *Model) renderRoster(width int) []string {
-	if len(m.entries) == 0 {
-		return []string{pad(" No subagents yet. Spawn one with the task tool.", width)}
-	}
-	now := m.opts.Now()
-	lines := make([]string, 0, len(m.entries))
-	for index, entry := range m.entries {
-		lines = append(lines, m.rosterRow(index, entry, now, width))
-	}
-	return lines
-}
-
-// rosterRow formats one roster line.
-func (m *Model) rosterRow(index int, entry subagent.Entry, now time.Time, width int) string {
-	marker := " "
-	if index == m.selected {
-		marker = "❯"
-	}
-	indent := ""
-	if m.tree && entry.Depth > 1 {
-		indent = strings.Repeat("  ", entry.Depth-1)
-	}
-	activity := entry.CurrentTool
-	if activity == "" {
-		if entry.Status == subagent.StatusIdle {
-			activity = "(done)"
-		} else if entry.Task != "" {
-			activity = firstLine(entry.Task)
-		}
-	}
-	row := fmt.Sprintf("%s %-11s %s%s", marker, statusLabel(entry), indent+entry.ID, "")
-	if entry.AgentType != "" && entry.AgentType != entry.ID {
-		row += " [" + entry.AgentType + "]"
-	}
-	row += " · " + activity
-	if tokens := entry.Usage.Total; tokens > 0 {
-		row += " · " + formatTokens(tokens)
-	}
-	if elapsed := entry.Elapsed(now); elapsed > 0 {
-		row += " · " + formatDuration(elapsed)
-	}
-	if entry.Unread > 0 {
-		row += fmt.Sprintf(" · %d unread", entry.Unread)
-	}
-	return pad(row, width)
-}
-
-// renderWide draws the roster beside the inspector.
-func (m *Model) renderWide(width int) []string {
-	leftWidth := width / 2
+// renderSplit is the wide layout: roster on the left, inspector on the right.
+func (m *Model) renderSplit(width int) []string {
+	// The roster needs the metric row plus its indent, so the split keeps that
+	// much for it and gives the rest to the inspector.
+	leftWidth := min(max(detailIndent+metricRowWidth, (width-1)*2/5), width-DETAIL_MIN_WIDTH-1)
 	rightWidth := width - leftWidth - 1
-	roster := m.renderRoster(leftWidth)
-	inspect := m.renderInspector(rightWidth)
-	rows := max(len(roster), len(inspect))
-	out := make([]string, 0, rows)
+	left := m.renderRosterSection(leftWidth)
+	right := m.renderDetailPanel(rightWidth, m.opts.Height-1)
+	rows := max(len(left), len(right))
+	out := make([]string, 0, rows+1)
 	for i := range rows {
-		left := ""
-		if i < len(roster) {
-			left = roster[i]
+		l, r := "", ""
+		if i < len(left) {
+			l = left[i]
 		}
-		right := ""
-		if i < len(inspect) {
-			right = inspect[i]
+		if i < len(right) {
+			r = right[i]
 		}
-		out = append(out, pad(left, leftWidth)+"│"+pad(right, rightWidth))
+		out = append(out, pad(l, leftWidth)+"│"+pad(r, rightWidth))
 	}
 	return out
 }
 
-// renderInspector is the selected agent's detail pane.
-func (m *Model) renderInspector(width int) []string {
-	entry, ok := m.Selected()
-	if !ok {
-		return []string{pad(" no agent selected", width)}
+// summaryHeader is omp's summary line: "Roster · Flat/By parent · counts",
+// then the aggregate usage line.
+func (m *Model) summaryHeader(width int) []string {
+	theme := m.theme()
+	mode := m.projectionLabel()
+	header := theme.Bold("Roster") + theme.Fg("dim", glyphDot) + " " + mode
+	if counts := statusSummary(theme, m.entries); counts != "" {
+		header += theme.Fg("dim", " "+glyphDot+" ") + counts
 	}
-	now := m.opts.Now()
-	lines := []string{
-		pad(" "+entry.ID, width),
-		pad(" status    "+string(entry.Status), width),
-		pad(" agent     "+orDash(entry.AgentType), width),
-		pad(" model     "+orDash(entry.Model), width),
-		pad(" thinking  "+orDash(entry.ThinkingLevel), width),
-		pad(" elapsed   "+formatDuration(entry.Elapsed(now)), width),
-		pad(" tokens    "+fmt.Sprintf("%s (in %s, out %s)", formatTokens(entry.Usage.Total), formatTokens(entry.Usage.Input), formatTokens(entry.Usage.Output)), width),
-		pad(" requests  "+fmt.Sprintf("%d", entry.Usage.Requests), width),
-		pad(" tools     "+fmt.Sprintf("%d", entry.Usage.ToolCalls), width),
-		pad(" cost      "+fmt.Sprintf("$%.4f", entry.Usage.Cost), width),
+	return []string{
+		truncate(header, width),
+		theme.Fg("dim", truncate(m.aggregateUsage(), width)),
 	}
-	if entry.ContextWindow > 0 {
-		lines = append(lines, pad(" context   "+fmt.Sprintf("%d/%d", entry.ContextTokens, entry.ContextWindow), width))
+}
+
+// projectionLabel is omp's "Flat / By parent" toggle.
+func (m *Model) projectionLabel() string {
+	active := func(label string) string { return m.theme().Bold(m.theme().Fg("accent", " "+label+" ")) }
+	inactive := func(label string) string { return m.theme().Fg("muted", " "+label+" ") }
+	sep := m.theme().Fg("dim", "/")
+	if m.tree {
+		return inactive("Flat") + sep + active("By parent")
 	}
-	lines = append(lines,
-		pad(" tool      "+orDash(entry.CurrentTool), width),
-		pad(" intent    "+orDash(entry.CurrentIntent), width),
-	)
-	if entry.ParentID != "" {
-		lines = append(lines, pad(" parent    "+entry.ParentID, width))
+	return active("Flat") + sep + inactive("By parent")
+}
+
+// aggregateUsage is omp's aggregate metric line.
+func (m *Model) aggregateUsage() string {
+	var cost float64
+	var tokens, requests, tools int64
+	measured := 0
+	for _, entry := range m.entries {
+		if entry.Usage.Total == 0 && entry.Usage.Requests == 0 {
+			continue
+		}
+		measured++
+		cost += entry.Usage.Cost
+		tokens += entry.Usage.Total
+		requests += entry.Usage.Requests
+		tools += entry.Usage.ToolCalls
 	}
-	if len(entry.Children) > 0 {
-		lines = append(lines, pad(" children  "+strings.Join(entry.Children, ", "), width))
+	if measured == 0 {
+		return fmt.Sprintf("Usage —%s0/%d measured", glyphDot, len(m.entries))
 	}
-	if entry.Error != "" {
-		lines = append(lines, pad(" error     "+entry.Error, width))
+	return strings.Join([]string{
+		formatCost(cost),
+		formatNumber(tokens) + " tok",
+		formatNumber(requests) + " req",
+		formatNumber(tools) + " tools",
+		fmt.Sprintf("%d/%d measured", measured, len(m.entries)),
+	}, " "+glyphDot+" ")
+}
+
+// renderEntries draws every visible entry with the selection window around it.
+func (m *Model) renderEntries(width, budget int) []string {
+	if budget < 1 {
+		budget = 1
 	}
-	if entry.OutputPath != "" {
-		lines = append(lines, pad(" output    "+entry.OutputPath, width))
+	if len(m.entries) == 0 {
+		return []string{
+			themeFgDim(m.theme(), glyphParked+" No agents in this session"),
+			themeFgDim(m.theme(), "Finished, parked, and killed subagents remain with the session that created them."),
+			themeFgDim(m.theme(), "Resume that session, or spawn a task here."),
+		}
+	}
+	// Keep the selection visible: grow a window outward from it.
+	start, end := m.selected, m.selected+1
+	used := len(m.entryLines(m.entries[m.selected], m.selected == m.selected, width))
+	for used < budget {
+		grew := false
+		if end < len(m.entries) {
+			if n := len(m.entryLines(m.entries[end], false, width)); used+n <= budget {
+				used += n
+				end++
+				grew = true
+			}
+		}
+		if start > 0 {
+			if n := len(m.entryLines(m.entries[start-1], false, width)); used+n <= budget {
+				used += n
+				start--
+				grew = true
+			}
+		}
+		if !grew {
+			break
+		}
+	}
+	var lines []string
+	if start > 0 {
+		lines = append(lines, themeFgDim(m.theme(), fmt.Sprintf("… %d more", start)))
+	}
+	for i := start; i < end; i++ {
+		lines = append(lines, m.entryLines(m.entries[i], i == m.selected, width)...)
+	}
+	if end < len(m.entries) {
+		lines = append(lines, themeFgDim(m.theme(), fmt.Sprintf("… %d more", len(m.entries)-end)))
 	}
 	return lines
 }
 
-// renderActivity draws the combined log.
-func (m *Model) renderActivity(width int) []string {
-	if len(m.activity) == 0 {
-		return []string{pad(" no activity yet", width)}
+// entryLines is omp's #renderEntry: identity plus badges on one line, then the
+// task, then the metric columns.
+func (m *Model) entryLines(entry subagent.Entry, selected bool, width int) []string {
+	theme := m.theme()
+	cursor := " "
+	if selected {
+		cursor = theme.Fg("accent", glyphCursor)
 	}
-	limit := min(len(m.activity), m.opts.Height)
-	lines := make([]string, 0, limit)
-	for _, event := range m.activity[:limit] {
-		// The activity pane renders at most the visible rows, once per repaint.
-		line := fmt.Sprintf(" %s %-20s %s", event.At.Format("15:04:05"), event.AgentID, event.Message) //perf:ok a display path, not the hot path
-		lines = append(lines, pad(line, width))
+	id := entry.ID
+	if selected {
+		id = theme.Bold(theme.Fg("accent", id))
+	} else {
+		id = theme.Bold(id)
+	}
+	branch := ""
+	if m.tree && entry.Depth > 1 {
+		prefix := strings.Repeat("│   ", entry.Depth-2)
+		connector := "├── "
+		if selected {
+			connector = "└── "
+		}
+		branch = theme.Fg("dim", prefix+connector)
+	}
+	fields := []string{cursor + " " + branch + statusGlyphStyled(theme, entry.Status) + " " + id}
+	if !m.tree && entry.ParentID != "" {
+		fields = append(fields, theme.Fg("dim", glyphParent+" "+entry.ParentID))
+	}
+	if entry.Kind == subagent.KindAdvisor {
+		fields = append(fields, theme.Fg("warning", "read-only"))
+	}
+	if entry.Unread > 0 {
+		fields = append(fields, theme.Fg("warning", fmt.Sprintf("%s %d", glyphUnread, entry.Unread)))
+	}
+	left := strings.Join(fields, "  ")
+
+	// The right side carries only variable-width badges, so the metric line
+	// below can never be split by task text.
+	var meta []string
+	if badge := modelBadge(theme, entry); badge != "" {
+		meta = append(meta, badge)
+	}
+	right := strings.Join(meta, themeSep(theme))
+
+	lines := make([]string, 0, 3)
+	leftWidth, rightWidth := widthx.VisibleWidth(left), widthx.VisibleWidth(right)
+	if rightWidth > 0 && leftWidth+2+rightWidth <= width {
+		lines = append(lines, left+strings.Repeat(" ", width-leftWidth-rightWidth)+right)
+	} else {
+		lines = append(lines, truncate(left, width))
+	}
+	indent := strings.Repeat(" ", detailIndent+widthx.VisibleWidth(branch))
+	if task := taskSummary(entry); task != "" {
+		lines = append(lines, indent+theme.Fg("muted", truncate(task, width-detailIndent)))
+	}
+	now := m.opts.Now().UnixMilli()
+	lines = append(lines, indent+theme.Fg("dim", metricColumns(entry, now)))
+	return lines
+}
+
+// taskSummary is omp's taskSummary: the assignment preamble is not the task.
+func taskSummary(entry subagent.Entry) string {
+	task := entry.Task
+	for _, prefix := range []string{"Complete assignment thoroughly:", "## Task"} {
+		if at := strings.Index(task, prefix); at == 0 {
+			task = strings.TrimSpace(task[len(prefix):])
+		}
+	}
+	if at := strings.IndexByte(task, '\n'); at >= 0 {
+		task = task[:at]
+	}
+	return strings.TrimSpace(task)
+}
+
+// renderDetailPanel is omp's #renderDetailPanel: status, lifecycle, model, then
+// the Task, Current, Usage and Lineage sections.
+func (m *Model) renderDetailPanel(width, rows int) []string {
+	theme := m.theme()
+	entry, ok := m.Selected()
+	if !ok {
+		return []string{theme.Fg("dim", "Select an agent to inspect")}
+	}
+	now := m.opts.Now().UnixMilli()
+	var lines []string
+	add := func(line string) { lines = append(lines, truncate(line, width)) }
+	section := func(label string) {
+		if len(lines) > 0 {
+			add("")
+		}
+		add(theme.Bold(theme.Fg("accent", label)))
+	}
+
+	add(statusGlyphStyled(theme, entry.Status) + " " + theme.Bold(entry.ID))
+	add(statusText(theme, entry.Status, string(entry.Status)) + theme.Fg("dim",
+		themeSep(theme)+formatMetricDuration(entry, now)+themeSep(theme)+"active "+formatAge((now-entry.LastActivityAt.UnixMilli())/1000)))
+	if badge := modelBadge(theme, entry); badge != "" {
+		add(badge)
+	}
+	if task := taskSummary(entry); task != "" {
+		section("Task")
+		add(theme.Fg("muted", task))
+	}
+	if current := entry.CurrentTool; current != "" {
+		section("Current")
+		detail := current
+		if entry.CurrentIntent != "" {
+			detail += " " + glyphDot + " " + entry.CurrentIntent
+		}
+		add(detail)
+	}
+	section("Usage")
+	if entry.Usage.Total > 0 || entry.Usage.Requests > 0 {
+		add(metricsText(theme, entry, now))
+		if entry.ContextWindow > 0 {
+			add(contextGauge(theme, entry.ContextTokens, entry.ContextWindow))
+		}
+	} else {
+		add(theme.Fg("dim", "usage —"))
+	}
+	section("Lineage")
+	parent := entry.ParentID
+	if parent == "" {
+		parent = "Main"
+	}
+	lineage := "Spawned by " + parent
+	if len(entry.Children) > 0 {
+		lineage += fmt.Sprintf(" %s %d children", glyphDot, len(entry.Children))
+	}
+	add(lineage)
+	if len(entry.Children) > 0 {
+		add(theme.Fg("dim", strings.Join(entry.Children, ", ")))
+	}
+	section("Changes")
+	if entry.Kind == subagent.KindAdvisor {
+		add(theme.Fg("dim", "Read-only "+glyphDot+" 0 LoC"))
+	} else {
+		add(theme.Fg("dim", "Shared workspace "+glyphDot+" per-agent LoC not attributable"))
+	}
+	if entry.OutputPath != "" {
+		add(theme.Fg("dim", "Output "+entry.OutputPath))
+	}
+	if entry.Error != "" {
+		section("Error")
+		add(theme.Fg("error", entry.Error))
+	}
+	for len(lines) < rows {
+		lines = append(lines, "")
+	}
+	if len(lines) > rows {
+		lines = lines[:rows]
 	}
 	return lines
+}
+
+// renderActivitySection draws the combined log with omp's footer hints.
+func (m *Model) renderActivitySection(width int) []string {
+	theme := m.theme()
+	lines := []string{theme.Bold("Activity") + themeSep(theme) + statusSummary(theme, m.entries), ""}
+	if len(m.activity) == 0 {
+		lines = append(lines, theme.Fg("muted", "No response or tool activity yet"))
+	}
+	limit := min(len(m.activity), m.opts.Height-len(lines)-1)
+	for _, event := range m.activity[:limit] {
+		// The activity pane renders at most the visible rows, once per repaint.
+		line := fmt.Sprintf("%s %s %s", theme.Fg("dim", event.At.Format("15:04:05")), event.AgentID, event.Message) //perf:ok a display path, not the hot path
+		lines = append(lines, truncate(line, width))
+	}
+	lines = append(lines, m.footerLine(width))
+	return lines
+}
+
+// footerLine is omp's footer hint line for the current pane.
+func (m *Model) footerLine(width int) string {
+	if m.editing {
+		return pad(m.theme().Fg("dim", "message "+fmt.Sprintf("%q", m.draft)+"  enter:send  esc:cancel"), width)
+	}
+	if m.sections == SectionActivity {
+		return pad(m.theme().Fg("dim", "1:agents  2:activity  tab:roster  pageUp/pageDown:scroll  enter:open  t:tree  escape:roster"), width)
+	}
+	if m.wide {
+		return pad(m.theme().Fg("dim", "1:agents  2:activity  tab:roster  pageUp/pageDown:scroll  enter:open  t:tree  escape:close"), width)
+	}
+	return pad(m.theme().Fg("dim", "1:agents  2:activity  j/k/wheel:select  pageUp/pageDown:details  enter/click:open  t:tree  r:revive  x:kill  escape:close"), width)
+}
+
+// themeFgDim is a dim string when the theme has no styling hook.
+func themeFgDim(theme *tui.Theme, text string) string {
+	return theme.Fg("dim", text)
 }
 
 // statusLabel is the fixed-width status column.
@@ -556,14 +721,12 @@ func pad(line string, width int) string {
 	if width <= 0 {
 		return ""
 	}
-	runes := []rune(line)
-	if len(runes) > width {
-		if width <= 1 {
-			return string(runes[:width])
-		}
-		return string(runes[:width-1]) + "…"
+	if visible := widthx.VisibleWidth(line); visible > width {
+		return truncate(line, width)
+	} else if visible < width {
+		return line + strings.Repeat(" ", width-visible)
 	}
-	return line + strings.Repeat(" ", width-len(runes))
+	return line
 }
 
 // Entries returns the current visible rows, for tests and callers that render
