@@ -1166,7 +1166,8 @@ var thinkingDescriptions = map[string]string{
 	"max":     "Maximum reasoning",
 }
 
-// agentsHandler opens the Agent Hub roster (ompig divergence D206).
+// agentsHandler opens the Agent Hub roster.
+// ompig divergence (D206): /agents and the hub it opens have no Pi counterpart.
 func agentsHandler(sc *SlashContext) error {
 	if sc.OpenAgentHub == nil {
 		sc.Append("Subagents are unavailable in this session.")

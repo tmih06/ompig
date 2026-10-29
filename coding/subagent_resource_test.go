@@ -49,12 +49,12 @@ func TestSubagentConcurrencyBound(t *testing.T) {
 
 	gate := make(chan struct{}, 64)
 	observed := make(chan int, 64)
-	var inFlight int32
+	var inFlight atomic.Int32
 	runner.Spawner = spawnerFunc(func(ctx context.Context, req subagent.SpawnRequest) (subagent.SpawnResult, error) {
-		n := atomic.AddInt32(&inFlight, 1)
+		n := inFlight.Add(1)
 		observed <- int(n)
 		<-gate
-		atomic.AddInt32(&inFlight, -1)
+		inFlight.Add(-1)
 		return subagent.SpawnResult{Output: "ok"}, nil
 	})
 
@@ -69,12 +69,12 @@ func TestSubagentConcurrencyBound(t *testing.T) {
 	}
 
 	// Let the first two start, then release them one at a time.
-	for i := 0; i < 2; i++ {
+	for range 2 {
 		if n := <-observed; n > 2 {
 			t.Errorf("%d spawns ran at once, want at most 2", n)
 		}
 	}
-	for i := 0; i < 6; i++ {
+	for range 6 {
 		gate <- struct{}{}
 	}
 	wg.Wait()

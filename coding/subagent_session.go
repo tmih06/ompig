@@ -15,6 +15,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strings"
 	"sync"
@@ -499,6 +500,8 @@ func (s *Session) resumeChildSession(path string) (*Session, error) {
 }
 
 // subagentSessionPath is where a child's transcript lives.
+// ompig divergence (D207): a child transcript lives beside the parent's session
+// file, not in the project session bucket.
 func (s *Session) subagentSessionPath(id string) string {
 	if path := s.Path(); path != "" {
 		base := strings.TrimSuffix(path, filepath.Ext(path))
@@ -574,10 +577,10 @@ func finalAssistantText(session *Session) string {
 		return *text
 	}
 	messages := session.Messages()
-	for i := len(messages) - 1; i >= 0; i-- {
-		if messages[i].Assistant != nil {
+	for _, message := range slices.Backward(messages) {
+		if message.Assistant != nil {
 			var b strings.Builder
-			for _, block := range messages[i].Assistant.Content {
+			for _, block := range message.Assistant.Content {
 				if text, ok := block.(ai.TextContent); ok {
 					b.WriteString(text.Text)
 				}

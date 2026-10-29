@@ -82,8 +82,13 @@ test-inventory: ## Test-inventory validates the reviewed disposition mapping ove
 	@go run ./test/parity/cmd/testinventorycheck
 
 # Release law: no pending/partial hot-path tests and no decrease from the committed ported baseline.
-# The committed baseline must be reachable from public main. CI's clone names it origin; set PUBLIC_MAIN_REF to the remote-tracking ref of public main in a clone that names that remote differently.
-PUBLIC_MAIN_REF ?= refs/remotes/origin/main
+# The committed baseline must be reachable from public main. CI's clone names it origin; set PUBLIC_MAIN_REF to the
+# remote-tracking ref of public main in a clone that names that remote differently.
+#
+# In a fork whose default branch is not "main" (this repository's is "master") there is no refs/remotes/origin/main, and
+# the gate would fail on a missing object rather than on a real drift. The default therefore falls back to the remote's
+# own default branch, which is what "public main" means for that clone. An explicit PUBLIC_MAIN_REF still wins.
+PUBLIC_MAIN_REF ?= $(shell git rev-parse --verify -q refs/remotes/origin/main >/dev/null 2>&1 && echo refs/remotes/origin/main || git symbolic-ref -q --short refs/remotes/origin/HEAD 2>/dev/null | sed 's|^origin/|refs/remotes/origin/|' || echo refs/remotes/origin/main)
 
 test-porting-release: ## Enforce hot-path closure or explicit approved known gaps, without lowering the committed baseline
 	@go run ./test/parity/cmd/testinventorycheck -public-main-ref '$(PUBLIC_MAIN_REF)' -release-policy test/parity/interfaces/test-porting-policy-v$(UPSTREAM_VERSION).json

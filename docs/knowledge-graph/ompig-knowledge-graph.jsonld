@@ -141,7 +141,7 @@
       "ompig:inspect": "ompig ompiglet validate ompiglets/standard/ompig-standard.yaml"
     },
     {
-      "@id": "ompig:piglet_release",
+      "@id": "ompig:ompiglet_release",
       "@type": "DefinedTerm",
       "name": "Ompiglet release",
       "description": "Pins the exact Resource closure and component plan of a Ompiglet.",
@@ -150,7 +150,7 @@
       "ompig:inspect": "ompig ompiglet show --record <path>"
     },
     {
-      "@id": "ompig:piglet_binary",
+      "@id": "ompig:ompiglet_binary",
       "@type": "DefinedTerm",
       "name": "Ompiglet Binary",
       "description": "Target-native ompig executable for one Ompiglet release; verifies its closure at startup.",
@@ -164,7 +164,7 @@
       "name": "Builder",
       "description": "Produces Ompiglet Binaries: native (needs Go and Ompig source) or container (needs Docker or Podman).",
       "ompig:kind": "tool",
-      "ompig:where": "coding/pigletbuild",
+      "ompig:where": "coding/ompigletbuild",
       "ompig:inspect": "ompig setup"
     },
     {
@@ -271,23 +271,23 @@
     },
     {
       "@type": "ompig:Relation",
-      "ompig:from": "ompig:piglet_release",
+      "ompig:from": "ompig:ompiglet_release",
       "ompig:relation": "pins",
       "ompig:to": "ompig:ompiglet",
       "description": "exact closure"
     },
     {
       "@type": "ompig:Relation",
-      "ompig:from": "ompig:piglet_binary",
+      "ompig:from": "ompig:ompiglet_binary",
       "ompig:relation": "realizes",
-      "ompig:to": "ompig:piglet_release",
+      "ompig:to": "ompig:ompiglet_release",
       "description": "per target"
     },
     {
       "@type": "ompig:Relation",
       "ompig:from": "ompig:builder",
       "ompig:relation": "produces",
-      "ompig:to": "ompig:piglet_binary",
+      "ompig:to": "ompig:ompiglet_binary",
       "description": "no silent fallback between builders"
     },
     {

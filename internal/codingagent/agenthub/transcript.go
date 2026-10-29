@@ -66,10 +66,7 @@ func (t *Transcript) HandleInput(data string) {
 // Render draws the visible window of the transcript.
 func (t *Transcript) Render(width int) []string {
 	lines := t.lines(width)
-	visible := t.height - 2
-	if visible < 1 {
-		visible = 1
-	}
+	visible := max(t.height-2, 1)
 	start := t.scroll
 	if start > len(lines) {
 		start = max(0, len(lines)-visible)
@@ -184,7 +181,7 @@ func wrap(text string, width int, prefix string) []string {
 		width = 8
 	}
 	var out []string
-	for _, paragraph := range strings.Split(text, "\n") {
+	for paragraph := range strings.SplitSeq(text, "\n") {
 		if paragraph == "" {
 			out = append(out, pad(prefix, width))
 			continue

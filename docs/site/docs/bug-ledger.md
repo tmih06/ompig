@@ -27,8 +27,8 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-0225a43](#bf-0225a43) | A device-attributes reply delivered in slow reads no longer reaches the editor as input: an `ESC[?` prefix… | A Pi defect that Ompig fixed first | All platforms | 0.5.0 |
 | [BF-0225bbf](#bf-0225bbf) | Pressing Escape twice with only whitespace in the editor now opens the tree or fork selector, as in Pi, which… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-022d99f](#bf-022d99f) | fix(tui): the login dialog's input renders at every prompt position | Ompig's own defect | All platforms | Unreleased |
-| [BF-02887e3](#bf-02887e3) | fix(release): carry main's OmpigVersion 0.5.3 and the post-bump goldens and pins | Ompig's own defect | All platforms | Unreleased |
-| [BF-037b2e3](#bf-037b2e3) | A session message whose members are in another order than Pi writes them, or that holds members Ompig does not… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-02887e3](#bf-02887e3) | fix(release): carry main's PigVersion 0.5.3 and the post-bump goldens and pins | Ompig's own defect | All platforms | Unreleased |
+| [BF-037b2e3](#bf-037b2e3) | A session message whose members are in another order than Pi writes them, or that holds members PiG does not… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-03ad544](#bf-03ad544) | fix(tui): card of an unregistered tool is Pi's formatToolExecution | Ompig's own defect | All platforms | Unreleased |
 | [BF-040088e](#bf-040088e) | `ai.CloudflareStreams` drops the deferred fetch and cancel operations of the API it wraps, as Pi's… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-051a79d](#bf-051a79d) | A Provider object registered by an extension (`pi.registerProvider(provider)`) now receives the session's… | Ompig's own defect | All platforms | 0.5.0 |
@@ -45,7 +45,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-081e8c3](#bf-081e8c3) | Bug report files against live Pi: new `TestBugReportFilesMatchPi`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-082355f](#bf-082355f) | The session picker checks its keys in Pi's order when bindings overlap (delete before rename, list actions… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-082f350](#bf-082f350) | `markdown.codeBlockIndent`: Pi's getter is `markdown?.codeBlockIndent ?? " "`, so an authored `""` means no… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-086395a](#bf-086395a) | `coding.DefaultAgentDir()` (Pi's `getAgentDir`) now returns the directory named by `OMPIG_CODING_AGENT_DIR`… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-086395a](#bf-086395a) | `coding.DefaultAgentDir()` (Pi's `getAgentDir`) now returns the directory named by `PIG_CODING_AGENT_DIR`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-08bf076](#bf-08bf076) | An extension login callback (`onPrompt`, `onSelect`, `onManualCodeInput`) whose prompt fails for a reason… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-093cf5c](#bf-093cf5c) | Provider error text is written the way Pi writes it | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-098e33d](#bf-098e33d) | Extension `ctx.ui.theme.fg`, `bg` and `getBgAnsi` throw `Unknown theme color: <token>` in every SDK for a… | Ompig's own defect | All platforms | 0.5.0 |
@@ -54,10 +54,10 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-0aba908](#bf-0aba908) | Extensions' `ctx.ui.setHiddenThinkingLabel()` now changes the collapsed thinking label of every assistant… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-0adc7a6](#bf-0adc7a6) | A provider that an extension registers while it loads no longer fails the load when the model registry… | Ompig's own defect | All platforms | Unreleased |
 | [BF-0ae3fcf](#bf-0ae3fcf) | The login provider list selects with Enter when `tui.select.confirm` is rebound, as Pi's search input submits… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-0ae4683](#bf-0ae4683) | Ompig, the extension SDKs and the sprite selection use one configuration root: `OMPIG_HOME`, else… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-0b13d8b](#bf-0b13d8b) | `ompig auth --help` names `ompig auth ...` instead of `pi auth ...` | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-0b13d8b-2](#bf-0b13d8b-2) | `ompig extension --help` lists `ompig extension init --login` | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-0b13d8b-3](#bf-0b13d8b-3) | `ompig --help` lists `ompig login`, `ompig logout`, `ompig package`, `ompig extension upgrade`, `ompig reload`, and `ompig… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-0ae4683](#bf-0ae4683) | PiG, the extension SDKs and the sprite selection use one configuration root: `PIG_HOME`, else… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-0b13d8b](#bf-0b13d8b) | `pig auth --help` names `pig auth ...` instead of `pi auth ...` | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-0b13d8b-2](#bf-0b13d8b-2) | `pig extension --help` lists `pig extension init --login` | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-0b13d8b-3](#bf-0b13d8b-3) | `pig --help` lists `pig login`, `pig logout`, `pig package`, `pig extension upgrade`, `pig reload`, and `pig… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-0b4e1e3](#bf-0b4e1e3) | The OpenAI Codex base URL keeps the whitespace around it, as Pi does (only an all-blank value falls back to… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-0b674b3](#bf-0b674b3) | Gemini model-id checks follow Pi's lowercasing: an id spelled with a dotted capital İ or a long ſ is no… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-0b85f55](#bf-0b85f55) | The Rust SDK keeps every session entry when one entry of the session file holds an unpaired surrogate (it… | Ompig's own defect | All platforms | 0.5.0 |
@@ -82,7 +82,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-11a6fcb](#bf-11a6fcb) | fix(extension): a restart adopts the new renderers; the late-registration row runs what it registered | Ompig's own defect | All platforms | Unreleased |
 | [BF-11b199d](#bf-11b199d) | Session lines (and every other JSON.stringify-mode encode) now write ill-formed UTF-8 the way Pi does: one… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-1268115](#bf-1268115) | fix(model runtime): a cancelled request to a caller-owned provider the runtime does not know is aborted, not… | Ompig's own defect | All platforms | Unreleased |
-| [BF-1356aae](#bf-1356aae) | fix(train): load ompig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture… | Ompig's own defect | All platforms | Unreleased |
+| [BF-1356aae](#bf-1356aae) | fix(train): load pig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture… | Ompig's own defect | All platforms | Unreleased |
 | [BF-1364791](#bf-1364791) | Stopping a codemode script or reaching its deadline no longer waits up to half a second for a built-in that… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-1390c9d](#bf-1390c9d) | fix(ai): the Anthropic event reader matches the type member exactly | Ompig's own defect | All platforms | Unreleased |
 | [BF-155d0f3](#bf-155d0f3) | In RPC mode, SIGTERM or SIGHUP during a tool call likewise stops the run while the `session_shutdown`… | Ompig's own defect | All platforms | 0.5.0 |
@@ -91,7 +91,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-160d95a-2](#bf-160d95a-2) | In RPC mode, the Go, Python and Rust SDKs no longer let the host move on while a `notify`, `setStatus`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-1631753](#bf-1631753) | Queueing a steering or follow-up message while the agent streams prints no status line, as Pi does | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-163f7b7](#bf-163f7b7) | Empty quoted prompt-template arguments (`""` or `''`) are kept as empty arguments, so later positional… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-165cf58](#bf-165cf58) | `ompig package publish --to npm` and `ompig ompiglet publish --to npm` no longer run an `npm` that the published… | Ompig's own defect | Windows | 0.5.0 |
+| [BF-165cf58](#bf-165cf58) | `pig package publish --to npm` and `pig piglet publish --to npm` no longer run an `npm` that the published… | Ompig's own defect | Windows | 0.5.0 |
 | [BF-165cf58-2](#bf-165cf58-2) | On Windows, publishing to npm now works when npm is an `npm.cmd` at a path with spaces, such as `C:\Program… | Ompig's own defect | Windows | 0.5.0 |
 | [BF-167dae3](#bf-167dae3) | fix(codingagent): the idle collection runs two GC cycles again so pool victims are freed (D172) | Ompig's own defect | All platforms | Unreleased |
 | [BF-16f8d39](#bf-16f8d39) | fix(codingagent): keep the clock allowance on the marker header's time.Now line | Ompig's own defect | All platforms | Unreleased |
@@ -101,7 +101,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-1896331](#bf-1896331) | Changing the thinking level in interactive mode (cycle key, `/thinking`, the settings selector) goes through… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-18daf7f](#bf-18daf7f) | The Go SDK's typed branch entry keeps the text, thinking and tool calls of an assistant message whose tool… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-18f7d39](#bf-18f7d39) | Codemode `@options` errors report V8's JSON error text, tool and schema declarations keep unpaired… | A fix Pi shipped that Ompig ported | All platforms | 0.5.0 |
-| [BF-1971aae](#bf-1971aae) | A `bash` shell that starts at the moment `ompig` handles an emergency exit, a crash or a signal is now killed… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-1971aae](#bf-1971aae) | A `bash` shell that starts at the moment `pig` handles an emergency exit, a crash or a signal is now killed… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-19a07f0](#bf-19a07f0) | fix(sdk-rs): give the request-start wire test's RequestMsg the batch, child_session, tool_call_index and… | Ompig's own defect | All platforms | Unreleased |
 | [BF-1a855cd](#bf-1a855cd) | The `/session` block now follows a later theme change and shows the cache-warming countdown as of each… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-1b5540a](#bf-1b5540a) | `client.Client.Disconnect` takes the reason string as Pi's `Client.disconnect(reason)` does (it was an… | Ompig's own defect | All platforms | 0.5.0 |
@@ -114,7 +114,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-1d1c8aa](#bf-1d1c8aa) | RPC mode now ends by the signal when a termination signal arrives while a quit `session_shutdown` handler is… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-1d5b272](#bf-1d5b272) | A text file passed as an `@file` argument that holds invalid UTF-8 now reaches the prompt as Pi sends it… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-1dcaef7](#bf-1dcaef7) | Durable: a JSONL line that starts with a byte order mark now opens, as in Pi, instead of failing with… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-1ed43b3](#bf-1ed43b3) | fix(train): load ompig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture… | Ompig's own defect | All platforms | Unreleased |
+| [BF-1ed43b3](#bf-1ed43b3) | fix(train): load pig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture… | Ompig's own defect | All platforms | Unreleased |
 | [BF-1ee7dea](#bf-1ee7dea) | The Mistral request URL for a base URL with a non-special scheme or a host or port the WHATWG parser rejects… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-1f7fa2f](#bf-1f7fa2f) | In print and JSON mode, an extension in its own Node process no longer runs its callbacks with a stale ctx… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-1fbdabb](#bf-1fbdabb) | A CRLF that a proxy splits across two network chunks no longer aborts an Anthropic turn with `Could not parse… | A Pi defect that Ompig fixed first | All platforms | 0.5.0 |
@@ -129,7 +129,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-224dbd9](#bf-224dbd9) | On Linux and macOS, the bash tool, a `!` command and an extension's `exec` no longer report no output for a… | Ompig's own defect | macOS, Linux | Unreleased |
 | [BF-2280bf8](#bf-2280bf8) | The per-API stream entry points (`ai.AnthropicMessagesAPI()` through `ai.PiMessagesAPI()` and the deprecated… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-2309604](#bf-2309604) | Tool schemas in OpenAI Completions, OpenAI Responses, Codex and Mistral request bodies keep the members in… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-2316fe3](#bf-2316fe3) | The Ompiglet JSON Schema that `ompig ompiglet schema` prints rejected `powershell` in `tools`, which `ompig ompiglet… | Ompig's own defect | Windows | 0.5.3 |
+| [BF-2316fe3](#bf-2316fe3) | The Piglet JSON Schema that `pig piglet schema` prints rejected `powershell` in `tools`, which `pig piglet… | Ompig's own defect | Windows | 0.5.3 |
 | [BF-234316d](#bf-234316d) | On Windows, a Go extension's source hash no longer fails, or makes a build beside it fail, with `The process… | Ompig's own defect | Windows | Unreleased |
 | [BF-24872ab](#bf-24872ab) | Extensions receive each model (`ctx.model`, `model_select`, `ctx.modelRegistry` reads, scoped models… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-24a821d](#bf-24a821d) | The openai stream decoder follows openai 7.19.0, the version packages/ai declares: the stream ends at [DONE]… | Ompig's own defect | All platforms | 0.5.0 |
@@ -155,13 +155,13 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-2ad7249](#bf-2ad7249) | fix(ledger): close the getJsonSchemaToolParameters and google convertTools rows | Ompig's own defect | All platforms | Unreleased |
 | [BF-2be0883](#bf-2be0883) | fix(extensions): parallel Node runtime linking reports the walk-order first failure under every schedule | Ompig's own defect | All platforms | Unreleased |
 | [BF-2c1959c](#bf-2c1959c) | A Mistral stream is no longer aborted mid-generation by the request timeout: the timeout now covers only the… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-2c5db8b](#bf-2c5db8b) | A Ompiglet Binary with a fused Go extension starts within a few milliseconds of Stock Ompig | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-2c88c5f](#bf-2c88c5f) | Ill-formed UTF-8 in a string that Ompig re-encodes as JSON (an extension's raw JSON, tool schemas, code-mode… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-2c5db8b](#bf-2c5db8b) | A Piglet Binary with a fused Go extension starts within a few milliseconds of Stock PiG | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-2c88c5f](#bf-2c88c5f) | Ill-formed UTF-8 in a string that PiG re-encodes as JSON (an extension's raw JSON, tool schemas, code-mode… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-2d05dc8](#bf-2d05dc8) | A models.json cost that sets `tiers: []` (a custom model's cost, or a `modelOverrides` cost) keeps… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-2d71556](#bf-2d71556) | fix(codingagent): queued-message lines use the dim foreground; hint separator closes only the foreground | Ompig's own defect | All platforms | Unreleased |
 | [BF-2d99958](#bf-2d99958) | A terminal's reply to the startup color query now applies the colors and ends the startup wait before the… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-2ea8ad2](#bf-2ea8ad2) | The openai-completions, openai-responses and openrouter-images requests build their URL as the openai SDK… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-2f881ba](#bf-2f881ba) | "Your first extension" now says that `ompig install --validate-only` exits 1 when the extension does not build | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-2f881ba](#bf-2f881ba) | "Your first extension" now says that `pig install --validate-only` exits 1 when the extension does not build | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-2fc2307](#bf-2fc2307) | A scalar that names a collection tag (`!!map 1`, `!!seq true`) inside a complex mapping key stays plain in… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-305432b](#bf-305432b) | fix(coding-agent): stop macOS shell groups before killing them (Pi) | A fix Pi shipped that Ompig ported | macOS | Unreleased |
 | [BF-305bd8b](#bf-305bd8b) | A durable task that panics with a value whose `String` method panics now faults with the message `[object… | Ompig's own defect | All platforms | 0.5.0 |
@@ -176,7 +176,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-3270e5f](#bf-3270e5f) | `llama-cpp-classify` answers match Pi bit for bit: the softmax uses `jsmath.Exp`, V8's fdlibm `Math.exp`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-32ae04c](#bf-32ae04c) | Durable (Pi 89e5c2c0): a generation waiting on a blocking threshold compaction fails with `model_error`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-32b5367](#bf-32b5367) | A running `!command` that prints a lot, the `/resume` search over many long sessions, and streamed answers… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-32ce7ad](#bf-32ce7ad) | The Termux page shows the `[Context]` line as Ompig prints it, `~/.ompig/agent/AGENTS.md` | Ompig's own defect | Android and Termux | 0.5.0 |
+| [BF-32ce7ad](#bf-32ce7ad) | The Termux page shows the `[Context]` line as PiG prints it, `~/.pig/agent/AGENTS.md` | Ompig's own defect | Android and Termux | 0.5.0 |
 | [BF-32e86a8](#bf-32e86a8) | Go, Python and Rust SDK: `theme.bold`, `italic`, `underline`, `inverse` and `strikethrough` now draw as Pi's… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-333229c](#bf-333229c) | An HTTP 413 from any provider is treated as request-size overflow, so the agent compacts and retries instead… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-334bb4b](#bf-334bb4b) | A Gemini or Mistral stream chunk with a member of an unexpected type no longer sorts the members of a tool… | Ompig's own defect | All platforms | 0.5.0 |
@@ -214,9 +214,9 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-3ad9ec8](#bf-3ad9ec8) | fix(tui): tree label prompt gives its input width-2 cells (Pi LabelInput) | Ompig's own defect | All platforms | Unreleased |
 | [BF-3b009a3](#bf-3b009a3) | `chord/host`: a child host forked by `ForkDriver` no longer inherits its parent's `CHORD2_LOCK` | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-3b3dba6](#bf-3b3dba6) | A streamed tool argument of `-0` is held as `0`, so the serialized arguments write `0` as Pi's… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-3b8aa66](#bf-3b8aa66) | A Ompiglet Binary that strips `bedrock-converse-stream` links the AWS SDK again: the Bedrock retry backoff… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-3b8aa66](#bf-3b8aa66) | A Piglet Binary that strips `bedrock-converse-stream` links the AWS SDK again: the Bedrock retry backoff… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-3ba74f2](#bf-3ba74f2) | fix(codingagent): wait for a read's rest on the route snapshot that found no modal | Ompig's own defect | All platforms | Unreleased |
-| [BF-3cb7131](#bf-3cb7131) | fix(sdk-py): stage ompig_sdk.tui with the package, which ompig_sdk imports at load; keep the pi-ai patterns… | Ompig's own defect | All platforms | Unreleased |
+| [BF-3cb7131](#bf-3cb7131) | fix(sdk-py): stage pig_sdk.tui with the package, which pig_sdk imports at load; keep the pi-ai patterns… | Ompig's own defect | All platforms | Unreleased |
 | [BF-3ce6bcb](#bf-3ce6bcb) | fix(changelog,source): /i scheme tests fold as JavaScript does, not as RE2's (?i) | Ompig's own defect | All platforms | Unreleased |
 | [BF-3cf03c0](#bf-3cf03c0) | A faux provider error message that carries a response id writes `responseId` after `errorMessage` in session… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-3d12e48](#bf-3d12e48) | fix(tui): tree selector cursor follows Pi's selectedIndex over an empty list | Ompig's own defect | All platforms | Unreleased |
@@ -281,7 +281,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-4afdbac](#bf-4afdbac) | `ProjectTrustStore` reads entries in JavaScript order: `readTrustFile` named whichever invalid value Go's map… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-4bcc7da](#bf-4bcc7da) | `StreamProxy` merges the final tool call and reports abort and timeout as Pi does, and it no longer changes a… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-4c032a0](#bf-4c032a0) | A description decoded from the wire is written back with every schema member in the order it was declared in… | Ompig's own defect | All platforms | Unreleased |
-| [BF-4c45afa](#bf-4c45afa) | fix(sdk-py): stage ompig_sdk.tui with the package, which ompig_sdk imports at load; keep the pi-ai patterns… | Ompig's own defect | All platforms | Unreleased |
+| [BF-4c45afa](#bf-4c45afa) | fix(sdk-py): stage pig_sdk.tui with the package, which pig_sdk imports at load; keep the pi-ai patterns… | Ompig's own defect | All platforms | Unreleased |
 | [BF-4c7ccf2](#bf-4c7ccf2) | A classifier response that reports more than 2,147,483,647 input or output tokens keeps the reported count… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-4d04134](#bf-4d04134) | The cancel hint of extension loaders (`/share`, `/bug`) shows the key bound to `tui.select.cancel` instead of… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-4d33f78](#bf-4d33f78) | fix(tui): a tool error result collapses like any other (Pi updateResult) | Ompig's own defect | All platforms | Unreleased |
@@ -294,8 +294,8 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-4f6992d](#bf-4f6992d) | Durable: a tool's `PrepareArguments` result of a typed object (a struct, or a map of another element type)… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-4f6992d-2](#bf-4f6992d-2) | Durable: a `PrepareArguments` result that is not an object fails validation as an `invalid_arguments` tool… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-4fab2ef](#bf-4fab2ef) | Durable error values (FileError, ExecutionError, JsonlCorruptionError, ReadAfterWrite, StorageRejected… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-4fc8c2e](#bf-4fc8c2e) | With an active Ompiglet, an extension that denies every tool with `SetActiveTools([])` is no longer widened… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-4fd80d1](#bf-4fd80d1) | On Windows, Ompig finds PowerShell in its installation directories when it is not on `PATH`: PowerShell 7 under… | Ompig's own defect | Windows | 0.5.2 |
+| [BF-4fc8c2e](#bf-4fc8c2e) | With an active Piglet, an extension that denies every tool with `SetActiveTools([])` is no longer widened… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-4fd80d1](#bf-4fd80d1) | On Windows, PiG finds PowerShell in its installation directories when it is not on `PATH`: PowerShell 7 under… | Ompig's own defect | Windows | 0.5.2 |
 | [BF-4fd80d1-2](#bf-4fd80d1-2) | On Windows, the legacy WSL `bash.exe` launcher is recognized under the actual Windows directory in… | Ompig's own defect | Windows, WSL | 0.5.2 |
 | [BF-4fd80d1-3](#bf-4fd80d1-3) | On Windows, an empty `SystemRoot` takes `C:\Windows` for `taskkill.exe`, as an unset one already did, in the… | Ompig's own defect | Windows | 0.5.2 |
 | [BF-4fd80d1-4](#bf-4fd80d1-4) | On Windows, shells that are runnable Microsoft Store aliases are accepted: a configured shell path… | Ompig's own defect | Windows | 0.5.2 |
@@ -313,10 +313,10 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-53385a3](#bf-53385a3) | Registering a large MCP catalog, building a CodeMode sandbox from one, and CodeMode tool discovery were… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-5380e0a](#bf-5380e0a) | fix(extension): load failure shows the extension's own cause; registration edge-case rows | Ompig's own defect | All platforms | Unreleased |
 | [BF-54283ce](#bf-54283ce) | fix(extension): Shutdown closes live child sessions and releases the objects they hold | Ompig's own defect | All platforms | Unreleased |
-| [BF-542b536](#bf-542b536) | fix(cli): OMPIG_VERSION_FORMAT=pi prints the pinned Pi package version | Ompig's own defect | All platforms | Unreleased |
+| [BF-542b536](#bf-542b536) | fix(cli): PIG_VERSION_FORMAT=pi prints the pinned Pi package version | Ompig's own defect | All platforms | Unreleased |
 | [BF-5443b6c](#bf-5443b6c) | `durable/images` is the image processor of pi-durable: `images.CreatePhotonImages()` (also `images/node` and… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-54a5bf6](#bf-54a5bf6) | The host answers a parsed frontmatter with `<`, `>`, `&` and U+2028 as they are (as `JSON.stringify` writes… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-54dc372](#bf-54dc372) | fix(release): carry main's OmpigVersion 0.5.3 and the post-bump goldens and pins | Ompig's own defect | All platforms | Unreleased |
+| [BF-54dc372](#bf-54dc372) | fix(release): carry main's PigVersion 0.5.3 and the post-bump goldens and pins | Ompig's own defect | All platforms | Unreleased |
 | [BF-54e3983](#bf-54e3983) | fix(packagemanager): npm gets Node's realpathSync of the install root, and the npm tests expect it | Ompig's own defect | All platforms | Unreleased |
 | [BF-55573f4](#bf-55573f4) | fix(sdk): Rust and Python fuzzy match score contiguous occurrences (Pi) | Ompig's own defect | All platforms | Unreleased |
 | [BF-5654e71](#bf-5654e71) | MCP OAuth discovery and resource selection now read URLs the way Node's `URL` does (default ports, dot… | Ompig's own defect | All platforms | 0.5.0 |
@@ -328,8 +328,8 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-56f1d3c-2](#bf-56f1d3c-2) | `Submission.Wait`, `WaitForTask` and the idle waits return after every commit subscriber has run for the… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-570f857](#bf-570f857) | Fixed interactive sessions leaving extension prompt sections, such as the MCP `mcp_servers` list, out of the… | A fix Pi shipped that Ompig ported | All platforms | 0.5.0 |
 | [BF-5732479](#bf-5732479) | `auth.json` keeps each credential's properties in the order they were read or returned by an extension's… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-5774749](#bf-5774749) | A Ompiglet found by name in `<project>/.ompig/ompiglets` now follows project trust: it is used only when the… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-578c1a3](#bf-578c1a3) | The "Applied use cases" page in the manual that ships inside Ompig now links the Security page on the website | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-5774749](#bf-5774749) | A Piglet found by name in `<project>/.pig/piglets` now follows project trust: it is used only when the… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-578c1a3](#bf-578c1a3) | The "Applied use cases" page in the manual that ships inside PiG now links the Security page on the website | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-57a1687](#bf-57a1687) | fix(ai,agent): return a projection's blocks apart from its scalars so the caller's buffer stays on its stack | Ompig's own defect | All platforms | Unreleased |
 | [BF-57ee33b](#bf-57ee33b) | A model an extension registers with `registerProvider` reaches `ctx.modelRegistry`, `ctx.model` and RPC as… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-59456ae](#bf-59456ae) | Pressing a key in a subprocess extension's overlay no longer freezes interactive mode when the key reaches… | Ompig's own defect | All platforms | 0.5.0 |
@@ -349,7 +349,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-5c9d23f](#bf-5c9d23f) | A provider object's OAuth login receives Pi's login options, as `oauth.login(interaction, options)` does in Pi | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-5d36a58](#bf-5d36a58) | fix(agent): end the tool flow at custom user messages and hold system messages mid-flow | Ompig's own defect | All platforms | Unreleased |
 | [BF-5d6bb25](#bf-5d6bb25) | The request-string walk that splices cached strings into a request body finds a cycle by the pointer, map or… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-5d8eda1](#bf-5d8eda1) | `ompig auth check` and `ompig auth print-api-key` no longer reject `--api-key` that another option takes as its… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-5d8eda1](#bf-5d8eda1) | `pig auth check` and `pig auth print-api-key` no longer reject `--api-key` that another option takes as its… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-5dbfed1](#bf-5dbfed1) | A scripted faux response can carry `DurationMs` | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-5e36d87](#bf-5e36d87) | The assistant-message frame encoder no longer re-parses and re-serializes a whole tool call's arguments for… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-5e3e346](#bf-5e3e346) | An explicit `anthropic-beta` header, from a model's `headers` or the request, no longer makes a… | A Pi defect that Ompig fixed first | All platforms | 0.5.0 |
@@ -368,7 +368,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-61fc01d-2](#bf-61fc01d-2) | MCP tool descriptions, resource MIME types, a pasted sign-in redirect URL and the resource tools' `server`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6235532](#bf-6235532) | Filterable selector lists (theme, images, tree-filter-like pickers) check up/down before confirm/cancel like… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6258d27](#bf-6258d27) | fix(rpc): a replacement aborts the compactions of its batch at its teardown only | Ompig's own defect | All platforms | Unreleased |
-| [BF-625a32e](#bf-625a32e) | Display text that Ompig cuts at a length (the `/tree` listing, the Ompiglet system-prompt preview, an extension… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-625a32e](#bf-625a32e) | Display text that PiG cuts at a length (the `/tree` listing, the Piglet system-prompt preview, an extension… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-626dccc](#bf-626dccc) | OpenAI-compatible Chat Completions requests resolve `chat_template_args` (the `baseten` thinking format) and… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-62a1c87](#bf-62a1c87) | The `ExtensionSelector` and `ExtensionInput` oracles also run with the Kitty keyboard protocol active (CSI-u… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-62ae30d](#bf-62ae30d) | Durable: reading the history of a conversation whose parent conversation is not stored now fails with Pi's… | Ompig's own defect | All platforms | 0.5.0 |
@@ -376,12 +376,12 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-6323c8e](#bf-6323c8e) | fix(ai): a Bedrock model outside the catalog is a bedrock-converse-stream model of amazon-bedrock, so its own… | Ompig's own defect | All platforms | Unreleased |
 | [BF-633152d](#bf-633152d) | Starting a Go extension no longer fails with `hash <dir> after its build: open …/release/deps/rmeta…: no… | Ompig's own defect | All platforms | Unreleased |
 | [BF-63b4fc8](#bf-63b4fc8) | `NodeExecutionEnv.Watch` gives a directory replaced at the same path a new watcher, reports changes to the… | A fix Pi shipped that Ompig ported | macOS | 0.5.0 |
-| [BF-63bb0b7](#bf-63bb0b7) | `ompig extension upgrade` now rewrites a `Context` getter call that is the only argument of a variadic call… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-63bb0b7](#bf-63bb0b7) | `pig extension upgrade` now rewrites a `Context` getter call that is the only argument of a variadic call… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-644a9f2](#bf-644a9f2) | Changelog link rewriting and `git` source parsing match a URL scheme case-insensitively as Pi's regex with… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-644a9f2-2](#bf-644a9f2-2) | A Node extension's `ctx.ui.custom` factory can call `tui.showOverlay`, `tui.hideOverlay` and `tui.setFocus`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-644b3e0](#bf-644b3e0) | A codemode script that calls `text()` tens of thousands of times no longer blocks the process: adjacent text… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-648ff3e](#bf-648ff3e) | A child session's `message_update` event carries the message so far and the assistant event's `partial`, as… | Ompig's own defect | All platforms | 0.5.2 |
-| [BF-648ff3e-10](#bf-648ff3e-10) | `ompig --list-models` now prints only the models the model runtime reports as available, as Pi does | Ompig's own defect | All platforms | 0.5.2 |
+| [BF-648ff3e-10](#bf-648ff3e-10) | `pig --list-models` now prints only the models the model runtime reports as available, as Pi does | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-100](#bf-648ff3e-100) | `ctx.abort()` aborts the run's `ctx.signal`, and the signal a tool receives, before it returns in a Node… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-101](#bf-648ff3e-101) | `pi.getCommands()` in a Node extension lists a command registered after load by the same turn's… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-102](#bf-648ff3e-102) | A Node extension tool that awaits real work and then takes the file mutation queue (the upstream `subagent`… | Ompig's own defect | All platforms | 0.5.2 |
@@ -427,7 +427,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-648ff3e-45](#bf-648ff3e-45) | An extension's `SessionManager.appendContextEdit(id, null)` clears the content instead of failing, and… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-46](#bf-648ff3e-46) | Extension SDKs: `formatKeyText`/`keyDisplayText` upper-cased the first rune of a part, where Pi's… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-47](#bf-648ff3e-47) | Extensions: `ctx.ui.setTheme(theme)` with a theme object makes that object the active theme as it is, as Pi's… | Ompig's own defect | All platforms | 0.5.2 |
-| [BF-648ff3e-48](#bf-648ff3e-48) | A Ompig TLS client no longer accepts a certificate chain through a compromised eMudhra intermediate or a root… | Ompig's own defect | All platforms | 0.5.2 |
+| [BF-648ff3e-48](#bf-648ff3e-48) | A PiG TLS client no longer accepts a certificate chain through a compromised eMudhra intermediate or a root… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-49](#bf-648ff3e-49) | The CI images no longer ship the three removed emSign roots: `ca-certificates` 20261020-r0 in the ci-go lock… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-5](#bf-648ff3e-5) | The `tool_result` handlers of a parallel batch start in the order the tools settled, each running to its… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-50](#bf-648ff3e-50) | Shutting a host down while a child session is live no longer leaves its extension host running | Ompig's own defect | All platforms | 0.5.2 |
@@ -439,10 +439,10 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-648ff3e-56](#bf-648ff3e-56) | An extension that reads `ctx.model`, `pi.getSettings()`, `pi.getSessionName()`, `pi.getThinkingLevel()` or… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-57](#bf-648ff3e-57) | In a Rust extension's `before_agent_start` handler, `ctx.get_system_prompt()` returns the prompt the… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-58](#bf-648ff3e-58) | RPC mode no longer writes `entry_appended` for a `pi.appendEntry` or `session_info_changed` for a… | Ompig's own defect | All platforms | 0.5.2 |
-| [BF-648ff3e-59](#bf-648ff3e-59) | Docs: another Ompig build that shares the config root no longer removes the documentation bundle a running… | Ompig's own defect | All platforms | 0.5.2 |
+| [BF-648ff3e-59](#bf-648ff3e-59) | Docs: another PiG build that shares the config root no longer removes the documentation bundle a running… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-6](#bf-648ff3e-6) | The Go, Python and Rust SDKs start the handlers of concurrent event and command requests in the order the… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-60](#bf-648ff3e-60) | RPC mode now writes the members of an `extension_ui_request` that Pi writes empty, as Pi's `JSON.stringify`… | Ompig's own defect | All platforms | 0.5.2 |
-| [BF-648ff3e-61](#bf-648ff3e-61) | Starting a second Ompiglet Binary instance no longer fails on Windows while the first is running | Ompig's own defect | Windows | 0.5.2 |
+| [BF-648ff3e-61](#bf-648ff3e-61) | Starting a second Piglet Binary instance no longer fails on Windows while the first is running | Ompig's own defect | Windows | 0.5.2 |
 | [BF-648ff3e-62](#bf-648ff3e-62) | RPC mode writes one `setWidget` request per `ctx.ui.setWidget` call from the Go, Python and Rust SDKs, in… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-63](#bf-648ff3e-63) | In print and JSON mode, a `/skill:name` prompt whose skill file cannot be read now reports the skill's read… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-64](#bf-648ff3e-64) | Images are now resized with the image profile of the model that answered last under a virtual model selection | Ompig's own defect | All platforms | 0.5.2 |
@@ -450,9 +450,9 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-648ff3e-66](#bf-648ff3e-66) | An extension that reads `pi.getMcpServers()` from a timer, thread or goroutine and has no… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-67](#bf-648ff3e-67) | An extension that reads `ctx.ui.theme` from a timer, thread or goroutine now sees the theme the user selects… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-68](#bf-648ff3e-68) | A Node extension that registers or unregisters a virtual model… | Ompig's own defect | All platforms | 0.5.2 |
-| [BF-648ff3e-69](#bf-648ff3e-69) | CI: the nightly `-race` run now covers the packages that own most of Ompig's goroutines | Ompig's own defect | All platforms | 0.5.2 |
+| [BF-648ff3e-69](#bf-648ff3e-69) | CI: the nightly `-race` run now covers the packages that own most of PiG's goroutines | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-7](#bf-648ff3e-7) | An edit or write call of a parallel batch registers in the file mutation queue after the extension tools… | Ompig's own defect | All platforms | 0.5.2 |
-| [BF-648ff3e-70](#bf-648ff3e-70) | A ompig session on another machine or container that shares your `~/.ompig` (an NFS home, a bind mount) is no… | Ompig's own defect | All platforms | 0.5.2 |
+| [BF-648ff3e-70](#bf-648ff3e-70) | A pig session on another machine or container that shares your `~/.pig` (an NFS home, a bind mount) is no… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-71](#bf-648ff3e-71) | Fixed a chord host root failing with `superseded: code version N is not retained` although it was started in… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-72](#bf-648ff3e-72) | Print mode and `--mode json` no longer run an extension command a second time on text an input handler or a… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-73](#bf-648ff3e-73) | Shutting down a host while a crashed extension waits out its restart backoff no longer leaves a goroutine… | Ompig's own defect | All platforms | 0.5.2 |
@@ -470,7 +470,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-648ff3e-84](#bf-648ff3e-84) | A Node extension that changes the active tools or registers a tool now reads the system prompt back as Pi does | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-85](#bf-648ff3e-85) | `ctx.isIdle()` after `pi.sendMessage(..., { triggerTurn: true })` in an `agent_settled` handler of a Node… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-86](#bf-648ff3e-86) | A Node extension's `ctx.ui.select`, `confirm` and `input` honor `options.signal`, as Pi's RPC and interactive… | Ompig's own defect | All platforms | 0.5.2 |
-| [BF-648ff3e-87](#bf-648ff3e-87) | A start could fail with a bare missing-file error when another `ompig`'s cache collection removed the cached… | Ompig's own defect | All platforms | 0.5.2 |
+| [BF-648ff3e-87](#bf-648ff3e-87) | A start could fail with a bare missing-file error when another `pig`'s cache collection removed the cached… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-88](#bf-648ff3e-88) | A tool's `prepareLoadout` hook now runs again before every later turn of a run, as in Pi, so the descriptions… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-89](#bf-648ff3e-89) | Fixed the chord host keeping a disposed object reachable until its ready timeout (a minute by default) had… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-648ff3e-9](#bf-648ff3e-9) | A Node extension tool that awaits the event loop before it takes the file mutation queue registers after the… | Ompig's own defect | All platforms | 0.5.2 |
@@ -490,7 +490,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-663e84b](#bf-663e84b) | The built-in models page lists the real thinking levels (off, minimal, low, medium, high, xhigh, max) instead… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-663e84b-2](#bf-663e84b-2) | The built-in models page documents the `models.json` provider and model fields (`models[]`, `contextWindow`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-663e84b-3](#bf-663e84b-3) | The built-in docs gain the compaction summary format, branch summaries and extension hooks, the RPC, JSON… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-663e84b-4](#bf-663e84b-4) | The packages page says how to build and run `ompig-acp`, which `npm:@ompig/pigpen-acp` needs but does not… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-663e84b-4](#bf-663e84b-4) | The packages page says how to build and run `pig-acp`, which `npm:@pi-in-go/pigpen-acp` needs but does not… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6646adc](#bf-6646adc) | A durable transaction that settles a submission with a detail that is not strict JSON now counts as having… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-666acff](#bf-666acff) | Package filters, manifest `!`/`+`/`-` overrides, settings resource patterns and built-in extension overrides… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-666acff-2](#bf-666acff-2) | A pattern that Pi cannot compile now fails where Pi fails: a local Package keeps only the resource kinds… | Ompig's own defect | All platforms | 0.5.0 |
@@ -508,14 +508,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-68f98d7](#bf-68f98d7) | Fixed the error message of a failed lazy API setup, such as a module load or auth failure, using its failure… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-692bdf7](#bf-692bdf7) | Durable with telemetry off (no telemetry or the no-op span) no longer builds span attributes, events or… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-6992ffb](#bf-6992ffb) | A Go, Python or Rust extension that calls `appendEntry` in a handler that already read the session log now… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-69b9811](#bf-69b9811) | Two Ompig builds that share a config root (two installed versions, or stock Ompig beside a Ompiglet Binary) no… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-69b9811](#bf-69b9811) | Two PiG builds that share a config root (two installed versions, or stock PiG beside a Piglet Binary) no… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-69c175b](#bf-69c175b) | fix(models): models.json entries keep exposed limits and cost; bound thinking-only messages in summaries; pin… | Ompig's own defect | All platforms | Unreleased |
 | [BF-69f6341](#bf-69f6341) | The Radius relay WebSocket URL is built with the WHATWG URL parser, as Pi's `new URL` does: gateway hosts are… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6a6fffa](#bf-6a6fffa) | A session message whose integer member, such as `timestamp`, a usage count or `durationMs`, is spelled with a… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6a6fffa-2](#bf-6a6fffa-2) | `formatToolCallWithArgs` against live Pi: new `TestFormatToolCallWithArgsMatchesPi`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6a6fffa-3](#bf-6a6fffa-3) | `getTextOutput` against live Pi: new `TestGetTextOutputMatchesPi`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6a6fffa-4](#bf-6a6fffa-4) | Live-Pi oracles for `utils/headers.ts`: `TestHeadersToRecordMatchesPi` (800 header sequences over case… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-6a6fffa-5](#bf-6a6fffa-5) | The Skills page said your own skills live in `~/.ompig/skills`, that a skill's text is added to the system… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-6a6fffa-5](#bf-6a6fffa-5) | The Skills page said your own skills live in `~/.pig/skills`, that a skill's text is added to the system… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6a6fffa-6](#bf-6a6fffa-6) | Live-Pi oracle `TestOpenAICompletionsCompatAndCacheOptionsPayloadMatchesPi`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6a6fffa-7](#bf-6a6fffa-7) | The settings documentation now says that `images.blockImages` replaces each image sent to the model with… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6a6fffa-8](#bf-6a6fffa-8) | In `--mode json`, SIGTERM or SIGHUP during a tool call now stops the output and the session file where Pi… | Ompig's own defect | All platforms | 0.5.0 |
@@ -523,7 +523,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-6ac4c8c](#bf-6ac4c8c) | Ctrl+V pastes clipboard text in Termux | A fix Pi shipped that Ompig ported | Linux, Android and Termux | 0.5.0 |
 | [BF-6b97207](#bf-6b97207) | An extension that overrides the `edit` tool with a definition built by the Go, Rust or Python SDK's… | Ompig's own defect | All platforms | Unreleased |
 | [BF-6c26be3](#bf-6c26be3) | A submission's `Wait` no longer fails with "Harness is closed" when a close begins before the wait wakes: a… | Ompig's own defect | All platforms | Unreleased |
-| [BF-6cb29f0](#bf-6cb29f0) | Started from a directory reached through a symlink, `ompig install`/`remove`/`list`/`update` resolve local… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-6cb29f0](#bf-6cb29f0) | Started from a directory reached through a symlink, `pig install`/`remove`/`list`/`update` resolve local… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6cb29f0-2](#bf-6cb29f0-2) | Started from a directory reached through a symlink, `/export <file>.jsonl` and `/bug` now write and name… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6cb29f0-3](#bf-6cb29f0-3) | Switching to or importing an empty session file from a directory reached through a symlink starts the session… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6ce1db1](#bf-6ce1db1) | In print and JSON mode, SIGTERM and SIGHUP always leave their line in `exit.log` | Ompig's own defect | All platforms | 0.5.0 |
@@ -531,14 +531,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-6d3cfc8](#bf-6d3cfc8) | A user_bash `operations` object from an extension is no longer released while a command is running through it | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-6d9b403](#bf-6d9b403) | The /config selector keeps the first-seen order of groups that tie on origin, scope and source (auto… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6debb12](#bf-6debb12) | fix(train): gate repairs after merging train 3 and the ordering stack | Ompig's own defect | All platforms | Unreleased |
-| [BF-6dfa6bf](#bf-6dfa6bf) | `go install github.com/tmih06/ompig/cmd/ompig@<version>` downloads a root module of 181 MB instead of 304 MB | Ompig's own defect | All platforms | 0.5.2 |
+| [BF-6dfa6bf](#bf-6dfa6bf) | `go install github.com/MichaelKinsy/PiG/cmd/pig@<version>` downloads a root module of 181 MB instead of 304 MB | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-6e6a0dd](#bf-6e6a0dd) | A session message with a member of another JSON type than Pi writes is now kept, as Pi keeps it | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6ee6eae](#bf-6ee6eae) | A Session delivers each event to its listeners the way Pi's `AgentSession` does | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6f26a84](#bf-6f26a84) | Xiaomi MiMo models send only the thinking on/off toggle (no `reasoning_effort`) and expose only the `off` and… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6f4a82f](#bf-6f4a82f) | Validation errors for `propertyNames` name the failing member in their path, `contains` reports only "must… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6fb1307](#bf-6fb1307) | openai-codex-responses reads `instructions` from the initial system message of the resolved transcript before… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-70d51e5](#bf-70d51e5) | Fixed bash and PowerShell results losing `Took` after reloading a session, and the live `Took` including… | A fix Pi shipped that Ompig ported | Windows | 0.5.0 |
-| [BF-70d51e5-2](#bf-70d51e5-2) | Fixed the message-format page: it said Ompig does not carry the `nestedCalls` record on tool result messages… | A fix Pi shipped that Ompig ported | All platforms | 0.5.0 |
+| [BF-70d51e5-2](#bf-70d51e5-2) | Fixed the message-format page: it said PiG does not carry the `nestedCalls` record on tool result messages… | A fix Pi shipped that Ompig ported | All platforms | 0.5.0 |
 | [BF-70d8a41](#bf-70d8a41) | Keybinding conflict detection ignores user bindings for actions the table does not define, as Pi's… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-70e1841](#bf-70e1841) | /settings warnings submenu: a warning the settings never set shows as on and a toggle always reports the… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-7177d5f](#bf-7177d5f) | fix(tui): card of an unregistered tool is Pi's formatToolExecution | Ompig's own defect | All platforms | Unreleased |
@@ -553,12 +553,12 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-72e7ab2-6](#bf-72e7ab2-6) | `TestSummaryAndSkillMessageComponentsMatchPi` probes the compaction, branch summary and skill messages under… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-731474b](#bf-731474b) | `coding.DefineTool` returns the tool definition it is given, as Pi's `defineTool` does | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-731474b-2](#bf-731474b-2) | `codemode.CodemodeJsonSchema` names the raw JSON of a tool's JSON Schema document, as Pi's… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-7375fe4](#bf-7375fe4) | After `ompig ompiglet update` installs a new release of a pulled Ompiglet Binary, `ompig ompiglet list` shows the… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-7375fe4](#bf-7375fe4) | After `pig piglet update` installs a new release of a pulled Piglet Binary, `pig piglet list` shows the… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-73a09eb](#bf-73a09eb) | fix: the ANSI renderer that replaces a frontend surface draws on the options terminal, not the surface's… | Ompig's own defect | All platforms | Unreleased |
 | [BF-73a6c8c](#bf-73a6c8c) | OpenAI-compatible chat completions requests keep the tool-call ids of the same model's earlier calls as they… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-73ef1ea](#bf-73ef1ea) | Reduced context-limit request failures by estimating input at 3.5 characters per token instead of 4 when… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-7472171](#bf-7472171) | An extension dialog (`select`, `confirm`, `input`, `editor`) that opens while another is shown now replaces… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-7489735](#bf-7489735) | `ompig -e <directory>` now loads a Node extension whose entry file is `index.mjs` and that has no… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-7489735](#bf-7489735) | `pig -e <directory>` now loads a Node extension whose entry file is `index.mjs` and that has no… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-74bc69b](#bf-74bc69b) | fix(rpc): every Session replacement aborts the compactions of its batch, and an abort before the request… | Ompig's own defect | All platforms | Unreleased |
 | [BF-74e801f](#bf-74e801f) | Fix in shipped code | Ompig's own defect | All platforms | Unreleased |
 | [BF-74f806c](#bf-74f806c) | fix(agent): end the tool flow at custom user messages after /tree navigation (#203) | Ompig's own defect | All platforms | Unreleased |
@@ -577,13 +577,13 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-7768bea](#bf-7768bea) | fix(ai): tool-call arguments are written as JSON.stringify writes them, and keep a lone surrogate | Ompig's own defect | All platforms | Unreleased |
 | [BF-779318a](#bf-779318a) | OpenAI-compatible streams where one chunk carries reasoning and content (LiteLLM and similar proxies) now… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-7809364](#bf-7809364) | Schema errors of a `ChordError` of code `invalid` list their members in the order the value arrived in, as… | Ompig's own defect | All platforms | Unreleased |
-| [BF-78c4c6c](#bf-78c4c6c) | `ompig ompiglet add` now names the offending bundled path and where it came from (for example `Package herdr… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-78f2d55](#bf-78f2d55) | `ompig mcp login --help` described `--timeout` as only the wait for the browser; it limits the whole sign-in… | A fix Pi shipped that Ompig ported | All platforms | 0.5.0 |
+| [BF-78c4c6c](#bf-78c4c6c) | `pig piglet add` now names the offending bundled path and where it came from (for example `Package herdr… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-78f2d55](#bf-78f2d55) | `pig mcp login --help` described `--timeout` as only the wait for the browser; it limits the whole sign-in… | A fix Pi shipped that Ompig ported | All platforms | 0.5.0 |
 | [BF-79eadcf](#bf-79eadcf) | Long sessions no longer slow down each streamed frame in the main screen: a frame redraws from the first line… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-79f9a9e](#bf-79f9a9e) | fix(agent): convert a live partial with one clone and keep events at an unchanged publication (TU-T7 rest) | Ompig's own defect | All platforms | Unreleased |
 | [BF-7a4a8e8](#bf-7a4a8e8) | fix duplicate jsstring import in tui/assistant_message_block.go | Ompig's own defect | All platforms | Unreleased |
 | [BF-7b0f5d7](#bf-7b0f5d7) | A native extension provider's `filterAllModels` receives the models its `getAllModels` (or `getModels`)… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-7b59fe2](#bf-7b59fe2) | `ompig ompiglet build --format binary` from a Ompig source directory that is not a Git checkout (for example… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-7b59fe2](#bf-7b59fe2) | `pig piglet build --format binary` from a Pig source directory that is not a Git checkout (for example… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-7b92429](#bf-7b92429) | `find` and `grep` trim like JavaScript: `FindTool` trimmed each fd output line with `strings.TrimSpace` where… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-7ba3211](#bf-7ba3211) | A resumed session no longer holds its whole file in memory | Ompig's own defect | macOS | 0.5.0 |
 | [BF-7bcd404](#bf-7bcd404) | fix(durable): state the lifetime of the goroutine that publishes an adopted commit | Ompig's own defect | All platforms | Unreleased |
@@ -606,7 +606,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-8070fcc](#bf-8070fcc) | OpenAI Codex and Azure OpenAI requests parse their URL as fetch does again: an upper-case scheme, a space or… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-8085dc0](#bf-8085dc0) | A legacy `oauth.json` or `settings.json` that starts with a byte order mark migrates to `auth.json`, as in Pi | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-80970da](#bf-80970da) | The Go SDK page now says that leaving `AgentDir` empty in `CreateAgentSessionServicesOptions` makes a program… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-80b912a](#bf-80b912a) | A failed install-receipt write during `ompig update` or install, such as one rejected because the update CA… | Ompig's own defect | Windows | Unreleased |
+| [BF-80b912a](#bf-80b912a) | A failed install-receipt write during `pig update` or install, such as one rejected because the update CA… | Ompig's own defect | Windows | Unreleased |
 | [BF-80bb522](#bf-80bb522) | Compacting a history longer than the model's context window no longer fails with the provider's "prompt is… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-80bb522-2](#bf-80bb522-2) | Gemini 2.x models (Google Generative AI and Vertex) no longer reject a conversation in which a parallel tool… | A Pi defect that Ompig fixed first | All platforms | 0.5.0 |
 | [BF-80bb522-3](#bf-80bb522-3) | Amazon Bedrock Converse requests merge adjacent messages that have the same role | A Pi defect that Ompig fixed first | All platforms | 0.5.0 |
@@ -617,11 +617,11 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-81e584b-2](#bf-81e584b-2) | Live-Pi oracle `TestMistralMessagesPayloadMatchesPi` (`ai/mistral_messages_payload_oracle_test.go`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-8241433](#bf-8241433) | A Mistral stream chunk with a member of an unexpected type is read as Pi's JavaScript reads it instead of… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-82d1808](#bf-82d1808) | Subprocess extensions no longer slow down each streamed token in long sessions: the state sent before each… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-83d5488](#bf-83d5488) | `ompig install <dir>` of a local directory with no package manifest and no `extensions/`, `skills/`, `prompts/`… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-83d5488](#bf-83d5488) | `pig install <dir>` of a local directory with no package manifest and no `extensions/`, `skills/`, `prompts/`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-83fea11](#bf-83fea11) | On Windows, a refused connection reads as Node's `connect ECONNREFUSED` and is not retried, as in Pi; it was… | Ompig's own defect | Windows | 0.5.0 |
 | [BF-844d215](#bf-844d215) | Repairing a partial tool-call arguments text follows partial-json's `obj["__proto__"] = value`: a… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-848836a](#bf-848836a) | fix(frontmatter): header starts one UTF-16 unit after the fence | Ompig's own defect | All platforms | Unreleased |
-| [BF-852652e](#bf-852652e) | Ompig no longer names documentation that does not exist | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-852652e](#bf-852652e) | PiG no longer names documentation that does not exist | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-852f029](#bf-852f029) | Durable document, conversation-view and task-graph states report failing state listeners to the Session's… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-85618d9](#bf-85618d9) | fix(rpc): a failed switch_session answers before the replacement ahead of it; prompt compaction checks… | Ompig's own defect | All platforms | Unreleased |
 | [BF-85908ae](#bf-85908ae) | A `/tree` branch summary the provider refuses as too long is retried with the newest half of the request… | A Pi defect that Ompig fixed first | All platforms | 0.5.0 |
@@ -645,9 +645,9 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-8a9bb40](#bf-8a9bb40) | fix(ai): Anthropic retry-delay message and Codex error body without an error member | Ompig's own defect | All platforms | Unreleased |
 | [BF-8ab5a89](#bf-8ab5a89) | A long session no longer holds each tool result twice | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-8ab86c8](#bf-8ab86c8) | RPC `get_state` sent right after `new_session`, `fork`, `clone`, `switch_session` or `export_html` now… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-8b75dc0](#bf-8b75dc0) | Config selector (`ompig config`): every key that reaches the search input re-filters and resets the selection… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-8b75dc0](#bf-8b75dc0) | Config selector (`pig config`): every key that reaches the search input re-filters and resets the selection… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-8b8f379](#bf-8b8f379) | A pi-ai call made while a module loads is answered in every extension host: SDK sessions, the extension… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-8b9e467](#bf-8b9e467) | `OMPIG_PROFILE=metrics` reports the exact cumulative allocation counts | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-8b9e467](#bf-8b9e467) | `PIG_PROFILE=metrics` reports the exact cumulative allocation counts | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-8bc7c8f](#bf-8bc7c8f) | Fix in shipped code | Ompig's own defect | All platforms | Unreleased |
 | [BF-8c3f5a1](#bf-8c3f5a1) | fix(tui): a finished block's hidden thinking run keeps no streaming memos | Ompig's own defect | All platforms | Unreleased |
 | [BF-8c5a7a4](#bf-8c5a7a4) | The Go, Python and Rust extension SDKs' `serializeConversation` (`SerializeConversation`… | Ompig's own defect | All platforms | 0.5.0 |
@@ -669,7 +669,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-9101bc8](#bf-9101bc8) | Bedrock model matching follows Pi: separator runs in a model id or display name become a single `-` (so "Opus… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-918f21c](#bf-918f21c) | `formatThousands` (`tui/compaction_summary.go`, compaction-summary-message.ts:40… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-919575a](#bf-919575a) | A JSON syntax error reports what V8's `JSON.parse` reports in two cases it got wrong: a number or string… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-91e912a](#bf-91e912a) | Two Ompig versions that share a config root (two installed versions, or Ompig beside a Ompiglet Binary) no longer… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-91e912a](#bf-91e912a) | Two PiG versions that share a config root (two installed versions, or PiG beside a Piglet Binary) no longer… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-91f9946](#bf-91f9946) | OpenRouter image generation reads the chat completions body as Pi does, checked against the pinned Pi in a… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-928e15c](#bf-928e15c) | A listener that fails while agent_start is dispatched now ends the run as in Pi (failure messages, no… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-928e15c-10](#bf-928e15c-10) | Constrained-sampling errors quote tool and property names as Pi does (raw text between double quotes, not… | Ompig's own defect | All platforms | 0.5.0 |
@@ -754,11 +754,11 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-9327bc7](#bf-9327bc7) | A closed Harness or Session no longer stays reachable from Go's timer heap | Ompig's own defect | All platforms | Unreleased |
 | [BF-93319f4](#bf-93319f4) | The terminal UI worked example now describes the typed `/model` prefix in words | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-93c09d6](#bf-93c09d6) | A local package source that is a file Node cannot import, such as a packed `.tgz`, fails to load as in Pi… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-93c09d6-2](#bf-93c09d6-2) | `ompig install --validate-only` on a Package root validates every extension the Package names in… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-93c09d6-2](#bf-93c09d6-2) | `pig install --validate-only` on a Package root validates every extension the Package names in… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-93c5def](#bf-93c5def) | A built-in extension named with `-e builtin:<name>` loads before the extensions from settings and the… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-93f8b7c](#bf-93f8b7c) | fix(agent): a listener failure at agent_start ends the run as in Pi; failure messages carry the model's api | Ompig's own defect | All platforms | Unreleased |
 | [BF-942bc6c](#bf-942bc6c) | fix(coding-agent): preserve pi.exec spawn errors (Pi) | Ompig's own defect | All platforms | Unreleased |
-| [BF-94e3498](#bf-94e3498) | On Windows, Ompig no longer searches `C:\etc\ompig\ompiglets` or `C:\opt\ompig\ompiglet.yaml` for a Ompiglet | Ompig's own defect | Windows | 0.5.0 |
+| [BF-94e3498](#bf-94e3498) | On Windows, PiG no longer searches `C:\etc\pig\piglets` or `C:\opt\pig\piglet.yaml` for a Piglet | Ompig's own defect | Windows | 0.5.0 |
 | [BF-94e6796](#bf-94e6796) | A Durable Harness task that went to sleep for a short time, such as the 1 ms backoff before a generation… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-94f1e6f](#bf-94f1e6f) | fix(coding): a provider of only virtual models is configured with source virtual | Ompig's own defect | All platforms | Unreleased |
 | [BF-9515bcb](#bf-9515bcb) | Code mode: a deterministic run's clocks round like `Math.round` (0.49999999999999994 ms read 1 ms), and a… | Ompig's own defect | All platforms | 0.5.0 |
@@ -766,10 +766,10 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-95a5f79](#bf-95a5f79) | RPC mode starts the `--tools` list active in its own order when it names extension tools, as Pi does | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-95eefe2](#bf-95eefe2) | openai-completions thinking formats now match Pi (`ai/openai.go`, openai-completions.ts:885-985 and… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-9721c48](#bf-9721c48) | An auto, manual or overflow compaction status shown in the editor's top border now takes the editor border… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-9740507](#bf-9740507) | `ompig extension upgrade` now rewrites a `Context.ConfigHome()` call in an `if` or `switch` init statement and… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-9740507-2](#bf-9740507-2) | `ompig extension upgrade` no longer discards the error of `Context.ConfigHome` with `home, _ :=… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-9740507-3](#bf-9740507-3) | `ompig extension upgrade` is all or nothing | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-976af87](#bf-976af87) | The documentation said Ompig starts without a first-time setup screen and that Stock Ompig has no built-in sprites | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-9740507](#bf-9740507) | `pig extension upgrade` now rewrites a `Context.ConfigHome()` call in an `if` or `switch` init statement and… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-9740507-2](#bf-9740507-2) | `pig extension upgrade` no longer discards the error of `Context.ConfigHome` with `home, _ :=… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-9740507-3](#bf-9740507-3) | `pig extension upgrade` is all or nothing | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-976af87](#bf-976af87) | The documentation said PiG starts without a first-time setup screen and that Stock PiG has no built-in sprites | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-97cd675](#bf-97cd675) | fix(agent): nested records keep a message whatever the spelling of its numbers | Ompig's own defect | All platforms | Unreleased |
 | [BF-97e178f](#bf-97e178f) | Tool-call arguments that arrive as incomplete or malformed JSON are now recovered exactly as Pi's… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-983d651](#bf-983d651) | The bash truncation notice for a last line over 50 KB that ends with a newline reports the line's size… | Ompig's own defect | All platforms | 0.5.0 |
@@ -783,10 +783,10 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-9b4312b](#bf-9b4312b) | A Rust extension build that ends without a compiler diagnostic (cargo or rustc killed, cargo unable to start)… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-9b4312b-2](#bf-9b4312b-2) | The Rust build failure test asserts that a killed rustc is named by its program name, not its full path | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-9b63b2b](#bf-9b63b2b) | On Windows, the bash tool no longer risks waiting forever after a command exits while a process it started in… | Ompig's own defect | Windows | 0.5.0 |
-| [BF-9b63b2b-2](#bf-9b63b2b-2) | A running `!` command or bash tool command no longer outlives `ompig` when the session ends because its… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-9b63b2b-2](#bf-9b63b2b-2) | A running `!` command or bash tool command no longer outlives `pig` when the session ends because its… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-9ba2589](#bf-9ba2589) | fix(agent): write a decoded message as the object it was decoded from | Ompig's own defect | All platforms | Unreleased |
 | [BF-9be5765](#bf-9be5765) | Pressing Escape while an extension tool runs now lets the tool finish: a tool that stops on its abort signal… | A Pi defect that Ompig fixed first | All platforms | 0.5.0 |
-| [BF-9be7181](#bf-9be7181) | Pasting in the shell no longer hangs after copying text in ompig and suspending it with Ctrl+Z on Linux: the… | Ompig's own defect | Linux | 0.5.2 |
+| [BF-9be7181](#bf-9be7181) | Pasting in the shell no longer hangs after copying text in pig and suspending it with Ctrl+Z on Linux: the… | Ompig's own defect | Linux | 0.5.2 |
 | [BF-9c1a0e9](#bf-9c1a0e9) | An OpenAI Responses stream event or output item with a member of an unexpected type is read as Pi's… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-9c98038](#bf-9c98038) | An unclosed `$$` or `\[` display-math block no longer swallows or corrupts every Markdown table after it | A fix Pi shipped that Ompig ported | All platforms | 0.5.2 |
 | [BF-9d02a48](#bf-9d02a48) | Gemini tool schemas send string and number `const` values as single-value `enum`s, which Gemini honors where… | Ompig's own defect | All platforms | Unreleased |
@@ -820,21 +820,21 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-a3bfab2](#bf-a3bfab2) | A Radius gateway config cached on an OAuth credential is sanitized as Pi does | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-a40a16d](#bf-a40a16d) | fix(codingagent): typed input restarts the idle collection's wait on every route | Ompig's own defect | All platforms | Unreleased |
 | [BF-a46f930](#bf-a46f930) | A Package configured as a settings object reads a resource kind its `pi` manifest does not declare (or… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-a4753ec](#bf-a4753ec) | A panic in a background goroutine of an interactive session no longer ends Ompig with only a stderr dump | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-a4753ec](#bf-a4753ec) | A panic in a background goroutine of an interactive session no longer ends PiG with only a stderr dump | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-a4753ec-2](#bf-a4753ec-2) | The prompt-cache refresh that fires minutes after a prompt now treats a panic in the extension decision or in… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-a4753ec-3](#bf-a4753ec-3) | When the terminal's input ends while its output is still there, Ompig keeps running as Pi does instead of… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-a4753ec-3](#bf-a4753ec-3) | When the terminal's input ends while its output is still there, PiG keeps running as Pi does instead of… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-a47eb1a](#bf-a47eb1a) | A tool result from a Rust or Python extension can set the collapsed-view `preview` the Go SDK already had… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-a53f72f](#bf-a53f72f) | A context an extension kept across a session replacement or reload now raises Pi's stale message from `cwd`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-a5524c8](#bf-a5524c8) | In print and JSON mode, an extension whose `session_shutdown` handler throws after SIGTERM or SIGHUP now has… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-a5524c8-2](#bf-a5524c8-2) | In print and JSON mode, SIGTERM or SIGHUP during a tool call stops the run where Pi does while the… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-a690122](#bf-a690122) | `OMPIG_PROFILE=heap` and the `heap_live_bytes` of `OMPIG_PROFILE=metrics` count only memory Ompig retains | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-a690122](#bf-a690122) | `PIG_PROFILE=heap` and the `heap_live_bytes` of `PIG_PROFILE=metrics` count only memory PiG retains | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-a6932b4](#bf-a6932b4) | fix(coding): pass a Node extension request's client identity to the provider | Ompig's own defect | All platforms | Unreleased |
 | [BF-a6e0ce8](#bf-a6e0ce8) | fix(codingagent): session selector page keys keep the index valid (Pi #7680) | Ompig's own defect | All platforms | Unreleased |
 | [BF-a739b6d](#bf-a739b6d) | The Bedrock endpoint region is read from the WHATWG hostname of the base URL, as Pi's `new URL` does… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-a7be906](#bf-a7be906) | Pressing Enter in the model picker's search box selects the highlighted model even when `tui.select.confirm`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-a7d2ef5](#bf-a7d2ef5) | Path autocomplete after resuming a session created in another directory now lists files from that session's… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-a81ec0d](#bf-a81ec0d) | A key pressed while an extension's custom overlay is open no longer freezes `ompig` when the key reaches the… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-a8a04f4](#bf-a8a04f4) | `OMPIG_DEBUG` writes its log with mode 0600 and refuses a symlink or a file owned by another user in the shared… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-a81ec0d](#bf-a81ec0d) | A key pressed while an extension's custom overlay is open no longer freezes `pig` when the key reaches the… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-a8a04f4](#bf-a8a04f4) | `PIG_DEBUG` writes its log with mode 0600 and refuses a symlink or a file owned by another user in the shared… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-a8ff0c7](#bf-a8ff0c7) | The anthropic-messages and google-generative-ai requests build their URL as @anthropic-ai/sdk and… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-a901509](#bf-a901509) | OpenRouter turns (the built-in provider and custom providers on OpenRouter's endpoint) now take OpenRouter's… | Ompig's own defect | All platforms | 0.5.3 |
 | [BF-a94455c](#bf-a94455c) | The durable code mode joins the text items of a script's output in linear time (Pi f11e50f7… | Ompig's own defect | All platforms | 0.5.0 |
@@ -849,7 +849,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-ac0dc3b](#bf-ac0dc3b) | An empty list item ends its list: a following unindented line is no longer taken for its lazy continuation… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-ac6fcea](#bf-ac6fcea) | A `session_start` handler that calls `ctx.shutdown()` during `/reload` ends the session and exits 0, as Pi… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-aca35e7](#bf-aca35e7) | In print and JSON mode, a Node extension no longer runs a timer or other callback between a prompt's last… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-ad49f9f](#bf-ad49f9f) | `ompig status` no longer reports a shared extension name as an unhealthy duplicate | Ompig's own defect | All platforms | Unreleased |
+| [BF-ad49f9f](#bf-ad49f9f) | `pig status` no longer reports a shared extension name as an unhealthy duplicate | Ompig's own defect | All platforms | Unreleased |
 | [BF-ad9ed64](#bf-ad9ed64) | Appending a tool result whose details are a tool's own value (a truncated `read`, `bash` output details, an… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-ad9ed64-2](#bf-ad9ed64-2) | A large message's session record no longer keeps a regrown buffer when its text has escapes such as newlines… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-ae1ee6d](#bf-ae1ee6d) | The login dialog opens and prints only `http:` and `https:` URLs, in their normalized form (percent-encoded… | Ompig's own defect | All platforms | Unreleased |
@@ -864,18 +864,18 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-affc944](#bf-affc944) | Bedrock requests that fail with `The pending stream has been canceled` after a stalled HTTP/2 connection are… | A fix Pi shipped that Ompig ported | All platforms | 0.5.0 |
 | [BF-b02876b](#bf-b02876b) | `chord/host`: a link that is already closed when a host accepts or routes to it is no longer kept as a… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-b0608a9](#bf-b0608a9) | OpenRouter generated-image data URLs are matched exactly as Pi does (`^data:([^;]+);base64,(.+)$`): a URL… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-b06ad92](#bf-b06ad92) | An MCP server `url` can use environment variables (`"url": "${TOOLS_URL}"`): Ompig checks and connects to the… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-b06ad92](#bf-b06ad92) | An MCP server `url` can use environment variables (`"url": "${TOOLS_URL}"`): PiG checks and connects to the… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-b1642ac](#bf-b1642ac) | fix(ai,chord): AppendText is a function over a draft; the streaming JSON parser reads deep nesting in linear… | Ompig's own defect | All platforms | Unreleased |
 | [BF-b18a7ff](#bf-b18a7ff) | `ctx.compact` answers `onComplete` with the compaction result's members in Pi's order (`summary`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-b1ff77a](#bf-b1ff77a) | The pi-env daemon answers as Pi's daemon does where a differential test found it did not: an error for an… | Ompig's own defect | All platforms | Unreleased |
 | [BF-b2b0c63](#bf-b2b0c63) | Fix in shipped code | Ompig's own defect | All platforms | Unreleased |
 | [BF-b2c219f](#bf-b2c219f) | fix(runtimecell): satisfy the divergence, port and perf gates for the usage-lease and fingerprint changes | Ompig's own defect | All platforms | Unreleased |
-| [BF-b341a82](#bf-b341a82) | `go install github.com/tmih06/ompig/cmd/ompig@latest` works again | Ompig's own defect | All platforms | 0.5.2 |
-| [BF-b3543f8](#bf-b3543f8) | Fixed MCP stdio servers staying alive after Ompig exited because the terminal closed, it crashed, or it… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-b341a82](#bf-b341a82) | `go install github.com/MichaelKinsy/PiG/cmd/pig@latest` works again | Ompig's own defect | All platforms | 0.5.2 |
+| [BF-b3543f8](#bf-b3543f8) | Fixed MCP stdio servers staying alive after PiG exited because the terminal closed, it crashed, or it… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-b430c7a](#bf-b430c7a) | Extension widgets now appear in the order they were set when Node or other extension-process widgets and Go… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-b4504dd](#bf-b4504dd) | Amazon Bedrock request bodies match Pi's: Ompig writes the ConverseStream body itself in the member order Pi's… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-b4504dd](#bf-b4504dd) | Amazon Bedrock request bodies match Pi's: PiG writes the ConverseStream body itself in the member order Pi's… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-b47b6bc](#bf-b47b6bc) | fix(tui): number the editor wrap divergence D159 (lead block), cite Pi's measured RangeError; add… | Ompig's own defect | All platforms | Unreleased |
-| [BF-b4822ef](#bf-b4822ef) | `ompig install <dir>` now installs a local Go, Rust or Python extension folder and loads it as an extension, as… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-b4822ef](#bf-b4822ef) | `pig install <dir>` now installs a local Go, Rust or Python extension folder and loads it as an extension, as… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-b4c6569](#bf-b4c6569) | `~/dir/` expands to the home directory with the trailing separator kept (`$HOME/dir/`), as Node's `path.join`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-b4e83db](#bf-b4e83db) | Anthropic tools list `eager_input_streaming` and `strict` before `input_schema`, and the input schema and… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-b4f1d4a](#bf-b4f1d4a) | Pasting a large text that arrives in many terminal reads no longer stalls input: the paste is joined once… | Ompig's own defect | All platforms | 0.5.0 |
@@ -883,14 +883,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-b5b7b43](#bf-b5b7b43) | Frontmatter YAML parsing matches the `yaml` library on text outside ASCII and on unterminated quotes: an… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-b5ebeb5](#bf-b5ebeb5) | A resumed session draws its `!` and `!!` command blocks, as Pi does | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-b5fb4aa](#bf-b5fb4aa) | fix(tui): a streamed Markdown is not resumed past a paragraph that a later LaTeX closer clips; keep wraps… | Ompig's own defect | All platforms | Unreleased |
-| [BF-b607c35](#bf-b607c35) | Started from a directory reached through a symlink (a `$PWD` naming a link), ompig now uses the physical… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-b607c35](#bf-b607c35) | Started from a directory reached through a symlink (a `$PWD` naming a link), pig now uses the physical… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-b684b81](#bf-b684b81) | RPC and session JSON write an assistant message's members in the order Pi's providers assign them… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-b6c65b3](#bf-b6c65b3) | `!` command and RPC `bash` output no longer keeps fragments of color codes, such as a stray `m`, when an… | A fix Pi shipped that Ompig ported | All platforms | 0.5.0 |
 | [BF-b6d8ab0](#bf-b6d8ab0) | Fix changelog fragment and bug ledger naming the pre-squash commit of #307 (#317) | Ompig's own defect | All platforms | Unreleased |
 | [BF-b730205](#bf-b730205) | OpenRouter image models that only the Images API serves (for example `openai/gpt-image-2.5-flare`) now… | A Pi defect that Ompig fixed first | All platforms | 0.5.0 |
 | [BF-b751326](#bf-b751326) | When an extension in a shared Go, Rust or Python process crashes, the error for each stopped extension now… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-b78cdae](#bf-b78cdae) | A YAML parse error on a block scalar used as an implicit key (`name: x` followed by `\|description: ...`)… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-b7d9b2b](#bf-b7d9b2b) | `ompig install` and `ompig remove` no longer add ever deeper nested entries to the npm `package-lock.json` when… | Ompig's own defect | All platforms | Unreleased |
+| [BF-b7d9b2b](#bf-b7d9b2b) | `pig install` and `pig remove` no longer add ever deeper nested entries to the npm `package-lock.json` when… | Ompig's own defect | All platforms | Unreleased |
 | [BF-b84facb](#bf-b84facb) | fix(codingagent,tui): extension editor follows the terminal rows; title and image fallback close only the… | Ompig's own defect | All platforms | Unreleased |
 | [BF-b88044f](#bf-b88044f) | A login flow's text prompt accepts an empty answer, as Pi's does, instead of failing with "<prompt> is… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-b8c5de6](#bf-b8c5de6) | Interactive startup no longer reads terminal input while it checks for fd and rg unless one of them is being… | Ompig's own defect | All platforms | 0.5.0 |
@@ -900,7 +900,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-b99457f](#bf-b99457f) | `tool_search` and codemode tool search match Chinese, Japanese and Korean queries: each such character is a… | A Pi defect that Ompig fixed first | All platforms | 0.5.0 |
 | [BF-b9db06c](#bf-b9db06c) | fix(subprocess): keep a user_bash operations object alive while its exec runs | Ompig's own defect | All platforms | Unreleased |
 | [BF-ba8b6b7](#bf-ba8b6b7) | `/logout` reads stored credentials with Pi's 15-second signal, so an unreadable `auth.json` reports "Could… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-ba9c37b](#bf-ba9c37b) | Starting `ompig` no longer waits for the daily cleanup of the extension cache | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-ba9c37b](#bf-ba9c37b) | Starting `pig` no longer waits for the daily cleanup of the extension cache | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-bada2af](#bf-bada2af) | Session and crash timestamps are read like Date.parse of a JavaScript string: U+00A0 and U+FEFF between… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-bb324f7](#bf-bb324f7) | A JavaScript or TypeScript extension loads when its `registerCommand` options carry a member Pi does not… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-bb3d661](#bf-bb3d661) | An extension served in-process now refuses to serve a second connection while it serves one, with the error… | Ompig's own defect | All platforms | Unreleased |
@@ -925,7 +925,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-c1fedc2](#bf-c1fedc2) | The durable `read` tool reads a file that grows while it is read, such as an active log, instead of failing… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-c1fedc2-2](#bf-c1fedc2-2) | Bounded durable tool output drops a byte-order mark only at the start of byte output, and keeps a U+FEFF at… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-c225c97](#bf-c225c97) | fix(rpc): compaction_start precedes a refused replacement's error; D148 names the extra compaction_end; D141… | Ompig's own defect | All platforms | Unreleased |
-| [BF-c229e1c](#bf-c229e1c) | A Pi Durable SQLite file written by Ompig can be read by Pi, and the reverse, when a task kind, request ID, or… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-c229e1c](#bf-c229e1c) | A Pi Durable SQLite file written by PiG can be read by Pi, and the reverse, when a task kind, request ID, or… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-c2b2b8b](#bf-c2b2b8b) | fix(tui): the inline memo is used only with tui's own style functions | Ompig's own defect | All platforms | Unreleased |
 | [BF-c350117](#bf-c350117) | Fixed incorrect MCP reconnect behavior after cancellation during transport cleanup | Ompig's own defect | All platforms | Unreleased |
 | [BF-c371a13](#bf-c371a13) | OpenAI Responses requests keep the prompt cache across tool changes (Pi #11142) | Ompig's own defect | All platforms | 0.5.2 |
@@ -958,7 +958,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-cc9370b](#bf-cc9370b) | A Node extension's `setWidget`, `setHeader` and `setFooter` factories receive the same `tui` as a… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-ccaade2](#bf-ccaade2) | The `/thinking` selector edits its search like Pi's input, selects with the input's submit key, and no longer… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-cd7fa1c](#bf-cd7fa1c) | A read-only config root no longer prints warnings at every start | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-cda6e3a](#bf-cda6e3a) | Ompig opens a session file that holds a valid JSON line that is not an entry (an array, `true`, a string) or an… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-cda6e3a](#bf-cda6e3a) | PiG opens a session file that holds a valid JSON line that is not an entry (an array, `true`, a string) or an… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-cdf0be7](#bf-cdf0be7) | Markdown rendering matches Pi on blank lines at the start and end of the text, empty headings and closing `#`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-cdf2887](#bf-cdf2887) | fix(ai): keep a reused-id tool result in its own turn during the D48 repair | Ompig's own defect | All platforms | Unreleased |
 | [BF-ce0f352](#bf-ce0f352) | `createPowerShellTool` now uses the `operations` option | A fix Pi shipped that Ompig ported | Windows | 0.5.0 |
@@ -968,12 +968,12 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-ce8587e](#bf-ce8587e) | On macOS, reading an image or file paths from the clipboard and writing text to it no longer risk passing… | Ompig's own defect | macOS | 0.5.0 |
 | [BF-ced3a9c](#bf-ced3a9c) | RPC model objects of built-in models carry `"type":"chat"` (`get_available_models`, `get_state`, `set_model`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-ced3a9c-2](#bf-ced3a9c-2) | A URL of a non-special scheme keeps an explicit port 0 (`ssh://git@host:0/repo`, an MCP OAuth redirect such… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-cf4fff8](#bf-cf4fff8) | A project whose only configuration is a project `mcp.json` (`.ompig/mcp.json`, or `.pi/mcp.json` with… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-cf4fff8](#bf-cf4fff8) | A project whose only configuration is a project `mcp.json` (`.pig/mcp.json`, or `.pi/mcp.json` with… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-cf648c7](#bf-cf648c7) | A restarted extension, isolated or in a recovered packed cell, now offers the commands, flags, shortcuts and… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-cf7916b](#bf-cf7916b) | Fix in shipped code | Ompig's own defect | All platforms | Unreleased |
 | [BF-cf7f368](#bf-cf7f368) | A local file listed as a Package with `autoload: false` still loads as one enabled extension, and when a… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d0c2727](#bf-d0c2727) | fix(codingagent): decode a Node request's client identity from its fields; regenerate the normalization… | Ompig's own defect | All platforms | Unreleased |
-| [BF-d11ca55](#bf-d11ca55) | `ompig ompiglet build --format binary` from a Ompig checkout with a `go.work` builds a Ompiglet whose fused Go… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-d11ca55](#bf-d11ca55) | `pig piglet build --format binary` from a Pig checkout with a `go.work` builds a Piglet whose fused Go… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d133e3d](#bf-d133e3d) | Codemode scripts that patch built-ins, for example `Array.prototype.toJSON = ...`, no longer break the tool… | A fix Pi shipped that Ompig ported | All platforms | 0.5.0 |
 | [BF-d133e3d-2](#bf-d133e3d-2) | MCP OAuth sign-in no longer fails with `invalid_redirect_uri` on OpenID Connect servers: client registration… | A fix Pi shipped that Ompig ported | All platforms | 0.5.0 |
 | [BF-d1af7ae](#bf-d1af7ae) | The crash message of a deterministic code mode VM that is told a result number it cannot take now reads as… | Ompig's own defect | All platforms | Unreleased |
@@ -981,14 +981,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-d1af7ae-3](#bf-d1af7ae-3) | A code mode `done` message that carries no store writes now fails the execution with Pi's `store writes is… | Ompig's own defect | All platforms | Unreleased |
 | [BF-d1cbde3](#bf-d1cbde3) | The pi-messages, Cloudflare Workers AI and TypeSafe System One, and OpenAI decisions request URLs are built… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d1f258f](#bf-d1f258f) | The `/settings` search edits like Pi's search input: the cursor moves with the arrow keys, Ctrl+W, Ctrl+K… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-d212cdf](#bf-d212cdf) | `ompig --ompiglet ompiglets/standard/ompig-standard.yaml` no longer warns on every start that its `piglogin`… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-d212cdf](#bf-d212cdf) | `pig --piglet piglets/standard/pig-standard.yaml` no longer warns on every start that its `piglogin`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d249c70](#bf-d249c70) | SDK: `Session.Dispose` now releases the Session as Pi's `dispose` does | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d26d494](#bf-d26d494) | fix(tui): Editor.SetText resets the scroll offset | Ompig's own defect | All platforms | Unreleased |
-| [BF-d276c00](#bf-d276c00) | `ompig ompiglet schema` lists the `apis` strip list | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-d276c00](#bf-d276c00) | `pig piglet schema` lists the `apis` strip list | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d2b1fc1](#bf-d2b1fc1) | GitHub Copilot login reads an enterprise domain the way Pi does: an IPv6 host keeps its brackets, an… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d2b1fc1-2](#bf-d2b1fc1-2) | Pasting an OAuth authorization into the Anthropic, OpenAI Codex or OpenRouter login now reads it the way Pi… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d2d4384](#bf-d2d4384) | A streamed write card no longer slows down as its content grows | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-d305b76](#bf-d305b76) | A Go extension whose `go.mod` replace (or a Rust extension whose `ompig-sdk` path dependency) points at an SDK… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-d305b76](#bf-d305b76) | A Go extension whose `go.mod` replace (or a Rust extension whose `pig-sdk` path dependency) points at an SDK… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d36b329](#bf-d36b329) | The edit tool no longer accepts a JSON-string `edits` value that starts or ends with non-JSON whitespace such… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d37c769](#bf-d37c769) | A replacement request body from a `before_provider_request` hook on Anthropic Messages, and every OpenAI… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d38f3be](#bf-d38f3be) | fix(durable): record the requested thinking level without boxing a string in the turn package | Ompig's own defect | All platforms | Unreleased |
@@ -1001,7 +1001,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-d50ec25](#bf-d50ec25) | The TypeScript extension runtime no longer depends on Node-only behaviour: its entry modules do not await the… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d514b3d](#bf-d514b3d) | In a Node extension's `before_agent_start` handler, `event.systemPrompt` and `ctx.getSystemPrompt()` now… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d53cd09](#bf-d53cd09) | A tool call whose arguments are not an object is written back to each provider as Pi writes it: Anthropic and… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-d60d422](#bf-d60d422) | `pi.exec` gives the command Ompig's environment unchanged, as Pi does, so a command started in a symlinked… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-d60d422](#bf-d60d422) | `pi.exec` gives the command PiG's environment unchanged, as Pi does, so a command started in a symlinked… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d64f8ed](#bf-d64f8ed) | `durable.StorageRequestError` and `durable.SessionFailed` are Pi's error classes of the same names… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d6aaf72](#bf-d6aaf72) | A `setTimeout(0)` or `setImmediate` callback that an extension queues while an RPC stdin command runs (a… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-d6e0dca](#bf-d6e0dca) | The extension SDK surface matrix and the extension API pages say that `setEditorComponent` and… | Ompig's own defect | All platforms | 0.5.0 |
@@ -1010,52 +1010,52 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-d7c7f86](#bf-d7c7f86) | fix(runtimecell): start a packed cell's members in order so a later member's factory cannot take the factory… | Ompig's own defect | All platforms | Unreleased |
 | [BF-d7fbf00](#bf-d7fbf00) | Stored assistant messages of a durable conversation now carry `thinkingLevel`: a generation records the… | Ompig's own defect | All platforms | Unreleased |
 | [BF-d80425c](#bf-d80425c) | fix(train): gate repairs after merging train 3 and the ordering stack | Ompig's own defect | All platforms | Unreleased |
-| [BF-d80c1cd](#bf-d80c1cd) | Where Pi calls `new URL(value)`, Ompig now parses a `ws:`, `wss:`, `ftp:` or `file:` URL, and a bracketed IPv6… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-d80c1cd](#bf-d80c1cd) | Where Pi calls `new URL(value)`, Pig now parses a `ws:`, `wss:`, `ftp:` or `file:` URL, and a bracketed IPv6… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d8357e2](#bf-d8357e2) | Cache warmer pure functions against live Pi: new `TestCacheWarmerPureFunctionsMatchPi`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d87b70c](#bf-d87b70c) | A second `ctx.ui.custom` component opened while one is shown now opens over it at once, as in Pi, whether it… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d88dca7](#bf-d88dca7) | `harness.ToolTaskInput.Kind` and `ToolTaskResult.Kind` are the named string type `harness.ToolTaskKind` with… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d8bed22](#bf-d8bed22) | `auth.json` keeps every provider's entry as written, as Pi does | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-d8d513a](#bf-d8d513a) | With the Bun TypeScript runtime (`OMPIG_TS_RUNTIME=bun`), `/reload` now evaluates an edited ES module extension… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-d8d513a](#bf-d8d513a) | With the Bun TypeScript runtime (`PIG_TS_RUNTIME=bun`), `/reload` now evaluates an edited ES module extension… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d90c2f4](#bf-d90c2f4) | Markdown now nests a `**strong**` run inside `*emphasis*` as Pi does, renders a line underlined with `===` or… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d983b74](#bf-d983b74) | Anthropic requests whose strict `prefer` tools exceed a strict tool limit ("The compiled grammar is too… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d9886fe](#bf-d9886fe) | fix(hljs): no magic-literal hits for the resume and dispatch bounds | Ompig's own defect | All platforms | Unreleased |
 | [BF-da5d32b](#bf-da5d32b) | fix(extension): theme palette reports the theme's own sourcePath; conformance rows for the rest of… | Ompig's own defect | All platforms | Unreleased |
 | [BF-da8a870](#bf-da8a870) | Pasting a ChatGPT sign-in callback URL with a `ws:`, `wss:` or `ftp:` scheme, a backslash path or an unusual… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-da907ca](#bf-da907ca) | The Go program in the SDK page now compiles | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-da907ca-2](#bf-da907ca-2) | The bundled command page (`ompig docs show commands`) and the website's CLI reference now agree with `ompig… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-da907ca-3](#bf-da907ca-3) | `ompig docs show divergences` lists D110 and D111, and the README names the pinned Pi release (1.1.0) and its… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-da907ca-2](#bf-da907ca-2) | The bundled command page (`pig docs show commands`) and the website's CLI reference now agree with `pig… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-da907ca-3](#bf-da907ca-3) | `pig docs show divergences` lists D110 and D111, and the README names the pinned Pi release (1.1.0) and its… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-da907ca-4](#bf-da907ca-4) | The Termux page's link to the Quickstart reaches its "Authenticate a provider" section | Ompig's own defect | Android and Termux | 0.5.0 |
 | [BF-dac3cd5](#bf-dac3cd5) | A session keeps reading its history as it loaded it when another program rewrites, truncates, replaces or… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-dae37be](#bf-dae37be) | fix: the input loop never waits for the Session lock; the abort-fix leak and two stale tests | Ompig's own defect | All platforms | Unreleased |
 | [BF-db12780](#bf-db12780) | fix(agent): end the tool flow at custom user messages and hold system messages mid-flow | Ompig's own defect | All platforms | Unreleased |
 | [BF-db7007d](#bf-db7007d) | A Radius gateway model's `samplingParamsByThinkingLevel` now reaches the `pi-messages` model and the composed… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-db9a315](#bf-db9a315) | Codemode peak memory is now measured and guarded through the normal tool path in a fresh process with 40… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-dbe1ad3](#bf-dbe1ad3) | `ompig setup` now flags a go on PATH older than Go 1.26, the extension SDK minimum, naming the version found… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-dbe1ad3](#bf-dbe1ad3) | `pig setup` now flags a go on PATH older than Go 1.26, the extension SDK minimum, naming the version found… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-dbe25ef](#bf-dbe25ef) | CI: `make interface-gaps` passes on main again | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-dbe25ef-10](#bf-dbe25ef-10) | The bug fix ledger no longer credits a squash commit's tests to a release note that names no fix commit | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-dbe25ef-11](#bf-dbe25ef-11) | Two calls of a Go, Python or Rust extension tool in one assistant message that each open a dialog now behave… | Ompig's own defect | All platforms | 0.5.2 |
-| [BF-dbe25ef-12](#bf-dbe25ef-12) | `ompig extension upgrade` finds and rewrites every changed API of an extension in one run | Ompig's own defect | All platforms | 0.5.2 |
-| [BF-dbe25ef-13](#bf-dbe25ef-13) | `ompig extension upgrade` applies the rewrites that have one safe form and lists the rest with file, line and… | Ompig's own defect | All platforms | 0.5.2 |
+| [BF-dbe25ef-12](#bf-dbe25ef-12) | `pig extension upgrade` finds and rewrites every changed API of an extension in one run | Ompig's own defect | All platforms | 0.5.2 |
+| [BF-dbe25ef-13](#bf-dbe25ef-13) | `pig extension upgrade` applies the rewrites that have one safe form and lists the rest with file, line and… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-dbe25ef-14](#bf-dbe25ef-14) | The Node extension runtime's `ctx.modelRegistry.runtime` is now a model runtime that a nested Session can… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-dbe25ef-15](#bf-dbe25ef-15) | Starting a child host could wait out its 30-second ready timeout ("child not ready in time") although the… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-dbe25ef-16](#bf-dbe25ef-16) | Fixed the chord host's `Close` waiting forever when a hold that a link was still delivering created an object… | Ompig's own defect | All platforms | 0.5.2 |
-| [BF-dbe25ef-17](#bf-dbe25ef-17) | `ompig update --extensions` no longer fails when two Git Packages come from one repository | Ompig's own defect | All platforms | 0.5.2 |
+| [BF-dbe25ef-17](#bf-dbe25ef-17) | `pig update --extensions` no longer fails when two Git Packages come from one repository | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-dbe25ef-18](#bf-dbe25ef-18) | A Go, Python or Rust extension tool that awaits a host call such as `exec` before its first dialog no longer… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-dbe25ef-19](#bf-dbe25ef-19) | Two calls of an extension tool in one assistant message now end in the order their tools answer, as Pi ends… | Ompig's own defect | All platforms | 0.5.2 |
-| [BF-dbe25ef-2](#bf-dbe25ef-2) | CI: the Windows test jobs no longer fail the `ompig extension upgrade` notice tests when the temporary… | Ompig's own defect | Windows | 0.5.2 |
+| [BF-dbe25ef-2](#bf-dbe25ef-2) | CI: the Windows test jobs no longer fail the `pig extension upgrade` notice tests when the temporary… | Ompig's own defect | Windows | 0.5.2 |
 | [BF-dbe25ef-20](#bf-dbe25ef-20) | A compaction, branch summary or bug-report summary request is now sent through the session's own stream… | Ompig's own defect | All platforms | 0.5.2 |
-| [BF-dbe25ef-21](#bf-dbe25ef-21) | Fixed `ompig --mode rpc` exiting 143 instead of 0 when stdin ended while a termination signal's shutdown was… | Ompig's own defect | All platforms | 0.5.2 |
-| [BF-dbe25ef-3](#bf-dbe25ef-3) | `ompig extension upgrade`: the command a startup notice or the upgrade offer prints now quotes a POSIX path… | Ompig's own defect | Windows | 0.5.2 |
+| [BF-dbe25ef-21](#bf-dbe25ef-21) | Fixed `pig --mode rpc` exiting 143 instead of 0 when stdin ended while a termination signal's shutdown was… | Ompig's own defect | All platforms | 0.5.2 |
+| [BF-dbe25ef-3](#bf-dbe25ef-3) | `pig extension upgrade`: the command a startup notice or the upgrade offer prints now quotes a POSIX path… | Ompig's own defect | Windows | 0.5.2 |
 | [BF-dbe25ef-4](#bf-dbe25ef-4) | RPC mode no longer runs `ctx.ui.setWidget` component factories or emits `setWidget` requests carrying their… | Ompig's own defect | All platforms | 0.5.2 |
-| [BF-dbe25ef-5](#bf-dbe25ef-5) | `ompig ompiglet verify <binary> --source <name\|path>` and `ompig ompiglet lineage <binary> --source <name\|path>`… | Ompig's own defect | All platforms | 0.5.2 |
-| [BF-dbe25ef-6](#bf-dbe25ef-6) | `ompig ompiglet verify` accepts `--workspace <dir>`, and `ompig ompiglet lineage --workspace` now applies to the… | Ompig's own defect | All platforms | 0.5.2 |
+| [BF-dbe25ef-5](#bf-dbe25ef-5) | `pig piglet verify <binary> --source <name\|path>` and `pig piglet lineage <binary> --source <name\|path>`… | Ompig's own defect | All platforms | 0.5.2 |
+| [BF-dbe25ef-6](#bf-dbe25ef-6) | `pig piglet verify` accepts `--workspace <dir>`, and `pig piglet lineage --workspace` now applies to the… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-dbe25ef-7](#bf-dbe25ef-7) | A run that an extension's `sendMessage` with `triggerTurn` starts now carries the session's system prompt | Ompig's own defect | All platforms | 0.5.2 |
-| [BF-dbe25ef-8](#bf-dbe25ef-8) | `go install github.com/tmih06/ompig/cmd/ompig@main` builds again | Ompig's own defect | All platforms | 0.5.2 |
+| [BF-dbe25ef-8](#bf-dbe25ef-8) | `go install github.com/MichaelKinsy/PiG/cmd/pig@main` builds again | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-dbe25ef-9](#bf-dbe25ef-9) | A tool that an extension activates with `setActiveTools` now appears in the system prompt's tool list of the… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-dc003a9](#bf-dc003a9) | Automatic retry no longer treats digits inside a request id or another number (for example `req_011CU503xyz`… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-dc003a9-2](#bf-dc003a9-2) | Automatic retry now triggers for `stream disconnected before completion` errors that a proxy wrapping the… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-dc003a9-3](#bf-dc003a9-3) | Sign in with ChatGPT: a ChatGPT Business workspace usage-limit error… | Ompig's own defect | All platforms | 0.5.2 |
-| [BF-dc53412](#bf-dc53412) | A `ompig_strip_bedrock_converse_stream` Ompiglet Binary no longer links the AWS SDK through the Bedrock retry… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-dc53412](#bf-dc53412) | A `pig_strip_bedrock_converse_stream` Piglet Binary no longer links the AWS SDK through the Bedrock retry… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-dca5763](#bf-dca5763) | A notification, status or message that an extension queues on `setImmediate` or `setTimeout(0)` from inside a… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-ddd4772](#bf-ddd4772) | fix(ai): a lone surrogate in a content block stays one code unit, as in JSON.parse | Ompig's own defect | All platforms | Unreleased |
 | [BF-dde6aa6](#bf-dde6aa6) | Cache warming no longer refreshes at once when a model's promptCache lifetime is far larger than the one-hour… | Ompig's own defect | All platforms | 0.5.0 |
@@ -1075,7 +1075,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-dde6aa6-7](#bf-dde6aa6-7) | A table delimiter row on a lazy blockquote line no longer splits the quoted paragraph above it unless it… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-dde6aa6-8](#bf-dde6aa6-8) | A setext underline on a lazy line after another lazy line in a blockquote now renders as Pi does, joined to… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-dde6aa6-9](#bf-dde6aa6-9) | A line of only spaces and tabs that starts with a tab or four spaces, alone or after a blank line or in a… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-de0aaa7](#bf-de0aaa7) | RPC mode now writes the `OMPIG_PROFILE` files when it exits; it ended the process before they were written | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-de0aaa7](#bf-de0aaa7) | RPC mode now writes the `PIG_PROFILE` files when it exits; it ended the process before they were written | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-de38ce2](#bf-de38ce2) | A lone UTF-16 surrogate in a tool result's details, in a nested tool call's result, or in a code mode call's… | Ompig's own defect | All platforms | Unreleased |
 | [BF-de85b0e](#bf-de85b0e) | An HTTP MCP client opens its server-to-client stream before it sends the next request after… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-de91c76](#bf-de91c76) | When an MCP server drops tools or is disabled, its tools are hidden in the order the server listed them | Ompig's own defect | All platforms | 0.5.0 |
@@ -1092,10 +1092,10 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-e16cbba](#bf-e16cbba) | Tool search ranks a tool first when the query is its name, with `-` and other non-identifier characters read… | Ompig's own defect | All platforms | Unreleased |
 | [BF-e1764c3](#bf-e1764c3) | A live `/skill:` message renders as the collapsed `[skill] name` block instead of the raw `<skill>` XML | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-e1ad272](#bf-e1ad272) | The xAI, Kimi Code, Meta, Radius, OpenAI Codex, Sign in with ChatGPT and GitHub Copilot OAuth requests send… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-e24487e](#bf-e24487e) | fix(cli): OMPIG_VERSION_FORMAT=pi prints the pinned Pi package version | Ompig's own defect | All platforms | Unreleased |
+| [BF-e24487e](#bf-e24487e) | fix(cli): PIG_VERSION_FORMAT=pi prints the pinned Pi package version | Ompig's own defect | All platforms | Unreleased |
 | [BF-e25a09f](#bf-e25a09f) | A tool argument or event payload with a number outside the double range (`1e400`), at any nesting depth, no… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-e2db931](#bf-e2db931) | On Windows, refreshing an MCP server's OAuth token no longer fails with `EPERM` when another `ompig` process is… | Ompig's own defect | Windows | 0.5.0 |
-| [BF-e32c60c](#bf-e32c60c) | A Ompiglet or Package installed under a symlinked agent directory keeps the origin integrity recorded in its… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-e2db931](#bf-e2db931) | On Windows, refreshing an MCP server's OAuth token no longer fails with `EPERM` when another `pig` process is… | Ompig's own defect | Windows | 0.5.0 |
+| [BF-e32c60c](#bf-e32c60c) | A Piglet or Package installed under a symlinked agent directory keeps the origin integrity recorded in its… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-e3f39b7](#bf-e3f39b7) | Automatic retry now triggers for the gateway error "Unable to forward upstream stream" | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-e4252b4](#bf-e4252b4) | Fix in shipped code | Ompig's own defect | All platforms | Unreleased |
 | [BF-e42ae82](#bf-e42ae82) | `SettingsManager` structured getters (settings-manager.ts getBranchSummarySettings, getRetrySettings… | Ompig's own defect | All platforms | 0.5.0 |
@@ -1152,21 +1152,21 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-f25348f](#bf-f25348f) | A `turn_end` or `agent_before_settle` handler in an extension process receives each… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f2790f9](#bf-f2790f9) | A `tui` input listener or light/dark listener that is added while input is dispatched now sees that input… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f288d69](#bf-f288d69) | MCP OAuth token and client registration responses keep empty lists, read `expires_in` like JavaScript's… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-f288d69-2](#bf-f288d69-2) | On Windows, an npm self-update no longer fails when a virus scanner or indexer holds `ompig.exe` open for a… | A Pi defect that Ompig fixed first | Windows | 0.5.0 |
+| [BF-f288d69-2](#bf-f288d69-2) | On Windows, an npm self-update no longer fails when a virus scanner or indexer holds `pig.exe` open for a… | A Pi defect that Ompig fixed first | Windows | 0.5.0 |
 | [BF-f288d69-3](#bf-f288d69-3) | `ModelRuntime.Close` cancels the remote model catalog's refreshes and waits for them, so none runs on after… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-f288d69-4](#bf-f288d69-4) | Crash attribution reads Go goroutine traces as well as JavaScript stacks, so a crash in the Ompig process… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-f288d69-4](#bf-f288d69-4) | Crash attribution reads Go goroutine traces as well as JavaScript stacks, so a crash in the PiG process… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f29e906](#bf-f29e906) | OpenAI Completions, OpenAI Responses and Codex request bodies list their fields in the order Pi writes them… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f2a2b34](#bf-f2a2b34) | An unmatched tool result row in the /tree selector shows the tool's name, as in Pi (`[bash]`), instead of… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f2c00f9](#bf-f2c00f9) | A fused Go extension's built-in tool `execute` without an extension context (`createBashTool(cwd).execute(id… | Ompig's own defect | All platforms | 0.5.3 |
 | [BF-f2c00f9-2](#bf-f2c00f9-2) | Extensions' `ui_prompt_start` and `ui_prompt_end` notifications are recorded in order when the host is slow… | Ompig's own defect | All platforms | 0.5.3 |
 | [BF-f2c00f9-3](#bf-f2c00f9-3) | A fused Go extension's `createLocalBashOperations().exec` (and `createLocalPowerShellOperations`) no longer… | Ompig's own defect | Windows | 0.5.3 |
-| [BF-f2c00f9-4](#bf-f2c00f9-4) | `ompig install <source> --validate-only` now validates git and npm sources that are not installed yet | Ompig's own defect | All platforms | 0.5.3 |
-| [BF-f2c00f9-5](#bf-f2c00f9-5) | Installing a Package or Ompiglet from a local `git:file://` source on Windows no longer fails with `fatal… | Ompig's own defect | Windows | 0.5.3 |
+| [BF-f2c00f9-4](#bf-f2c00f9-4) | `pig install <source> --validate-only` now validates git and npm sources that are not installed yet | Ompig's own defect | All platforms | 0.5.3 |
+| [BF-f2c00f9-5](#bf-f2c00f9-5) | Installing a Package or Piglet from a local `git:file://` source on Windows no longer fails with `fatal… | Ompig's own defect | Windows | 0.5.3 |
 | [BF-f2c8b02](#bf-f2c8b02) | After `await ctx.reload()`, a command's captured `pi` and `ctx` now throw Pi's stale message for every… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f34b545](#bf-f34b545) | Durable: resolving harness settings no longer shares the default retry policy's max agent delay between… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f3b4045](#bf-f3b4045) | `.gitignore`, `.ignore` and `.fdignore` rules that skills, packages and extension entry discovery read now… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f4d85f8](#bf-f4d85f8) | A large file written through a tool call no longer slows down as it streams: each streamed piece of the… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-f5ecdc2](#bf-f5ecdc2) | Settings and `models.json` compat objects keep the members Ompig does not model, as Pi 1.2.0 does | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-f5ecdc2](#bf-f5ecdc2) | Settings and `models.json` compat objects keep the members PiG does not model, as Pi 1.2.0 does | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f6305d9](#bf-f6305d9) | A `new_session`, `fork`, `clone` or `switch_session` in the same RPC batch as a `compact` aborts the… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f68aa40](#bf-f68aa40) | A `delta.Tracker` no longer keeps memory alive that Pi's tracker releases | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f68aa40-2](#bf-f68aa40-2) | `delta.CloneJSON`, `chord.CopyJSON` and draft placements report a Go struct or pointer with Pi's message for… | Ompig's own defect | All platforms | 0.5.0 |
@@ -1177,7 +1177,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-f73c00c](#bf-f73c00c) | Replaying a thinking block that holds only U+FEFF drops it and one that holds only U+0085 keeps it, as… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f78b951](#bf-f78b951) | fix(codingagent): cache the Markdown transformer list per theme and runner (TU-T6) | Ompig's own defect | All platforms | Unreleased |
 | [BF-f7b245a](#bf-f7b245a) | A frontend member's main region now matches the transcript after an extension's custom entry is placed before… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-f7c4b01](#bf-f7c4b01) | `ompig extension upgrade` no longer changes, breaks or rejects a Go extension that already builds against the… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-f7c4b01](#bf-f7c4b01) | `pig extension upgrade` no longer changes, breaks or rejects a Go extension that already builds against the… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f7d701e](#bf-f7d701e) | Tool argument validation asserts the `format` keyword for the formats TypeBox checks (date, time, date-time… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f8673e6](#bf-f8673e6) | Tool argument conversion for TypeBox schemas lower-cases with JavaScript rules (an `İ` in `UNDEFİNED` no… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f9648c6](#bf-f9648c6) | On Windows, stopping a terminal reader whose input is a pipe no longer hangs | Ompig's own defect | Windows | Unreleased |
@@ -1201,9 +1201,9 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-fa3da97-22](#bf-fa3da97-22) | Choosing a bundled model no longer builds every model of its provider on each request, and providers in… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-fa3da97-23](#bf-fa3da97-23) | `chord/host`: a host no longer sends on another host's connection while delivering notifications, and a… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-fa3da97-24](#bf-fa3da97-24) | A Durable code mode tool call made just before the script launches another call or ends has started before… | Ompig's own defect | All platforms | 0.5.2 |
-| [BF-fa3da97-25](#bf-fa3da97-25) | Fixed `ompig ompiglet build` failing on a Ompiglet that carries a single-file extension (a lone `.ts` or `.js`… | Ompig's own defect | All platforms | 0.5.2 |
+| [BF-fa3da97-25](#bf-fa3da97-25) | Fixed `pig piglet build` failing on a Piglet that carries a single-file extension (a lone `.ts` or `.js`… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-fa3da97-26](#bf-fa3da97-26) | A provider stream could stop for good, with the turn waiting for events that never came, when the goroutine… | Ompig's own defect | Windows, macOS, Linux | 0.5.2 |
-| [BF-fa3da97-27](#bf-fa3da97-27) | Ompig no longer hangs for 30 seconds at exit when two extensions share a Node process and one is still waiting… | Ompig's own defect | All platforms | 0.5.2 |
+| [BF-fa3da97-27](#bf-fa3da97-27) | PiG no longer hangs for 30 seconds at exit when two extensions share a Node process and one is still waiting… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-fa3da97-28](#bf-fa3da97-28) | A Node extension whose factory failed, because it has no default export or throws while initializing, could… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-fa3da97-29](#bf-fa3da97-29) | A tool that streams a growing partial result no longer sends the whole result to each subscribed extension on… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-fa3da97-3](#bf-fa3da97-3) | `done()` of an overlay `ui.custom` component hides that component's own overlay instead of the topmost one | Ompig's own defect | All platforms | 0.5.2 |
@@ -1254,7 +1254,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Ctrl+U, Ctrl+K and the word-delete keys leave an open autocomplete list open, as Pi's editor does.
-- **Root cause:** deleteToStartOfLine, deleteToEndOfLine, deleteWordBackwards and deleteWordForward (tui editor.ts 1624-1700) change the text and call onChange only; the list is updated by insertCharacter, handleBackspace, handleForwardDelete and moveCursor. Ompig refreshed it after each kill, closing the popup Pi leaves. Found by the skills journey.
+- **Root cause:** deleteToStartOfLine, deleteToEndOfLine, deleteWordBackwards and deleteWordForward (tui editor.ts 1624-1700) change the text and call onChange only; the list is updated by insertCharacter, handleBackspace, handleForwardDelete and moveCursor. PiG refreshed it after each kill, closing the popup Pi leaves. Found by the skills journey.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -1282,7 +1282,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Go, Python and Rust extensions: in a `before_agent_start` handler, the event's `systemPrompt` and the context's system prompt getter now return the prompt the shared options render when read, as Pi and Node do.
-- **Root cause:** Each SDK now holds the prompt the host rendered for the options the handler received and, once the options differ, asks the host to render them with renderSystemPrompt, reusing the result until they change again: - Go: data["systemPrompt"] is an *sdk.SystemPrompt (Get, MarshalJSON), since a map cannot run a getter; ctx.GetSystemPrompt() returns the same value. - Python: the event dict's "systemPrompt" and ctx.get_system_prompt() render. The Host answers renderSystemPrompt without a UI bridge too (an SDK session): the render is a pure function of the options the call carries. Callers of the Go string form move to Get(); the known gaps are deleted; ompig-go.json is regenerated by gointerfaces.
+- **Root cause:** Each SDK now holds the prompt the host rendered for the options the handler received and, once the options differ, asks the host to render them with renderSystemPrompt, reusing the result until they change again: - Go: data["systemPrompt"] is an *sdk.SystemPrompt (Get, MarshalJSON), since a map cannot run a getter; ctx.GetSystemPrompt() returns the same value. - Python: the event dict's "systemPrompt" and ctx.get_system_prompt() render. The Host answers renderSystemPrompt without a UI bridge too (an SDK session): the render is a pure function of the options the call carries. Callers of the Go string form move to Get(); the known gaps are deleted; pig-go.json is regenerated by gointerfaces.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -1295,14 +1295,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **`mcp.json` files that start with a UTF-8 BOM, which Windows PowerShell 5.1 adds when it rewrites a file, load…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `mcp.json` files that start with a UTF-8 BOM, which Windows PowerShell 5.1 adds when it rewrites a file, load their MCP servers again, and `ompig mcp add` and `ompig mcp remove` work on them (Pi bdd9f039, #11191).
+- **Symptom:** `mcp.json` files that start with a UTF-8 BOM, which Windows PowerShell 5.1 adds when it rewrites a file, load their MCP servers again, and `pig mcp add` and `pig mcp remove` work on them (Pi bdd9f039, #11191).
 - **Root cause:** Ports Pi (#11191): readFile and editMcpServers strip the BOM; the Radius MCP offer reads the file the same way, as Pi does through loadMcpConfig.
 - **User impact:** Behavior differed from Pi
 - **Platform:** Windows
 - **Fixed in:** 0.5.2
 - **Fix commits:** `00933e586a` (2026-10-20)
 - **Tests:** `coding/mcpext/config_test.go::TestMCPConfigReadsAndEditsMcpJSONFilesThatStartWithAUTF8BOM`, `internal/codingagent/radius_login_mcp_offer_upstream_test.go::TestRadiusMcpServerConfigReadsAMcpJSONThatStartsWithAUTF8BOM`
-- **Release note:** `mcp.json` files that start with a UTF-8 BOM, which Windows PowerShell 5.1 adds when it rewrites a file, load their MCP servers again, and `ompig mcp add` and `ompig mcp remove` work on them (Pi bdd9f039, #11191).
+- **Release note:** `mcp.json` files that start with a UTF-8 BOM, which Windows PowerShell 5.1 adds when it rewrites a file, load their MCP servers again, and `pig mcp add` and `pig mcp remove` work on them (Pi bdd9f039, #11191).
 
 ### BF-02114ff
 
@@ -1310,7 +1310,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(tui): filterable list drops the label when no cell remains (Pi select-list)
-- **Root cause:** select-list.ts renderItem computes maxWidth = width - 2 - 2 without a floor and truncateToWidth returns "" for maxWidth <= 0; Ompig's FilterableList floored it at 1, drawing one label cell at widths 3-4. TestFilterableListShowsNoLabelWhenNoCellRemains is red without the fix.
+- **Root cause:** select-list.ts renderItem computes maxWidth = width - 2 - 2 without a floor and truncateToWidth returns "" for maxWidth <= 0; Pig's FilterableList floored it at 1, drawing one label cell at widths 3-4. TestFilterableListShowsNoLabelWhenNoCellRemains is red without the fix.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -1339,7 +1339,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Pressing Escape twice with only whitespace in the editor now opens the tree or fork selector, as in Pi, which trims the editor text before the double-Escape check.
-- **Root cause:** onEscape runs the double-Escape shortcut when !editor.getText().trim(). Ompig required an editor with no text at all.
+- **Root cause:** onEscape runs the double-Escape shortcut when !editor.getText().trim(). PiG required an editor with no text at all.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -1353,7 +1353,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(tui): the login dialog's input renders at every prompt position
-- **Root cause:** login-dialog.ts adds the same Input to the content container for each prompt and replaceInputWithSubmittedText replaces every occurrence; a cancel leaves it in place. Ompig rendered only the newest slot and blank for the others.
+- **Root cause:** login-dialog.ts adds the same Input to the content container for each prompt and replaceInputWithSubmittedText replaces every occurrence; a cancel leaves it in place. Pig rendered only the newest slot and blank for the others.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -1362,11 +1362,11 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-02887e3
 
-**fix(release): carry main's OmpigVersion 0.5.3 and the post-bump goldens and pins**
+**fix(release): carry main's PigVersion 0.5.3 and the post-bump goldens and pins**
 
 - **Source:** Ompig's own defect
-- **Symptom:** fix(release): carry main's OmpigVersion 0.5.3 and the post-bump goldens and pins
-- **Root cause:** The merge of main kept next's generated pigversion.go, which dropped main's OmpigVersion 0.5.3: the fused-extension cell then required extensions/sdk v0.5.2 against go.mod's v0.5.3 and every packed Go conformance cell failed to build, and TestParseChangelog_RealFile saw 0.5.3 as newer than the release line. OmpigVersion is back at 0.5.3 and the README example follows it.
+- **Symptom:** fix(release): carry main's PigVersion 0.5.3 and the post-bump goldens and pins
+- **Root cause:** The merge of main kept next's generated pigversion.go, which dropped main's PigVersion 0.5.3: the fused-extension cell then required extensions/sdk v0.5.2 against go.mod's v0.5.3 and every packed Go conformance cell failed to build, and TestParseChangelog_RealFile saw 0.5.3 as newer than the release line. PigVersion is back at 0.5.3 and the README example follows it.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -1375,17 +1375,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-037b2e3
 
-**A session message whose members are in another order than Pi writes them, or that holds members Ompig does not…**
+**A session message whose members are in another order than Pi writes them, or that holds members PiG does not…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Ompig rewrote such a message in its own member order and dropped unknown members.
+- **Symptom:** PiG rewrote such a message in its own member order and dropped unknown members.
 - **Root cause:** After /tree navigation between parallel tool calls and their results, a branch summary followed by a new prompt sent a synthetic tool_result behind the summary, and Anthropic rejected it with an unexpected tool_use_id. Upstream runs transformMessages after convertToLlm, where a branch summary, compaction summary, bash execution or custom message is already a user message and closes the pending tool calls. NormalizeMessages ran first and did not see them.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `e8cc072521` (2026-10-08), `433d232815` (2026-10-09), `037b2e327b` (2026-10-10), `3b5673d924` (2026-10-10), `63222832e9` (2026-10-10), `f9ef071708` (2026-10-10)
 - **Tests:** `agent/convert_custom_upstream_test.go::TestConvertToLLMCustomMessagesMatchUpstreamConvertToLlm`, `agent/convert_custom_upstream_test.go::TestConvertToLLMToolFlowMatchesUpstreamTransformOrder`, `agent/convert_custom_upstream_test.go::TestCustomMessagesReachProvidersAsUpstreamContentBlocks`, `agent/message_shape_test.go::TestMemberScanAcceptsMessagesPiWrites`, `agent/message_shape_test.go::TestMemberScanAcceptsOnlyTextTheFieldsEncodeTo`, `agent/message_source_test.go::TestDecodedMessageInPiOrderRetainsNoText`, `agent/message_source_test.go::TestDecodedMessageWritesTheObjectItWasDecodedFrom`, `agent/message_source_test.go::TestWithEmptyContentSpreadsContent` and 18 more in docs/bug-ledger.json
-- **Release note:** A session message whose members are in another order than Pi writes them, or that holds members Ompig does not model, now reaches RPC `get_messages`, extension events and the built session context exactly as Pi returns it: the object parsed from the file, written with `JSON.stringify`. Before, Ompig rewrote such a message in its own member order and dropped unknown members. Context edits and handler replacements without content keep the content member in place, as the JavaScript spread does. A system message without content is kept and gets empty content, as in Pi; before, Ompig dropped it. Messages Pi wrote are unaffected and retain no extra memory.
+- **Release note:** A session message whose members are in another order than Pi writes them, or that holds members PiG does not model, now reaches RPC `get_messages`, extension events and the built session context exactly as Pi returns it: the object parsed from the file, written with `JSON.stringify`. Before, PiG rewrote such a message in its own member order and dropped unknown members. Context edits and handler replacements without content keep the content member in place, as the JavaScript spread does. A system message without content is kept and gets empty content, as in Pi; before, PiG dropped it. Messages Pi wrote are unaffected and retain no extra memory.
 
 ### BF-03ad544
 
@@ -1393,7 +1393,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(tui): card of an unregistered tool is Pi's formatToolExecution
-- **Root cause:** tool-execution.ts updateDisplay draws a tool without a definition (hasRendererDefinition false, e.g. a hallucinated tool name) as one Text: toolTitle name, a blank line, JSON.stringify(args, null, 2) and the ANSI-stripped result on the next line. Ompig drew a compact 'x:1' summary (with sorted keys, cut at 40/80 chars) and a blank row before the result. Found by running scripted replies through the real Pi and Ompig (mock OpenAI-completions server, tmux, session files compared too). TestUnregisteredToolCardIsUpstreamFormatToolExecution is red without the change; the two component-only tests that used a definition-less card for a registered tool now give it a definition.…
+- **Root cause:** tool-execution.ts updateDisplay draws a tool without a definition (hasRendererDefinition false, e.g. a hallucinated tool name) as one Text: toolTitle name, a blank line, JSON.stringify(args, null, 2) and the ANSI-stripped result on the next line. Pig drew a compact 'x:1' summary (with sorted keys, cut at 40/80 chars) and a blank row before the result. Found by running scripted replies through the real Pi and Pig (mock OpenAI-completions server, tmux, session files compared too). TestUnregisteredToolCardIsUpstreamFormatToolExecution is red without the change; the two component-only tests that used a definition-less card for a registered tool now give it a definition.…
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -1447,14 +1447,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **RPC mode: when an extension command calls `pi.sendUserMessage()` or `pi.sendMessage(..., { triggerTurn: true…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Ompig used to emit `agent_start`, `turn_start` and the run's first messages before the response.
+- **Symptom:** PiG used to emit `agent_start`, `turn_start` and the run's first messages before the response.
 - **Root cause:** In Pi an extension command that calls pi.sendUserMessage() without awaiting it starts prompt() inside the handler: prompt() awaits _runInputHandlers and checkAuth, then emitBeforeAgentStart calls the before_agent_start handlers (agent-session.ts:1968-2112, 2116-2140), while the command's `await command.handler()` and `await this._tryExecuteExtensionCommand(text)` write the prompt response two microtasks after the handler returned (rpc-mode.ts:394-413). The run's preparation starts before the response, and agent_start follows it. Under D139 (Pi PR #10739) an idle triggerTurn sendMessage calls _startRun -> _prepareRun -> emitBeforeAgentStart before its first await, so its before_agent_start…
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `34f7594aa5` (2026-10-11), `053d96d1af` (2026-10-12)
 - **Tests:** `coding/cli/rpc_command_send_order_test.go::TestRPCCommandTurnStartOrderMatchesPi`, `coding/cli/rpc_command_send_order_test.go::TestRPCInlineCommandTurnStartOrderMatchesPi`, `internal/codingagent/extension_ui_phase_shutdown_test.go::TestAwaitedExtensionPhaseWithoutShutdownReturnsItsResult`, `internal/codingagent/extension_ui_phase_shutdown_test.go::TestNewSessionEndedByShutdownIsNotAFatalRuntimeError`, `internal/codingagent/extension_ui_phase_shutdown_test.go::TestShutdownDuringAwaitedExtensionPhaseDoesNotWaitForAHandlerThatIgnoresCancellation`, `internal/codingagent/extension_ui_phase_shutdown_test.go::TestShutdownDuringAwaitedExtensionPhaseEndsThePhase`, `test/parity/scenarios/extensions-runtime/73-shutdown-from-session-before-fork.toml`, `test/parity/scenarios/extensions-runtime/73-shutdown-from-session-before-switch.toml` and 2 more in docs/bug-ledger.json
-- **Release note:** RPC mode: when an extension command calls `pi.sendUserMessage()` or `pi.sendMessage(..., { triggerTurn: true })` without awaiting it, the run's `before_agent_start` handlers run before the command's `prompt` response, and `agent_start` follows the response, as in Pi. Ompig used to emit `agent_start`, `turn_start` and the run's first messages before the response.
+- **Release note:** RPC mode: when an extension command calls `pi.sendUserMessage()` or `pi.sendMessage(..., { triggerTurn: true })` without awaiting it, the run's `before_agent_start` handlers run before the command's `prompt` response, and `agent_start` follows the response, as in Pi. PiG used to emit `agent_start`, `turn_start` and the run's first messages before the response.
 
 ### BF-056bbfb
 
@@ -1462,7 +1462,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Key matching follows Pi for three terminal inputs.
-- **Root cause:** A differential test runs Pi's parseKey and matchesKey in Node (testdata/keys.mjs, from the pinned .upstream/current source, WT_SESSION and SSH unset) over 7570 inputs with the Kitty protocol off and on: every legacy byte and ESC-prefixed byte, SS3/CSI cursor, editing and function sequences with modifiers, xterm modifyOtherKeys, Kitty CSI-u with shifted and base-layout alternates, modifier masks with lock bits, event types and text fields, and truncated and bit-flipped variants, each against 660 key ids. parseKey agreed on every input; matchesKey differed on 144, in three ways, all fixed in key_match.go: - keys.ts matchesKey returns false for 'escape' or 'esc' with any modifier (:832); Ompig…
+- **Root cause:** A differential test runs Pi's parseKey and matchesKey in Node (testdata/keys.mjs, from the pinned .upstream/current source, WT_SESSION and SSH unset) over 7570 inputs with the Kitty protocol off and on: every legacy byte and ESC-prefixed byte, SS3/CSI cursor, editing and function sequences with modifiers, xterm modifyOtherKeys, Kitty CSI-u with shifted and base-layout alternates, modifier masks with lock bits, event types and text fields, and truncated and bit-flipped variants, each against 660 key ids. parseKey agreed on every input; matchesKey differed on 144, in three ways, all fixed in key_match.go: - keys.ts matchesKey returns false for 'escape' or 'esc' with any modifier (:832); Pig…
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -1551,7 +1551,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Fix commits:** `0790d5eae8` (2026-10-11)
 - **Tests:** `agent/js_trim_test.go::TestReplayAndProxyLinesTrimLikeJavaScript`, `tui/js_trim_test.go::TestAssistantMessageComponentTrimsRunsLikeJavaScript`, `tui/js_trim_test.go::TestTextBlankCheckTrimsLikeJavaScript`
-- **Release note:** `String.prototype.trim` vs `strings.TrimSpace`: four Pi `.trim()` sites used Go's `strings.TrimSpace`, which trims U+0085 and not U+FEFF where JavaScript trims U+FEFF and not U+0085 (`jsstring.Trim` is the JS rule, already used in 100 other places). Fixed where the difference is observable: `Text` blank check (`tui/text.go`, text.ts:57), assistant-message text/thinking runs (`tui/assistant_message_block.go`, assistant-message.ts:110-125: a leading BOM is now trimmed before the markdown renders, U+0085 is kept), replayed empty-thinking filter (`agent/transform.go`, transform-messages.ts:111) and the proxy `data:` line (`agent/proxy.go`, proxy.ts:181). Regressions `TestTextBlankCheckTrimsLikeJavaScript`, `TestAssistantMessageComponentTrimsRunsLikeJavaScript`, `TestReplayAndProxyLinesTrimLikeJavaScript` (each red with the old call, 3 sites checked by swapping the call back). `parseStreamingJsonValue`'s guard (`ai/streaming_json.go`) was probed and left: the result is the same either way. Left for owners: `stripThinkingSignatures` (`ai/anthropic.go`, Ompig's own D37 recovery, no Pi counterpart), the Pi `.trim()` sites in other providers if any still use `TrimSpace`. `./tui -race` (1,219 s) failed only the flaky `TestSurfaceRendersAnEditorBeforeAnythingAsksForItsTerminal` (race in `tui_surface_program_status_test.go:213`, passes alone) and `./agent` only `TestAgentClassMatchesPi`/`TestAgentLoopMatchesPi` (the oracle cannot import `@earendil-works/pi-ai` from `durable/interop`, a missing node_modules in this worktree).
+- **Release note:** `String.prototype.trim` vs `strings.TrimSpace`: four Pi `.trim()` sites used Go's `strings.TrimSpace`, which trims U+0085 and not U+FEFF where JavaScript trims U+FEFF and not U+0085 (`jsstring.Trim` is the JS rule, already used in 100 other places). Fixed where the difference is observable: `Text` blank check (`tui/text.go`, text.ts:57), assistant-message text/thinking runs (`tui/assistant_message_block.go`, assistant-message.ts:110-125: a leading BOM is now trimmed before the markdown renders, U+0085 is kept), replayed empty-thinking filter (`agent/transform.go`, transform-messages.ts:111) and the proxy `data:` line (`agent/proxy.go`, proxy.ts:181). Regressions `TestTextBlankCheckTrimsLikeJavaScript`, `TestAssistantMessageComponentTrimsRunsLikeJavaScript`, `TestReplayAndProxyLinesTrimLikeJavaScript` (each red with the old call, 3 sites checked by swapping the call back). `parseStreamingJsonValue`'s guard (`ai/streaming_json.go`) was probed and left: the result is the same either way. Left for owners: `stripThinkingSignatures` (`ai/anthropic.go`, PiG's own D37 recovery, no Pi counterpart), the Pi `.trim()` sites in other providers if any still use `TrimSpace`. `./tui -race` (1,219 s) failed only the flaky `TestSurfaceRendersAnEditorBeforeAnythingAsksForItsTerminal` (race in `tui_surface_program_status_test.go:213`, passes alone) and `./agent` only `TestAgentClassMatchesPi`/`TestAgentLoopMatchesPi` (the oracle cannot import `@earendil-works/pi-ai` from `durable/interop`, a missing node_modules in this worktree).
 
 ### BF-07da4ea
 
@@ -1559,13 +1559,13 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** A fix Pi shipped that Ompig ported
 - **Symptom:** A configured package or `-e` source that cannot be installed no longer ends startup.
-- **Root cause:** Ports Pi (#11304). Resolving packages catches an install failure, skips that package as offline mode does and reports it in ResolvedPaths.InstallFailures. The resource loader and the CLI turn it into an extension warning that names `ompig remove <source>` (`--local` for a project package), or tells an -e source to check the source; --help and --list-models print the runtime diagnostics, so the warning shows there too. The extension SDKs see installFailures on the resolve result.
+- **Root cause:** Ports Pi (#11304). Resolving packages catches an install failure, skips that package as offline mode does and reports it in ResolvedPaths.InstallFailures. The resource loader and the CLI turn it into an extension warning that names `pig remove <source>` (`--local` for a project package), or tells an -e source to check the source; --help and --list-models print the runtime diagnostics, so the warning shows there too. The extension SDKs see installFailures on the resolve result.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
 - **Fix commits:** `07da4ea3a6` (2026-10-23)
 - **Tests:** `coding/resource_loader_extension_files_test.go::TestDefaultResourceLoaderPointsProjectPackagesAtRemoveLocal`, `coding/resource_loader_extension_files_test.go::TestDefaultResourceLoaderPointsTemporaryExtensionSourcesAtTheSource`, `coding/resource_loader_extension_files_test.go::TestDefaultResourceLoaderWarnsAndKeepsLoadingWhenAConfiguredPackageCannotBeInstalled`, `coding/resource_loader_extension_files_test.go::TestDefaultResourceLoaderWarnsOnceAboutAFailingInstallWhenProjectTrustIsResolved`, `internal/packagemanager/managed_root_cwd_test.go::TestEmptyAgentDirNeverWritesIntoTheProcessDirectory`, `internal/packagemanager/resolve_gaps_test.go::TestResolveExtensionSourcesReportsATemporarySourceThatFailsToInstall`, `internal/packagemanager/resolve_gaps_test.go::TestResolveReportsNoInstallFailureForASkippedSourceAndKeepsTheErrorDecision`, `internal/packagemanager/resolve_gaps_test.go::TestResolveSkipsAPackageSourceThatFailsToInstallAndReportsIt`
-- **Release note:** A configured package or `-e` source that cannot be installed no longer ends startup. It is skipped, as in offline mode, and reported as an extension warning that says how to remove it (`ompig remove <source>`, with `--local` for a project package) or to check the source; `--help` and `--list-models` print it too.
+- **Release note:** A configured package or `-e` source that cannot be installed no longer ends startup. It is skipped, as in offline mode, and reported as an extension warning that says how to remove it (`pig remove <source>`, with `--local` for a project package) or to check the source; `--help` and `--list-models` print it too.
 
 ### BF-081e8c3
 
@@ -1579,7 +1579,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Fix commits:** `081e8c34d2` (2026-10-11)
 - **Tests:** `ai/diagnostic_empty_details_test.go::TestAssistantMessageDiagnosticKeepsAnEmptyDetailsObject`, `internal/codingagent/bug_report_files_oracle_test.go::TestBugReportFilesMatchPi`
-- **Release note:** Bug report files against live Pi: new `TestBugReportFilesMatchPi` (`internal/codingagent/bug_report_files_oracle_test.go`; `collectBugReportDiagnostics` over a `SessionManager` opened on 500 generated session files plus a crash log, and `bugReportFiles`; bytes of diagnostics.json, member list, session.jsonl and summary.md). Two real fixes, both red first (128 of 500, then 13): (1) report.json and diagnostics.json went through `json.Encoder`, which writes U+2028/U+2029 as `\u2028` where `JSON.stringify` writes them literally (and kept Go number text); `bugReportJSON` now canonicalises through `stringifyIndented` (`internal/codingagent/bug_report.go`); (2) a diagnostic's `details: {}` was dropped by `omitempty` (`ai.AssistantMessageDiagnostic` now has a `MarshalJSON` that keeps an empty, non-nil Details; regression `TestAssistantMessageDiagnosticKeepsAnEmptyDetailsObject`). 14 mutations red (crash `notified` strip needed the crash corpus to be a JSON array, as `readCrashLog` expects). Findings left for a ruling (questions/lg-help-4.md): Ompig's `AssistantMessage` cannot tell an empty `errorMessage`/`rawStopReason` from an absent one (Pi keeps `""`), and a diagnostic's `details` is a Go map, so non-index key order is sorted, not insertion order; both are excluded from the corpus and named in the test comment. Not compared: report.json content (metadata tests), the zip container (Pi writes a classic layout, Go's archive/zip a data-descriptor layout; the members' content is what a reader sees).
+- **Release note:** Bug report files against live Pi: new `TestBugReportFilesMatchPi` (`internal/codingagent/bug_report_files_oracle_test.go`; `collectBugReportDiagnostics` over a `SessionManager` opened on 500 generated session files plus a crash log, and `bugReportFiles`; bytes of diagnostics.json, member list, session.jsonl and summary.md). Two real fixes, both red first (128 of 500, then 13): (1) report.json and diagnostics.json went through `json.Encoder`, which writes U+2028/U+2029 as `\u2028` where `JSON.stringify` writes them literally (and kept Go number text); `bugReportJSON` now canonicalises through `stringifyIndented` (`internal/codingagent/bug_report.go`); (2) a diagnostic's `details: {}` was dropped by `omitempty` (`ai.AssistantMessageDiagnostic` now has a `MarshalJSON` that keeps an empty, non-nil Details; regression `TestAssistantMessageDiagnosticKeepsAnEmptyDetailsObject`). 14 mutations red (crash `notified` strip needed the crash corpus to be a JSON array, as `readCrashLog` expects). Findings left for a ruling (questions/lg-help-4.md): PiG's `AssistantMessage` cannot tell an empty `errorMessage`/`rawStopReason` from an absent one (Pi keeps `""`), and a diagnostic's `details` is a Go map, so non-index key order is sorted, not insertion order; both are excluded from the corpus and named in the test comment. Not compared: report.json content (metadata tests), the zip container (Pi writes a classic layout, Go's archive/zip a data-descriptor layout; the members' content is what a reader sees).
 
 ### BF-082355f
 
@@ -1587,7 +1587,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The session picker checks its keys in Pi's order when bindings overlap (delete before rename, list actions up, down, page up, page down, confirm, cancel), and Enter typed into the search box selects the highlighted session even when `tui.select.confirm` is rebound.
-- **Root cause:** (1) tui.input.submit (ctrl+s here) must select through the search Input's onSubmit -> selectList.handleInput("\r"); Ompig's host-owned TextInput only marked itself done. (2) Ompig re-fired onSelect/onCancel on every later navigation key because it read the list's sticky Done state; Pi fires once per confirm/cancel key (new FilterableList.Reset, called by the selector after it dispatches). Scenario settings/06 (/thinking, m Down Left d -> '> dm') is red on the old selector ('> md') and byte-equal now.
+- **Root cause:** (1) tui.input.submit (ctrl+s here) must select through the search Input's onSubmit -> selectList.handleInput("\r"); Pig's host-owned TextInput only marked itself done. (2) Pig re-fired onSelect/onCancel on every later navigation key because it read the list's sticky Done state; Pi fires once per confirm/cancel key (new FilterableList.Reset, called by the selector after it dispatches). Scenario settings/06 (/thinking, m Down Left d -> '> dm') is red on the old selector ('> md') and byte-equal now.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -1611,17 +1611,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-086395a
 
-**`coding.DefaultAgentDir()` (Pi's `getAgentDir`) now returns the directory named by `OMPIG_CODING_AGENT_DIR`…**
+**`coding.DefaultAgentDir()` (Pi's `getAgentDir`) now returns the directory named by `PIG_CODING_AGENT_DIR`…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `coding.DefaultAgentDir()` (Pi's `getAgentDir`) now returns the directory named by `OMPIG_CODING_AGENT_DIR` (`PI_CODING_AGENT_DIR` with `OMPIG_USE_PI_DIRS=1`), tilde expanded, as the `ompig` binary does; before, SDK embedders, `--skill` loading, the default skills directory and the interactive default ignored the variable and used `$OMPIG_HOME/agent`.
-- **Root cause:** coding.DefaultAgentDir() (the SDK entry point for Pi's getAgentDir) and the internal DefaultAgentDir it wraps returned $OMPIG_HOME/agent and ignored OMPIG_CODING_AGENT_DIR (PI_CODING_AGENT_DIR in shared mode), while the ompig binary's AgentDir() read it: an embedder, --skill loading, DefaultSkillsDir and the interactive default named a different directory. The variable check moves into the one resolver; AgentDir and DefaultAgentDir are now the same function.
+- **Symptom:** `coding.DefaultAgentDir()` (Pi's `getAgentDir`) now returns the directory named by `PIG_CODING_AGENT_DIR` (`PI_CODING_AGENT_DIR` with `PIG_USE_PI_DIRS=1`), tilde expanded, as the `pig` binary does; before, SDK embedders, `--skill` loading, the default skills directory and the interactive default ignored the variable and used `$PIG_HOME/agent`.
+- **Root cause:** coding.DefaultAgentDir() (the SDK entry point for Pi's getAgentDir) and the internal DefaultAgentDir it wraps returned $PIG_HOME/agent and ignored PIG_CODING_AGENT_DIR (PI_CODING_AGENT_DIR in shared mode), while the pig binary's AgentDir() read it: an embedder, --skill loading, DefaultSkillsDir and the interactive default named a different directory. The variable check moves into the one resolver; AgentDir and DefaultAgentDir are now the same function.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `086395a8bd` (2026-10-11)
 - **Tests:** `coding/services_test.go::TestDefaultAgentDirHonorsTheAgentDirVariable`
-- **Release note:** `coding.DefaultAgentDir()` (Pi's `getAgentDir`) now returns the directory named by `OMPIG_CODING_AGENT_DIR` (`PI_CODING_AGENT_DIR` with `OMPIG_USE_PI_DIRS=1`), tilde expanded, as the `ompig` binary does; before, SDK embedders, `--skill` loading, the default skills directory and the interactive default ignored the variable and used `$OMPIG_HOME/agent`.
+- **Release note:** `coding.DefaultAgentDir()` (Pi's `getAgentDir`) now returns the directory named by `PIG_CODING_AGENT_DIR` (`PI_CODING_AGENT_DIR` with `PIG_USE_PI_DIRS=1`), tilde expanded, as the `pig` binary does; before, SDK embedders, `--skill` loading, the default skills directory and the interactive default ignored the variable and used `$PIG_HOME/agent`.
 
 ### BF-08bf076
 
@@ -1643,7 +1643,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Provider error text is written the way Pi writes it.
-- **Root cause:** It found two differences in Ompig, fixed here: - SafeJsonStringify wrote encoding/json text: U+2028 and U+2029 escaped, -0 as -0, integer-like keys sorted lexically. JSON.stringify writes them raw, 0, and integer keys first. It now passes the encoded text through jsonstringify.Canonicalize (JSON.parse then stringify of validated JSON, which keeps lone surrogates), so raw provider bodies (json.RawMessage) and decoded values give Pi's text. - truncateUTF16 (slice(0, limit)) dropped the first half of a surrogate pair when the cut fell inside it; JavaScript keeps the lone high surrogate, U+FFFD once encoded as UTF-8. It now keeps U+FFFD. Callers: TruncateErrorText, the Radius gateway text cap and…
+- **Root cause:** It found two differences in Pig, fixed here: - SafeJsonStringify wrote encoding/json text: U+2028 and U+2029 escaped, -0 as -0, integer-like keys sorted lexically. JSON.stringify writes them raw, 0, and integer keys first. It now passes the encoded text through jsonstringify.Canonicalize (JSON.parse then stringify of validated JSON, which keeps lone surrogates), so raw provider bodies (json.RawMessage) and decoded values give Pi's text. - truncateUTF16 (slice(0, limit)) dropped the first half of a surrogate pair when the cut fell inside it; JavaScript keeps the lone high surrogate, U+FFFD once encoded as UTF-8. It now keeps U+FFFD. Callers: TruncateErrorText, the Radius gateway text cap and…
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -1719,7 +1719,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** Unreleased
 - **Fix commits:** `0adc7a6152` (2026-10-25)
 - **Tests:** `coding/cli/extension_host_wiring_guard_test.go::TestBuildFlushesTheExtensionHostProviderRegistrations`, `test/extension-conformance/provider_registration_diagnostic_test.go::TestProviderRegistrationFailureIsADiagnosticAcrossSDKs`, `test/parity/scenarios/extensions-runtime/88-startup-provider-registration-failure.toml`
-- **Release note:** A provider that an extension registers while it loads no longer fails the load when the model registry rejects it. The host asked the registry at once and reported `Failed to load extension: Provider x, model y: no "api" specified.`, with the `ompig -ne` hint. Pi queues the registration and applies it after every extension has loaded. Ompig now does the same: the extension stays loaded, the other registrations apply, and startup reports `Error: Extension "<path>" error: Provider x, model y: no "api" specified. Set it at model level or provider level.` as Pi does. A registration that an extension makes after it loaded still applies at once and returns its error to the extension.
+- **Release note:** A provider that an extension registers while it loads no longer fails the load when the model registry rejects it. The host asked the registry at once and reported `Failed to load extension: Provider x, model y: no "api" specified.`, with the `pig -ne` hint. Pi queues the registration and applies it after every extension has loaded. PiG now does the same: the extension stays loaded, the other registrations apply, and startup reports `Error: Extension "<path>" error: Provider x, model y: no "api" specified. Set it at model level or provider level.` as Pi does. A registration that an extension makes after it loaded still applies at once and returns its error to the extension.
 
 ### BF-0ae3fcf
 
@@ -1737,59 +1737,59 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-0ae4683
 
-**Ompig, the extension SDKs and the sprite selection use one configuration root: `OMPIG_HOME`, else…**
+**PiG, the extension SDKs and the sprite selection use one configuration root: `PIG_HOME`, else…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Ompig, the extension SDKs and the sprite selection use one configuration root: `OMPIG_HOME`, else `$XDG_CONFIG_HOME/ompig`, else `~/.ompig`.
+- **Symptom:** PiG, the extension SDKs and the sprite selection use one configuration root: `PIG_HOME`, else `$XDG_CONFIG_HOME/pig`, else `~/.pig`.
 - **Root cause:** Pi's JsonRevisionValidator validates object properties in Reflect.ownKeys order and throws the first failing property's TypeError (revision-validator.ts:26-33). So a state with several invalid properties always reports the same error. Go's normalize walked the map in random order, so Prepare's error changed from run to run. Example: NaN at a and a struct at b gave either 'non-finite number' or 'containers must be plain objects'.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `0ae4683246` (2026-10-08)
 - **Tests:** None recorded.
-- **Release note:** Ompig, the extension SDKs and the sprite selection use one configuration root: `OMPIG_HOME`, else `$XDG_CONFIG_HOME/ompig`, else `~/.ompig`. The Python SDK's `config_home` ignored `XDG_CONFIG_HOME`, the Rust SDK's `config_home` still read the retired `GOPI_HOME`, and the Go SDK, the sprite selection and several host paths each had their own copy of the rule, so an extension could read or write a different directory than the CLI. An empty `OMPIG_HOME` or `XDG_CONFIG_HOME` now falls through to the next choice, a leading `~` or `~/` expands to your home directory everywhere, and any other value is used as written. If the configuration root needs your home directory and Ompig cannot find it, Ompig reports an error and exits (`ompig --version` and other commands that need no root still run) instead of writing under a path relative to the working directory. Pi-sharing mode (`OMPIG_USE_PI_DIRS=1`) still moves only the agent and project directories, so a fresh `ompig` in that mode writes its documentation and stages the extension SDKs under `$XDG_CONFIG_HOME/ompig`. Reported by @baggiiiie (#200).
+- **Release note:** PiG, the extension SDKs and the sprite selection use one configuration root: `PIG_HOME`, else `$XDG_CONFIG_HOME/pig`, else `~/.pig`. The Python SDK's `config_home` ignored `XDG_CONFIG_HOME`, the Rust SDK's `config_home` still read the retired `GOPI_HOME`, and the Go SDK, the sprite selection and several host paths each had their own copy of the rule, so an extension could read or write a different directory than the CLI. An empty `PIG_HOME` or `XDG_CONFIG_HOME` now falls through to the next choice, a leading `~` or `~/` expands to your home directory everywhere, and any other value is used as written. If the configuration root needs your home directory and PiG cannot find it, PiG reports an error and exits (`pig --version` and other commands that need no root still run) instead of writing under a path relative to the working directory. Pi-sharing mode (`PIG_USE_PI_DIRS=1`) still moves only the agent and project directories, so a fresh `pig` in that mode writes its documentation and stages the extension SDKs under `$XDG_CONFIG_HOME/pig`. Reported by @baggiiiie (#200).
 
 ### BF-0b13d8b
 
-**`ompig auth --help` names `ompig auth ...` instead of `pi auth ...`**
+**`pig auth --help` names `pig auth ...` instead of `pi auth ...`**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig auth --help` names `ompig auth ...` instead of `pi auth ...`.
+- **Symptom:** `pig auth --help` names `pig auth ...` instead of `pi auth ...`.
 - **Root cause:** Not recorded.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `0b13d8bc58` (2026-10-13)
 - **Tests:** None recorded.
-- **Release note:** `ompig auth --help` names `ompig auth ...` instead of `pi auth ...`.
+- **Release note:** `pig auth --help` names `pig auth ...` instead of `pi auth ...`.
 
 ### BF-0b13d8b-2
 
-**`ompig extension --help` lists `ompig extension init --login`**
+**`pig extension --help` lists `pig extension init --login`**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig extension --help` lists `ompig extension init --login`.
+- **Symptom:** `pig extension --help` lists `pig extension init --login`.
 - **Root cause:** Not recorded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `0b13d8bc58` (2026-10-13)
 - **Tests:** None recorded.
-- **Release note:** `ompig extension --help` lists `ompig extension init --login`.
+- **Release note:** `pig extension --help` lists `pig extension init --login`.
 
 ### BF-0b13d8b-3
 
-**`ompig --help` lists `ompig login`, `ompig logout`, `ompig package`, `ompig extension upgrade`, `ompig reload`, and `ompig…**
+**`pig --help` lists `pig login`, `pig logout`, `pig package`, `pig extension upgrade`, `pig reload`, and `pig…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig --help` lists `ompig login`, `ompig logout`, `ompig package`, `ompig extension upgrade`, `ompig reload`, and `ompig diagnose`.
+- **Symptom:** `pig --help` lists `pig login`, `pig logout`, `pig package`, `pig extension upgrade`, `pig reload`, and `pig diagnose`.
 - **Root cause:** Not recorded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `0b13d8bc58` (2026-10-13)
 - **Tests:** None recorded.
-- **Release note:** `ompig --help` lists `ompig login`, `ompig logout`, `ompig package`, `ompig extension upgrade`, `ompig reload`, and `ompig diagnose`.
+- **Release note:** `pig --help` lists `pig login`, `pig logout`, `pig package`, `pig extension upgrade`, `pig reload`, and `pig diagnose`.
 
 ### BF-0b4e1e3
 
@@ -1839,7 +1839,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(codingagent): footer context usage refreshes on a context_edit entry (Pi getContextUsage)
-- **Root cause:** Pi's footer calls session.getContextUsage() on every render. Found by an end-to-end run of the same scripted OpenAI-completions server through real Pi and Ompig; handleEntryAppended now refreshes on a context_edit entry. TestContextEditEntryRefreshesTheFooterContextUsage is red without the change.
+- **Root cause:** Pi's footer calls session.getContextUsage() on every render. Found by an end-to-end run of the same scripted OpenAI-completions server through real Pi and Pig; handleEntryAppended now refreshes on a context_edit entry. TestContextEditEntryRefreshesTheFooterContextUsage is red without the change.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -1921,7 +1921,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** `tui.Box` no longer invalidates its children when a child is added or removed or the box is cleared.
-- **Root cause:** box.ts addChild, removeChild and clear call only invalidateCache, which drops the box's own cache. Pi invalidates the children only from Box.invalidate. Go's Box.AddChild, RemoveChild and Clear called b.Invalidate(), which also invalidates every child. A child component, including an extension's remote component, therefore received invalidate calls that Pi never makes. Ompig's Container already follows Pi here.
+- **Root cause:** box.ts addChild, removeChild and clear call only invalidateCache, which drops the box's own cache. Pi invalidates the children only from Box.invalidate. Go's Box.AddChild, RemoveChild and Clear called b.Invalidate(), which also invalidates every child. A child component, including an extension's remote component, therefore received invalidate calls that Pi never makes. Pig's Container already follows Pi here.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -1935,7 +1935,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A panicking notify while MCP reports startup problems is shown as "MCP failed to load" instead of ending the process, as Pi's startup chain catches it.
-- **Root cause:** - mcpext: let ctx.notify panics propagate everywhere except the "MCP failed to load" notify, but Pi's session_start chain `.then(() => reportProblems(ctx)).catch(...)` (mcp/index.ts:1138-1147) also catches a throw from reportProblems' notify. Ompig runs that report on a background goroutine, so the panic ended the process. reportStartupProblems shows it as "MCP failed to load: <message>" and ignores a second throw. - sdk-py: the Go SDK now reports a SetInvalidate(nil) panic on overlay stop in the extension log; Python's _dispose_remote_component still swallowed a raising set_invalidate(None) silently. It reports it on stderr and still disposes.
+- **Root cause:** - mcpext: let ctx.notify panics propagate everywhere except the "MCP failed to load" notify, but Pi's session_start chain `.then(() => reportProblems(ctx)).catch(...)` (mcp/index.ts:1138-1147) also catches a throw from reportProblems' notify. PiG runs that report on a background goroutine, so the panic ended the process. reportStartupProblems shows it as "MCP failed to load: <message>" and ignores a second throw. - sdk-py: the Go SDK now reports a SetInvalidate(nil) panic on overlay stop in the extension log; Python's _dispose_remote_component still swallowed a raising set_invalidate(None) silently. It reports it on stderr and still disposes.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -1949,7 +1949,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The Python SDK reports a component whose `set_invalidate(None)` raises during cleanup in the extension log, as the Go SDK does.
-- **Root cause:** - mcpext: let ctx.notify panics propagate everywhere except the "MCP failed to load" notify, but Pi's session_start chain `.then(() => reportProblems(ctx)).catch(...)` (mcp/index.ts:1138-1147) also catches a throw from reportProblems' notify. Ompig runs that report on a background goroutine, so the panic ended the process. reportStartupProblems shows it as "MCP failed to load: <message>" and ignores a second throw. - sdk-py: the Go SDK now reports a SetInvalidate(nil) panic on overlay stop in the extension log; Python's _dispose_remote_component still swallowed a raising set_invalidate(None) silently. It reports it on stderr and still disposes.
+- **Root cause:** - mcpext: let ctx.notify panics propagate everywhere except the "MCP failed to load" notify, but Pi's session_start chain `.then(() => reportProblems(ctx)).catch(...)` (mcp/index.ts:1138-1147) also catches a throw from reportProblems' notify. PiG runs that report on a background goroutine, so the panic ended the process. reportStartupProblems shows it as "MCP failed to load: <message>" and ignores a second throw. - sdk-py: the Go SDK now reports a SetInvalidate(nil) panic on overlay stop in the extension log; Python's _dispose_remote_component still swallowed a raising set_invalidate(None) silently. It reports it on stderr and still disposes.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -2080,7 +2080,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** Unreleased
 - **Fix commits:** `11866f8f17` (2026-10-27)
 - **Tests:** `durable/harness/harness_tasks_test.go::TestPublicationAtAdoption`
-- **Release note:** `WaitForIdle` on the Harness or a Conversation no longer fails with "Harness is closed" when a close begins after the commit that made the work idle and before the wait wakes. Pi settles the idle waits at the commit, so a later close cannot reach them; Ompig decided and settled them only after the host listeners, and the close's seal rejected them. They are now settled at the commit and only wake after the listeners.
+- **Release note:** `WaitForIdle` on the Harness or a Conversation no longer fails with "Harness is closed" when a close begins after the commit that made the work idle and before the wait wakes. Pi settles the idle waits at the commit, so a later close cannot reach them; PiG decided and settled them only after the host listeners, and the close's seal rejected them. They are now settled at the commit and only wake after the listeners.
 
 ### BF-11a6fcb
 
@@ -2100,14 +2100,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **Session lines (and every other JSON.stringify-mode encode) now write ill-formed UTF-8 the way Pi does: one…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Ompig used to write one `\ufffd` escape per bad byte, so `"a\xe2\x82b"` became `"a\ufffd\ufffdb"` where Pi writes `"a�b"`.
-- **Root cause:** JSON.stringify of a string decoded from ill-formed UTF-8 writes one raw U+FFFD per WHATWG maximal subpart; Ompig's session lines wrote one \ufffd escape per bad byte. The codec now counts one replacement per maximal subpart in every mode, writes it raw in the JSON.stringify mode, and rewrites nested \ufffd escapes to raw there. Marshal and MarshalJS keep the escape form. Session files written before keep their form and read back the same.
+- **Symptom:** PiG used to write one `\ufffd` escape per bad byte, so `"a\xe2\x82b"` became `"a\ufffd\ufffdb"` where Pi writes `"a�b"`.
+- **Root cause:** JSON.stringify of a string decoded from ill-formed UTF-8 writes one raw U+FFFD per WHATWG maximal subpart; PiG's session lines wrote one \ufffd escape per bad byte. The codec now counts one replacement per maximal subpart in every mode, writes it raw in the JSON.stringify mode, and rewrites nested \ufffd escapes to raw there. Marshal and MarshalJS keep the escape form. Session files written before keep their form and read back the same.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `11b199d645` (2026-10-12), `4e17838ae9` (2026-10-12)
 - **Tests:** `ai/errors_pool_test.go::TestSafeJsonStringifyPoolDropsLargeBuffers`, `extensions/sdk/json/append_string_swar_test.go::TestAppendStringMatchesBytewise`, `extensions/sdk/json/decode_trusted_test.go::TestUnmarshalTrustedMatchesUnmarshal`, `extensions/sdk/json/decode_trusted_test.go::TestUnmarshalTrustedVerifiesInTests`, `extensions/sdk/json/lw_budget_norace_test.go::TestAppendString200KBudget`, `extensions/sdk/json/lw_budget_norace_test.go::TestEncodeStatePoolDropsLargeBuffers`, `internal/jsonstringify/fast_node_test.go::TestFastPathKeyStackBound`, `internal/jsonstringify/large_object_test.go::TestIsCanonicalAcceptsLargeObjects` and 10 more in docs/bug-ledger.json
-- **Release note:** Session lines (and every other JSON.stringify-mode encode) now write ill-formed UTF-8 the way Pi does: one raw U+FFFD per WHATWG maximal subpart (what a JavaScript string decoded from those bytes holds, and what JSON.stringify writes). Ompig used to write one `\ufffd` escape per bad byte, so `"a\xe2\x82b"` became `"a\ufffd\ufffdb"` where Pi writes `"a�b"`. Nested `\ufffd` escapes from Ompig's own types are written raw as well. Session files written before this change keep the old form and read back the same strings. On the extension wire (the codec's `Marshal`/`MarshalJS`), ill-formed UTF-8 also counts one replacement per maximal subpart rather than per byte; the `\ufffd` escape form there is unchanged.
+- **Release note:** Session lines (and every other JSON.stringify-mode encode) now write ill-formed UTF-8 the way Pi does: one raw U+FFFD per WHATWG maximal subpart (what a JavaScript string decoded from those bytes holds, and what JSON.stringify writes). PiG used to write one `\ufffd` escape per bad byte, so `"a\xe2\x82b"` became `"a\ufffd\ufffdb"` where Pi writes `"a�b"`. Nested `\ufffd` escapes from PiG's own types are written raw as well. Session files written before this change keep the old form and read back the same strings. On the extension wire (the codec's `Marshal`/`MarshalJS`), ill-formed UTF-8 also counts one replacement per maximal subpart rather than per byte; the `\ufffd` escape form there is unchanged.
 
 ### BF-1268115
 
@@ -2124,10 +2124,10 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-1356aae
 
-**fix(train): load ompig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture…**
+**fix(train): load pig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** fix(train): load ompig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture modules to the root SDK version
+- **Symptom:** fix(train): load pig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture modules to the root SDK version
 - **Root cause:** Not recorded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
@@ -2168,7 +2168,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** In RPC mode, SIGTERM or SIGHUP during a tool call likewise stops the run while the `session_shutdown` handlers finish without waiting, as Pi does: a handler that throws no longer lets the run persist the tool result and send another provider request before the exit.
-- **Root cause:** Pi's RPC signal handler kills tracked children and awaits runtimeHost.dispose on its one event loop (rpc-mode.ts:366-376,726-744). The killed bash call's exit is I/O, so the run reaches its tool result only after a session_shutdown handler awaits a timer or I/O. Ompig's run went on concurrently: with a throwing handler it persisted the tool result and an assistant turn and sent a second provider request before exiting. RPC mode now registers the same termination prelude as print mode: Session.HoldAgentEvents from the moment the signal arrives until a handler reports its yield or the Session is disposed.
+- **Root cause:** Pi's RPC signal handler kills tracked children and awaits runtimeHost.dispose on its one event loop (rpc-mode.ts:366-376,726-744). The killed bash call's exit is I/O, so the run reaches its tool result only after a session_shutdown handler awaits a timer or I/O. PiG's run went on concurrently: with a throwing handler it persisted the tool result and an assistant turn and sent a second provider request before exiting. RPC mode now registers the same termination prelude as print mode: Session.HoldAgentEvents from the moment the signal arrives until a handler reports its yield or the Session is disposed.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -2182,7 +2182,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The Kimi Code, Meta and xAI device logins judge the verification URI the way Pi does, and Meta and xAI open the URL Pi opens.
-- **Root cause:** A differential test runs Pi's three private functions in Node (testdata/trusted_urls.mjs cuts them out of the pinned source) over 91 URLs and found 42 differences. Ompig used url.Parse, which keeps the URL as received and accepts what the WHATWG parser rejects, and rejects forms the WHATWG parser accepts: - 'https:example.com', 'https:/example.com', 'https:///example.com' and backslash forms are valid in Pi and were refused; - ports above 65535, 'https://:443', numeric hosts out of range, a space in the host were refused by Pi and accepted; - Meta and xAI returned the URL as written, where Pi returns the href (lowercase scheme and host, default and empty port and empty userinfo dropped, empty…
+- **Root cause:** A differential test runs Pi's three private functions in Node (testdata/trusted_urls.mjs cuts them out of the pinned source) over 91 URLs and found 42 differences. Pig used url.Parse, which keeps the URL as received and accepts what the WHATWG parser rejects, and rejects forms the WHATWG parser accepts: - 'https:example.com', 'https:/example.com', 'https:///example.com' and backslash forms are valid in Pi and were refused; - ports above 65535, 'https://:443', numeric hosts out of range, a space in the host were refused by Pi and accepted; - Meta and xAI returned the URL as written, where Pi returns the href (lowercase scheme and host, default and empty port and empty userinfo dropped, empty…
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -2224,7 +2224,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Queueing a steering or follow-up message while the agent streams prints no status line, as Pi does.
-- **Root cause:** Pi queues a steering or follow-up message with session.prompt(text, { streamingBehavior }) and refreshes the pending-messages area (interactive-mode.ts handleSubmit, handleFollowUp 4491-4499); only a message queued during compaction shows a status (queueCompactionMessage, 4768). Ompig flashed "Queued steering message" and "Queued follow-up message". Found by the queue journey.
+- **Root cause:** Pi queues a steering or follow-up message with session.prompt(text, { streamingBehavior }) and refreshes the pending-messages area (interactive-mode.ts handleSubmit, handleFollowUp 4491-4499); only a message queued during compaction shows a status (queueCompactionMessage, 4768). PiG flashed "Queued steering message" and "Queued follow-up message". Found by the queue journey.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -2248,7 +2248,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-165cf58
 
-**`ompig package publish --to npm` and `ompig ompiglet publish --to npm` no longer run an `npm` that the published…**
+**`pig package publish --to npm` and `pig piglet publish --to npm` no longer run an `npm` that the published…**
 
 - **Source:** Ompig's own defect
 - **Symptom:** Windows' `cmd.exe` could pick a Package's own `npm.cmd` ahead of the author's npm, and a relative `npmCommand` was resolved inside the Package directory.
@@ -2257,8 +2257,8 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Platform:** Windows
 - **Fixed in:** 0.5.0
 - **Fix commits:** `2e0f88f794` (2026-10-06, #160), `9a95b36b11` (2026-10-06, #162), `a4753ec61e` (2026-10-06, #170), `ba9c37b247` (2026-10-06, #171), `c019ea9155` (2026-10-06, #163), `165cf5884d` (2026-10-07, #180), `9b63b2bc4e` (2026-10-07, #176), `ce8587ef40` (2026-10-07, #179)
-- **Tests:** `coding/cli/rpc_initial_tools_test.go::TestRPCFreshPromptDeclaresStructuredSystemOnce`, `coding/cli/rpc_shutdown_test.go::TestRPCInputEndAfterExtensionCommandComparedWithPi`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleBusyEntriesAreSkippedNotErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledBeforeStartTouchesNothing`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledDuringTheLastEntryReportsTheCancellation`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleEntryLeasedAfterClassificationIsSkippedNotAnError`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleOtherErrorsStayErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleStopsWhenItsContextIsCancelled` and 96 more in docs/bug-ledger.json
-- **Release note:** `ompig package publish --to npm` and `ompig ompiglet publish --to npm` no longer run an `npm` that the published directory contains. Ompig finds npm in the absolute directories on `PATH`, so publishing from inside a Package that ships its own `npm` works and uses your npm (or resolves a relative `npmCommand` against the directory you run `ompig` in) and starts that file. Before, Windows' `cmd.exe` could pick a Package's own `npm.cmd` ahead of the author's npm, and a relative `npmCommand` was resolved inside the Package directory.
+- **Tests:** `coding/cli/rpc_initial_tools_test.go::TestRPCFreshPromptDeclaresStructuredSystemOnce`, `coding/cli/rpc_shutdown_test.go::TestRPCInputEndAfterExtensionCommandComparedWithPi`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleBusyEntriesAreSkippedNotErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledBeforeStartTouchesNothing`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledDuringTheLastEntryReportsTheCancellation`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleEntryLeasedAfterClassificationIsSkippedNotAnError`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleOtherErrorsStayErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleStopsWhenItsContextIsCancelled` and 76 more in docs/bug-ledger.json
+- **Release note:** `pig package publish --to npm` and `pig piglet publish --to npm` no longer run an `npm` that the published directory contains. PiG finds npm in the absolute directories on `PATH`, so publishing from inside a Package that ships its own `npm` works and uses your npm (or resolves a relative `npmCommand` against the directory you run `pig` in) and starts that file. Before, Windows' `cmd.exe` could pick a Package's own `npm.cmd` ahead of the author's npm, and a relative `npmCommand` was resolved inside the Package directory.
 
 ### BF-165cf58-2
 
@@ -2271,7 +2271,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Platform:** Windows
 - **Fixed in:** 0.5.0
 - **Fix commits:** `2e0f88f794` (2026-10-06, #160), `56c3f85350` (2026-10-06, #172), `9a95b36b11` (2026-10-06, #162), `ba9c37b247` (2026-10-06, #171), `c019ea9155` (2026-10-06, #163), `165cf5884d` (2026-10-07, #180), `9b63b2bc4e` (2026-10-07, #176), `ce8587ef40` (2026-10-07, #179)
-- **Tests:** `agent/tool_argument_order_test.go::TestAgentLoopDeliversEditedToolArgumentsInTheHooksOrder`, `coding/cli/rpc_shutdown_test.go::TestRPCInputEndAfterExtensionCommandComparedWithPi`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleBusyEntriesAreSkippedNotErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledBeforeStartTouchesNothing`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledDuringTheLastEntryReportsTheCancellation`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleEntryLeasedAfterClassificationIsSkippedNotAnError`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleOtherErrorsStayErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleStopsWhenItsContextIsCancelled` and 87 more in docs/bug-ledger.json
+- **Tests:** `agent/tool_argument_order_test.go::TestAgentLoopDeliversEditedToolArgumentsInTheHooksOrder`, `coding/cli/rpc_shutdown_test.go::TestRPCInputEndAfterExtensionCommandComparedWithPi`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleBusyEntriesAreSkippedNotErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledBeforeStartTouchesNothing`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledDuringTheLastEntryReportsTheCancellation`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleEntryLeasedAfterClassificationIsSkippedNotAnError`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleOtherErrorsStayErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleStopsWhenItsContextIsCancelled` and 67 more in docs/bug-ledger.json
 - **Release note:** On Windows, publishing to npm now works when npm is an `npm.cmd` at a path with spaces, such as `C:\Program Files\nodejs`. Arguments now reach the shim the way Pi's package commands pass them. An `npmCommand` that names a script now fails with a hint to name its interpreter first.
 
 ### BF-167dae3
@@ -2320,7 +2320,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Two extension processes setting the same key used to both show.
-- **Root cause:** Pi keeps one widget map per side keyed by the widget key alone (interactive-mode.ts setExtensionWidget removes the key from both maps, then sets it), whichever extension calls it. Ompig keyed extension-process widgets by "extName:key" and kept the host-process widgets apart, so two extensions setting one key both showed.
+- **Root cause:** Pi keeps one widget map per side keyed by the widget key alone (interactive-mode.ts setExtensionWidget removes the key from both maps, then sets it), whichever extension calls it. PiG keyed extension-process widgets by "extName:key" and kept the host-process widgets apart, so two extensions setting one key both showed.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -2375,7 +2375,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** A fix Pi shipped that Ompig ported
 - **Symptom:** Codemode `@options` errors report V8's JSON error text, tool and schema declarations keep unpaired surrogates, and an explicitly empty global signature renders as Pi renders it.
-- **Root cause:** Pi packages/codemode/src/source.ts:parseOptions reports JSON.parse's SyntaxError text after the fixed prefix; Ompig reported Go's. declarations.ts keeps lone surrogates in JSON string escapes (const, property names) and distinguishes an explicit empty signature (renderGlobal: signature !== undefined) from an absent one; Ompig replaced the surrogate with U+FFFD and treated "" as absent.
+- **Root cause:** Pi packages/codemode/src/source.ts:parseOptions reports JSON.parse's SyntaxError text after the fixed prefix; PiG reported Go's. declarations.ts keeps lone surrogates in JSON string escapes (const, property names) and distinguishes an explicit empty signature (renderGlobal: signature !== undefined) from an absent one; PiG replaced the surrogate with U+FFFD and treated "" as absent.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -2385,17 +2385,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-1971aae
 
-**A `bash` shell that starts at the moment `ompig` handles an emergency exit, a crash or a signal is now killed…**
+**A `bash` shell that starts at the moment `pig` handles an emergency exit, a crash or a signal is now killed…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** A `bash` shell that starts at the moment `ompig` handles an emergency exit, a crash or a signal is now killed with the others.
-- **Root cause:** A shell that had started but was not yet tracked could be missed and outlive `ompig`.
+- **Symptom:** A `bash` shell that starts at the moment `pig` handles an emergency exit, a crash or a signal is now killed with the others.
+- **Root cause:** A shell that had started but was not yet tracked could be missed and outlive `pig`.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `1971aaebd8` (2026-10-06)
 - **Tests:** `durable/env/node/watch_link_alias_test.go::TestNodeFileWatcherReportsALinkedTargetForAnEventNamedByTheResolvedFile`, `internal/codingagent/context_files_oracle_test.go::TestLoadProjectContextFilesMatchesPi`, `internal/codingagent/emergency_exit_children_test.go::TestEmergencyTerminalExitHelper`, `internal/codingagent/session_manager_test.go::TestDefaultSessionDirUsesAgentDirOverride`, `internal/codingagent/session_path_parity_test.go::TestDefaultSessionDirUsesUpstreamEncoding`, `internal/codingagent/tools/shell_tracked_test.go::TestKillTrackedDetachedChildrenKillsAShellStartedButNotYetTracked`
-- **Release note:** A `bash` shell that starts at the moment `ompig` handles an emergency exit, a crash or a signal is now killed with the others. A shell that had started but was not yet tracked could be missed and outlive `ompig`.
+- **Release note:** A `bash` shell that starts at the moment `pig` handles an emergency exit, a crash or a signal is now killed with the others. A shell that had started but was not yet tracked could be missed and outlive `pig`.
 
 ### BF-19a07f0
 
@@ -2416,7 +2416,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The `/session` block now follows a later theme change and shows the cache-warming countdown as of each redraw, as in Pi.
-- **Root cause:** handleSessionCommand snapshots the statistics and adds new ThemedText(renderInfo, 1, 0), so the text is rebuilt on every render with the active theme and the cache-warming status as of that render. Ompig built a static string once.
+- **Root cause:** handleSessionCommand snapshots the statistics and adds new ThemedText(renderInfo, 1, 0), so the text is rebuilt on every render with the active theme and the cache-warming status as of that render. PiG built a static string once.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -2525,13 +2525,13 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** RPC mode now ends by the signal when a termination signal arrives while a quit `session_shutdown` handler is pending.
-- **Root cause:** RPC mode exited 0 instead of by SIGTERM when the extension processes Ompig stops before dying completed a pending quit dispose or reported a drained loop; no exit starts once the signal's default action begins. The core-skills fixture used skill.Path (Pi: filePath). The theme border test resolved the theme in the terminal's color mode, where 256-color collapses two levels as in Pi. The MCP trust test expanded Windows 8.3 short names that the process never sees. go fix applied; ompig-go.json regenerated.
+- **Root cause:** RPC mode exited 0 instead of by SIGTERM when the extension processes PiG stops before dying completed a pending quit dispose or reported a drained loop; no exit starts once the signal's default action begins. The core-skills fixture used skill.Path (Pi: filePath). The theme border test resolved the theme in the terminal's color mode, where 256-color collapses two levels as in Pi. The MCP trust test expanded Windows 8.3 short names that the process never sees. go fix applied; pig-go.json regenerated.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `1d1c8aa106` (2026-10-06)
 - **Tests:** `ai/union_constants_upstream_test.go::TestUpstreamStringUnionsMatchTheGoConstants`, `ai/utils_exports_upstream_test.go::TestGetOverflowPatternsMatchesUpstreamList`, `tui/theme_attribute_helpers_test.go::TestThemeBorderColorFunctions`
-- **Release note:** RPC mode now ends by the signal when a termination signal arrives while a quit `session_shutdown` handler is pending. The extension processes Ompig stops first could complete the pending shutdown or report a drained event loop, and the process exited 0 instead of by the signal.
+- **Release note:** RPC mode now ends by the signal when a termination signal arrives while a quit `session_shutdown` handler is pending. The extension processes PiG stops first could complete the pending shutdown or report a drained event loop, and the process exited 0 instead of by the signal.
 
 ### BF-1d5b272
 
@@ -2545,7 +2545,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Fix commits:** `1d5b272feb` (2026-10-09), `433d232815` (2026-10-09)
 - **Tests:** `agent/convert_custom_upstream_test.go::TestConvertToLLMCustomMessagesMatchUpstreamConvertToLlm`, `agent/convert_custom_upstream_test.go::TestConvertToLLMToolFlowMatchesUpstreamTransformOrder`, `agent/convert_custom_upstream_test.go::TestCustomMessagesReachProvidersAsUpstreamContentBlocks`, `agent/transform_custom_user_boundary_test.go::TestAnthropicRequestAfterBranchSummaryHasNoOrphanToolResult`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMCustomMessageWithoutWireOutputKeepsToolFlow`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMCustomUserMessageInterruptsToolFlow`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMHoldsSystemMessageUntilToolFlowCloses`, `coding/session_tree_wire_oracle_test.go::TestNavigateTreeEveryPointSendsValidToolFlow` and 2 more in docs/bug-ledger.json
-- **Release note:** A text file passed as an `@file` argument that holds invalid UTF-8 now reaches the prompt as Pi sends it: each ill-formed byte sequence becomes one U+FFFD replacement character. Ompig previously copied the raw bytes, which later became one replacement character per byte.
+- **Release note:** A text file passed as an `@file` argument that holds invalid UTF-8 now reaches the prompt as Pi sends it: each ill-formed byte sequence becomes one U+FFFD replacement character. Pig previously copied the raw bytes, which later became one replacement character per byte.
 
 ### BF-1dcaef7
 
@@ -2553,7 +2553,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Durable: a JSONL line that starts with a byte order mark now opens, as in Pi, instead of failing with "Malformed complete ... line N".
-- **Root cause:** Lineage through a missing parent conversation now fails as in Pi. Pi's findLatestHeadMarker, visibleEntries and visibleEntriesAscending (memory.ts:509, :695, :717) read `.parent` of a conversation that is not stored and throw "Cannot read properties of undefined (reading 'parent')"; commit does not check that a parent exists (memory.ts:266-287), so a caller or a dropped commit leaves one dangling. Ompig stopped at the missing record and returned a truncated history (scanEntries even returned items). Each walk now returns that error at the same point, after the entries Pi yields first. The recovery differential no longer overwrites Ompig's answer with Pi's TypeError; danglingParentPrograms pins…
+- **Root cause:** Lineage through a missing parent conversation now fails as in Pi. Pi's findLatestHeadMarker, visibleEntries and visibleEntriesAscending (memory.ts:509, :695, :717) read `.parent` of a conversation that is not stored and throw "Cannot read properties of undefined (reading 'parent')"; commit does not check that a parent exists (memory.ts:266-287), so a caller or a dropped commit leaves one dangling. Pig stopped at the missing record and returned a truncated history (scanEntries even returned items). Each walk now returns that error at the same point, after the entries Pi yields first. The recovery differential no longer overwrites Pig's answer with Pi's TypeError; danglingParentPrograms pins…
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -2563,10 +2563,10 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-1ed43b3
 
-**fix(train): load ompig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture…**
+**fix(train): load pig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** fix(train): load ompig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture modules to the root SDK version
+- **Symptom:** fix(train): load pig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture modules to the root SDK version
 - **Root cause:** Not recorded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
@@ -2656,7 +2656,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `202b8f1943` (2026-10-13), `7633906d03` (2026-10-13), `a00dbe6901` (2026-10-13), `bd3e8ab24b` (2026-10-13)
-- **Tests:** `ai/device_code_poll_oracle_test.go::TestDeviceCodePollDeadlineRoundsTheProductLikePi`, `ai/oauth_expiry_arithmetic_test.go::TestBuiltinOAuthExpiryUsesJavaScriptArithmetic`, `ai/openai_codex_http_error_test.go::TestCodexHTTPErrorResetMinutesRoundTheProductFirst`, `internal/codingagent/cache_warmer_test.go::TestCacheWarmingExpectedSavingsRoundsTheProductLikePi`, `internal/codingagent/ompig_egg3d_test.go::TestPig3dFlightHomeOffsetsRoundLikePi`, `internal/codingagent/radius_login_oracle_test.go::TestRadiusLoginMenuRendersLikePi`, `internal/jsmath/log_oracle_test.go::TestLogMatchesNode`, `tui/colors_test.go::TestColorToOkhslRoundsTheChromaStopProduct`
+- **Tests:** `ai/device_code_poll_oracle_test.go::TestDeviceCodePollDeadlineRoundsTheProductLikePi`, `ai/oauth_expiry_arithmetic_test.go::TestBuiltinOAuthExpiryUsesJavaScriptArithmetic`, `ai/openai_codex_http_error_test.go::TestCodexHTTPErrorResetMinutesRoundTheProductFirst`, `internal/codingagent/cache_warmer_test.go::TestCacheWarmingExpectedSavingsRoundsTheProductLikePi`, `internal/codingagent/radius_login_oracle_test.go::TestRadiusLoginMenuRendersLikePi`, `internal/jsmath/log_oracle_test.go::TestLogMatchesNode`, `tui/colors_test.go::TestColorToOkhslRoundsTheChromaStopProduct`
 - **Release note:** On arm64 and other CPUs with a fused multiply-add, the OKHSL saturation of a color (used when generating the system theme's colors) rounds `0.8 * c0` before adding it, as Pi does. Before, it differed from Pi's in the last bit for about 9% of sRGB colors.
 
 ### BF-205933e
@@ -2732,14 +2732,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **On Linux and macOS, the bash tool, a `!` command and an extension's `exec` no longer report no output for a…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** On Linux and macOS, the bash tool, a `!` command and an extension's `exec` no longer report no output for a command that printed, when the machine is too busy to run Ompig's pipe reader within 100 ms of the command's exit.
+- **Symptom:** On Linux and macOS, the bash tool, a `!` command and an extension's `exec` no longer report no output for a command that printed, when the machine is too busy to run PiG's pipe reader within 100 ms of the command's exit.
 - **Root cause:** childwait.Wait ends the post-exit wait when the 100 ms grace of Pi's waitForChildProcess elapses and mayHoldOutput says a descendant may hold the pipe, which on Unix is always true (a process that left the group can). The grace measures a quiet writer, but the reader that was to take the output had not run for that long on a busy machine, so what the shell wrote before it exited was still unread in the pipe and Wait closed it and dropped it: the bash tool, user bash and an extension's exec reported no output for a command that printed. A reader that had taken a chunk but not yet handed it over lost it the same way when the grace released a quiet held pipe in that gap.
 - **User impact:** Lost or altered data
 - **Platform:** macOS, Linux
 - **Fixed in:** Unreleased
 - **Fix commits:** `224dbd923f` (2026-10-24)
 - **Tests:** `internal/childwait/pipe_blocked_unix_test.go::TestPollPipeAnswersWhileAReaderIsBlockedInReadingIt`, `internal/childwait/pipe_unix_test.go::TestPipesWaitDeliversEveryPipeWhenOneEndedAndAHolderKeepsTheOther`, `internal/childwait/pipe_unix_test.go::TestPipesWaitDeliversWhatWaitsUnreadInAPipeAHolderKeepsOpen`, `internal/childwait/pipe_unix_test.go::TestPipesWaitReadsToEOFAfterTheGraceWhenEveryWriteEndIsClosed`, `internal/childwait/pipe_unix_test.go::TestPollPipeReportsTheWriteEndsAndTheBytesOfAPipe`, `internal/childwait/pipe_unix_test.go::TestPollPipeTakesNothingAndLeavesTheReaderWorking`, `internal/childwait/wait_test.go::TestPipesWaitDeliversAChunkAReaderTookBeforeTheGraceReleasedTheHeldPipe`, `internal/childwait/wait_test.go::TestWaitIdleArmsTheGraceAgainWhileAPipeHoldsUnreadOutput` and 3 more in docs/bug-ledger.json
-- **Release note:** On Linux and macOS, the bash tool, a `!` command and an extension's `exec` no longer report no output for a command that printed, when the machine is too busy to run Ompig's pipe reader within 100 ms of the command's exit. Ompig ended the wait for the output pipe after Pi's 100 ms post-exit grace even though the command had written its output before it exited and the reader had not yet taken it, so the output was lost; on a loaded machine `echo answer` came back as `(no output)`. Ompig now asks the pipe itself when the grace elapses: a pipe that no process holds is read to its end, a pipe that holds output nobody has read yet keeps the wait going, and only a pipe that a background process still holds and that is quiet is released after the grace, as in Pi.
+- **Release note:** On Linux and macOS, the bash tool, a `!` command and an extension's `exec` no longer report no output for a command that printed, when the machine is too busy to run PiG's pipe reader within 100 ms of the command's exit. PiG ended the wait for the output pipe after Pi's 100 ms post-exit grace even though the command had written its output before it exited and the reader had not yet taken it, so the output was lost; on a loaded machine `echo answer` came back as `(no output)`. PiG now asks the pipe itself when the grace elapses: a pipe that no process holds is read to its end, a pipe that holds output nobody has read yet keeps the wait going, and only a pipe that a background process still holds and that is quiet is released after the grace, as in Pi.
 
 ### BF-2280bf8
 
@@ -2761,7 +2761,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Tool schemas in OpenAI Completions, OpenAI Responses, Codex and Mistral request bodies keep the members in the order the tool declares them.
-- **Root cause:** Pi passes a tool's parameters object through to the body (openai-completions.ts convertTools :1506-1514, openai-responses-shared.ts :386-390), so JSON.stringify writes the schema's members in declaration order; a strict schema is the same object rebuilt member by member (constrained-sampling.ts makeJsonSchemaNodeStrict: required, then additionalProperties are assigned after the existing members, and an optional property becomes {anyOf: [property, {type: "null"}]}). Ompig copied ToolSchema.Parameters as a map[string]any and dropped the recorded parameterOrder, so every schema object was written in sorted order.
+- **Root cause:** Pi passes a tool's parameters object through to the body (openai-completions.ts convertTools :1506-1514, openai-responses-shared.ts :386-390), so JSON.stringify writes the schema's members in declaration order; a strict schema is the same object rebuilt member by member (constrained-sampling.ts makeJsonSchemaNodeStrict: required, then additionalProperties are assigned after the existing members, and an optional property becomes {anyOf: [property, {type: "null"}]}). PiG copied ToolSchema.Parameters as a map[string]any and dropped the recorded parameterOrder, so every schema object was written in sorted order.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -2771,17 +2771,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-2316fe3
 
-**The Ompiglet JSON Schema that `ompig ompiglet schema` prints rejected `powershell` in `tools`, which `ompig ompiglet…**
+**The Piglet JSON Schema that `pig piglet schema` prints rejected `powershell` in `tools`, which `pig piglet…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** The Ompiglet JSON Schema that `ompig ompiglet schema` prints rejected `powershell` in `tools`, which `ompig ompiglet validate` accepts as a built-in tool, and stated nothing for most of the other closed vocabulary.
-- **Root cause:** The schema listed seven built-in tools while the parser accepts eight, so it rejected a Ompiglet that used powershell. An audit of every enum and field found more drift: the agentEnv runtime modes and policy presets, the strip IDs, the name, build target, output name, release version and secret patterns, the required keys of a mount, and the exactly-one agentEnv form were all unstated.
+- **Symptom:** The Piglet JSON Schema that `pig piglet schema` prints rejected `powershell` in `tools`, which `pig piglet validate` accepts as a built-in tool, and stated nothing for most of the other closed vocabulary.
+- **Root cause:** The schema listed seven built-in tools while the parser accepts eight, so it rejected a Piglet that used powershell. An audit of every enum and field found more drift: the agentEnv runtime modes and policy presets, the strip IDs, the name, build target, output name, release version and secret patterns, the required keys of a mount, and the exactly-one agentEnv form were all unstated.
 - **User impact:** Credential or permission exposure
 - **Platform:** Windows
 - **Fixed in:** 0.5.3
 - **Fix commits:** `2316fe38fb` (2026-10-22)
-- **Tests:** `coding/ompiglet/internal/genstripids/main_test.go::TestCommittedSchemaStripEnumsMatchRegistrations`, `coding/ompiglet/schema_test.go::TestAC1SchemaParserAgreement`, `coding/ompiglet/schema_vocabulary_test.go::TestSchemaAcceptsEveryPigletTheRepositoryShips`, `coding/ompiglet/schema_vocabulary_test.go::TestSchemaAgreesWithParserOnEveryValueOfASet`, `coding/ompiglet/schema_vocabulary_test.go::TestSchemaEnumsMatchParserSets`, `coding/ompiglet/schema_vocabulary_test.go::TestSchemaFieldsMatchParserFields`, `coding/ompiglet/schema_vocabulary_test.go::TestSchemaNeverRejectsWhatTheParserAccepts`
-- **Release note:** The Ompiglet JSON Schema that `ompig ompiglet schema` prints rejected `powershell` in `tools`, which `ompig ompiglet validate` accepts as a built-in tool, and stated nothing for most of the other closed vocabulary. It now lists all eight built-in tools, the strip IDs of each strip list, the `agentEnv` runtime modes (`inject`, `image`) and policy presets (`minimal`, `standard`, `elevated`), and carries the parser's name, build target, output name, release version and secret patterns, the required `source` and `target` of a mount, and the rule that `agentEnv` names exactly one of `image`, `devContainer` and `source`. `make ompiglet-strip-ids` writes the strip ID enums, and tests that read the parser's sets from code fail when the schema and the parser disagree.
+- **Tests:** None recorded.
+- **Release note:** The Piglet JSON Schema that `pig piglet schema` prints rejected `powershell` in `tools`, which `pig piglet validate` accepts as a built-in tool, and stated nothing for most of the other closed vocabulary. It now lists all eight built-in tools, the strip IDs of each strip list, the `agentEnv` runtime modes (`inject`, `image`) and policy presets (`minimal`, `standard`, `elevated`), and carries the parser's name, build target, output name, release version and secret patterns, the required `source` and `target` of a mount, and the rule that `agentEnv` names exactly one of `image`, `devContainer` and `source`. `make piglet-strip-ids` writes the strip ID enums, and tests that read the parser's sets from code fail when the schema and the parser disagree.
 
 ### BF-234316d
 
@@ -2803,7 +2803,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Extensions receive each model (`ctx.model`, `model_select`, `ctx.modelRegistry` reads, scoped models, virtual-model routes and provider-object calls) as Pi's model object, with its members in Pi's order, instead of sorted by member name with `null` for members the model does not set.
-- **Root cause:** ctx.model, model_select, ctx.modelRegistry (find/getAll/typed models, getAvailableOfType), scoped models, virtual-model routes and provider-object calls carried extension.ModelInfo: a map[string]any that json.Marshal sorted, with null for absent members and Ompig's aliases (modelId, displayName, maxOutputTokens, *CostPer1M). Pi hands extensions the runtime's model object itself (runner.ts:609): its catalog record's member order for a built-in or stored model, provider-composer.ts:230-248's for a composed one.
+- **Root cause:** ctx.model, model_select, ctx.modelRegistry (find/getAll/typed models, getAvailableOfType), scoped models, virtual-model routes and provider-object calls carried extension.ModelInfo: a map[string]any that json.Marshal sorted, with null for absent members and PiG's aliases (modelId, displayName, maxOutputTokens, *CostPer1M). Pi hands extensions the runtime's model object itself (runner.ts:609): its catalog record's member order for a built-in or stored model, provider-composer.ts:230-248's for a composed one.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -2817,7 +2817,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The openai stream decoder follows openai 7.19.0, the version packages/ai declares: the stream ends at [DONE] without waiting for the connection to close, the last event is delivered when the server omits its blank line, [DONE] must be the whole data, and an event named error throws an APIError.
-- **Root cause:** Differential: 6000 seeded response bodies (every line ending, comments, fields with and without the optional space, repeated data, [DONE] and [DONE] tails, JSON errors, malformed JSON, BOM, invalid UTF-8, unterminated last event, split at arbitrary bytes) through the pinned openai 7.19.0 Stream.fromSSEResponse and Ompig's decoder: items, API error messages and malformed-JSON errors compared. 631 of 6000 differed.
+- **Root cause:** Differential: 6000 seeded response bodies (every line ending, comments, fields with and without the optional space, repeated data, [DONE] and [DONE] tails, JSON errors, malformed JSON, BOM, invalid UTF-8, unterminated last event, split at arbitrary bytes) through the pinned openai 7.19.0 Stream.fromSSEResponse and Pig's decoder: items, API error messages and malformed-JSON errors compared. 631 of 6000 differed.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -2831,7 +2831,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(hljs): a resumed run counts the scan iterations before its checkpoint
-- **Root cause:** A resumed run started counting at 0, so a whole run could throw (Pi prints the escaped code) where the resumed run did not (Ompig printed highlighted code); maxCheckpointIterations only narrowed that window. A checkpoint now records the iterations before it, ResumePoint carries them, tui's resume state keeps them, and the resumed run continues the count, so both runs see the same counter at every match. maxCheckpointIterations goes: points past it are now exact.
+- **Root cause:** A resumed run started counting at 0, so a whole run could throw (Pi prints the escaped code) where the resumed run did not (PiG printed highlighted code); maxCheckpointIterations only narrowed that window. A checkpoint now records the iterations before it, ResumePoint carries them, tui's resume state keeps them, and the resumed run continues the count, so both runs see the same counter at every match. maxCheckpointIterations goes: points past it are now exact.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -2944,7 +2944,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A `tui.*` id had no key text and matched nothing through the coding-agent manager, and an unknown id echoed its user keys.
-- **Root cause:** Ompig's KeyText and Matches read km.resolved (app.* only): keyText("tui.select.confirm") was "" and matches("\r", "tui.select.confirm") false; getKeys echoed the user keys of an unknown id (TUI bridge). They now share keysOf over the merged table, which returns nothing for an undefined id.
+- **Root cause:** PiG's KeyText and Matches read km.resolved (app.* only): keyText("tui.select.confirm") was "" and matches("\r", "tui.select.confirm") false; getKeys echoed the user keys of an unknown id (TUI bridge). They now share keysOf over the merged table, which returns nothing for an undefined id.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -2972,7 +2972,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The npm release packer reads `npm pack --json` output from npm 12, which keys the result by package name, as well as npm 11's array (Pi 6fb2e781).
-- **Root cause:** #10415: Pi main.ts:80-97 readPipedStdin waits for EOF; Ompig ported it, so an open idle pipe hangs startup. --no-stdin skips the read; default unchanged (D-PIBUG-10415). pack_npm.py: npm 12 prints pack --json keyed by package name; port Pi 's shape handling.
+- **Root cause:** #10415: Pi main.ts:80-97 readPipedStdin waits for EOF; PiG ported it, so an open idle pipe hangs startup. --no-stdin skips the read; default unchanged (D-PIBUG-10415). pack_npm.py: npm 12 prints pack --json keyed by package name; port Pi 's shape handling.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -3047,7 +3047,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Fix commits:** `2a0fb968de` (2026-10-11)
 - **Tests:** `internal/codingagent/slash_cost_order_test.go::TestFormatCostSummaryListsToolsInStableNameOrder`
-- **Release note:** `/cost` lists its tools in a stable order: `formatCostSummary` ranged over `snap.ToolTotals`, so the `Tools:` lines came out in a different order on every call (Go map iteration). They are now sorted by name. Regression `TestFormatCostSummaryListsToolsInStableNameOrder` (red before: fails on the first run with 24 tools). `/cost` has no Pi counterpart, so the name order is Ompig's choice. Found by scanning production code for map ranges that feed output; the same pattern (a map range whose first failing entry names the error) remains in `coding/packagecontent` (`validateMCPDocument`, `validateComposeClosure`) and `coding/hookconfig.Parse`, which belong to other lanes.
+- **Release note:** `/cost` lists its tools in a stable order: `formatCostSummary` ranged over `snap.ToolTotals`, so the `Tools:` lines came out in a different order on every call (Go map iteration). They are now sorted by name. Regression `TestFormatCostSummaryListsToolsInStableNameOrder` (red before: fails on the first run with 24 tools). `/cost` has no Pi counterpart, so the name order is PiG's choice. Found by scanning production code for map ranges that feed output; the same pattern (a map range whose first failing entry names the error) remains in `coding/packagecontent` (`validateMCPDocument`, `validateComposeClosure`) and `coding/hookconfig.Parse`, which belong to other lanes.
 
 ### BF-2a919a4
 
@@ -3069,7 +3069,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** An extension provider whose `streamSimple` hands its request to pi-ai's compat `streamSimple` (or `stream`) for a stock API, as `pi-commandcode-provider` does, no longer re-enters its own `streamSimple` without bound.
-- **Root cause:** pi-commandcode-provider registers a provider whose streamSimple forwards to pi-ai's streamSimple for the model's real wire. Pi dispatches that call on model.api (compat.ts:252-293). Ompig looked the provider up by name, found the extension's own streamSimple and called it again, without end, until the packed Node process ran out of memory, missed its heartbeat and was killed, taking the healthy members that shared it down too.
+- **Root cause:** pi-commandcode-provider registers a provider whose streamSimple forwards to pi-ai's streamSimple for the model's real wire. Pi dispatches that call on model.api (compat.ts:252-293). PiG looked the provider up by name, found the extension's own streamSimple and called it again, without end, until the packed Node process ran out of memory, missed its heartbeat and was killed, taking the healthy members that shared it down too.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -3083,7 +3083,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A provider registered with its own `streamSimple` runs that callback only for its models whose `api` is the provider's registered `api`, as under Pi.
-- **Root cause:** pi-commandcode-provider registers a provider whose streamSimple forwards to pi-ai's streamSimple for the model's real wire. Pi dispatches that call on model.api (compat.ts:252-293). Ompig looked the provider up by name, found the extension's own streamSimple and called it again, without end, until the packed Node process ran out of memory, missed its heartbeat and was killed, taking the healthy members that shared it down too.
+- **Root cause:** pi-commandcode-provider registers a provider whose streamSimple forwards to pi-ai's streamSimple for the model's real wire. Pi dispatches that call on model.api (compat.ts:252-293). PiG looked the provider up by name, found the extension's own streamSimple and called it again, without end, until the packed Node process ran out of memory, missed its heartbeat and was killed, taking the healthy members that shared it down too.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -3133,31 +3133,31 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-2c5db8b
 
-**A Ompiglet Binary with a fused Go extension starts within a few milliseconds of Stock Ompig**
+**A Piglet Binary with a fused Go extension starts within a few milliseconds of Stock PiG**
 
 - **Source:** Ompig's own defect
-- **Symptom:** A Ompiglet Binary with a fused Go extension starts within a few milliseconds of Stock Ompig.
-- **Root cause:** A Ompiglet Binary with one fused Go extension took 72.1 ms for -p with the faux provider against 31.7 ms for Stock Ompig. The extension host encoded the whole model catalog (more than 1 MB of JSON) three times while it wired model operations and sent it to every extension, though the Go, Rust and Python SDKs answer ctx.modelRegistry with a blocking getModelRegistryState call and discard the snapshot.
+- **Symptom:** A Piglet Binary with a fused Go extension starts within a few milliseconds of Stock PiG.
+- **Root cause:** A Piglet Binary with one fused Go extension took 72.1 ms for -p with the faux provider against 31.7 ms for Stock PiG. The extension host encoded the whole model catalog (more than 1 MB of JSON) three times while it wired model operations and sent it to every extension, though the Go, Rust and Python SDKs answer ctx.modelRegistry with a blocking getModelRegistryState call and discard the snapshot.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `2c5db8b20a` (2026-10-06)
 - **Tests:** None recorded.
-- **Release note:** A Ompiglet Binary with a fused Go extension starts within a few milliseconds of Stock Ompig. On an Apple M4 Pro (median of 20, faux provider), `-p` took 72.1 ms against 31.7 ms for Stock Ompig and now takes 33.0 ms, and the first typed key showed in the editor after 71.0 ms against 33.6 ms and now after 33.4 ms. The extension host encoded the whole model catalog (more than 1 MB of JSON) three times at startup for every extension. Now it builds and sends that snapshot only to Node extensions, which answer `ctx.modelRegistry` reads from it. Go, Rust and Python extensions read the registry from the host when they ask, as before, so Stock Ompig with such extensions starts faster too. See D19 in `docs/additive-features.md`.
+- **Release note:** A Piglet Binary with a fused Go extension starts within a few milliseconds of Stock PiG. On an Apple M4 Pro (median of 20, faux provider), `-p` took 72.1 ms against 31.7 ms for Stock PiG and now takes 33.0 ms, and the first typed key showed in the editor after 71.0 ms against 33.6 ms and now after 33.4 ms. The extension host encoded the whole model catalog (more than 1 MB of JSON) three times at startup for every extension. Now it builds and sends that snapshot only to Node extensions, which answer `ctx.modelRegistry` reads from it. Go, Rust and Python extensions read the registry from the host when they ask, as before, so Stock PiG with such extensions starts faster too. See D19 in `docs/additive-features.md`.
 
 ### BF-2c88c5f
 
-**Ill-formed UTF-8 in a string that Ompig re-encodes as JSON (an extension's raw JSON, tool schemas, code-mode…**
+**Ill-formed UTF-8 in a string that PiG re-encodes as JSON (an extension's raw JSON, tool schemas, code-mode…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Ill-formed UTF-8 in a string that Ompig re-encodes as JSON (an extension's raw JSON, tool schemas, code-mode keys, Bedrock and Google request members) is written as `JSON.stringify` writes the decoded text: one literal U+FFFD for each ill-formed sequence, instead of one `\ufffd` escape per byte.
+- **Symptom:** Ill-formed UTF-8 in a string that PiG re-encodes as JSON (an extension's raw JSON, tool schemas, code-mode keys, Bedrock and Google request members) is written as `JSON.stringify` writes the decoded text: one literal U+FFFD for each ill-formed sequence, instead of one `\ufffd` escape per byte.
 - **Root cause:** Design step 1 ("internal/jsnumber.String, jsstring and jsonstringify's string writer become callers"): - internal/jsstring.AppendString is jsparity.AppendString. It was an ASCII fast path plus MarshalJSON through the SDK encoder. - internal/jsnumber.String writes finite numbers with jsparity.AppendNumber instead of a safe-integer branch plus json.Marshal. - internal/jsonstringify's canonicalize writes numbers with jsparity.AppendNumber. stringToken is JSON.stringify(JSON.parse(token)): jv.Parse decodes to WTF-8 and jsparity.AppendString writes it, replacing a hand-written escape rewriter.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `2c88c5fd2e` (2026-10-10), `80c797da93` (2026-10-10), `afa1dd5185` (2026-10-10), `f02269c6e1` (2026-10-10), `fe625bb5dd` (2026-10-10)
 - **Tests:** `ai/anthropic_replaced_payload_order_oracle_test.go::TestAnthropicReplacedPayloadKeepsPiMemberOrder`, `ai/bedrock_request_body_oracle_test.go::TestBedrockRequestBodyMatchesPi`, `ai/bedrock_wire_metadata_order_test.go::TestBedrockStringMapEnumeratesLikeAJavaScriptObject`, `ai/google_request_body_oracle_test.go::TestGoogleRequestBodyMatchesPi`, `ai/mistral_request_body_oracle_test.go::TestMistralRequestBodyMatchesPi`, `ai/mistral_request_body_oracle_test.go::TestMistralTypedWirePayloadMatchesTheGeneralLowering`, `ai/openai_codex_websocket_frame_oracle_test.go::TestCodexWebSocketFramesMatchPi`, `ai/provider_ecmascript_whitespace_test.go::TestMistralAssistantBlankUsesECMAScriptTrim` and 17 more in docs/bug-ledger.json
-- **Release note:** Ill-formed UTF-8 in a string that Ompig re-encodes as JSON (an extension's raw JSON, tool schemas, code-mode keys, Bedrock and Google request members) is written as `JSON.stringify` writes the decoded text: one literal U+FFFD for each ill-formed sequence, instead of one `\ufffd` escape per byte.
+- **Release note:** Ill-formed UTF-8 in a string that PiG re-encodes as JSON (an extension's raw JSON, tool schemas, code-mode keys, Bedrock and Google request members) is written as `JSON.stringify` writes the decoded text: one literal U+FFFD for each ill-formed sequence, instead of one `\ufffd` escape per byte.
 
 ### BF-2d05dc8
 
@@ -3179,7 +3179,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(codingagent): queued-message lines use the dim foreground; hint separator closes only the foreground
-- **Root cause:** Pi interactive-mode.ts:4729-4737 renders queued steering/follow-up lines and the dequeue hint as theme.fg("dim", ...) and :1056 joins the compact startup hints with theme.fg("muted", " · "). Ompig used the muted colour (not dim) and a full reset (ESC[0m) for the queued lines, and a full reset after the separator. Tests TestPendingDisplayLinesUseTheDimForeground and TestStartupKeybindHintsSeparatorIsTheMutedForeground red before the fix.
+- **Root cause:** Pi interactive-mode.ts:4729-4737 renders queued steering/follow-up lines and the dequeue hint as theme.fg("dim", ...) and :1056 joins the compact startup hints with theme.fg("muted", " · "). Pig used the muted colour (not dim) and a full reset (ESC[0m) for the queued lines, and a full reset after the separator. Tests TestPendingDisplayLinesUseTheDimForeground and TestStartupKeybindHintsSeparatorIsTheMutedForeground red before the fix.
 - **User impact:** Lost or altered data
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -3205,18 +3205,18 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **The openai-completions, openai-responses and openrouter-images requests build their URL as the openai SDK…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** The openai-completions, openai-responses and openrouter-images requests build their URL as the openai SDK does (base query rewritten through qs, one slash dropped, WHATWG normalisation) and a URL with credentials is refused as fetch refuses it ("Connection error."), where Ompig sent the credentials as Basic auth.
+- **Symptom:** The openai-completions, openai-responses and openrouter-images requests build their URL as the openai SDK does (base query rewritten through qs, one slash dropped, WHATWG normalisation) and a URL with credentials is refused as fetch refuses it ("Connection error."), where Pig sent the credentials as Basic auth.
 - **Root cause:** Not recorded.
 - **User impact:** Credential or permission exposure
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `2ea8ad24ae` (2026-10-10), `a8ff0c7afe` (2026-10-10)
 - **Tests:** `ai/sdk_request_url_oracle_test.go::TestSDKProvidersRefuseCredentialsLikeFetch`, `ai/sdk_request_url_oracle_test.go::TestSDKProvidersRequestURLMatchesSDK`
-- **Release note:** The openai-completions, openai-responses and openrouter-images requests build their URL as the openai SDK does (base query rewritten through qs, one slash dropped, WHATWG normalisation) and a URL with credentials is refused as fetch refuses it ("Connection error."), where Ompig sent the credentials as Basic auth.
+- **Release note:** The openai-completions, openai-responses and openrouter-images requests build their URL as the openai SDK does (base query rewritten through qs, one slash dropped, WHATWG normalisation) and a URL with credentials is refused as fetch refuses it ("Connection error."), where Pig sent the credentials as Basic auth.
 
 ### BF-2f881ba
 
-**"Your first extension" now says that `ompig install --validate-only` exits 1 when the extension does not build**
+**"Your first extension" now says that `pig install --validate-only` exits 1 when the extension does not build**
 
 - **Source:** Ompig's own defect
 - **Symptom:** It said 0.
@@ -3226,7 +3226,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `2f881baf82` (2026-10-11)
 - **Tests:** None recorded.
-- **Release note:** "Your first extension" now says that `ompig install --validate-only` exits 1 when the extension does not build. Before, it said 0.
+- **Release note:** "Your first extension" now says that `pig install --validate-only` exits 1 when the extension does not build. Before, it said 0.
 
 ### BF-2fc2307
 
@@ -3234,7 +3234,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A scalar that names a collection tag (`!!map 1`, `!!seq true`) inside a complex mapping key stays plain in the key's text, as the yaml library prints it; it used to be quoted (`!!map "1"`) as a string scalar is, so the object key differed.
-- **Root cause:** getTagObject picks the tag by name, and the collection tags have no stringify, so the scalar reaches stringifyString with the caller's context: a text that would read as a number stays plain in a stringified complex key ('? [!!map 1]' keys the object '[ !!map 1 ]', the library; Ompig quoted it). Found by the yaml12 mutated-corpus seed sweep (class 3 of the earlier note). The blank-line indentation inside stringified flow-map keys (class 2) remains.
+- **Root cause:** getTagObject picks the tag by name, and the collection tags have no stringify, so the scalar reaches stringifyString with the caller's context: a text that would read as a number stays plain in a stringified complex key ('? [!!map 1]' keys the object '[ !!map 1 ]', the library; Pig quoted it). Found by the yaml12 mutated-corpus seed sweep (class 3 of the earlier note). The blank-line indentation inside stringified flow-map keys (class 2) remains.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -3424,17 +3424,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-32ce7ad
 
-**The Termux page shows the `[Context]` line as Ompig prints it, `~/.ompig/agent/AGENTS.md`**
+**The Termux page shows the `[Context]` line as PiG prints it, `~/.pig/agent/AGENTS.md`**
 
 - **Source:** Ompig's own defect
-- **Symptom:** The Termux page shows the `[Context]` line as Ompig prints it, `~/.ompig/agent/AGENTS.md`.
+- **Symptom:** The Termux page shows the `[Context]` line as PiG prints it, `~/.pig/agent/AGENTS.md`.
 - **Root cause:** Not recorded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** Android and Termux
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `32ce7ad1c7` (2026-10-11)
 - **Tests:** None recorded.
-- **Release note:** The Termux page shows the `[Context]` line as Ompig prints it, `~/.ompig/agent/AGENTS.md`.
+- **Release note:** The Termux page shows the `[Context]` line as PiG prints it, `~/.pig/agent/AGENTS.md`.
 
 ### BF-32e86a8
 
@@ -3524,7 +3524,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** `ModelsError` appends the cause detail the way Pi does: an Error cause with an empty message contributes its name ("load failed: TypeError") instead of nothing (`ai/auth_resolve.go` NewModelsError, models-error.ts withCauseDetail; live-Pi oracle `TestModelsErrorMessageMatchesPi`, 3,000 probes, 147 red before; three mutations red).
-- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). Ompig's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
+- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). PiG's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -3538,7 +3538,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Live-Pi oracles `TestExtensionSelectorMatchesPi` (4,320 probes) and `TestExtensionInputMatchesPi` (1,144 probes) (`tui/extension_selector_oracle_test.go`, `tui/extension_input_oracle_test.go`): every frame and callback after each key against the pinned Pi component, default and rebound select keys, descriptions, wide/empty content, focus; no bug found; six and seven mutations red (the lone-LF confirm needed its own probe).
-- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). Ompig's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
+- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). PiG's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -3633,14 +3633,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **An extension that calls `ctx.shutdown()` from a `session_start` handler, or from a `session_before_switch` or…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** An extension that calls `ctx.shutdown()` from a `session_start` handler, or from a `session_before_switch` or `session_before_fork` handler during `/new`, `/resume` or `/fork`, ends the session as Pi does: extensions get `session_shutdown`, `ompig` prints the resume command when the session has a file, and exits 0 without waiting for the handler that asked for the shutdown.
+- **Symptom:** An extension that calls `ctx.shutdown()` from a `session_start` handler, or from a `session_before_switch` or `session_before_fork` handler during `/new`, `/resume` or `/fork`, ends the session as Pi does: extensions get `session_shutdown`, `pig` prints the resume command when the session has a file, and exits 0 without waiting for the handler that asked for the shutdown.
 - **Root cause:** Pi's shutdown() stops the TUI, awaits runtimeHost.dispose() (session_shutdown), prints the resume command when the session file exists and calls process.exit(0); it never awaits the session_start, session_before_switch or session_before_fork handler that asked for the shutdown (interactive-mode.ts:2020-2024, 4251-4290).
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `34f7594aa5` (2026-10-11)
 - **Tests:** `internal/codingagent/extension_ui_phase_shutdown_test.go::TestAwaitedExtensionPhaseWithoutShutdownReturnsItsResult`, `internal/codingagent/extension_ui_phase_shutdown_test.go::TestNewSessionEndedByShutdownIsNotAFatalRuntimeError`, `internal/codingagent/extension_ui_phase_shutdown_test.go::TestShutdownDuringAwaitedExtensionPhaseDoesNotWaitForAHandlerThatIgnoresCancellation`, `internal/codingagent/extension_ui_phase_shutdown_test.go::TestShutdownDuringAwaitedExtensionPhaseEndsThePhase`, `test/parity/scenarios/extensions-runtime/73-shutdown-from-session-before-fork.toml`, `test/parity/scenarios/extensions-runtime/73-shutdown-from-session-before-switch.toml`, `test/parity/scenarios/extensions-runtime/73-shutdown-from-session-start.toml`
-- **Release note:** An extension that calls `ctx.shutdown()` from a `session_start` handler, or from a `session_before_switch` or `session_before_fork` handler during `/new`, `/resume` or `/fork`, ends the session as Pi does: extensions get `session_shutdown`, `ompig` prints the resume command when the session has a file, and exits 0 without waiting for the handler that asked for the shutdown. `ompig` had restored the terminal and then waited forever for that handler, and `/new` exited 1 as if creating the session had failed.
+- **Release note:** An extension that calls `ctx.shutdown()` from a `session_start` handler, or from a `session_before_switch` or `session_before_fork` handler during `/new`, `/resume` or `/fork`, ends the session as Pi does: extensions get `session_shutdown`, `pig` prints the resume command when the session has a file, and exits 0 without waiting for the handler that asked for the shutdown. `pig` had restored the terminal and then waited forever for that handler, and `/new` exited 1 as if creating the session had failed.
 
 ### BF-34f7594-2
 
@@ -3719,7 +3719,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** RPC model objects of built-in models match Pi's: each keeps its catalog entry's own member order and spelling (`"type"` last for most models, first for others; `inputLimits.images` as the entry spells it), and a `models.json` override keeps the changed members in place, with merged objects listing the catalog's members first.
-- **Root cause:** Pi's RPC model objects are its catalog's model objects, so each is JSON.stringify of its MODELS entry: "type" is last in 1164 chat entries and first in 399, baseUrl precedes provider in some, and inputLimits.images lists maxPerRequest first. Ompig wrote every model in one fixed RPCModel order.
+- **Root cause:** Pi's RPC model objects are its catalog's model objects, so each is JSON.stringify of its MODELS entry: "type" is last in 1164 chat entries and first in 399, baseUrl precedes provider in some, and inputLimits.images lists maxPerRequest first. PiG wrote every model in one fixed RPCModel order.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -3763,7 +3763,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A search over a directory of very large logs used to exhaust the heap; the output is unchanged (Pi #9276).
-- **Root cause:** grep.ts getFileLines reads and splits every matched file; Ompig ported it. Output unchanged; heap growth for a 50 MB file with context 2 drops from 150 MB to under 12 MB.
+- **Root cause:** grep.ts getFileLines reads and splits every matched file; PiG ported it. Output unchanged; heap growth for a 50 MB file with context 2 drops from 150 MB to under 12 MB.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -3829,14 +3829,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **The pi-messages and classifier (System One, decisions) requests are sent to the URL as written and a URL with…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** The pi-messages and classifier (System One, decisions) requests are sent to the URL as written and a URL with credentials is refused as fetch refuses it, where Ompig sent the credentials as Basic auth.
-- **Root cause:** pi-messages.ts:370,392 hands new URL(...) to options.fetch ?? globalThis.fetch, classifier-shared.ts:73 the target to the same; fetch sends the serialized URL as is and throws a TypeError naming it for a URL with a username or password. Ompig re-parsed the href with net/url and sent credentials as Basic auth. Both now use ai.newFetchRequest.
+- **Symptom:** The pi-messages and classifier (System One, decisions) requests are sent to the URL as written and a URL with credentials is refused as fetch refuses it, where Pig sent the credentials as Basic auth.
+- **Root cause:** pi-messages.ts:370,392 hands new URL(...) to options.fetch ?? globalThis.fetch, classifier-shared.ts:73 the target to the same; fetch sends the serialized URL as is and throws a TypeError naming it for a URL with a username or password. Pig re-parsed the href with net/url and sent credentials as Basic auth. Both now use ai.newFetchRequest.
 - **User impact:** Credential or permission exposure
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `3804a5a2ab` (2026-10-10)
 - **Tests:** `ai/sdk_request_url_oracle_test.go::TestPostClassifierRequestRefusesCredentialsLikeFetch`, `ai/sdk_request_url_oracle_test.go::TestSDKProvidersRequestURLMatchesSDK`
-- **Release note:** The pi-messages and classifier (System One, decisions) requests are sent to the URL as written and a URL with credentials is refused as fetch refuses it, where Ompig sent the credentials as Basic auth.
+- **Release note:** The pi-messages and classifier (System One, decisions) requests are sent to the URL as written and a URL with credentials is refused as fetch refuses it, where Pig sent the credentials as Basic auth.
 
 ### BF-3840820
 
@@ -3844,7 +3844,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** MCP tool results whose content blocks carry members of another type than the protocol's (a numeric `text`, a `size` string, a missing `uri`, a `null` block, a `resource` that is not an object) now convert as Pi converts them: the model sees what Pi's would, and a block Pi cannot read ends the tool call with Pi's error instead of a placeholder.
-- **Root cause:** package_updates.go, package_update_operations.go, package_npm_metadata.go and the update source matching move from cmd/ompig into internal/packagemanager. PackageManager.Update(source) and PackageManager.CheckForAvailableUpdates() are Pi's update and checkForAvailableUpdates; cmd/ompig update and the startup update check call them. Pure update tests (operations, semver/metadata, capture) move with the code; the CLI-fixture tests stay in cmd/ompig and call the exported members. Behaviour is unchanged (cmd/ompig package/update/npm/git tests pass).
+- **Root cause:** package_updates.go, package_update_operations.go, package_npm_metadata.go and the update source matching move from cmd/pig into internal/packagemanager. PackageManager.Update(source) and PackageManager.CheckForAvailableUpdates() are Pi's update and checkForAvailableUpdates; cmd/pig update and the startup update check call them. Pure update tests (operations, semver/metadata, capture) move with the code; the CLI-fixture tests stay in cmd/pig and call the exported members. Behaviour is unchanged (cmd/pig package/update/npm/git tests pass).
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -3892,7 +3892,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** Unreleased
 - **Fix commits:** `3a0d0e1711` (2026-10-25)
 - **Tests:** `coding/cli/extension_host_wiring_guard_test.go::TestBuildFlushesTheExtensionHostProviderRegistrations`, `coding/extension/host/subprocess/native_provider_callback_context_test.go::TestNodeNativeProviderReceivesTheCallersOnResponseAndOnPayloadByName`, `coding/extension/host/subprocess/native_provider_oauth_test.go::TestNativeProviderOAuthRefreshAndLogin`, `coding/extension/host/subprocess/provider_load_rejection_rollback_test.go::TestRejectedLoadRegistrationLeavesAnEarlierRegistrationIntact`, `coding/extension/host/subprocess/provider_object_load_queue_test.go::TestProviderObjectRegisteredWhileLoadingIsQueuedForABoundRegistry`, `test/parity/scenarios/extensions-runtime/89-reload-provider-registration-failure.toml`
-- **Release note:** A `Provider` object that an extension registers while it loads is now applied after every extension has loaded, like a provider configuration, instead of at once. When the model registry rejects a registration, Ompig now leaves nothing of it behind: the login it declared, its entry in the model list that extensions read, and its claim on the provider are given back, so a registration of the same provider by another extension stays as it was. Pi's registry validates a registration before it stores anything of it.
+- **Release note:** A `Provider` object that an extension registers while it loads is now applied after every extension has loaded, like a provider configuration, instead of at once. When the model registry rejects a registration, PiG now leaves nothing of it behind: the login it declared, its entry in the model list that extensions read, and its claim on the provider are given back, so a registration of the same provider by another extension stays as it was. Pi's registry validates a registration before it stores anything of it.
 
 ### BF-3ab4c24
 
@@ -3913,7 +3913,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(tui): tree label prompt gives its input width-2 cells (Pi LabelInput)
-- **Root cause:** tree-selector.ts LabelInput.render passes availableWidth = width - 2 straight to Input.render; Ompig clamped it to 1, so a two-column terminal drew one cell more.
+- **Root cause:** tree-selector.ts LabelInput.render passes availableWidth = width - 2 straight to Input.render; Pig clamped it to 1, so a two-column terminal drew one cell more.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -3950,17 +3950,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-3b8aa66
 
-**A Ompiglet Binary that strips `bedrock-converse-stream` links the AWS SDK again: the Bedrock retry backoff…**
+**A Piglet Binary that strips `bedrock-converse-stream` links the AWS SDK again: the Bedrock retry backoff…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** A Ompiglet Binary that strips `bedrock-converse-stream` links the AWS SDK again: the Bedrock retry backoff (`ai/bedrock_retry_backoff.go`) had no `ompig_strip_bedrock_converse_stream` build tag and imported `aws-sdk-go-v2` (27 packages).
-- **Root cause:** An all-strip Ompiglet Binary still linked go/types, go/importer and friends (965 KB of symbols) because coding/cli's extension upgrade analysis calls sdk/upgrade.Open, and that analysis needs the Go SDK the Ompiglet stripped. analyzeExtension moves to extension_upgrade_analyze.go (stock) with a ompig_strip_extension_sdk_go variant that reports the strip (D92); the linker then drops the type checker: go/* symbols 965 KB -> 272 KB, Binary 56.10 -> 53.69 MB before -s -w.
+- **Symptom:** A Piglet Binary that strips `bedrock-converse-stream` links the AWS SDK again: the Bedrock retry backoff (`ai/bedrock_retry_backoff.go`) had no `pig_strip_bedrock_converse_stream` build tag and imported `aws-sdk-go-v2` (27 packages).
+- **Root cause:** An all-strip Piglet Binary still linked go/types, go/importer and friends (965 KB of symbols) because coding/cli's extension upgrade analysis calls sdk/upgrade.Open, and that analysis needs the Go SDK the Piglet stripped. analyzeExtension moves to extension_upgrade_analyze.go (stock) with a pig_strip_extension_sdk_go variant that reports the strip (D92); the linker then drops the type checker: go/* symbols 965 KB -> 272 KB, Binary 56.10 -> 53.69 MB before -s -w.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `3b8aa66c74` (2026-10-11)
 - **Tests:** `coding/cli/extension_upgrade_analyze_off_test.go::TestUpgradeInAGoSDKStrippedBinaryNamesTheStrip`, `coding/cli/strip_providers_binary_test.go::TestStripBedrockConverseStreamBuildOmitsAWSSDK`, `coding/cli/strip_upgrade_link_test.go::TestStripExtensionSDKGoBuildOmitsTheUpgradeAnalysis`
-- **Release note:** A Ompiglet Binary that strips `bedrock-converse-stream` links the AWS SDK again: the Bedrock retry backoff (`ai/bedrock_retry_backoff.go`) had no `ompig_strip_bedrock_converse_stream` build tag and imported `aws-sdk-go-v2` (27 packages). It carries the tag now, like the rest of the Bedrock provider.
+- **Release note:** A Piglet Binary that strips `bedrock-converse-stream` links the AWS SDK again: the Bedrock retry backoff (`ai/bedrock_retry_backoff.go`) had no `pig_strip_bedrock_converse_stream` build tag and imported `aws-sdk-go-v2` (27 packages). It carries the tag now, like the rest of the Bedrock provider.
 
 ### BF-3ba74f2
 
@@ -3977,10 +3977,10 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-3cb7131
 
-**fix(sdk-py): stage ompig_sdk.tui with the package, which ompig_sdk imports at load; keep the pi-ai patterns…**
+**fix(sdk-py): stage pig_sdk.tui with the package, which pig_sdk imports at load; keep the pi-ai patterns…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** fix(sdk-py): stage ompig_sdk.tui with the package, which ompig_sdk imports at load; keep the pi-ai patterns gofmt-clean
+- **Symptom:** fix(sdk-py): stage pig_sdk.tui with the package, which pig_sdk imports at load; keep the pi-ai patterns gofmt-clean
 - **Root cause:** Not recorded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
@@ -4040,7 +4040,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Fix commits:** `433d232815` (2026-10-09), `6a6fffa638` (2026-10-10), `3d475c443d` (2026-10-11)
 - **Tests:** `agent/convert_custom_upstream_test.go::TestConvertToLLMCustomMessagesMatchUpstreamConvertToLlm`, `agent/convert_custom_upstream_test.go::TestConvertToLLMToolFlowMatchesUpstreamTransformOrder`, `agent/convert_custom_upstream_test.go::TestCustomMessagesReachProvidersAsUpstreamContentBlocks`, `agent/message_json_number_spelling_test.go::TestAgentMessageDecodeKeepsANonNumberWhereAnIntegerIsExpected`, `agent/message_json_test.go::TestAgentMessageJSONRejectsInvalidUnion`, `agent/message_type_mismatch_test.go::TestDecodedMessageKeepsMembersOfAnyType`, `agent/provider_content_block_decode_test.go::TestUnknownContentBlockCostsOnlyThatBlock`, `agent/transform_custom_user_boundary_test.go::TestAnthropicRequestAfterBranchSummaryHasNoOrphanToolResult` and 19 more in docs/bug-ledger.json
-- **Release note:** Image resize strategy against live Pi: new `TestResizeImageDimensionStrategyMatchesPi` (`internal/imageprocessing/resize_strategy_oracle_test.go`; `resizeImageInProcess` through Photon vs `ResizeImage`; 200 seeded PNGs 1-2,600 px, maxWidth/maxHeight 1-3,000, default/huge/1-byte maxBytes, unset/explicit mime). One real fix, red first (15 of 300): a scaled side that rounds to zero (8000x1 under the 2000 limit gives a height of round(0.25) = 0) made Ompig clamp it to one pixel and return an image, where Pi's Photon resize throws and `resizeImageInProcess` returns null, so the image is dropped; `ResizeImage` now returns `ErrImageTooLarge` (`internal/imageprocessing/images.go`). Regression `TestResizeImageReturnsNoImageWhenAScaledSideRoundsToZero`. 5 mutations: 4 red; the 0.75 shrink factor survives because the shrink loop is reached only when every candidate misses maxBytes, which depends on the encoders (named as not compared). Not compared: the encoded bytes, which candidate wins a tight maxBytes, BMP input (Ompig-only branch), the shrink steps.
+- **Release note:** Image resize strategy against live Pi: new `TestResizeImageDimensionStrategyMatchesPi` (`internal/imageprocessing/resize_strategy_oracle_test.go`; `resizeImageInProcess` through Photon vs `ResizeImage`; 200 seeded PNGs 1-2,600 px, maxWidth/maxHeight 1-3,000, default/huge/1-byte maxBytes, unset/explicit mime). One real fix, red first (15 of 300): a scaled side that rounds to zero (8000x1 under the 2000 limit gives a height of round(0.25) = 0) made PiG clamp it to one pixel and return an image, where Pi's Photon resize throws and `resizeImageInProcess` returns null, so the image is dropped; `ResizeImage` now returns `ErrImageTooLarge` (`internal/imageprocessing/images.go`). Regression `TestResizeImageReturnsNoImageWhenAScaledSideRoundsToZero`. 5 mutations: 4 red; the 0.75 shrink factor survives because the shrink loop is reached only when every candidate misses maxBytes, which depends on the encoders (named as not compared). Not compared: the encoded bytes, which candidate wins a tight maxBytes, BMP input (PiG-only branch), the shrink steps.
 
 ### BF-3def2a7
 
@@ -4048,7 +4048,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** MCP servers whose names are numbers (`"9"`, `"42"`) load and report their errors in the order Pi does: a JSON object lists its array-index keys first, in ascending order, then the others in file order.
-- **Root cause:** TestLoadMcpConfigMatchesPiOnRandomFiles loads 1500 random global and project mcp.json files through Pi's loadMcpConfig and Ompig's LoadMcpConfig: 187 differed, among them every file with a numeric server name, because Object.entries lists array-index keys first and orderedjson.Object kept file order. Object.Set now inserts an array-index key at its ascending place before the other keys (Keys, MarshalJSON, Clone follow), with TestObjectEnumeratesArrayIndexKeysFirst. Dependent packages (codingagent, extension, mcpext, mcp, packagecontent) pass; the failures left in tools and the node-backed subprocess tests are the fd/rg and node-shim environment ones.
+- **Root cause:** TestLoadMcpConfigMatchesPiOnRandomFiles loads 1500 random global and project mcp.json files through Pi's loadMcpConfig and PiG's LoadMcpConfig: 187 differed, among them every file with a numeric server name, because Object.entries lists array-index keys first and orderedjson.Object kept file order. Object.Set now inserts an array-index key at its ascending place before the other keys (Keys, MarshalJSON, Clone follow), with TestObjectEnumeratesArrayIndexKeysFirst. Dependent packages (codingagent, extension, mcpext, mcp, packagecontent) pass; the failures left in tools and the node-backed subprocess tests are the fd/rg and node-shim environment ones.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -4093,7 +4093,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Platform:** Linux
 - **Fixed in:** 0.5.2
 - **Fix commits:** `3ee123c6d5` (2026-10-20, #255)
-- **Tests:** `agent/stream_fn_descriptor_test.go::TestAgentEffectiveStreamFunction`, `chord/host/manager_fork_test.go::TestForkInstanceReplaysControlMessagesReceivedBeforeTheFirstListener`, `chord/host/manager_ipc_listener_test.go::TestNodeChannelGivesTheFirstMessageListenerTheMessagesThatCameBeforeIt`, `chord/host/manager_ipc_listener_test.go::TestNodeChannelQueuesAMessageThatArrivesDuringTheReplayBehindTheBacklog`, `coding/cli/extension_stale_copy_test.go::TestStaleCopyDiagnosticFindsAnEditedCopyByItsModulePath`, `coding/cli/extension_upgrade_completeness_startup_test.go::TestStartupOffersEveryDriftedExtensionAndOneYesUpgradesThemAll`, `coding/cli/extension_upgrade_completeness_test.go::TestDryRunReportsWhatTheRewrittenTreeDoes`, `coding/cli/extension_upgrade_completeness_test.go::TestExtensionUpgradeCommandAppliesWhatItCanAndListsTheRest` and 40 more in docs/bug-ledger.json
+- **Tests:** `agent/stream_fn_descriptor_test.go::TestAgentEffectiveStreamFunction`, `chord/host/manager_fork_test.go::TestForkInstanceReplaysControlMessagesReceivedBeforeTheFirstListener`, `chord/host/manager_ipc_listener_test.go::TestNodeChannelGivesTheFirstMessageListenerTheMessagesThatCameBeforeIt`, `chord/host/manager_ipc_listener_test.go::TestNodeChannelQueuesAMessageThatArrivesDuringTheReplayBehindTheBacklog`, `coding/cli/extension_stale_copy_test.go::TestStaleCopyDiagnosticFindsAnEditedCopyByItsModulePath`, `coding/cli/extension_upgrade_completeness_startup_test.go::TestStartupOffersEveryDriftedExtensionAndOneYesUpgradesThemAll`, `coding/cli/extension_upgrade_completeness_test.go::TestDryRunReportsWhatTheRewrittenTreeDoes`, `coding/cli/extension_upgrade_completeness_test.go::TestExtensionUpgradeCommandAppliesWhatItCanAndListsTheRest` and 39 more in docs/bug-ledger.json
 - **Release note:** CI: the `Linux / portmap` job (`make portmap-check`) no longer runs out its 60-minute limit. `portmapcheck` builds each evidence package's test binary once instead of once per PORT_MAP row, runs rows that name the same tests of a package once, and keeps a marker row's killed-mutant verdict in its cached record. CI runs the check as three shards (`make portmap-check-N`, `portmapcheck -shard N/3`); every shard computes the same plan and judges its own rows, and the Linux verification job still requires all of them. Each row's requirement is unchanged: its named tests pass, they execute its mapped cited files, and a marker row's mutant makes them fail.
 
 ### BF-3fa6e63
@@ -4102,13 +4102,13 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** MCP servers with resources registered no tools until every resource was listed, so a slow listing (a large drive) kept their tools out of the first prompt.
-- **Root cause:** Ports Pi packages/coding-agent/src/extensions/mcp/{runtime,cli,index}.ts: a connection no longer calls resources/list and resources/templates/list (fetchResources, refreshResources and the resources/list_changed handler are gone), so tools register without waiting for a slow listing. Connection keeps HasResources; /mcp shows "connected · N tools · resources" (index.ts describeState), `ompig mcp list` prints " offers resources" and --json reports `resources: true` instead of the two counts (cli.ts list). The resource tools still list and read on demand.
+- **Root cause:** Ports Pi packages/coding-agent/src/extensions/mcp/{runtime,cli,index}.ts: a connection no longer calls resources/list and resources/templates/list (fetchResources, refreshResources and the resources/list_changed handler are gone), so tools register without waiting for a slow listing. Connection keeps HasResources; /mcp shows "connected · N tools · resources" (index.ts describeState), `pig mcp list` prints " offers resources" and --json reports `resources: true` instead of the two counts (cli.ts list). The resource tools still list and read on demand.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `3fa6e63e8e` (2026-10-12)
 - **Tests:** `coding/mcpext/cli_upstream_test.go::TestMcpCommandListReportsThatAServerOffersResourcesWithoutCountingThem`, `coding/mcpext/connection_test.go::TestMCPConnectionsConnectsToServersWithResourcesWithoutListingThem`, `coding/mcpext/responsive_test.go::TestMcpDescribeStateShowsThatAServerOffersResources`
-- **Release note:** MCP servers with resources registered no tools until every resource was listed, so a slow listing (a large drive) kept their tools out of the first prompt. Ompig no longer lists resources when connecting; the resource tools still list and read them on demand.
+- **Release note:** MCP servers with resources registered no tools until every resource was listed, so a slow listing (a large drive) kept their tools out of the first prompt. PiG no longer lists resources when connecting; the resource tools still list and read them on demand.
 
 ### BF-3fbdfd2
 
@@ -4158,7 +4158,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Assistant messages in session files and RPC output list `responseId` before `responseModel`, Codex's `endTurn` before `rawStopReason`, and `rawStopReason` before `errorMessage`, the order in which Pi's providers create them.
-- **Root cause:** An earlier change says it writes "the static creation order every Pi provider produces", but it puts endTurn after rawStopReason and errorMessage. Codex is the one Pi provider that sets endTurn. It sets it on the terminal event inside mapCodexEvents (openai-codex-responses.ts:774-778), before it yields that event to processResponsesStream, whose finalizeResponse then creates rawStopReason and errorMessage (openai-responses-shared.ts:589-593). Ompig wrote responseId,rawStopReason,endTurn.
+- **Root cause:** An earlier change says it writes "the static creation order every Pi provider produces", but it puts endTurn after rawStopReason and errorMessage. Codex is the one Pi provider that sets endTurn. It sets it on the terminal event inside mapCodexEvents (openai-codex-responses.ts:774-778), before it yields that event to processResponsesStream, whose finalizeResponse then creates rawStopReason and errorMessage (openai-responses-shared.ts:589-593). PiG wrote responseId,rawStopReason,endTurn.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -4172,7 +4172,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The Anthropic event reader decides message_start and message_stop from the parsed event type as Pi does (not the SSE event name), and a JSON null event fails with the TypeError Pi reports (a CRLF split across chunks still waits for the LF, D121).
-- **Root cause:** Differential: 6000 seeded response bodies through Pi's iterateAnthropicEvents (the installed pi-ai dist, private generator exported by a load hook) and Ompig's event reader, split at arbitrary bytes (never inside a CRLF: D121 keeps Ompig's wait for the LF); events and the way each stream ends compared. 222 of 6000 differed.
+- **Root cause:** Differential: 6000 seeded response bodies through Pi's iterateAnthropicEvents (the installed pi-ai dist, private generator exported by a load hook) and Pig's event reader, split at arbitrary bytes (never inside a CRLF: D121 keeps Pig's wait for the LF); events and the way each stream ends compared. 222 of 6000 differed.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -4199,14 +4199,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **Background runs of pi-subagents (and other helpers an extension starts as a detached Node process) complete…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Background runs of pi-subagents (and other helpers an extension starts as a detached Node process) complete under Ompig.
+- **Symptom:** Background runs of pi-subagents (and other helpers an extension starts as a detached Node process) complete under PiG.
 - **Root cause:** Not recorded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `411a8cb698` (2026-10-12)
 - **Tests:** `test/docs-drift/commands_test.go::TestDocumentedPigCommandsAreValid`
-- **Release note:** Background runs of pi-subagents (and other helpers an extension starts as a detached Node process) complete under Ompig. The harness package now carries the host peer packages Pi's pi-coding-agent depends on, and a process with no extension runtime streams model requests through a bridge process it owns (the internal provider-bridge command), D74.
+- **Release note:** Background runs of pi-subagents (and other helpers an extension starts as a detached Node process) complete under PiG. The harness package now carries the host peer packages Pi's pi-coding-agent depends on, and a process with no extension runtime streams model requests through a bridge process it owns (the internal provider-bridge command), D74.
 
 ### BF-4163646
 
@@ -4220,7 +4220,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Fix commits:** `0ae4683246` (2026-10-08), `e8cc072521` (2026-10-08), `433d232815` (2026-10-09), `41636465fe` (2026-10-10)
 - **Tests:** `agent/convert_custom_upstream_test.go::TestConvertToLLMCustomMessagesMatchUpstreamConvertToLlm`, `agent/convert_custom_upstream_test.go::TestConvertToLLMToolFlowMatchesUpstreamTransformOrder`, `agent/convert_custom_upstream_test.go::TestCustomMessagesReachProvidersAsUpstreamContentBlocks`, `agent/transform_custom_user_boundary_test.go::TestAnthropicRequestAfterBranchSummaryHasNoOrphanToolResult`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMCustomMessageWithoutWireOutputKeepsToolFlow`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMCustomUserMessageInterruptsToolFlow`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMHoldsSystemMessageUntilToolFlowCloses`, `ai/auth_storage_file_oracle_test.go::TestAuthStorageFileMatchesPi` and 10 more in docs/bug-ledger.json
-- **Release note:** `AuthStorage` file semantics: new live-Pi oracle `TestAuthStorageFileMatchesPi` (`ai/auth_storage_file_oracle_test.go`; 600 auth.json files x 1-5 operations over read, list, modify and delete: absent, empty, corrupt, byte-order-marked and non-object files, `$VAR`/`${VAR}`/`!command`/credential-env key resolution, OAuth and unknown types, integer-index provider order). Real fixes for a file whose JSON is not an object (Pi keeps whatever `JSON.parse` returns): `null` made Ompig treat the file as empty where Pi's read, list, modify and delete all throw (`Cannot read properties of null (reading 'x')` / `Cannot convert undefined or null to object`); an array was rejected where Pi reads and lists it as an index-keyed object, turns it into an object on modify and rewrites it as an array (deleted element `null`) on delete; a number or boolean was rejected where Pi reads it as empty and a delete rewrites it as itself; a `null` credential entry made `list` return an entry where Pi's `credential.type` throws. 10 mutations red; one equivalent (the root shape of the post-write read cache is never rewritten). Not compared: V8's JSON parse error text, string-valued files (JavaScript indexes their characters), file modes, cross-process locking.
+- **Release note:** `AuthStorage` file semantics: new live-Pi oracle `TestAuthStorageFileMatchesPi` (`ai/auth_storage_file_oracle_test.go`; 600 auth.json files x 1-5 operations over read, list, modify and delete: absent, empty, corrupt, byte-order-marked and non-object files, `$VAR`/`${VAR}`/`!command`/credential-env key resolution, OAuth and unknown types, integer-index provider order). Real fixes for a file whose JSON is not an object (Pi keeps whatever `JSON.parse` returns): `null` made PiG treat the file as empty where Pi's read, list, modify and delete all throw (`Cannot read properties of null (reading 'x')` / `Cannot convert undefined or null to object`); an array was rejected where Pi reads and lists it as an index-keyed object, turns it into an object on modify and rewrites it as an array (deleted element `null`) on delete; a number or boolean was rejected where Pi reads it as empty and a delete rewrites it as itself; a `null` credential entry made `list` return an entry where Pi's `credential.type` throws. 10 mutations red; one equivalent (the root shape of the post-write read cache is never rewritten). Not compared: V8's JSON parse error text, string-valued files (JavaScript indexes their characters), file modes, cross-process locking.
 
 ### BF-41b305d
 
@@ -4378,14 +4378,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **Device-code logins (GitHub Copilot, Kimi Code, Meta, Radius) use the `verification_uri` a server sends only…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Device-code logins (GitHub Copilot, Kimi Code, Meta, Radius) use the `verification_uri` a server sends only when it is an `http:` or `https:` URL, and open and show its normalized form, so a malicious login server cannot make `ompig` launch a `file:` or custom protocol URL.
+- **Symptom:** Device-code logins (GitHub Copilot, Kimi Code, Meta, Radius) use the `verification_uri` a server sends only when it is an `http:` or `https:` URL, and open and show its normalized form, so a malicious login server cannot make `pig` launch a `file:` or custom protocol URL.
 - **Root cause:** Not recorded.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
 - **Fix commits:** `439c708ebc` (2026-10-26)
 - **Tests:** `ai/oauth_kimi_test.go::TestTrustedHTTPURL`, `ai/oauth_radius_test.go::TestRadiusOAuthBrowserDiscoveryRejectsNonHTTPAuthorizationEndpoint`, `ai/oauth_radius_test.go::TestRadiusOAuthDeviceLoginRejectsNonHTTPVerificationURI`, `ai/oauth_radius_test.go::TestRadiusOAuthThrowsFetchErrorsForCredentialedGatewayAndInvalidEndpoint`, `ai/pi_messages_test.go::TestPiMessagesRejectsContentIndexesThatAreNotTheNextOrAnExistingBlock`, `ai/trusted_url_oracle_test.go::TestTrustedVerificationURLsMatchPi`
-- **Release note:** Device-code logins (GitHub Copilot, Kimi Code, Meta, Radius) use the `verification_uri` a server sends only when it is an `http:` or `https:` URL, and open and show its normalized form, so a malicious login server cannot make `ompig` launch a `file:` or custom protocol URL. Ports Pi's `trustedHttpUrl` use in every login that opens a server-supplied URL.
+- **Release note:** Device-code logins (GitHub Copilot, Kimi Code, Meta, Radius) use the `verification_uri` a server sends only when it is an `http:` or `https:` URL, and open and show its normalized form, so a malicious login server cannot make `pig` launch a `file:` or custom protocol URL. Ports Pi's `trustedHttpUrl` use in every login that opens a server-supplied URL.
 
 ### BF-439c708-2
 
@@ -4589,7 +4589,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `a4753ec61e` (2026-10-06, #170), `ba9c37b247` (2026-10-06, #171), `165cf5884d` (2026-10-07, #180), `3499c2bea7` (2026-10-07, #181), `9b63b2bc4e` (2026-10-07, #176), `4610c9f4a1` (2026-10-08, #189), `50e81255de` (2026-10-08, #174)
-- **Tests:** `coding/cli/rpc_initial_tools_test.go::TestRPCFreshPromptDeclaresStructuredSystemOnce`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleBusyEntriesAreSkippedNotErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledBeforeStartTouchesNothing`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledDuringTheLastEntryReportsTheCancellation`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleEntryLeasedAfterClassificationIsSkippedNotAnError`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleOtherErrorsStayErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleStopsWhenItsContextIsCancelled`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestIsBusyErrorLooksThroughWrappedJoins` and 57 more in docs/bug-ledger.json
+- **Tests:** `coding/cli/rpc_initial_tools_test.go::TestRPCFreshPromptDeclaresStructuredSystemOnce`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleBusyEntriesAreSkippedNotErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledBeforeStartTouchesNothing`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledDuringTheLastEntryReportsTheCancellation`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleEntryLeasedAfterClassificationIsSkippedNotAnError`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleOtherErrorsStayErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleStopsWhenItsContextIsCancelled`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestIsBusyErrorLooksThroughWrappedJoins` and 56 more in docs/bug-ledger.json
 - **Release note:** A `!` or `!!` command's block draws the bytes Pi's `BashExecutionComponent` draws: its rows are padded to the terminal width, the exit status, cancelled and truncation lines use the theme's error and warning colors instead of fixed red and yellow, the collapse hint uses the theme's key hint with the configured expand key, the spinner names the configured cancel keys (`escape/ctrl+c` by default) instead of `Esc`, no blank row follows the bottom border, the output Pi would cut for the model's context (the last 2000 lines or 50 KB) is cut the same way, and ANSI escapes and carriage returns in the output are cleaned as Pi cleans them.
 
 ### BF-4649166
@@ -4665,7 +4665,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** A fix Pi shipped that Ompig ported
 - **Symptom:** `/mcp` now opens at once while servers are still connecting, and connection actions (reconnect, enable, disable) run in the background so the manager stays usable.
-- **Root cause:** - mcp/oauth/flow.go: an aborted refresh no longer falls back to a new authorization (flow.ts runFlow). - coding/mcpext: one session context replaces the generation counter; sign-ins stop with Esc and with the session, are tracked so shutdown waits for them, report aborted requests as McpSignInCancelledError, and each authorization-server request times out after 15 s (oauth.ts OAUTH_REQUEST_TIMEOUT_MS/timedFetch); ompig mcp login --timeout bounds the whole sign-in (cli.ts). - /mcp opens before startup connections finish; reconnect, enable and disable run in the background with an attempt token; reconnects and replacements are serialized; direct tool calls wait for their own server; prepared…
+- **Root cause:** - mcp/oauth/flow.go: an aborted refresh no longer falls back to a new authorization (flow.ts runFlow). - coding/mcpext: one session context replaces the generation counter; sign-ins stop with Esc and with the session, are tracked so shutdown waits for them, report aborted requests as McpSignInCancelledError, and each authorization-server request times out after 15 s (oauth.ts OAUTH_REQUEST_TIMEOUT_MS/timedFetch); pig mcp login --timeout bounds the whole sign-in (cli.ts). - /mcp opens before startup connections finish; reconnect, enable and disable run in the background with an attempt token; reconnects and replacements are serialized; direct tool calls wait for their own server; prepared…
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -4679,7 +4679,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** A fix Pi shipped that Ompig ported
 - **Symptom:** MCP OAuth sign-ins can now be cancelled with Esc at every step, session shutdown stops a running sign-in, and each request to the authorization server times out after 15 seconds.
-- **Root cause:** - mcp/oauth/flow.go: an aborted refresh no longer falls back to a new authorization (flow.ts runFlow). - coding/mcpext: one session context replaces the generation counter; sign-ins stop with Esc and with the session, are tracked so shutdown waits for them, report aborted requests as McpSignInCancelledError, and each authorization-server request times out after 15 s (oauth.ts OAUTH_REQUEST_TIMEOUT_MS/timedFetch); ompig mcp login --timeout bounds the whole sign-in (cli.ts). - /mcp opens before startup connections finish; reconnect, enable and disable run in the background with an attempt token; reconnects and replacements are serialized; direct tool calls wait for their own server; prepared…
+- **Root cause:** - mcp/oauth/flow.go: an aborted refresh no longer falls back to a new authorization (flow.ts runFlow). - coding/mcpext: one session context replaces the generation counter; sign-ins stop with Esc and with the session, are tracked so shutdown waits for them, report aborted requests as McpSignInCancelledError, and each authorization-server request times out after 15 s (oauth.ts OAUTH_REQUEST_TIMEOUT_MS/timedFetch); pig mcp login --timeout bounds the whole sign-in (cli.ts). - /mcp opens before startup connections finish; reconnect, enable and disable run in the background with an attempt token; reconnects and replacements are serialized; direct tool calls wait for their own server; prepared…
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -4693,7 +4693,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** A fix Pi shipped that Ompig ported
 - **Symptom:** Shutdown no longer waits up to 15 seconds to refresh an MCP OAuth token that was about to expire, only to close the server's session.
-- **Root cause:** - mcp/oauth/flow.go: an aborted refresh no longer falls back to a new authorization (flow.ts runFlow). - coding/mcpext: one session context replaces the generation counter; sign-ins stop with Esc and with the session, are tracked so shutdown waits for them, report aborted requests as McpSignInCancelledError, and each authorization-server request times out after 15 s (oauth.ts OAUTH_REQUEST_TIMEOUT_MS/timedFetch); ompig mcp login --timeout bounds the whole sign-in (cli.ts). - /mcp opens before startup connections finish; reconnect, enable and disable run in the background with an attempt token; reconnects and replacements are serialized; direct tool calls wait for their own server; prepared…
+- **Root cause:** - mcp/oauth/flow.go: an aborted refresh no longer falls back to a new authorization (flow.ts runFlow). - coding/mcpext: one session context replaces the generation counter; sign-ins stop with Esc and with the session, are tracked so shutdown waits for them, report aborted requests as McpSignInCancelledError, and each authorization-server request times out after 15 s (oauth.ts OAUTH_REQUEST_TIMEOUT_MS/timedFetch); pig mcp login --timeout bounds the whole sign-in (cli.ts). - /mcp opens before startup connections finish; reconnect, enable and disable run in the background with an attempt token; reconnects and replacements are serialized; direct tool calls wait for their own server; prepared…
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -4707,7 +4707,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(hljs): a resumed run counts the scan iterations before its checkpoint
-- **Root cause:** A resumed run started counting at 0, so a whole run could throw (Pi prints the escaped code) where the resumed run did not (Ompig printed highlighted code); maxCheckpointIterations only narrowed that window. A checkpoint now records the iterations before it, ResumePoint carries them, tui's resume state keeps them, and the resumed run continues the count, so both runs see the same counter at every match. maxCheckpointIterations goes: points past it are now exact.
+- **Root cause:** A resumed run started counting at 0, so a whole run could throw (Pi prints the escaped code) where the resumed run did not (PiG printed highlighted code); maxCheckpointIterations only narrowed that window. A checkpoint now records the iterations before it, ResumePoint carries them, tui's resume state keeps them, and the resumed run continues the count, so both runs see the same counter at every match. maxCheckpointIterations goes: points past it are now exact.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -4775,7 +4775,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A `bashExecution` entry records `excludeFromContext: false` when the caller passed `false`, as Pi does; an RPC `bash` command without the member records none.
-- **Root cause:** messages.ts:39 declares the member optional and agent-session.ts:3889 assigns options?.excludeFromContext, so the member is present exactly when a boolean was passed: interactive ! commands write false (interactive-mode.ts:7029,7058), an RPC bash command without the member writes none (rpc-mode.ts:571,577). Ompig's bool+omitempty dropped false. The field is now *bool through the entry, the Session recording API and the RPC command. Found by the bash journey (session file diff).
+- **Root cause:** messages.ts:39 declares the member optional and agent-session.ts:3889 assigns options?.excludeFromContext, so the member is present exactly when a boolean was passed: interactive ! commands write false (interactive-mode.ts:7029,7058), an RPC bash command without the member writes none (rpc-mode.ts:571,577). PiG's bool+omitempty dropped false. The field is now *bool through the entry, the Session recording API and the RPC command. Found by the bash journey (session file diff).
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -4789,7 +4789,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A branch-summary entry writes `fromHook: false` in Pi's member order, and the summary has its Spacer.
-- **Root cause:** messages.ts:39 declares the member optional and agent-session.ts:3889 assigns options?.excludeFromContext, so the member is present exactly when a boolean was passed: interactive ! commands write false (interactive-mode.ts:7029,7058), an RPC bash command without the member writes none (rpc-mode.ts:571,577). Ompig's bool+omitempty dropped false. The field is now *bool through the entry, the Session recording API and the RPC command. Found by the bash journey (session file diff).
+- **Root cause:** messages.ts:39 declares the member optional and agent-session.ts:3889 assigns options?.excludeFromContext, so the member is present exactly when a boolean was passed: interactive ! commands write false (interactive-mode.ts:7029,7058), an RPC bash command without the member writes none (rpc-mode.ts:571,577). PiG's bool+omitempty dropped false. The field is now *bool through the entry, the Session recording API and the RPC command. Found by the bash journey (session file diff).
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -4803,7 +4803,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The footer context percentage is refreshed after a `!` command is recorded, as Pi's footer asks the session on every render.
-- **Root cause:** Pi's footer asks session.getContextUsage() on every render (footer.ts:143) and the estimate counts a bashExecution message (compaction.ts:337-340), so a recorded ! command moves the percentage at once. Ompig keeps a stored estimate that only agent events and transcript rebuilds refreshed.
+- **Root cause:** Pi's footer asks session.getContextUsage() on every render (footer.ts:143) and the estimate counts a bashExecution message (compaction.ts:337-340), so a recorded ! command moves the percentage at once. PiG keeps a stored estimate that only agent events and transcript rebuilds refreshed.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -4844,7 +4844,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** `StreamProxy` merges the final tool call and reports abort and timeout as Pi does, and it no longer changes a delivered message when the server sends more after the terminal event.
-- **Root cause:** Ompig compared the text after each input and notified once. - A chunk that carries the paste start marker discards any earlier paste buffer, removes the first marker and joins surrounding text into the pasted content (editor.ts:720-724); Ompig processed the text before the marker as typed input and kept the old buffer. - Jump mode takes decodePrintableKey(data) before raw data (editor.ts:707); Ompig inserted CSI-u letters as jump targets. After: all 700 sequences match; a 4000-sequence run with another seed also matches.
+- **Root cause:** PiG compared the text after each input and notified once. - A chunk that carries the paste start marker discards any earlier paste buffer, removes the first marker and joins surrounding text into the pasted content (editor.ts:720-724); PiG processed the text before the marker as typed input and kept the old buffer. - Jump mode takes decodePrintableKey(data) before raw data (editor.ts:707); PiG inserted CSI-u letters as jump targets. After: all 700 sequences match; a 4000-sequence run with another seed also matches.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -4868,10 +4868,10 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-4c45afa
 
-**fix(sdk-py): stage ompig_sdk.tui with the package, which ompig_sdk imports at load; keep the pi-ai patterns…**
+**fix(sdk-py): stage pig_sdk.tui with the package, which pig_sdk imports at load; keep the pi-ai patterns…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** fix(sdk-py): stage ompig_sdk.tui with the package, which ompig_sdk imports at load; keep the pi-ai patterns gofmt-clean
+- **Symptom:** fix(sdk-py): stage pig_sdk.tui with the package, which pig_sdk imports at load; keep the pi-ai patterns gofmt-clean
 - **Root cause:** Not recorded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
@@ -4899,7 +4899,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The cancel hint of extension loaders (`/share`, `/bug`) shows the key bound to `tui.select.cancel` instead of always `escape/ctrl+c`.
-- **Root cause:** (1) tui.input.submit (ctrl+s here) must select through the search Input's onSubmit -> selectList.handleInput("\r"); Ompig's host-owned TextInput only marked itself done. (2) Ompig re-fired onSelect/onCancel on every later navigation key because it read the list's sticky Done state; Pi fires once per confirm/cancel key (new FilterableList.Reset, called by the selector after it dispatches). Scenario settings/06 (/thinking, m Down Left d -> '> dm') is red on the old selector ('> md') and byte-equal now.
+- **Root cause:** (1) tui.input.submit (ctrl+s here) must select through the search Input's onSubmit -> selectList.handleInput("\r"); Pig's host-owned TextInput only marked itself done. (2) Pig re-fired onSelect/onCancel on every later navigation key because it read the list's sticky Done state; Pi fires once per confirm/cancel key (new FilterableList.Reset, called by the selector after it dispatches). Scenario settings/06 (/thinking, m Down Left d -> '> dm') is red on the old selector ('> md') and byte-equal now.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -4913,7 +4913,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(tui): a tool error result collapses like any other (Pi updateResult)
-- **Root cause:** tool-execution.ts updateResult never changes the expansion; bash/read/write renderers show a collapsed preview for an error as for a success. Found by e2e runs of scripted replies through real Pi and Ompig (TUI panes and session files compared). TestErrorResultStaysCollapsedUntilExpanded is red without the change. NOTE: TestRefreshModelRuntimeHonoursNetworkForceErrorsAndRegistrationCover fails ('TempDir RemoveAll cleanup: directory not empty') at -count>1 and in full-package runs on the integrate base, unrelated.
+- **Root cause:** tool-execution.ts updateResult never changes the expansion; bash/read/write renderers show a collapsed preview for an error as for a success. Found by e2e runs of scripted replies through real Pi and Pig (TUI panes and session files compared). TestErrorResultStaysCollapsedUntilExpanded is red without the change. NOTE: TestRefreshModelRuntimeHonoursNetworkForceErrorsAndRegistrationCover fails ('TempDir RemoveAll cleanup: directory not empty') at -count>1 and in full-package runs on the integrate base, unrelated.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -4926,7 +4926,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** It used to sort the members and could cut a multi-byte character.
-- **Root cause:** tree-selector.ts:996-999 writes JSON.stringify(args).slice(0, 40) and "..." when the whole text is longer. Ompig encoded the decoded map, which sorted the members, and cut at 40 bytes, which could split a multi-byte character into invalid UTF-8. The label now uses ToolCall.ArgumentsJSON (the model's member order), jsonstringify.Canonicalize and UTF-16 length and slicing. The truncation case asserts the exact label instead of only its byte length. Regression: TestFormatToolCall_CustomToolMatchesJSONStringify (red before).
+- **Root cause:** tree-selector.ts:996-999 writes JSON.stringify(args).slice(0, 40) and "..." when the whole text is longer. Pig encoded the decoded map, which sorted the members, and cut at 40 bytes, which could split a multi-byte character into invalid UTF-8. The label now uses ToolCall.ArgumentsJSON (the model's member order), jsonstringify.Canonicalize and UTF-16 length and slicing. The truncation case asserts the exact label instead of only its byte length. Regression: TestFormatToolCall_CustomToolMatchesJSONStringify (red before).
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -5046,31 +5046,31 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-4fc8c2e
 
-**With an active Ompiglet, an extension that denies every tool with `SetActiveTools([])` is no longer widened…**
+**With an active Piglet, an extension that denies every tool with `SetActiveTools([])` is no longer widened…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** With an active Ompiglet, an extension that denies every tool with `SetActiveTools([])` is no longer widened back to the Ompiglet's full tool scope.
+- **Symptom:** With an active Piglet, an extension that denies every tool with `SetActiveTools([])` is no longer widened back to the Piglet's full tool scope.
 - **Root cause:** …ts scope
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `4fc8c2e65f` (2026-10-06, #169)
-- **Tests:** `coding/extension/host/subprocess/state_presence_test.go::TestNodeActiveToolsNarrowedToNoneSurvivesTheWire`, `coding/extension/host/subprocess/state_test.go::TestActiveToolsNarrowedToNoneIsAnEmptyListOnTheWire`, `coding/extension/host/subprocess/state_test.go::TestSetActiveToolsEmptyListReachesTheHostAsEmpty`, `coding/ompiglet/empty_active_scope_test.go::TestPigletScopeNeverWidensWhatAnExtensionNarrowed`, `coding/session_prompt_defaults_test.go::TestActiveToolNamesAfterDeactivatingAllToolsIsNonNilEmpty`, `extensions/sdk/getter_state_test.go::TestContextGettersDistinguishAbsentEmptyAndFailure`
-- **Release note:** With an active Ompiglet, an extension that denies every tool with `SetActiveTools([])` is no longer widened back to the Ompiglet's full tool scope. The Ompiglet scope only narrows what an earlier extension selected. `getActiveTools` replies and the replicated state carry `[]` for a session narrowed to no tools, never `null`.
+- **Tests:** `coding/extension/host/subprocess/state_presence_test.go::TestNodeActiveToolsNarrowedToNoneSurvivesTheWire`, `coding/extension/host/subprocess/state_test.go::TestActiveToolsNarrowedToNoneIsAnEmptyListOnTheWire`, `coding/extension/host/subprocess/state_test.go::TestSetActiveToolsEmptyListReachesTheHostAsEmpty`, `coding/session_prompt_defaults_test.go::TestActiveToolNamesAfterDeactivatingAllToolsIsNonNilEmpty`, `extensions/sdk/getter_state_test.go::TestContextGettersDistinguishAbsentEmptyAndFailure`
+- **Release note:** With an active Piglet, an extension that denies every tool with `SetActiveTools([])` is no longer widened back to the Piglet's full tool scope. The Piglet scope only narrows what an earlier extension selected. `getActiveTools` replies and the replicated state carry `[]` for a session narrowed to no tools, never `null`.
 
 ### BF-4fd80d1
 
-**On Windows, Ompig finds PowerShell in its installation directories when it is not on `PATH`: PowerShell 7 under…**
+**On Windows, PiG finds PowerShell in its installation directories when it is not on `PATH`: PowerShell 7 under…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** On Windows, Ompig finds PowerShell in its installation directories when it is not on `PATH`: PowerShell 7 under `%ProgramFiles%\PowerShell\7` after `PATH`, and Windows PowerShell under `%SystemRoot%\System32\WindowsPowerShell\v1.0` as the last fallback, on any drive (Pi 61060ddf, #9490).
+- **Symptom:** On Windows, PiG finds PowerShell in its installation directories when it is not on `PATH`: PowerShell 7 under `%ProgramFiles%\PowerShell\7` after `PATH`, and Windows PowerShell under `%SystemRoot%\System32\WindowsPowerShell\v1.0` as the last fallback, on any drive (Pi 61060ddf, #9490).
 - **Root cause:** PowerShell 7 is looked for under ProgramFiles after PATH and Windows PowerShell under SystemRoot as the last fallback. The legacy WSL launcher is matched under the actual SystemRoot (System32 and Sysnative). taskkill takes C:\Windows for an empty SystemRoot (|| not ??). Shell paths are checked with access(F_OK) semantics (nodefs.Access) so runnable Store aliases pass. Windows-native behavior is not run in this change.
 - **User impact:** Behavior differed from Pi
 - **Platform:** Windows
 - **Fixed in:** 0.5.2
 - **Fix commits:** `4fd80d1cb2` (2026-10-19)
 - **Tests:** `durable/env/node/shell_test.go::TestShellUsesStdinCommandTransportForLegacyWSLBashPaths`, `internal/codingagent/tools/powershell_config_upstream_test.go::TestPowerShellInstallationCandidatesUseWindowsPathRules`, `internal/codingagent/tools/powershell_config_upstream_test.go::TestUpstreamPowerShellConfig`, `internal/codingagent/tools/powershell_test.go::TestPowerShellConfigResolutionOrder`, `internal/codingagent/tools/powershell_test.go::TestPowerShellConfigResolvesPwshBeforeWindowsPowerShellOnWindowsOnly`, `internal/codingagent/tools/shell_path_exists_upstream_test.go::TestUpstreamUnixShellExistenceChecks`, `internal/codingagent/tools/shell_path_exists_upstream_test.go::TestUpstreamWindowsStoreShellAliases`, `internal/codingagent/tools/taskkill_port_test.go::TestTaskkillSpawnFailurePort` and 6 more in docs/bug-ledger.json
-- **Release note:** On Windows, Ompig finds PowerShell in its installation directories when it is not on `PATH`: PowerShell 7 under `%ProgramFiles%\PowerShell\7` after `PATH`, and Windows PowerShell under `%SystemRoot%\System32\WindowsPowerShell\v1.0` as the last fallback, on any drive (Pi 61060ddf, #9490).
+- **Release note:** On Windows, PiG finds PowerShell in its installation directories when it is not on `PATH`: PowerShell 7 under `%ProgramFiles%\PowerShell\7` after `PATH`, and Windows PowerShell under `%SystemRoot%\System32\WindowsPowerShell\v1.0` as the last fallback, on any drive (Pi 61060ddf, #9490).
 
 ### BF-4fd80d1-2
 
@@ -5147,7 +5147,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** An `env` SSH command that runs past its timeout now receives SIGTERM, as in Pi, instead of SIGKILL, and the operation fails as soon as the timeout expires, even when a process started by `ssh` keeps its output open.
-- **Root cause:** Pi's runSsh timer (ssh.ts:136-146) calls child.kill(), Node's SIGTERM, and rejects at once with the stderr read so far. Ompig's runSsh killed the child with SIGKILL through exec.CommandContext and returned only after cmd.Run finished, up to WaitDelay (5 s) later when a descendant kept stdout or stderr open. runSsh now sets Cmd.Cancel to send SIGTERM (a plain kill on Windows, as Node does), waits on a goroutine and returns when the timer fires; the goroutine reaps the child, still bounded by WaitDelay, and stderr is collected in a locked buffer.
+- **Root cause:** Pi's runSsh timer (ssh.ts:136-146) calls child.kill(), Node's SIGTERM, and rejects at once with the stderr read so far. PiG's runSsh killed the child with SIGKILL through exec.CommandContext and returned only after cmd.Run finished, up to WaitDelay (5 s) later when a descendant kept stdout or stderr open. runSsh now sets Cmd.Cancel to send SIGTERM (a plain kill on Windows, as Node does), waits on a goroutine and returns when the timer fires; the goroutine reaps the child, still bounded by WaitDelay, and stderr is collected in a locked buffer.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -5277,7 +5277,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.2
 - **Fix commits:** `53385a3d93` (2026-10-21, #268)
 - **Tests:** `codemode/sandbox_scaling_test.go::TestSandboxConstructionKeepsOrderAndRejectsDuplicates`, `coding/extension/builtin/codemode/run_test.go::TestDiscoveryDoesNotKeepReadingTheCatalogAfterCancellation`, `coding/extension/builtin/codemode/run_test.go::TestDiscoveryReadsTheCatalogOnceAndKeepsTheFirstEntryOfAName`, `coding/extension/builtin/codemode/run_test.go::TestDiscoveryStopsWhenItsContextIsCancelled`, `coding/mcpext/extension_test.go::TestAgentSessionMCPNamesCollidingToolsAcrossTheWholeCatalog`
-- **Release note:** Registering a large MCP catalog, building a CodeMode sandbox from one, and CodeMode tool discovery were quadratic in the number of tools, so a 100,000-tool server took tens of seconds to register after its last `tools/list` page, `NewSandbox` took 27 seconds, and every `searchTools()` or `describeNamespace()` call rescanned the whole host catalog once per tool. Tool names are now assigned from a per-server count of the sanitized names, the sandbox keeps a name index beside its tool list, and a discovery call reads the host catalog once and resolves each tool's namespace by lookup. Names, collision suffixes, registration order, duplicate-tool errors and the first-entry-wins namespace of a repeated name are unchanged. Discovery also now stops when its context is cancelled and returns the context's error; before, it kept scanning. Pi resolves the same way for the sandbox (a `Map` by name) but scans per tool in the MCP extension and in codemode discovery; Ompig's results match Pi's.
+- **Release note:** Registering a large MCP catalog, building a CodeMode sandbox from one, and CodeMode tool discovery were quadratic in the number of tools, so a 100,000-tool server took tens of seconds to register after its last `tools/list` page, `NewSandbox` took 27 seconds, and every `searchTools()` or `describeNamespace()` call rescanned the whole host catalog once per tool. Tool names are now assigned from a per-server count of the sanitized names, the sandbox keeps a name index beside its tool list, and a discovery call reads the host catalog once and resolves each tool's namespace by lookup. Names, collision suffixes, registration order, duplicate-tool errors and the first-entry-wins namespace of a repeated name are unchanged. Discovery also now stops when its context is cancelled and returns the context's error; before, it kept scanning. Pi resolves the same way for the sandbox (a `Map` by name) but scans per tool in the MCP extension and in codemode discovery; PiG's results match Pi's.
 
 ### BF-5380e0a
 
@@ -5307,10 +5307,10 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-542b536
 
-**fix(cli): OMPIG_VERSION_FORMAT=pi prints the pinned Pi package version**
+**fix(cli): PIG_VERSION_FORMAT=pi prints the pinned Pi package version**
 
 - **Source:** Ompig's own defect
-- **Symptom:** fix(cli): OMPIG_VERSION_FORMAT=pi prints the pinned Pi package version
+- **Symptom:** fix(cli): PIG_VERSION_FORMAT=pi prints the pinned Pi package version
 - **Root cause:** Pi's --version prints the package version, which differs from the display version when the pin is a pi-mono commit. Use coding.UpstreamPackageVersion so the opt-in always matches pi --version.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
@@ -5324,7 +5324,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** `durable/images` is the image processor of pi-durable: `images.CreatePhotonImages()` (also `images/node` and `images/cloudflare`) is a `tools.ImageProcessor` that turns an image upright by its EXIF orientation, scales it to the limits with a Lanczos3 filter, converts BMP to PNG, and re-encodes PNG or JPEG at falling qualities until it fits.
-- **Root cause:** .upstream/pin names the pinned Pi build: a release tag or a pi-mono commit (version 1.1.0+). pigversion.go is generated from it; coding gains UpstreamRef and UpstreamPackageVersion beside the display version. PI_UPSTREAM_REF=<tag|commit> overrides the pin for one run (make variables, a pigversion.go build overlay, OMPIG_UPSTREAM_* in the environment). make pin-bump moves the pin and regenerates what derives from it: SDK, CI-image and Durable package pins, README and ledger version fields, the source mirror, the inventories.
+- **Root cause:** .upstream/pin names the pinned Pi build: a release tag or a pi-mono commit (version 1.1.0+). pigversion.go is generated from it; coding gains UpstreamRef and UpstreamPackageVersion beside the display version. PI_UPSTREAM_REF=<tag|commit> overrides the pin for one run (make variables, a pigversion.go build overlay, PIG_UPSTREAM_* in the environment). make pin-bump moves the pin and regenerates what derives from it: SDK, CI-image and Durable package pins, README and ledger version fields, the source mirror, the inventories.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -5348,11 +5348,11 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-54dc372
 
-**fix(release): carry main's OmpigVersion 0.5.3 and the post-bump goldens and pins**
+**fix(release): carry main's PigVersion 0.5.3 and the post-bump goldens and pins**
 
 - **Source:** Ompig's own defect
-- **Symptom:** fix(release): carry main's OmpigVersion 0.5.3 and the post-bump goldens and pins
-- **Root cause:** The merge of main kept next's generated pigversion.go, which dropped main's OmpigVersion 0.5.3: the fused-extension cell then required extensions/sdk v0.5.2 against go.mod's v0.5.3 and every packed Go conformance cell failed to build, and TestParseChangelog_RealFile saw 0.5.3 as newer than the release line. OmpigVersion is back at 0.5.3 and the README example follows it.
+- **Symptom:** fix(release): carry main's PigVersion 0.5.3 and the post-bump goldens and pins
+- **Root cause:** The merge of main kept next's generated pigversion.go, which dropped main's PigVersion 0.5.3: the fused-extension cell then required extensions/sdk v0.5.2 against go.mod's v0.5.3 and every packed Go conformance cell failed to build, and TestParseChangelog_RealFile saw 0.5.3 as newer than the release line. PigVersion is back at 0.5.3 and the README example follows it.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -5365,7 +5365,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(packagemanager): npm gets Node's realpathSync of the install root, and the npm tests expect it
-- **Root cause:** Pi passes realpathSync(root) as --prefix. Ompig's port used filepath.EvalSymlinks, which on Windows expands 8.3 short names (C:\Users\RUNNER~1) and the case of every component to the stored form, where Node's realpathSync keeps every component that is not a link as the caller spelled it. RealInstallRoot and the uninstall path now use codingagent.RealPathSync (Node's realpathSync, the walk CanonicalizePath and the self-update tier already use), so npm is given the spelling Pi gives it.
+- **Root cause:** Pi passes realpathSync(root) as --prefix. PiG's port used filepath.EvalSymlinks, which on Windows expands 8.3 short names (C:\Users\RUNNER~1) and the case of every component to the stored form, where Node's realpathSync keeps every component that is not a link as the caller spelled it. RealInstallRoot and the uninstall path now use codingagent.RealPathSync (Node's realpathSync, the walk CanonicalizePath and the self-update tier already use), so npm is given the spelling Pi gives it.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -5391,7 +5391,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** MCP OAuth discovery and resource selection now read URLs the way Node's `URL` does (default ports, dot segments, backslashes, punycode hosts), and `WWW-Authenticate` challenges with quoted or odd values parse as Pi parses them.
-- **Root cause:** Pi packages/mcp/src: discovery.ts field() reads an unquoted value with a quote and tests JavaScript's \s and ASCII-only /i; Ompig returned an empty value and used RE2's classes. discovery.ts builds URLs with WHATWG new URL (default port, dot segments, backslash, punycode, scheme-relative // paths, origin null for other schemes); Ompig used net/url. types.ts keeps empty arrays, reads expires_in with Number() (arrays, 0x10, booleans) before access_token, treats null *_at as absent and spreads unmodeled client members; Ompig dropped or rejected each. jsonrpc.ts isJsonRpcRequest/Notification ignore the error member and require a string method.
+- **Root cause:** Pi packages/mcp/src: discovery.ts field() reads an unquoted value with a quote and tests JavaScript's \s and ASCII-only /i; PiG returned an empty value and used RE2's classes. discovery.ts builds URLs with WHATWG new URL (default port, dot segments, backslash, punycode, scheme-relative // paths, origin null for other schemes); PiG used net/url. types.ts keeps empty arrays, reads expires_in with Number() (arrays, 0x10, booleans) before access_token, treats null *_at as absent and spreads unmodeled client members; PiG dropped or rejected each. jsonrpc.ts isJsonRpcRequest/Notification ignore the error member and require a string method.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -5405,7 +5405,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A JSON-RPC request or notification with a malformed `error` member is no longer rejected, and a `method` that is not a string is.
-- **Root cause:** Pi packages/mcp/src: discovery.ts field() reads an unquoted value with a quote and tests JavaScript's \s and ASCII-only /i; Ompig returned an empty value and used RE2's classes. discovery.ts builds URLs with WHATWG new URL (default port, dot segments, backslash, punycode, scheme-relative // paths, origin null for other schemes); Ompig used net/url. types.ts keeps empty arrays, reads expires_in with Number() (arrays, 0x10, booleans) before access_token, treats null *_at as absent and spreads unmodeled client members; Ompig dropped or rejected each. jsonrpc.ts isJsonRpcRequest/Notification ignore the error member and require a string method.
+- **Root cause:** Pi packages/mcp/src: discovery.ts field() reads an unquoted value with a quote and tests JavaScript's \s and ASCII-only /i; PiG returned an empty value and used RE2's classes. discovery.ts builds URLs with WHATWG new URL (default port, dot segments, backslash, punycode, scheme-relative // paths, origin null for other schemes); PiG used net/url. types.ts keeps empty arrays, reads expires_in with Number() (arrays, 0x10, booleans) before access_token, treats null *_at as absent and spreads unmodeled client members; PiG dropped or rejected each. jsonrpc.ts isJsonRpcRequest/Notification ignore the error member and require a string method.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -5418,14 +5418,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **`/login` runs a provider object's OAuth login with Pi's login interaction, so an `info` event shows in the…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Ompig showed the message as a progress line and dropped the links.
+- **Symptom:** PiG showed the message as a progress line and dropped the links.
 - **Root cause:** It now uses ShowSecretInput.
 - **User impact:** Credential or permission exposure
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `56731e90d8` (2026-10-09)
 - **Tests:** `ai/credential_key_order_test.go::TestAuthStorageKeepsEnvOrderAndFirstPositionOfARepeatedKey`, `internal/codingagent/device_code_native_test.go::TestProviderOwnedAuthDialogNotifications`, `internal/codingagent/login_info_event_test.go::TestOAuthInteractionSecretPromptHonorsMaskSecretInput`, `internal/codingagent/native_provider_login_test.go::TestNativeProviderOAuthLoginSelectPrompt`, `test/parity/scenarios/oauth/31-provider-object-login-info-links.toml`
-- **Release note:** `/login` runs a provider object's OAuth login with Pi's login interaction, so an `info` event shows in the login dialog with its message and links, as Pi shows it. Before, Ompig showed the message as a progress line and dropped the links. A `secret` prompt in that login now follows the **Mask secret input** setting, as it does in an API-key login.
+- **Release note:** `/login` runs a provider object's OAuth login with Pi's login interaction, so an `info` event shows in the login dialog with its message and links, as Pi shows it. Before, PiG showed the message as a progress line and dropped the links. A `secret` prompt in that login now follows the **Mask secret input** setting, as it does in an API-key login.
 
 ### BF-56731e9-2
 
@@ -5502,32 +5502,32 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **`auth.json` keeps each credential's properties in the order they were read or returned by an extension's…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Ompig rewrote every credential in a fixed key order whenever `auth.json` was saved, including credentials of providers that were not changed.
+- **Symptom:** PiG rewrote every credential in a fixed key order whenever `auth.json` was saved, including credentials of providers that were not changed.
 - **Root cause:** BenchmarkCredentialKeyOrderRoundTrip decodes and encodes an auth.json of three credentials. The remaining cost is the default encoding that decides whether an order must be kept. That cost is acceptable, because AuthStorage decodes only when auth.json's revision changes and encodes only on a login, refresh or logout.
 - **User impact:** Credential or permission exposure
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `0ae4683246` (2026-10-08), `24ee26a82b` (2026-10-09), `26d302a2d7` (2026-10-09, #201), `5732479897` (2026-10-09), `a527291444` (2026-10-09), `a9956e80d8` (2026-10-09), `b88044ff8a` (2026-10-09), `c7ebb23d87` (2026-10-09)
 - **Tests:** `ai/auth_credential_payload_test.go::TestOAuthCredentialCustomJSONRetainsUTF16Payload`, `ai/credential_key_order_test.go::TestAuthStorageStoresALoginCredentialInItsOwnKeyOrder`, `ai/credential_key_order_test.go::TestAuthStorageWritesCredentialsInTheirDecodedKeyOrder`, `ai/credential_key_order_test.go::TestCredentialFromOAuthPlacesTheDiscriminatorAsPiDoes`, `ai/credential_key_order_test.go::TestCredentialInCodecOrderCarriesNoKeyOrder`, `coding/extension/host/subprocess/native_provider_login_test.go::TestDecodeNativeLoginCallback`, `coding/extension/host/subprocess/native_provider_login_test.go::TestNativeAuthInteractionAnswersTheLoginDialog`, `coding/extension/host/subprocess/native_provider_login_test.go::TestNativeProviderCarrierCarriesDeclaredLogins` and 15 more in docs/bug-ledger.json
-- **Release note:** `auth.json` keeps each credential's properties in the order they were read or returned by an extension's login, as Pi keeps the object it stores and writes it with `JSON.stringify`. Before, Ompig rewrote every credential in a fixed key order whenever `auth.json` was saved, including credentials of providers that were not changed. A `config.oauth` login's credential gets its `type` after the flow's own properties, as Pi's `{ ...credential, type: "oauth" }` does. A credential that one of Ompig's built-in logins creates still uses Ompig's own key order, not the order of Pi's object literal.
+- **Release note:** `auth.json` keeps each credential's properties in the order they were read or returned by an extension's login, as Pi keeps the object it stores and writes it with `JSON.stringify`. Before, PiG rewrote every credential in a fixed key order whenever `auth.json` was saved, including credentials of providers that were not changed. A `config.oauth` login's credential gets its `type` after the flow's own properties, as Pi's `{ ...credential, type: "oauth" }` does. A credential that one of PiG's built-in logins creates still uses PiG's own key order, not the order of Pi's object literal.
 
 ### BF-5774749
 
-**A Ompiglet found by name in `<project>/.ompig/ompiglets` now follows project trust: it is used only when the…**
+**A Piglet found by name in `<project>/.pig/piglets` now follows project trust: it is used only when the…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** A cloned repository could shadow the user's Ompiglet of that name, with its system prompt, extensions and model, with no prompt and no flag.
-- **Root cause:** A bare `--ompiglet <name>` is never read as a file in the working directory.
+- **Symptom:** A cloned repository could shadow the user's Piglet of that name, with its system prompt, extensions and model, with no prompt and no flag.
+- **Root cause:** A bare `--piglet <name>` is never read as a file in the working directory.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `da99854d1b` (2026-10-09), `5774749dbc` (2026-10-10), `cb0873dbfa` (2026-10-10)
-- **Tests:** `coding/cli/main_test.go::TestResolvePigletResolvesExtends`, `coding/cli/main_test.go::TestResolvePiglet_FlagOverridesEnv`, `coding/cli/main_test.go::TestResolvePiglet_FromEnvPath`, `coding/cli/main_test.go::TestResolvePiglet_NoFlagNoEnv`, `coding/cli/mcp_builtin_binary_test.go::TestBuiltinMCPExtensionStartsProjectServersOnlyInATrustedProject`, `coding/cli/strip_app_features_test.go::TestStripExportHTMLBuildOmitsExportPackage`, `coding/ompiglet/workspace_trust_test.go::TestResolveNamesAnIgnoredUntrustedWorkspacePiglet`, `coding/ompiglet/workspace_trust_test.go::TestResolveSkipsAnUntrustedWorkspacePigletAndPrefersTheUsers` and 1 more in docs/bug-ledger.json
-- **Release note:** A Ompiglet found by name in `<project>/.ompig/ompiglets` now follows project trust: it is used only when the project has a stored trust decision of yes or the run passes `--approve`, and an ignored workspace Ompiglet is named in the error. A bare `--ompiglet <name>` is never read as a file in the working directory. Before, a cloned repository could shadow the user's Ompiglet of that name, with its system prompt, extensions and model, with no prompt and no flag.
+- **Tests:** `coding/cli/main_test.go::TestResolvePigletResolvesExtends`, `coding/cli/main_test.go::TestResolvePiglet_FlagOverridesEnv`, `coding/cli/main_test.go::TestResolvePiglet_FromEnvPath`, `coding/cli/main_test.go::TestResolvePiglet_NoFlagNoEnv`, `coding/cli/mcp_builtin_binary_test.go::TestBuiltinMCPExtensionStartsProjectServersOnlyInATrustedProject`, `coding/cli/strip_app_features_test.go::TestStripExportHTMLBuildOmitsExportPackage`, `test/parity/scenarios/project-trust/22-mcp-json-only-project-requires-trust.toml`
+- **Release note:** A Piglet found by name in `<project>/.pig/piglets` now follows project trust: it is used only when the project has a stored trust decision of yes or the run passes `--approve`, and an ignored workspace Piglet is named in the error. A bare `--piglet <name>` is never read as a file in the working directory. Before, a cloned repository could shadow the user's Piglet of that name, with its system prompt, extensions and model, with no prompt and no flag.
 
 ### BF-578c1a3
 
-**The "Applied use cases" page in the manual that ships inside Ompig now links the Security page on the website**
+**The "Applied use cases" page in the manual that ships inside PiG now links the Security page on the website**
 
 - **Source:** Ompig's own defect
 - **Symptom:** It named a `security.md` page that the shipped manual does not have.
@@ -5537,7 +5537,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `578c1a3b47` (2026-10-11)
 - **Tests:** None recorded.
-- **Release note:** The "Applied use cases" page in the manual that ships inside Ompig now links the Security page on the website. Before, it named a `security.md` page that the shipped manual does not have.
+- **Release note:** The "Applied use cases" page in the manual that ships inside PiG now links the Security page on the website. Before, it named a `security.md` page that the shipped manual does not have.
 
 ### BF-57a1687
 
@@ -5564,7 +5564,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Fix commits:** `50ca49180f` (2026-10-13), `57ee33b5c7` (2026-10-13), `5cd840e477` (2026-10-13)
 - **Tests:** `coding/cli/model_registry_refresh_test.go::TestSubprocessModelRegistryPublishesExtensionReplacementAndRestoration`, `coding/cli/model_registry_refresh_test.go::TestSubprocessModelRegistryPublishesProviderOnlyOverlayRefresh`, `coding/cli/model_registry_refresh_test.go::TestSubprocessModelRegistryPublishesProviderRegistrationAndRemoval`, `coding/cli/model_registry_refresh_test.go::TestSubprocessModelRegistryRefreshesConnectedNode`, `coding/cli/port_wave_10_package_command_paths_test.go::TestPortWave10ModelRuntimeCreation`, `coding/cli/shipped_piglet_inventory_test.go::TestShippedPigletInventory`, `coding/cli/strip_leak_gate_test.go::TestStripLeakGate`, `coding/model_availability_auth_view_test.go::TestAvailabilityPassAuthViewMatchesPiUpstream` and 1 more in docs/bug-ledger.json
-- **Release note:** A model an extension registers with `registerProvider` reaches `ctx.modelRegistry`, `ctx.model` and RPC as Pi's object: the definition's members in the order the extension wrote them, then `api`, `provider` and `baseUrl`, and its `input` as written. Ompig sent the members in its own order and filled in `input: ["text"]` when the definition left it out.
+- **Release note:** A model an extension registers with `registerProvider` reaches `ctx.modelRegistry`, `ctx.model` and RPC as Pi's object: the definition's members in the order the extension wrote them, then `api`, `provider` and `baseUrl`, and its `input` as written. PiG sent the members in its own order and filled in `input: ["text"]` when the definition left it out.
 
 ### BF-59456ae
 
@@ -5586,7 +5586,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Previously it aborted the compaction and left the list open.
-- **Root cause:** CustomEditor runs onEscape only while no autocomplete is showing (custom-editor.ts:106-116); otherwise super.handleInput closes the list. Ompig's CustomEditor falls through to superInput, which re-enters handleEditorAction with actionInterrupt, and the compaction-abort check (Pi's compaction_start onEscape, interactive-mode.ts:3678) ran before the autocomplete intercept: Escape aborted the compaction and left the list open. The check now follows the intercept. TestInteractiveMode_EscapeClosesAutocompleteDuringCompactionWithoutAborting is red on the old order.
+- **Root cause:** CustomEditor runs onEscape only while no autocomplete is showing (custom-editor.ts:106-116); otherwise super.handleInput closes the list. Pig's CustomEditor falls through to superInput, which re-enters handleEditorAction with actionInterrupt, and the compaction-abort check (Pi's compaction_start onEscape, interactive-mode.ts:3678) ran before the autocomplete intercept: Escape aborted the compaction and left the list open. The check now follows the intercept. TestInteractiveMode_EscapeClosesAutocompleteDuringCompactionWithoutAborting is red on the old order.
 - **User impact:** Lost or altered data
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -5641,13 +5641,13 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Starting an extension no longer fails with `fork/exec …: text file busy` when the host builds or starts other extensions at the same moment (seen as a `ci-test-conformance` failure in `TestModelTypesVirtualModelsAcrossSDKs/rust-isolated`).
-- **Root cause:** the host copies a compiled binary into the cache with an in-process write (copyArtifact for a cell runner when CARGO_TARGET_DIR puts the compiler output outside the build scratch; copyBuiltBinary, formerly inline in buildRust, for a standalone Rust extension; atomicWriteFile for an embedded cell of a Ompiglet Binary) and executes the copy as soon as it is published. A child that another goroutine forks while the copy is open holds a copy of the write descriptor until it calls exec. Close-on-exec closes it at exec, not at fork, so the host's exec of the binary fails while that child is still between fork and exec. Renaming the file into place does not help: ETXTBSY follows the open file, not…
+- **Root cause:** the host copies a compiled binary into the cache with an in-process write (copyArtifact for a cell runner when CARGO_TARGET_DIR puts the compiler output outside the build scratch; copyBuiltBinary, formerly inline in buildRust, for a standalone Rust extension; atomicWriteFile for an embedded cell of a Piglet Binary) and executes the copy as soon as it is published. A child that another goroutine forks while the copy is open holds a copy of the write descriptor until it calls exec. Close-on-exec closes it at exec, not at fork, so the host's exec of the binary fails while that child is still between fork and exec. Renaming the file into place does not help: ETXTBSY follows the open file, not…
 - **User impact:** An operation failed or was rejected
 - **Platform:** Linux
 - **Fixed in:** Unreleased
 - **Fix commits:** `5ab230421c` (2026-10-24)
 - **Tests:** `coding/extension/host/cellpack/extract_fork_test.go::TestAtomicWriteFileStartsNoChildWhileWriting`, `coding/extension/host/runtimecell/cellcache_exec_test.go::TestPublishArtifactStartsNoChildWhileCopyingAnExternalArtifact`, `coding/extension/host/subprocess/builder_rust_copy_test.go::TestCopyBuiltBinaryStartsNoChildWhileCopying`, `internal/execfile/execfile_test.go::TestWriteReleasesTheForkLockWhenItFails`, `internal/execfile/execfile_test.go::TestWriteStartsNoChildWhileTheFileIsOpen`, `internal/execfile/execfile_test.go::TestWriteTruncatesWhenAsked`, `internal/execfile/execfile_unix_test.go::TestStartAfterWriteIsNeverBusy`, `internal/execfile/execfile_unix_test.go::TestWriteLeavesNoDescriptorOpen` and 1 more in docs/bug-ledger.json
-- **Release note:** Starting an extension no longer fails with `fork/exec …: text file busy` when the host builds or starts other extensions at the same moment (seen as a `ci-test-conformance` failure in `TestModelTypesVirtualModelsAcrossSDKs/rust-isolated`). The host copies a compiled extension binary into its cache and starts the copy as soon as it is published: a Rust cell runner when `CARGO_TARGET_DIR` puts the compiler output outside the build directory, a standalone Rust extension, and the embedded cells of a Ompiglet Binary. A process that another goroutine started while the copy was open still held the copy's write descriptor, and Linux refuses to start a file that any process holds open for writing. The host now starts no process from before the copy is opened until after it is closed, so a start waits for at most one 256 KiB chunk of a copy (about 0.2 ms), not the whole copy. A standalone Rust extension build also no longer reads the whole binary into memory to copy it.
+- **Release note:** Starting an extension no longer fails with `fork/exec …: text file busy` when the host builds or starts other extensions at the same moment (seen as a `ci-test-conformance` failure in `TestModelTypesVirtualModelsAcrossSDKs/rust-isolated`). The host copies a compiled extension binary into its cache and starts the copy as soon as it is published: a Rust cell runner when `CARGO_TARGET_DIR` puts the compiler output outside the build directory, a standalone Rust extension, and the embedded cells of a Piglet Binary. A process that another goroutine started while the copy was open still held the copy's write descriptor, and Linux refuses to start a file that any process holds open for writing. The host now starts no process from before the copy is opened until after it is closed, so a start waits for at most one 256 KiB chunk of a copy (about 0.2 ms), not the whole copy. A standalone Rust extension build also no longer reads the whole binary into memory to copy it.
 
 ### BF-5b0e909
 
@@ -5655,7 +5655,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** /scoped-models: an empty search no longer makes enable-all/clear-all act on every model, clearing every model from an all-enabled list now leaves none enabled (not all), and the save key is checked after the navigation keys like Pi.
-- **Root cause:** (2) clearing every model from an all-enabled list produced a nil slice, i.e. 'all enabled', instead of an empty explicit list. (3) the save action was checked before navigation; Pi checks up, down, reorder, confirm, enableAll, clearAll, toggleProvider, save, ctrl+c, escape, so a shared key keeps the earlier action. Found, not changed: both Pi and Ompig crash (TypeError / index out of range [-1]) when a reorder with an active search moves the selection above the first filtered row (reorder bounds are checked against the enabled list, not the filtered one).
+- **Root cause:** (2) clearing every model from an all-enabled list produced a nil slice, i.e. 'all enabled', instead of an empty explicit list. (3) the save action was checked before navigation; Pi checks up, down, reorder, confirm, enableAll, clearAll, toggleProvider, save, ctrl+c, escape, so a shared key keeps the earlier action. Found, not changed: both Pi and Pig crash (TypeError / index out of range [-1]) when a reorder with an active search moves the selection above the first filtered row (reorder bounds are checked against the enabled list, not the filtered one).
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -5669,7 +5669,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** In-process extensions that call `pi.getCommands()` now receive the extension commands, prompt templates and skills of the session in every mode, as Pi's session binds them.
-- **Root cause:** Pi's PackageManager/DefaultPackageManager (package-manager.ts) was a set of cmd/ompig helper functions taking (cwd, settings). They move to internal/packagemanager as PackageManager with setProgressCallback, listConfiguredPackages, getInstalledPath, install, installAndPersist, remove, removeAndPersist, addSourceToSettings and removeSourceFromSettings; cmd/ompig builds one per command with packageManagerFor and its ~90 call sites (production and tests) use the methods. Behaviour is unchanged (cmd/ompig package/install/remove/settings/npm/git tests pass).
+- **Root cause:** Pi's PackageManager/DefaultPackageManager (package-manager.ts) was a set of cmd/pig helper functions taking (cwd, settings). They move to internal/packagemanager as PackageManager with setProgressCallback, listConfiguredPackages, getInstalledPath, install, installAndPersist, remove, removeAndPersist, addSourceToSettings and removeSourceFromSettings; cmd/pig builds one per command with packageManagerFor and its ~90 call sites (production and tests) use the methods. Behaviour is unchanged (cmd/pig package/install/remove/settings/npm/git tests pass).
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -5766,7 +5766,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A provider object's flow got no options, so a flow that needs the device ID could not get it.
-- **Root cause:** Python: ompig_sdk.LoginOptions(get_device_id, agent_name), with the same dispatch and proxy behavior. Only oauth.login receives it, because Pi declares apiKey.login with the interaction alone (types.ts:175).
+- **Root cause:** Python: pig_sdk.LoginOptions(get_device_id, agent_name), with the same dispatch and proxy behavior. Only oauth.login receives it, because Pi declares apiKey.login with the interaction alone (types.ts:175).
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -5780,7 +5780,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(agent): end the tool flow at custom user messages and hold system messages mid-flow
-- **Root cause:** Pi converts messages to LLM form and then runs transformMessages (packages/ai/src/api/transform-messages.ts), where a branchSummary, compactionSummary, bashExecution or custom message is already a user message and closes the pending tool calls (closePendingToolCalls). Ompig normalizes AgentMessages before convertToLLM, so those custom messages did not interrupt the flow and the placeholders landed behind them. NormalizeMessages now treats a custom message that convertToLLM sends as a user message as a user turn, and holds a system message that sits between a tool call and its results until after the results (transform-messages.ts heldSystemMessages).
+- **Root cause:** Pi converts messages to LLM form and then runs transformMessages (packages/ai/src/api/transform-messages.ts), where a branchSummary, compactionSummary, bashExecution or custom message is already a user message and closes the pending tool calls (closePendingToolCalls). PiG normalizes AgentMessages before convertToLLM, so those custom messages did not interrupt the flow and the placeholders landed behind them. NormalizeMessages now treats a custom message that convertToLLM sends as a user message as a user turn, and holds a system message that sits between a tool call and its results until after the results (transform-messages.ts heldSystemMessages).
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -5803,17 +5803,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-5d8eda1
 
-**`ompig auth check` and `ompig auth print-api-key` no longer reject `--api-key` that another option takes as its…**
+**`pig auth check` and `pig auth print-api-key` no longer reject `--api-key` that another option takes as its…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig auth check` and `ompig auth print-api-key` no longer reject `--api-key` that another option takes as its value (`--model --api-key`, `--provider --api-key`): only an `--api-key` that is itself a flag counts, as in Pi.
-- **Root cause:** ValidateAuthCommandArgs decided that --api-key was given by scanning the raw arguments for the token, so ompig auth check --model --api-key --provider --model (--model takes --api-key as its value) failed with "Auth commands only accept --provider and --model". Pi tests args.apiKey !== undefined, which only a parsed --api-key sets. parseArgs records that (apiKeySet, also for an empty value) and the validator reads it; the raw-argument parameter is no longer read. Found by seed sweeps K=6 and K=7 of TestAuthCommandMatchesPi.
+- **Symptom:** `pig auth check` and `pig auth print-api-key` no longer reject `--api-key` that another option takes as its value (`--model --api-key`, `--provider --api-key`): only an `--api-key` that is itself a flag counts, as in Pi.
+- **Root cause:** ValidateAuthCommandArgs decided that --api-key was given by scanning the raw arguments for the token, so pig auth check --model --api-key --provider --model (--model takes --api-key as its value) failed with "Auth commands only accept --provider and --model". Pi tests args.apiKey !== undefined, which only a parsed --api-key sets. parseArgs records that (apiKeySet, also for an empty value) and the validator reads it; the raw-argument parameter is no longer read. Found by seed sweeps K=6 and K=7 of TestAuthCommandMatchesPi.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `6a6fffa638` (2026-10-10), `5d8eda1fb2` (2026-10-11)
 - **Tests:** `agent/message_json_number_spelling_test.go::TestAgentMessageDecodeKeepsANonNumberWhereAnIntegerIsExpected`, `agent/message_json_test.go::TestAgentMessageJSONRejectsInvalidUnion`, `agent/message_type_mismatch_test.go::TestDecodedMessageKeepsMembersOfAnyType`, `agent/provider_content_block_decode_test.go::TestUnknownContentBlockCostsOnlyThatBlock`, `coding/cli/args_upstream_test.go::TestArgsUpstream`, `coding/cli/auth_command_oracle_test.go::TestAuthCommandMatchesPi`, `internal/codingagent/session_context_settings_test.go::TestGetSessionContextSettingsBoundaries`, `internal/codingagent/session_messagefor_cache_test.go::TestMessageForReportsAnUnparseableEntryWithoutParsingItAgain` and 2 more in docs/bug-ledger.json
-- **Release note:** `ompig auth check` and `ompig auth print-api-key` no longer reject `--api-key` that another option takes as its value (`--model --api-key`, `--provider --api-key`): only an `--api-key` that is itself a flag counts, as in Pi.
+- **Release note:** `pig auth check` and `pig auth print-api-key` no longer reject `--api-key` that another option takes as its value (`--model --api-key`, `--provider --api-key`): only an `--api-key` that is itself a flag counts, as in Pi.
 
 ### BF-5dbfed1
 
@@ -5857,7 +5857,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Removed when Pi fixes it:** Pi derives `block_binding` and the mid-conversation markers from the betas it sends.
 - **Fix commits:** `5e3e346a69` (2026-10-10)
 - **Tests:** `ai/anthropic_beta_override_test.go::TestAnthropicManagedEffortBodyFollowsTheBetasSent`
-- **Release note:** An explicit `anthropic-beta` header, from a model's `headers` or the request, no longer makes a managed-effort Claude model (claude-opus-5, opus-5-5, sonnet-5-5, haiku-5-5, fable-5-1) fail with 400. The override still replaces the default betas. Ompig now sends `thinking.block_binding` only with `thinking-binding-controls-2026-08-01`, and the mid-conversation effort markers only with `mid-conversation-output-config-2026-07-01`. Without the markers, the effort is sent as the top-level effort. Pi sends both regardless (Pi #10759, D130).
+- **Release note:** An explicit `anthropic-beta` header, from a model's `headers` or the request, no longer makes a managed-effort Claude model (claude-opus-5, opus-5-5, sonnet-5-5, haiku-5-5, fable-5-1) fail with 400. The override still replaces the default betas. PiG now sends `thinking.block_binding` only with `thinking-binding-controls-2026-08-01`, and the mid-conversation effort markers only with `mid-conversation-output-config-2026-07-01`. Without the markers, the effort is sent as the top-level effort. Pi sends both regardless (Pi #10759, D130).
 
 ### BF-5eab79d
 
@@ -6003,28 +6003,28 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **MCP sign-in now rejects authorization endpoints and other OAuth metadata URLs that are not `http:` or…**
 
 - **Source:** A fix Pi shipped that Ompig ported
-- **Symptom:** MCP sign-in now rejects authorization endpoints and other OAuth metadata URLs that are not `http:` or `https:`, so a malicious server cannot make ompig launch a `file:` or custom protocol URL.
+- **Symptom:** MCP sign-in now rejects authorization endpoints and other OAuth metadata URLs that are not `http:` or `https:`, so a malicious server cannot make pig launch a `file:` or custom protocol URL.
 - **Root cause:** Ports Pi. OAuth metadata URLs and the authorization endpoint must be http: or https:, so a server cannot make sign-in launch a file: or custom protocol URL through the platform URL handler.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
 - **Fix commits:** `619443a024` (2026-10-23)
 - **Tests:** `mcp/oauth/oauth_test.go::TestMCPOAuthRejectsNonHTTPAuthorizationEndpointsWhichThePlatformURLHandlerWouldLaunch`
-- **Release note:** MCP sign-in now rejects authorization endpoints and other OAuth metadata URLs that are not `http:` or `https:`, so a malicious server cannot make ompig launch a `file:` or custom protocol URL.
+- **Release note:** MCP sign-in now rejects authorization endpoints and other OAuth metadata URLs that are not `http:` or `https:`, so a malicious server cannot make pig launch a `file:` or custom protocol URL.
 
 ### BF-61fc01d
 
 **`list_mcp_resources`, `list_mcp_resource_templates` and `read_mcp_resource` return every member a server sent…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Members Ompig did not know were dropped and the known ones were reordered.
-- **Root cause:** Before, members Ompig did not know were dropped and the known ones were reordered.
+- **Symptom:** Members PiG did not know were dropped and the known ones were reordered.
+- **Root cause:** Before, members PiG did not know were dropped and the known ones were reordered.
 - **User impact:** Lost or altered data
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `44e0ab8129` (2026-10-05), `49cb28c369` (2026-10-05), `61fc01d975` (2026-10-05)
 - **Tests:** `coding/mcpext/connection_test.go::TestMCPConnectionsAppendsTheLastUTF16UnitsOfAFailedStdioServersStderr`, `coding/mcpext/extension_test.go::TestAgentSessionMCPResourceToolsKeepTheMembersAndOrderTheServerSent`, `coding/mcpext/extension_test.go::TestAgentSessionMCPResourceToolsTrimServerArgumentsLikeJavaScript`, `coding/mcpext/extension_test.go::TestAgentSessionMCPResourceToolsWriteTheServersEntriesAsJSONStringifyDoes`, `coding/mcpext/fixtures_test.go::TestMain`, `coding/mcpext/jstrim_internal_test.go::TestParseStatesTreatsJavaScriptWhitespaceAsEmpty`, `coding/mcpext/jstrim_internal_test.go::TestResponseFromRedirectURLTrimsLikeJavaScript`, `coding/mcpext/jstrim_internal_test.go::TestWaitForAuthorizationResponseCancelsOnAJavaScriptBlankAnswer` and 5 more in docs/bug-ledger.json
-- **Release note:** `list_mcp_resources`, `list_mcp_resource_templates` and `read_mcp_resource` return every member a server sent for a resource, template or content entry, in Pi's order and in the form `JSON.stringify` writes: integer-like keys first, numbers such as `2.0` as `2`, and `<`, `&` and `>` unescaped. Before, members Ompig did not know were dropped and the known ones were reordered.
+- **Release note:** `list_mcp_resources`, `list_mcp_resource_templates` and `read_mcp_resource` return every member a server sent for a resource, template or content entry, in Pi's order and in the form `JSON.stringify` writes: integer-like keys first, numbers such as `2.0` as `2`, and `<`, `&` and `>` unescaped. Before, members PiG did not know were dropped and the known ones were reordered.
 
 ### BF-61fc01d-2
 
@@ -6032,7 +6032,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** MCP tool descriptions, resource MIME types, a pasted sign-in redirect URL and the resource tools' `server` and `uri` arguments are trimmed as JavaScript trims them: a byte order mark (U+FEFF) is removed and U+0085 is kept.
-- **Root cause:** resources.ts jsonResult (packages/coding-agent/src/extensions/mcp/resources.ts:182-187) returns JSON.stringify(payload) as text and the payload object as structured content, and read (resources.ts:325-333) returns the contents as JSON.parse read them. The listed entries carried the server's raw member bytes, so Ompig wrote integer-like keys in sent order, kept `2.0`, `1e2`, `\u00e9` and escaped `<&>` as \u003c\u0026\u003e. jsonResult and the read's structured content now pass through jsonstringify.Canonicalize.
+- **Root cause:** resources.ts jsonResult (packages/coding-agent/src/extensions/mcp/resources.ts:182-187) returns JSON.stringify(payload) as text and the payload object as structured content, and read (resources.ts:325-333) returns the contents as JSON.parse read them. The listed entries carried the server's raw member bytes, so PiG wrote integer-like keys in sent order, kept `2.0`, `1e2`, `\u00e9` and escaped `<&>` as \u003c\u0026\u003e. jsonResult and the read's structured content now pass through jsonstringify.Canonicalize.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -6046,7 +6046,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Filterable selector lists (theme, images, tree-filter-like pickers) check up/down before confirm/cancel like Pi's SelectList when a key is bound to several of them.
-- **Root cause:** The assignment is removed. SelectSubmenuComponent now has OnSelectionChange (set by newSelectSubmenuStep, its production caller) fired after up/down. Frames compare as text (Pi bold/fg closers vs Ompig SGR 0 differ, open renderer question). Overlapping rebinds (a key shared by cancel and up) are not probed: FilterableList checks cancel before up unlike Pi's SelectList; follow-up.
+- **Root cause:** The assignment is removed. SelectSubmenuComponent now has OnSelectionChange (set by newSelectSubmenuStep, its production caller) fired after up/down. Frames compare as text (Pi bold/fg closers vs Pig SGR 0 differ, open renderer question). Overlapping rebinds (a key shared by cancel and up) are not probed: FilterableList checks cancel before up unlike Pi's SelectList; follow-up.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -6069,17 +6069,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-625a32e
 
-**Display text that Ompig cuts at a length (the `/tree` listing, the Ompiglet system-prompt preview, an extension…**
+**Display text that PiG cuts at a length (the `/tree` listing, the Piglet system-prompt preview, an extension…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Display text that Ompig cuts at a length (the `/tree` listing, the Ompiglet system-prompt preview, an extension load error cause) is cut at characters, not bytes, so a multi-byte character at the cut no longer becomes invalid UTF-8.
+- **Symptom:** Display text that PiG cuts at a length (the `/tree` listing, the Piglet system-prompt preview, an extension load error cause) is cut at characters, not bytes, so a multi-byte character at the cut no longer becomes invalid UTF-8.
 - **Root cause:** Not recorded.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `625a32e078` (2026-10-10)
 - **Tests:** `coding/extension/host/subprocess/load_error_cause_test.go::TestStderrCauseCutsAtCharactersNotBytes`, `internal/codingagent/tree_ascii_truncation_test.go::TestRenderTreeASCIICutsMessagesAtCharactersNotBytes`
-- **Release note:** Display text that Ompig cuts at a length (the `/tree` listing, the Ompiglet system-prompt preview, an extension load error cause) is cut at characters, not bytes, so a multi-byte character at the cut no longer becomes invalid UTF-8.
+- **Release note:** Display text that PiG cuts at a length (the `/tree` listing, the Piglet system-prompt preview, an extension load error cause) is cut at characters, not bytes, so a multi-byte character at the cut no longer becomes invalid UTF-8.
 
 ### BF-626dccc
 
@@ -6087,7 +6087,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** OpenAI-compatible Chat Completions requests resolve `chat_template_args` (the `baseten` thinking format) and `chat_template_kwargs` (the `chat-template` format) as Pi does.
-- **Root cause:** openai-completions.ts:1034-1075 resolves compat.chatTemplateArgs (baseten, line 916) and compat.chatTemplateKwargs (chat-template, line 906) with one function: {$var:thinking.budget} is the clamped thinking budget, and {$var:thinking.effort} is thinkingLevelMap[level] (the level when absent, nothing when null) or thinkingLevelMap.off when reasoning is off, nothing unless it is a string. Ompig's baseten branch re-implemented the loop without thinking.budget, so a budget variable was dropped there, and both formats sent "none" for an effort variable when reasoning was off with no off entry, and sent the raw level for a null entry. Baseten now calls resolveChatTemplateValues like chat-template…
+- **Root cause:** openai-completions.ts:1034-1075 resolves compat.chatTemplateArgs (baseten, line 916) and compat.chatTemplateKwargs (chat-template, line 906) with one function: {$var:thinking.budget} is the clamped thinking budget, and {$var:thinking.effort} is thinkingLevelMap[level] (the level when absent, nothing when null) or thinkingLevelMap.off when reasoning is off, nothing unless it is a string. PiG's baseten branch re-implemented the loop without thinking.budget, so a budget variable was dropped there, and both formats sent "none" for an effort variable when reasoning was off with no off entry, and sent the raw level for a null entry. Baseten now calls resolveChatTemplateValues like chat-template…
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -6100,14 +6100,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **The `ExtensionSelector` and `ExtensionInput` oracles also run with the Kitty keyboard protocol active (CSI-u…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** The `ExtensionSelector` and `ExtensionInput` oracles also run with the Kitty keyboard protocol active (CSI-u enter, escape, ctrl+j, ctrl+c, shift+enter, letters, modified arrows) in Pi and Ompig; no difference.
+- **Symptom:** The `ExtensionSelector` and `ExtensionInput` oracles also run with the Kitty keyboard protocol active (CSI-u enter, escape, ctrl+j, ctrl+c, shift+enter, letters, modified arrows) in Pi and Pig; no difference.
 - **Root cause:** No difference.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `62a1c87b2a` (2026-10-11)
 - **Tests:** `internal/codingagent/settings_selector_oracle_test.go::TestSettingsSelectorMatchesPi`, `tui/extension_input_oracle_test.go::TestExtensionInputMatchesPi`, `tui/extension_selector_oracle_test.go::TestExtensionSelectorMatchesPi`
-- **Release note:** The `ExtensionSelector` and `ExtensionInput` oracles also run with the Kitty keyboard protocol active (CSI-u enter, escape, ctrl+j, ctrl+c, shift+enter, letters, modified arrows) in Pi and Ompig; no difference.
+- **Release note:** The `ExtensionSelector` and `ExtensionInput` oracles also run with the Kitty keyboard protocol active (CSI-u enter, escape, ctrl+j, ctrl+c, shift+enter, letters, modified arrows) in Pi and Pig; no difference.
 
 ### BF-62ae30d
 
@@ -6180,17 +6180,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-63bb0b7
 
-**`ompig extension upgrade` now rewrites a `Context` getter call that is the only argument of a variadic call…**
+**`pig extension upgrade` now rewrites a `Context` getter call that is the only argument of a variadic call…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig extension upgrade` now rewrites a `Context` getter call that is the only argument of a variadic call, such as `fmt.Println(ctx.ConfigHome())`.
+- **Symptom:** `pig extension upgrade` now rewrites a `Context` getter call that is the only argument of a variadic call, such as `fmt.Println(ctx.ConfigHome())`.
 - **Root cause:** That call still compiles against the current SDK because the value and the error both become arguments, so the error was printed or passed on instead of handled and the upgrade reported nothing.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `63bb0b7eac` (2026-10-12), `974050757c` (2026-10-12), `d305b76bda` (2026-10-12)
 - **Tests:** `coding/cli/extension_upgrade_test.go::TestUpgraderRestoresEveryFileWhenTheRebuildFails`, `coding/cli/extension_upgrade_test.go::TestUpgraderRestoresWrittenFilesWhenAWriteFails`, `coding/extension/host/runtimecell/go_sdk_override_test.go::TestGoSDKPathOverrideIgnoresRetiredStagedSDK`, `coding/extension/host/runtimecell/go_sdk_override_test.go::TestGoSDKPathOverrideKeepsCurrentStagedSDK`, `coding/extension/host/runtimecell/go_sdk_override_test.go::TestRustSDKPathOverrideIgnoresRetiredStagedSDK`, `coding/extension/host/subprocess/builder_test.go::TestGoNeedsStagedSDK`, `coding/extension/host/subprocess/builder_test.go::TestRustNeedsStagedSDK`, `extensions/sdk/upgrade/fixtures_test.go::TestFixturesUpgradeAndBuild` and 3 more in docs/bug-ledger.json
-- **Release note:** `ompig extension upgrade` now rewrites a `Context` getter call that is the only argument of a variadic call, such as `fmt.Println(ctx.ConfigHome())`. That call still compiles against the current SDK because the value and the error both become arguments, so the error was printed or passed on instead of handled and the upgrade reported nothing. It is now rewritten like the other uses: the function returns the error, or, for `ConfigHome` in a function that does not return an error, the line is listed for you to change.
+- **Release note:** `pig extension upgrade` now rewrites a `Context` getter call that is the only argument of a variadic call, such as `fmt.Println(ctx.ConfigHome())`. That call still compiles against the current SDK because the value and the error both become arguments, so the error was printed or passed on instead of handled and the upgrade reported nothing. It is now rewritten like the other uses: the function returns the error, or, for `ConfigHome` in a function that does not return an error, the line is listed for you to change.
 
 ### BF-644a9f2
 
@@ -6250,17 +6250,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-648ff3e-10
 
-**`ompig --list-models` now prints only the models the model runtime reports as available, as Pi does**
+**`pig --list-models` now prints only the models the model runtime reports as available, as Pi does**
 
 - **Source:** Ompig's own defect
-- **Symptom:** It used to append every bundled model of each provider that had a login or API key, so after `ompig update --models` it still listed OpenRouter models that the saved personalized catalog had dropped, such as `openrouter/auto` and the `:batch` variants.
+- **Symptom:** It used to append every bundled model of each provider that had a login or API key, so after `pig update --models` it still listed OpenRouter models that the saved personalized catalog had dropped, such as `openrouter/auto` and the `:batch` variants.
 - **Root cause:** Not recorded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `648ff3e2b0` (2026-10-22, #288)
 - **Tests:** None recorded.
-- **Release note:** `ompig --list-models` now prints only the models the model runtime reports as available, as Pi does. It used to append every bundled model of each provider that had a login or API key, so after `ompig update --models` it still listed OpenRouter models that the saved personalized catalog had dropped, such as `openrouter/auto` and the `:batch` variants.
+- **Release note:** `pig --list-models` now prints only the models the model runtime reports as available, as Pi does. It used to append every bundled model of each provider that had a login or API key, so after `pig update --models` it still listed OpenRouter models that the saved personalized catalog had dropped, such as `openrouter/auto` and the `:batch` variants.
 
 ### BF-648ff3e-100
 
@@ -6528,7 +6528,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.2
 - **Fix commits:** `648ff3e2b0` (2026-10-22, #288)
 - **Tests:** None recorded.
-- **Release note:** CI: `TestTerminalProgramGetsDefaultSignalsWhenTheDaemonStartedIgnoringThem` no longer fails every run under `make test-fast`. It required every ignored-signal bit of the terminal's program to be clear, but Pi's `pty.rs` (and Ompig's daemon, which mirrors it) resets signals 1 through 31 only, and GNU make 4.4.1 starts its recipes with signals 32 and 33 ignored, so the program ended with `SigIgn` 0x80000000 under both daemons. The test asserts signals 1 through 31, the daemon's contract.
+- **Release note:** CI: `TestTerminalProgramGetsDefaultSignalsWhenTheDaemonStartedIgnoringThem` no longer fails every run under `make test-fast`. It required every ignored-signal bit of the terminal's program to be clear, but Pi's `pty.rs` (and PiG's daemon, which mirrors it) resets signals 1 through 31 only, and GNU make 4.4.1 starts its recipes with signals 32 and 33 ignored, so the program ended with `SigIgn` 0x80000000 under both daemons. The test asserts signals 1 through 31, the daemon's contract.
 
 ### BF-648ff3e-24
 
@@ -6696,7 +6696,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.2
 - **Fix commits:** `648ff3e2b0` (2026-10-22, #288)
 - **Tests:** None recorded.
-- **Release note:** `pi.events.emit` in a Go, Rust or Python factory behaves as Pi's does: the first factory-time bus call connects to the host (as `parseFrontmatter` does) and `Run` reuses the connection; a listener the factory subscribes is registered with the host at once and answers the host's dispatches on that connection while the factory waits for a host call, so it hears another extension's emit made while the factory runs, a nested reply to the factory's own emit included, as Pi's shared emitter delivers it; the call returns once the host has delivered the emit to every listener, in registration order (the extensions loaded before this one, then this one's own), and each has finished; a listener that throws or panics is written to stderr as `Event handler error (channel):` and reaches neither the emitter nor the next listener; an `error` emit that nobody hears fails with the emitted error. Before, the emit was queued until after ready, and its failure only reached stderr. A factory with no host (no `OMPIG_EXT_SOCKET`) gets an error from its first bus call. Go gains `sdk.ServeFactory(conn, factory)` for a fused binary, which gives the factory the pipe as its connection.
+- **Release note:** `pi.events.emit` in a Go, Rust or Python factory behaves as Pi's does: the first factory-time bus call connects to the host (as `parseFrontmatter` does) and `Run` reuses the connection; a listener the factory subscribes is registered with the host at once and answers the host's dispatches on that connection while the factory waits for a host call, so it hears another extension's emit made while the factory runs, a nested reply to the factory's own emit included, as Pi's shared emitter delivers it; the call returns once the host has delivered the emit to every listener, in registration order (the extensions loaded before this one, then this one's own), and each has finished; a listener that throws or panics is written to stderr as `Event handler error (channel):` and reaches neither the emitter nor the next listener; an `error` emit that nobody hears fails with the emitted error. Before, the emit was queued until after ready, and its failure only reached stderr. A factory with no host (no `PIG_EXT_SOCKET`) gets an error from its first bus call. Go gains `sdk.ServeFactory(conn, factory)` for a fused binary, which gives the factory the pipe as its connection.
 
 ### BF-648ff3e-35
 
@@ -6892,21 +6892,21 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.2
 - **Fix commits:** `648ff3e2b0` (2026-10-22, #288)
 - **Tests:** None recorded.
-- **Release note:** Extensions: `ctx.ui.setTheme(theme)` with a theme object makes that object the active theme as it is, as Pi's `setThemeInstance` does. Ompig re-created the object in the terminal's color depth, so a truecolor theme set on a terminal without truecolor became a 256-color copy (and the other way round).
+- **Release note:** Extensions: `ctx.ui.setTheme(theme)` with a theme object makes that object the active theme as it is, as Pi's `setThemeInstance` does. PiG re-created the object in the terminal's color depth, so a truecolor theme set on a terminal without truecolor became a 256-color copy (and the other way round).
 
 ### BF-648ff3e-48
 
-**A Ompig TLS client no longer accepts a certificate chain through a compromised eMudhra intermediate or a root…**
+**A PiG TLS client no longer accepts a certificate chain through a compromised eMudhra intermediate or a root…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** A Ompig TLS client no longer accepts a certificate chain through a compromised eMudhra intermediate or a root Mozilla removed after it; the error names the CA.
+- **Symptom:** A PiG TLS client no longer accepts a certificate chain through a compromised eMudhra intermediate or a root Mozilla removed after it; the error names the CA.
 - **Root cause:** Not recorded.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `648ff3e2b0` (2026-10-22, #288)
 - **Tests:** None recorded.
-- **Release note:** A Ompig TLS client no longer accepts a certificate chain through a compromised eMudhra intermediate or a root Mozilla removed after it; the error names the CA.
+- **Release note:** A PiG TLS client no longer accepts a certificate chain through a compromised eMudhra intermediate or a root Mozilla removed after it; the error names the CA.
 
 ### BF-648ff3e-49
 
@@ -7064,17 +7064,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-648ff3e-59
 
-**Docs: another Ompig build that shares the config root no longer removes the documentation bundle a running…**
+**Docs: another PiG build that shares the config root no longer removes the documentation bundle a running…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Docs: another Ompig build that shares the config root no longer removes the documentation bundle a running session's system prompt names.
+- **Symptom:** Docs: another PiG build that shares the config root no longer removes the documentation bundle a running session's system prompt names.
 - **Root cause:** Not recorded.
 - **User impact:** Lost or altered data
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `648ff3e2b0` (2026-10-22, #288)
 - **Tests:** None recorded.
-- **Release note:** Docs: another Ompig build that shares the config root no longer removes the documentation bundle a running session's system prompt names. A session leases its bundle until it exits; before, a session that outlived four newer builds' use lost its pages and nothing wrote them again.
+- **Release note:** Docs: another PiG build that shares the config root no longer removes the documentation bundle a running session's system prompt names. A session leases its bundle until it exits; before, a session that outlived four newer builds' use lost its pages and nothing wrote them again.
 
 ### BF-648ff3e-6
 
@@ -7106,17 +7106,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-648ff3e-61
 
-**Starting a second Ompiglet Binary instance no longer fails on Windows while the first is running**
+**Starting a second Piglet Binary instance no longer fails on Windows while the first is running**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Starting a second Ompiglet Binary instance no longer fails on Windows while the first is running.
+- **Symptom:** Starting a second Piglet Binary instance no longer fails on Windows while the first is running.
 - **Root cause:** Not recorded.
 - **User impact:** An operation failed or was rejected
 - **Platform:** Windows
 - **Fixed in:** 0.5.2
 - **Fix commits:** `648ff3e2b0` (2026-10-22, #288)
 - **Tests:** None recorded.
-- **Release note:** Starting a second Ompiglet Binary instance no longer fails on Windows while the first is running. Extraction left the embedded Go, Rust and Python cell binaries rewritten at every start, and Windows refuses to replace the executable of a running process (`Access is denied`); a cell binary that already holds the embedded bytes is now left in place, and only a different one is replaced, with a retry on a transient lock.
+- **Release note:** Starting a second Piglet Binary instance no longer fails on Windows while the first is running. Extraction left the embedded Go, Rust and Python cell binaries rewritten at every start, and Windows refuses to replace the executable of a running process (`Access is denied`); a cell binary that already holds the embedded bytes is now left in place, and only a different one is replaced, with a retry on a transient lock.
 
 ### BF-648ff3e-62
 
@@ -7218,17 +7218,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-648ff3e-69
 
-**CI: the nightly `-race` run now covers the packages that own most of Ompig's goroutines**
+**CI: the nightly `-race` run now covers the packages that own most of PiG's goroutines**
 
 - **Source:** Ompig's own defect
-- **Symptom:** CI: the nightly `-race` run now covers the packages that own most of Ompig's goroutines.
+- **Symptom:** CI: the nightly `-race` run now covers the packages that own most of PiG's goroutines.
 - **Root cause:** Not recorded.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `648ff3e2b0` (2026-10-22, #288)
 - **Tests:** None recorded.
-- **Release note:** CI: the nightly `-race` run now covers the packages that own most of Ompig's goroutines. `coding`, `coding/cli` (run as four shards), `coding/extension`, the extension hosts (`inproc`, `runtimecell`, `cellpack`), `internal/packagemanager`, `internal/pilock`, `internal/pigsdklock`, `coding/mcpext`, `coding/rpcclient`, the `extensions/sdk` Go module, `internal/codingagent/tools` and the concurrency libraries were in no `-race` job before. `make race-coverage` (part of `check-core` and `ci-drift`) fails when a package that starts goroutines or timers and has tests is in no nightly group of `automation/ci/race-packages.txt` and not exempt with a reason. The first `-race` run of all of them found no data race.
+- **Release note:** CI: the nightly `-race` run now covers the packages that own most of PiG's goroutines. `coding`, `coding/cli` (run as four shards), `coding/extension`, the extension hosts (`inproc`, `runtimecell`, `cellpack`), `internal/packagemanager`, `internal/pilock`, `internal/pigsdklock`, `coding/mcpext`, `coding/rpcclient`, the `extensions/sdk` Go module, `internal/codingagent/tools` and the concurrency libraries were in no `-race` job before. `make race-coverage` (part of `check-core` and `ci-drift`) fails when a package that starts goroutines or timers and has tests is in no nightly group of `automation/ci/race-packages.txt` and not exempt with a reason. The first `-race` run of all of them found no data race.
 
 ### BF-648ff3e-7
 
@@ -7246,17 +7246,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-648ff3e-70
 
-**A ompig session on another machine or container that shares your `~/.ompig` (an NFS home, a bind mount) is no…**
+**A pig session on another machine or container that shares your `~/.pig` (an NFS home, a bind mount) is no…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** A ompig session on another machine or container that shares your `~/.ompig` (an NFS home, a bind mount) is no longer reported as crashed by the next ompig you start.
+- **Symptom:** A pig session on another machine or container that shares your `~/.pig` (an NFS home, a bind mount) is no longer reported as crashed by the next pig you start.
 - **Root cause:** Not recorded.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `648ff3e2b0` (2026-10-22, #288)
 - **Tests:** None recorded.
-- **Release note:** A ompig session on another machine or container that shares your `~/.ompig` (an NFS home, a bind mount) is no longer reported as crashed by the next ompig you start. Session markers in `crash-output/` record the host and PID namespace, and a marker from another one is left alone instead of being removed with a false "ended without recording an exit" line.
+- **Release note:** A pig session on another machine or container that shares your `~/.pig` (an NFS home, a bind mount) is no longer reported as crashed by the next pig you start. Session markers in `crash-output/` record the host and PID namespace, and a marker from another one is left alone instead of being removed with a false "ended without recording an exit" line.
 
 ### BF-648ff3e-71
 
@@ -7498,17 +7498,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-648ff3e-87
 
-**A start could fail with a bare missing-file error when another `ompig`'s cache collection removed the cached…**
+**A start could fail with a bare missing-file error when another `pig`'s cache collection removed the cached…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** A start could fail with a bare missing-file error when another `ompig`'s cache collection removed the cached extension build it had just reused.
+- **Symptom:** A start could fail with a bare missing-file error when another `pig`'s cache collection removed the cached extension build it had just reused.
 - **Root cause:** Not recorded.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `648ff3e2b0` (2026-10-22, #288)
 - **Tests:** None recorded.
-- **Release note:** A start could fail with a bare missing-file error when another `ompig`'s cache collection removed the cached extension build it had just reused. The collection (the daily automatic one, or `ompig extensions cache prune`) decides which entries are expired and removes them a moment later. A start that reuses an old entry in between refreshed its use time but holds no lease until its extension process spawns, so the entry was removed under it, the lease then came back empty instead of failing, and the spawn reported a missing file. The collection now reads each entry again under its exclusive lock and skips one that another `ompig` used since, counting it as in use. A reuse takes the entry's lock while it checks and records the entry, so it never reuses an entry that is being removed and builds it again instead. A lease for an entry that is gone fails with `cache_lease_failed` and says the entry was removed. The SDK fingerprint file of a published entry is replaced through a rename and written only when it changes, so a collection can no longer read it half written and expire a build that a start is using.
+- **Release note:** A start could fail with a bare missing-file error when another `pig`'s cache collection removed the cached extension build it had just reused. The collection (the daily automatic one, or `pig extensions cache prune`) decides which entries are expired and removes them a moment later. A start that reuses an old entry in between refreshed its use time but holds no lease until its extension process spawns, so the entry was removed under it, the lease then came back empty instead of failing, and the spawn reported a missing file. The collection now reads each entry again under its exclusive lock and skips one that another `pig` used since, counting it as in use. A reuse takes the entry's lock while it checks and records the entry, so it never reuses an entry that is being removed and builds it again instead. A lease for an entry that is gone fails with `cache_lease_failed` and says the entry was removed. The SDK fingerprint file of a published entry is replaced through a rename and written only when it changes, so a collection can no longer read it half written and expire a build that a start is using.
 
 ### BF-648ff3e-88
 
@@ -7564,7 +7564,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.2
 - **Fix commits:** `648ff3e2b0` (2026-10-22, #288)
 - **Tests:** None recorded.
-- **Release note:** On a file system that refuses file locks (an NFS mount without a lock manager, a FUSE or SMB share), starting an extension failed with `wait for cell build lock: flock: no locks available`, or with a bare lock error from the lease of a cached build, the cache collector or the SDK staging, and nothing named the cause. The error now names the directory, says the file system does not support file locks, and names the remedy: point `OMPIG_HOME` at a directory on a file system that does. The cache still needs its locks, so a file system without them cannot hold it.
+- **Release note:** On a file system that refuses file locks (an NFS mount without a lock manager, a FUSE or SMB share), starting an extension failed with `wait for cell build lock: flock: no locks available`, or with a bare lock error from the lease of a cached build, the cache collector or the SDK staging, and nothing named the cause. The error now names the directory, says the file system does not support file locks, and names the remedy: point `PIG_HOME` at a directory on a file system that does. The cache still needs its locks, so a file system without them cannot hold it.
 
 ### BF-648ff3e-91
 
@@ -7592,7 +7592,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.2
 - **Fix commits:** `648ff3e2b0` (2026-10-22, #288)
 - **Tests:** None recorded.
-- **Release note:** In RPC mode, a message an extension's `session_start` listener sent while a command replaced the Session was written to the output. Pi subscribes its output writer after `session_start`, so it writes nothing for it; Ompig now publishes the new Session's events after `session_start` too.
+- **Release note:** In RPC mode, a message an extension's `session_start` listener sent while a command replaced the Session was written to the output. Pi subscribes its output writer after `session_start`, so it writes nothing for it; PiG now publishes the new Session's events after `session_start` too.
 
 ### BF-648ff3e-93
 
@@ -7676,7 +7676,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.2
 - **Fix commits:** `648ff3e2b0` (2026-10-22, #288)
 - **Tests:** None recorded.
-- **Release note:** A Go or Rust extension edited while it was being built could be cached under the hash of the source from before the edit. The compiler reads the source after the build hashed it, past the wait for another `ompig`'s build of the same extension and through its own compile, and nothing read it again, so an edit saved in that time was compiled into a build stored under the original source's hash. Putting the original source back then ran the build of the edit. A build now reads its inputs again when the compiler returns (the extension source, the SDK, workspace modules and toolchain) and caches nothing when they changed: it fails with `changed while it was being built`, and the next start builds the current source. A Rust crate's `Cargo.lock`, which `cargo` writes during the build, does not count as an edit.
+- **Release note:** A Go or Rust extension edited while it was being built could be cached under the hash of the source from before the edit. The compiler reads the source after the build hashed it, past the wait for another `pig`'s build of the same extension and through its own compile, and nothing read it again, so an edit saved in that time was compiled into a build stored under the original source's hash. Putting the original source back then ran the build of the edit. A build now reads its inputs again when the compiler returns (the extension source, the SDK, workspace modules and toolchain) and caches nothing when they changed: it fails with `changed while it was being built`, and the next start builds the current source. A Rust crate's `Cargo.lock`, which `cargo` writes during the build, does not count as an edit.
 
 ### BF-648ff3e-99
 
@@ -7765,28 +7765,28 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **The built-in docs gain the compaction summary format, branch summaries and extension hooks, the RPC, JSON…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** The built-in docs gain the compaction summary format, branch summaries and extension hooks, the RPC, JSON mode, CLI integration, session format, message types, llama.cpp, security and usage pages, and "Ompig" replaces "Ompig" throughout.
+- **Symptom:** The built-in docs gain the compaction summary format, branch summaries and extension hooks, the RPC, JSON mode, CLI integration, session format, message types, llama.cpp, security and usage pages, and "PiG" replaces "Pig" throughout.
 - **Root cause:** Not recorded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `663e84b2d8` (2026-10-14)
 - **Tests:** None recorded.
-- **Release note:** The built-in docs gain the compaction summary format, branch summaries and extension hooks, the RPC, JSON mode, CLI integration, session format, message types, llama.cpp, security and usage pages, and "Ompig" replaces "Ompig" throughout. The platform pages stay on the site only, by choice. Reported by @SkrOYC (#195).
+- **Release note:** The built-in docs gain the compaction summary format, branch summaries and extension hooks, the RPC, JSON mode, CLI integration, session format, message types, llama.cpp, security and usage pages, and "PiG" replaces "Pig" throughout. The platform pages stay on the site only, by choice. Reported by @SkrOYC (#195).
 
 ### BF-663e84b-4
 
-**The packages page says how to build and run `ompig-acp`, which `npm:@ompig/pigpen-acp` needs but does not…**
+**The packages page says how to build and run `pig-acp`, which `npm:@pi-in-go/pigpen-acp` needs but does not…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** The packages page says how to build and run `ompig-acp`, which `npm:@ompig/pigpen-acp` needs but does not install, and how to point Zed at it.
+- **Symptom:** The packages page says how to build and run `pig-acp`, which `npm:@pi-in-go/pigpen-acp` needs but does not install, and how to point Zed at it.
 - **Root cause:** Not recorded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `663e84b2d8` (2026-10-14)
 - **Tests:** None recorded.
-- **Release note:** The packages page says how to build and run `ompig-acp`, which `npm:@ompig/pigpen-acp` needs but does not install, and how to point Zed at it. Reported by @klonuo (#210).
+- **Release note:** The packages page says how to build and run `pig-acp`, which `npm:@pi-in-go/pigpen-acp` needs but does not install, and how to point Zed at it. Reported by @klonuo (#210).
 
 ### BF-6646adc
 
@@ -7891,7 +7891,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** An indented line after a quoted heading, rule or fence in a blockquote renders as the code block Pi shows.
-- **Root cause:** marked joins an indented lazy line to a quoted paragraph with its four spaces removed only when the quoted line before it is text; after a heading, rule or fence it is a code block of its own. Ompig stripped the spaces whatever the quoted line was. The strip now requires markdownIsTextLine of the last quoted line.
+- **Root cause:** marked joins an indented lazy line to a quoted paragraph with its four spaces removed only when the quoted line before it is text; after a heading, rule or fence it is a code block of its own. Pig stripped the spaces whatever the quoted line was. The strip now requires markdownIsTextLine of the last quoted line.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -8027,17 +8027,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-69b9811
 
-**Two Ompig builds that share a config root (two installed versions, or stock Ompig beside a Ompiglet Binary) no…**
+**Two PiG builds that share a config root (two installed versions, or stock PiG beside a Piglet Binary) no…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Two Ompig builds that share a config root (two installed versions, or stock Ompig beside a Ompiglet Binary) no longer rewrite each other's documentation at every start.
+- **Symptom:** Two PiG builds that share a config root (two installed versions, or stock PiG beside a Piglet Binary) no longer rewrite each other's documentation at every start.
 - **Root cause:** A sync keeps the four most recently used bundles.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `395c46cbf2` (2026-10-09), `69b9811164` (2026-10-09), `852652e3ae` (2026-10-09), `da99854d1b` (2026-10-09)
 - **Tests:** `coding/cli/piglet_verify_cache_startup_test.go::TestSignedPigletBinaryRunsWhenItsVerifyCacheCannotBeWritten`, `coding/cli/readonly_config_root_binary_test.go::TestReadOnlyConfigRootStartsQuietlyAndNamesOnlyDocsThatExist`, `coding/cli/strip_app_features_test.go::TestStripExportHTMLBuildOmitsExportPackage`, `internal/codingagent/auth_guidance_test.go::TestNoTextNamesADocsBundleStartupCouldNotWrite`, `internal/configroot/configroot_test.go::TestDocsDirIsThePigdocsBundleUnderTheConfigRoot`, `internal/contentdirs/contentdirs_test.go::TestEvictKeepsTheMostRecentlyUsedAndTheCallersOwn`, `internal/contentdirs/contentdirs_test.go::TestNameRequiresAHexHash`, `internal/contentdirs/contentdirs_test.go::TestTouchRecordsUseAtMostHourly` and 2 more in docs/bug-ledger.json
-- **Release note:** Two Ompig builds that share a config root (two installed versions, or stock Ompig beside a Ompiglet Binary) no longer rewrite each other's documentation at every start. Each build writes its docs to its own directory, `~/.ompig/docs/bundle-<hash>/`, and the system prompt, login help and codemode name that directory; `ompig docs path` prints it. A sync keeps the four most recently used bundles.
+- **Release note:** Two PiG builds that share a config root (two installed versions, or stock PiG beside a Piglet Binary) no longer rewrite each other's documentation at every start. Each build writes its docs to its own directory, `~/.pig/docs/bundle-<hash>/`, and the system prompt, login help and codemode name that directory; `pig docs path` prints it. A sync keeps the four most recently used bundles.
 
 ### BF-69c175b
 
@@ -8045,7 +8045,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(models): models.json entries keep exposed limits and cost; bound thinking-only messages in summaries; pin #8810 (D140, D141)
-- **Root cause:** Pi #9566, Pi #9602 (PR #9717). Pi #8810 does not reproduce in Ompig (40 x 3 startup orders x 10 runs); the test pins it.
+- **Root cause:** Pi #9566, Pi #9602 (PR #9717). Pi #8810 does not reproduce in PiG (40 x 3 startup orders x 10 runs); the test pins it.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -8071,14 +8071,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **A session message whose integer member, such as `timestamp`, a usage count or `durationMs`, is spelled with a…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Ompig dropped the message from the session context and RPC `get_messages`.
-- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). Ompig's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
+- **Symptom:** PiG dropped the message from the session context and RPC `get_messages`.
+- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). PiG's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
 - **User impact:** Lost or altered data
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `6a6fffa638` (2026-10-10)
 - **Tests:** `agent/message_json_number_spelling_test.go::TestAgentMessageDecodeKeepsANonNumberWhereAnIntegerIsExpected`, `agent/message_json_test.go::TestAgentMessageJSONRejectsInvalidUnion`, `agent/message_type_mismatch_test.go::TestDecodedMessageKeepsMembersOfAnyType`, `agent/provider_content_block_decode_test.go::TestUnknownContentBlockCostsOnlyThatBlock`, `internal/codingagent/session_context_settings_test.go::TestGetSessionContextSettingsBoundaries`, `internal/codingagent/session_messagefor_cache_test.go::TestMessageForReportsAnUnparseableEntryWithoutParsingItAgain`, `test/longsession/session_oracle_test.go::TestSessionManagerMatchesPi`, `test/parity/scenarios/rpc/58-rpc-session-wrong-typed-members.toml`
-- **Release note:** A session message whose integer member, such as `timestamp`, a usage count or `durationMs`, is spelled with a fraction or an exponent (Python's `json` writes `1767225603000.0`), holds a fraction, or is beyond the 64-bit range is now kept, as Pi keeps it. Before, Ompig dropped the message from the session context and RPC `get_messages`. The message is written as `JSON.stringify` writes the parsed number.
+- **Release note:** A session message whose integer member, such as `timestamp`, a usage count or `durationMs`, is spelled with a fraction or an exponent (Python's `json` writes `1767225603000.0`), holds a fraction, or is beyond the 64-bit range is now kept, as Pi keeps it. Before, PiG dropped the message from the session context and RPC `get_messages`. The message is written as `JSON.stringify` writes the parsed number.
 
 ### BF-6a6fffa-2
 
@@ -8086,13 +8086,13 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** `formatToolCallWithArgs` against live Pi: new `TestFormatToolCallWithArgsMatchesPi` (`tui/tool_call_args_oracle_test.go`; real dark and light themes; 3,000 seeded argument documents as JSON text with whitespace, repeated keys, escapes, integer-like keys, odd number text, tabs/CR/newlines/emoji, nested values and non-object arguments; collapsed and expanded, colour escapes included).
-- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). Ompig's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
+- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). PiG's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `6a6fffa638` (2026-10-10)
 - **Tests:** `agent/message_json_number_spelling_test.go::TestAgentMessageDecodeKeepsANonNumberWhereAnIntegerIsExpected`, `agent/message_json_test.go::TestAgentMessageJSONRejectsInvalidUnion`, `agent/message_type_mismatch_test.go::TestDecodedMessageKeepsMembersOfAnyType`, `agent/provider_content_block_decode_test.go::TestUnknownContentBlockCostsOnlyThatBlock`, `coding/discover_extensions_oracle_test.go::TestDiscoverExtensionPathsMatchPi`, `internal/codingagent/armin_test.go::TestArminFramesMatchPinnedPi`, `internal/codingagent/custom_message_components_oracle_test.go::TestCustomMessageAndEntryComponentsMatchPi`, `internal/codingagent/session_context_settings_test.go::TestGetSessionContextSettingsBoundaries` and 9 more in docs/bug-ledger.json
-- **Release note:** `formatToolCallWithArgs` against live Pi: new `TestFormatToolCallWithArgsMatchesPi` (`tui/tool_call_args_oracle_test.go`; real dark and light themes; 3,000 seeded argument documents as JSON text with whitespace, repeated keys, escapes, integer-like keys, odd number text, tabs/CR/newlines/emoji, nested values and non-object arguments; collapsed and expanded, colour escapes included). No bug (the earlier port is faithful, including the 100-unit cut and the 97-unit ellipsis); the cut can split a surrogate pair, which Ompig keeps as WTF-8 until the terminal write, so the test compares `jsstring.StreamText(got)`. 11 mutations: 10 red; `muted` vs `toolOutput` is equivalent (both resolve to the same colour in the dark and light themes). Related finding, not changed (no production caller): `agent.EstimateTokens` / `agent.EstimateContextTokens` (agent/context_tokens.go) count UTF-8 bytes where Pi's estimateTokens counts UTF-16 units; the production path is `internal/codingagent/compaction` (oracle-tested), so the `agent` copy is a caller-free duplicate.
+- **Release note:** `formatToolCallWithArgs` against live Pi: new `TestFormatToolCallWithArgsMatchesPi` (`tui/tool_call_args_oracle_test.go`; real dark and light themes; 3,000 seeded argument documents as JSON text with whitespace, repeated keys, escapes, integer-like keys, odd number text, tabs/CR/newlines/emoji, nested values and non-object arguments; collapsed and expanded, colour escapes included). No bug (the earlier port is faithful, including the 100-unit cut and the 97-unit ellipsis); the cut can split a surrogate pair, which PiG keeps as WTF-8 until the terminal write, so the test compares `jsstring.StreamText(got)`. 11 mutations: 10 red; `muted` vs `toolOutput` is equivalent (both resolve to the same colour in the dark and light themes). Related finding, not changed (no production caller): `agent.EstimateTokens` / `agent.EstimateContextTokens` (agent/context_tokens.go) count UTF-8 bytes where Pi's estimateTokens counts UTF-16 units; the production path is `internal/codingagent/compaction` (oracle-tested), so the `agent` copy is a caller-free duplicate.
 
 ### BF-6a6fffa-3
 
@@ -8100,7 +8100,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** `getTextOutput` against live Pi: new `TestGetTextOutputMatchesPi` (`internal/codingagent/tools/render_text_output_oracle_test.go`; 2,500 seeded tool results of text blocks with ANSI, CR, control characters and empty text, and PNG/JPEG/GIF/WebP/garbage/empty image blocks with matching, mismatching, empty and unknown mime types, with images off, kitty or iterm2 and showImages on or off).
-- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). Ompig's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
+- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). PiG's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -8114,27 +8114,27 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Live-Pi oracles for `utils/headers.ts`: `TestHeadersToRecordMatchesPi` (800 header sequences over case variants of 15 names, repeated names, set-cookie, empty values; compares `headersToRecord` with Pi's `Headers.entries` record) and `TestProviderHeadersToRecordMatchesPi` (1,500 source lists with null deletes and spelling replacement; `providerHeadersToRecord`), both in `ai/headers_utils_oracle_test.go`.
-- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). Ompig's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
+- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). PiG's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `6a6fffa638` (2026-10-10)
 - **Tests:** `agent/message_json_number_spelling_test.go::TestAgentMessageDecodeKeepsANonNumberWhereAnIntegerIsExpected`, `agent/message_json_test.go::TestAgentMessageJSONRejectsInvalidUnion`, `agent/message_type_mismatch_test.go::TestDecodedMessageKeepsMembersOfAnyType`, `agent/provider_content_block_decode_test.go::TestUnknownContentBlockCostsOnlyThatBlock`, `ai/headers_utils_oracle_test.go::TestHeadersToRecordMatchesPi`, `ai/headers_utils_oracle_test.go::TestProviderHeadersToRecordMatchesPi`, `internal/codingagent/session_context_settings_test.go::TestGetSessionContextSettingsBoundaries`, `internal/codingagent/session_messagefor_cache_test.go::TestMessageForReportsAnUnparseableEntryWithoutParsingItAgain` and 2 more in docs/bug-ledger.json
-- **Release note:** Live-Pi oracles for `utils/headers.ts`: `TestHeadersToRecordMatchesPi` (800 header sequences over case variants of 15 names, repeated names, set-cookie, empty values; compares `headersToRecord` with Pi's `Headers.entries` record) and `TestProviderHeadersToRecordMatchesPi` (1,500 source lists with null deletes and spelling replacement; `providerHeadersToRecord`), both in `ai/headers_utils_oracle_test.go`. No bug found; 8 of 9 mutations red (last-set-cookie, ", " join, lowercase key, set-cookie special case, delete-before-set, later spelling, undefined result, null handling); the ninth (dropping the empty-value-list skip in `headersToRecord`) is equivalent because `Headers` never holds a name with no values. Not covered: two spellings of one name inside a single `ai.ProviderHeaders` source, which Pi resolves by insertion order and a Go map cannot express (the later key wins in Pi; Ompig's result depends on map order).
+- **Release note:** Live-Pi oracles for `utils/headers.ts`: `TestHeadersToRecordMatchesPi` (800 header sequences over case variants of 15 names, repeated names, set-cookie, empty values; compares `headersToRecord` with Pi's `Headers.entries` record) and `TestProviderHeadersToRecordMatchesPi` (1,500 source lists with null deletes and spelling replacement; `providerHeadersToRecord`), both in `ai/headers_utils_oracle_test.go`. No bug found; 8 of 9 mutations red (last-set-cookie, ", " join, lowercase key, set-cookie special case, delete-before-set, later spelling, undefined result, null handling); the ninth (dropping the empty-value-list skip in `headersToRecord`) is equivalent because `Headers` never holds a name with no values. Not covered: two spellings of one name inside a single `ai.ProviderHeaders` source, which Pi resolves by insertion order and a Go map cannot express (the later key wins in Pi; PiG's result depends on map order).
 
 ### BF-6a6fffa-5
 
-**The Skills page said your own skills live in `~/.ompig/skills`, that a skill's text is added to the system…**
+**The Skills page said your own skills live in `~/.pig/skills`, that a skill's text is added to the system…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** The Skills page said your own skills live in `~/.ompig/skills`, that a skill's text is added to the system prompt, and that a bare skill name works in a Ompiglet.
-- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). Ompig's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
+- **Symptom:** The Skills page said your own skills live in `~/.pig/skills`, that a skill's text is added to the system prompt, and that a bare skill name works in a Piglet.
+- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). PiG's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `6a6fffa638` (2026-10-10)
 - **Tests:** `agent/message_json_number_spelling_test.go::TestAgentMessageDecodeKeepsANonNumberWhereAnIntegerIsExpected`, `agent/message_json_test.go::TestAgentMessageJSONRejectsInvalidUnion`, `agent/message_type_mismatch_test.go::TestDecodedMessageKeepsMembersOfAnyType`, `agent/provider_content_block_decode_test.go::TestUnknownContentBlockCostsOnlyThatBlock`, `internal/codingagent/session_context_settings_test.go::TestGetSessionContextSettingsBoundaries`, `internal/codingagent/session_messagefor_cache_test.go::TestMessageForReportsAnUnparseableEntryWithoutParsingItAgain`, `test/longsession/session_oracle_test.go::TestSessionManagerMatchesPi`, `test/parity/scenarios/rpc/58-rpc-session-wrong-typed-members.toml`
-- **Release note:** The Skills page said your own skills live in `~/.ompig/skills`, that a skill's text is added to the system prompt, and that a bare skill name works in a Ompiglet. Ompig reads `~/.ompig/agent/skills`, lists each skill's name, description and file in the system prompt (the model reads the text on demand, or you load it with `/skill:<name>`), and `ompig ompiglet validate` rejects a skill with no origin. The Skills and Prompt templates pages now carry worked examples with the output Ompig produces.
+- **Release note:** The Skills page said your own skills live in `~/.pig/skills`, that a skill's text is added to the system prompt, and that a bare skill name works in a Piglet. PiG reads `~/.pig/agent/skills`, lists each skill's name, description and file in the system prompt (the model reads the text on demand, or you load it with `/skill:<name>`), and `pig piglet validate` rejects a skill with no origin. The Skills and Prompt templates pages now carry worked examples with the output PiG produces.
 
 ### BF-6a6fffa-6
 
@@ -8142,7 +8142,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Live-Pi oracle `TestOpenAICompletionsCompatAndCacheOptionsPayloadMatchesPi` (`ai/openai_completions_compat_options_oracle_test.go`, 2,500 probes) for the openai-completions compat members and options the other payload oracles never draw: supportsFinishReason, zaiToolStream, supportsOpenAIGrammarTools, supportsMidConvoSystemMessages/ToolAdditions, supportsThinkingTokenBudget, thinkingTokenBudgetField, cacheControlFormat, supportsLongCacheRetention, openRouterRouting, vercelGatewayRouting, cacheRetention and sessionId, over OpenAI/OpenRouter/Vercel/Z.ai/xAI hosts and 0-2 mid-conversation system messages (text, sections, toolsAdded, toolsRemoved).
-- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). Ompig's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
+- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). PiG's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -8155,14 +8155,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **The settings documentation now says that `images.blockImages` replaces each image sent to the model with…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** It said Ompig still sent images.
-- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). Ompig's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
+- **Symptom:** It said PiG still sent images.
+- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). PiG's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `6a6fffa638` (2026-10-10)
 - **Tests:** `agent/message_json_number_spelling_test.go::TestAgentMessageDecodeKeepsANonNumberWhereAnIntegerIsExpected`, `agent/message_json_test.go::TestAgentMessageJSONRejectsInvalidUnion`, `agent/message_type_mismatch_test.go::TestDecodedMessageKeepsMembersOfAnyType`, `agent/provider_content_block_decode_test.go::TestUnknownContentBlockCostsOnlyThatBlock`, `internal/codingagent/session_context_settings_test.go::TestGetSessionContextSettingsBoundaries`, `internal/codingagent/session_messagefor_cache_test.go::TestMessageForReportsAnUnparseableEntryWithoutParsingItAgain`, `test/longsession/session_oracle_test.go::TestSessionManagerMatchesPi`, `test/parity/scenarios/rpc/58-rpc-session-wrong-typed-members.toml`
-- **Release note:** The settings documentation now says that `images.blockImages` replaces each image sent to the model with `Image reading is disabled.`, as Ompig does. Before, it said Ompig still sent images. The embedded onboarding page no longer says that skipping the first-time setup with `Esc` makes it appear again.
+- **Release note:** The settings documentation now says that `images.blockImages` replaces each image sent to the model with `Image reading is disabled.`, as PiG does. Before, it said PiG still sent images. The embedded onboarding page no longer says that skipping the first-time setup with `Esc` makes it appear again.
 
 ### BF-6a6fffa-8
 
@@ -8170,7 +8170,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** In `--mode json`, SIGTERM or SIGHUP during a tool call now stops the output and the session file where Pi does: no tool result, aborted turn or `agent_end` is written after the signal, and extensions still receive `session_shutdown`.
-- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). Ompig's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
+- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). PiG's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -8184,7 +8184,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** `TestSettingsSelectorMatchesPi` opens each row under the Kitty keyboard protocol with CSI-u keys; no difference.
-- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). Ompig's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
+- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). PiG's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -8204,7 +8204,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Fix commits:** `6ac4c8c763` (2026-10-07)
 - **Tests:** `coding/cli/dotenv_autoload_test.go::TestLaunchDirectoryDotenvFilesDoNotReachPigEnvironment`, `internal/codingagent/clipboard_copy_test.go::TestCopyToClipboardReportsTheTermuxAPIRequirementOnAndroid`, `internal/codingagent/clipboard_copy_test.go::TestCopyToClipboardTermuxOnAndroidWritesThroughTermuxClipboardSet`, `internal/codingagent/clipboard_paste_test.go::TestClipboardPasteInsertsTermuxTextOnAndroid`, `internal/codingagent/clipboard_read_text_test.go::TestReadClipboardTextAndroidSkipsLinuxCommands`, `internal/codingagent/clipboard_read_text_test.go::TestReadClipboardTextTermuxReadsOnAndroid`, `internal/codingagent/selfupdate_test.go::TestSelfReplaceAtWithCommitKeepsOnlyTheNewExecutable`
-- **Release note:** Ctrl+V pastes clipboard text in Termux. Ompig read `termux-clipboard-get` only where the platform is `linux`, and Termux reports `android`. A failed copy in Termux now also shows the Termux:API install hint on Android.
+- **Release note:** Ctrl+V pastes clipboard text in Termux. PiG read `termux-clipboard-get` only where the platform is `linux`, and Termux reports `android`. A failed copy in Termux now also shows the Termux:API install hint on Android.
 
 ### BF-6b97207
 
@@ -8232,21 +8232,21 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** Unreleased
 - **Fix commits:** `6c26be37c2` (2026-10-27)
 - **Tests:** `durable/harness/harness_submissions_test.go::TestSubmissions`
-- **Release note:** A submission's `Wait` no longer fails with "Harness is closed" when a close begins before the wait wakes: a host `SubscribeCommits` listener that closes the Harness on the commit that settled the submission, or a close that comes between that commit's adoption and its publication. Pi resolves the wait at the commit, so a later close cannot reach it; Ompig settled it only after the host listeners, and the close's seal rejected it, turning a settled submission into an error for its waiter. The record is now fixed at the commit and the wait only wakes after the listeners.
+- **Release note:** A submission's `Wait` no longer fails with "Harness is closed" when a close begins before the wait wakes: a host `SubscribeCommits` listener that closes the Harness on the commit that settled the submission, or a close that comes between that commit's adoption and its publication. Pi resolves the wait at the commit, so a later close cannot reach it; PiG settled it only after the host listeners, and the close's seal rejected it, turning a settled submission into an error for its waiter. The record is now fixed at the commit and the wait only wakes after the listeners.
 
 ### BF-6cb29f0
 
-**Started from a directory reached through a symlink, `ompig install`/`remove`/`list`/`update` resolve local…**
+**Started from a directory reached through a symlink, `pig install`/`remove`/`list`/`update` resolve local…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Started from a directory reached through a symlink, `ompig install`/`remove`/`list`/`update` resolve local sources against the physical working directory, and `--session` with an empty file records the physical directory as the session cwd, as Pi does.
-- **Root cause:** package-manager-cli.ts:951 resolves install/remove/list/update sources against process.cwd(), and SessionManager.open starts an empty session file in process.cwd() (session-manager.ts:1782). Ompig took os.Getwd's $PWD, so from a symlinked directory 'ompig list' printed a project package's path through the link and '--session empty.jsonl' recorded the link as the session cwd. New binary tests run ompig through a symlink with PWD=link. Package tests that set up sources from t.TempDir() and then ran the CLI there now start from the physical temp dir, the directory Pi's process.cwd() would report (they mixed /var and /private/var on macOS).
+- **Symptom:** Started from a directory reached through a symlink, `pig install`/`remove`/`list`/`update` resolve local sources against the physical working directory, and `--session` with an empty file records the physical directory as the session cwd, as Pi does.
+- **Root cause:** package-manager-cli.ts:951 resolves install/remove/list/update sources against process.cwd(), and SessionManager.open starts an empty session file in process.cwd() (session-manager.ts:1782). Pig took os.Getwd's $PWD, so from a symlinked directory 'pig list' printed a project package's path through the link and '--session empty.jsonl' recorded the link as the session cwd. New binary tests run pig through a symlink with PWD=link. Package tests that set up sources from t.TempDir() and then ran the CLI there now start from the physical temp dir, the directory Pi's process.cwd() would report (they mixed /var and /private/var on macOS).
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `630eb9ad7a` (2026-10-13), `6cb29f0c23` (2026-10-13), `b2b6d6f226` (2026-10-13), `b607c35564` (2026-10-13)
 - **Tests:** `coding/cli/package_cli_chalk_test.go::TestPackageCommandsStyleOutputLikeChalk`, `coding/cli/package_cli_output_test.go::TestPackageRemovalProgressAndEmptySettings`, `coding/cli/package_source_parsing_upstream_test.go::TestPackageBareSourcesNeverInvokeNpm`, `coding/cli/package_ssh_upstream_test.go::TestBareSCPPackageSourceRemainsLocalAtCLIAndIdentityBoundaries`, `coding/cli/startup_physical_cwd_test.go::TestEmptySessionFileStartsInThePhysicalWorkingDirectory`, `coding/cli/startup_physical_cwd_test.go::TestPackageListNamesProjectPackagesThroughThePhysicalWorkingDirectory`, `coding/cli/startup_physical_cwd_test.go::TestStartupWorkingDirectoryIsThePhysicalPath`, `internal/codingagent/bug_report_test.go::TestBugExportWritesArchiveRecordsSessionAndLinksPigIssue` and 3 more in docs/bug-ledger.json
-- **Release note:** Started from a directory reached through a symlink, `ompig install`/`remove`/`list`/`update` resolve local sources against the physical working directory, and `--session` with an empty file records the physical directory as the session cwd, as Pi does.
+- **Release note:** Started from a directory reached through a symlink, `pig install`/`remove`/`list`/`update` resolve local sources against the physical working directory, and `--session` with an empty file records the physical directory as the session cwd, as Pi does.
 
 ### BF-6cb29f0-2
 
@@ -8254,7 +8254,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Started from a directory reached through a symlink, `/export <file>.jsonl` and `/bug` now write and name their files under the physical working directory, as Pi does.
-- **Root cause:** package-manager-cli.ts:951 resolves install/remove/list/update sources against process.cwd(), and SessionManager.open starts an empty session file in process.cwd() (session-manager.ts:1782). Ompig took os.Getwd's $PWD, so from a symlinked directory 'ompig list' printed a project package's path through the link and '--session empty.jsonl' recorded the link as the session cwd. New binary tests run ompig through a symlink with PWD=link. Package tests that set up sources from t.TempDir() and then ran the CLI there now start from the physical temp dir, the directory Pi's process.cwd() would report (they mixed /var and /private/var on macOS).
+- **Root cause:** package-manager-cli.ts:951 resolves install/remove/list/update sources against process.cwd(), and SessionManager.open starts an empty session file in process.cwd() (session-manager.ts:1782). Pig took os.Getwd's $PWD, so from a symlinked directory 'pig list' printed a project package's path through the link and '--session empty.jsonl' recorded the link as the session cwd. New binary tests run pig through a symlink with PWD=link. Package tests that set up sources from t.TempDir() and then ran the CLI there now start from the physical temp dir, the directory Pi's process.cwd() would report (they mixed /var and /private/var on macOS).
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -8268,7 +8268,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Switching to or importing an empty session file from a directory reached through a symlink starts the session in the physical working directory, as Pi does.
-- **Root cause:** package-manager-cli.ts:951 resolves install/remove/list/update sources against process.cwd(), and SessionManager.open starts an empty session file in process.cwd() (session-manager.ts:1782). Ompig took os.Getwd's $PWD, so from a symlinked directory 'ompig list' printed a project package's path through the link and '--session empty.jsonl' recorded the link as the session cwd. New binary tests run ompig through a symlink with PWD=link. Package tests that set up sources from t.TempDir() and then ran the CLI there now start from the physical temp dir, the directory Pi's process.cwd() would report (they mixed /var and /private/var on macOS).
+- **Root cause:** package-manager-cli.ts:951 resolves install/remove/list/update sources against process.cwd(), and SessionManager.open starts an empty session file in process.cwd() (session-manager.ts:1782). Pig took os.Getwd's $PWD, so from a symlinked directory 'pig list' printed a project package's path through the link and '--session empty.jsonl' recorded the link as the session cwd. New binary tests run pig through a symlink with PWD=link. Package tests that set up sources from t.TempDir() and then ran the CLI there now start from the physical temp dir, the directory Pi's process.cwd() would report (they mixed /var and /private/var on macOS).
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -8324,7 +8324,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The /config selector keeps the first-seen order of groups that tie on origin, scope and source (auto resources from different base directories); it followed Go map order (`tui/config_selector.go` BuildResourceGroups, config-selector.ts buildGroups; regression `TestBuildResourceGroupsTiesKeepFirstSeenOrder`).
-- **Root cause:** Pi's buildGroups uses a Map (insertion order) and a stable sort; Ompig collected groups from a Go map, so groups tying on origin, scope and source (auto resources from different baseDirs) came out in random order.
+- **Root cause:** Pi's buildGroups uses a Map (insertion order) and a stable sort; Pig collected groups from a Go map, so groups tying on origin, scope and source (auto resources from different baseDirs) came out in random order.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -8347,31 +8347,31 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-6dfa6bf
 
-**`go install github.com/tmih06/ompig/cmd/ompig@<version>` downloads a root module of 181 MB instead of 304 MB**
+**`go install github.com/MichaelKinsy/PiG/cmd/pig@<version>` downloads a root module of 181 MB instead of 304 MB**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `go install github.com/tmih06/ompig/cmd/ompig@<version>` downloads a root module of 181 MB instead of 304 MB.
+- **Symptom:** `go install github.com/MichaelKinsy/PiG/cmd/pig@<version>` downloads a root module of 181 MB instead of 304 MB.
 - **Root cause:** Not recorded.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `6dfa6bfa3b` (2026-10-19, #226)
 - **Tests:** `automation/release/modulesize/main_test.go::TestCommittedBudgetStaysFarBelowTheGoLimit`, `automation/release/modulesize/main_test.go::TestMeasureCountsOnlyWhatGoPutsInTheModuleZip`, `automation/release/modulesize/main_test.go::TestOverBudgetListsTheLargestFilesAndDirectories`, `automation/release/modulesize/main_test.go::TestReadBudget`
-- **Release note:** `go install github.com/tmih06/ompig/cmd/ompig@<version>` downloads a root module of 181 MB instead of 304 MB. Nine data-only directories (parity interface ledgers, pin ledgers, upstream-sync ledgers and large test data) have their own `go.mod`, so Go leaves them out of the root module zip. The files stay in the repository.
+- **Release note:** `go install github.com/MichaelKinsy/PiG/cmd/pig@<version>` downloads a root module of 181 MB instead of 304 MB. Nine data-only directories (parity interface ledgers, pin ledgers, upstream-sync ledgers and large test data) have their own `go.mod`, so Go leaves them out of the root module zip. The files stay in the repository.
 
 ### BF-6e6a0dd
 
 **A session message with a member of another JSON type than Pi writes is now kept, as Pi keeps it**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Ompig dropped the message from the session context, the projection and RPC `get_messages`.
-- **Root cause:** parseSessionEntryLine keeps any JSON.parse value as an entry's message (session-manager.ts:617-623), and buildSessionContext and the projection push it as is, so Pi keeps a message that is a number, a string or an array in its context, projection and get_messages. Ompig dropped it. decodeLax now decodes such a message as a custom message without members that keeps its text, and SourceJSON writes that text. Having no role, it reaches no provider, as Pi's convertToLlm default case returns undefined (messages.ts:189-192). A null message stays undecodable: Pi's context build throws reading its role (getSessionContextSettings).
+- **Symptom:** PiG dropped the message from the session context, the projection and RPC `get_messages`.
+- **Root cause:** parseSessionEntryLine keeps any JSON.parse value as an entry's message (session-manager.ts:617-623), and buildSessionContext and the projection push it as is, so Pi keeps a message that is a number, a string or an array in its context, projection and get_messages. PiG dropped it. decodeLax now decodes such a message as a custom message without members that keeps its text, and SourceJSON writes that text. Having no role, it reaches no provider, as Pi's convertToLlm default case returns undefined (messages.ts:189-192). A null message stays undecodable: Pi's context build throws reading its role (getSessionContextSettings).
 - **User impact:** Lost or altered data
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `6e6a0dd1cc` (2026-10-10)
 - **Tests:** `agent/message_type_mismatch_test.go::TestDecodedMessageKeepsMembersOfAnyType`, `internal/codingagent/session_messagefor_cache_test.go::TestMessageForReportsAnUnparseableEntryWithoutParsingItAgain`, `internal/codingagent/session_undecodable_test.go::TestUndecodableEntriesAreCountedAndOmitted`, `internal/sessionentry/union_test.go::TestDecodeSessionEntryKeepsRecordsNoMemberDescribes`, `test/longsession/session_oracle_test.go::TestSessionManagerMatchesPi`
-- **Release note:** A session message with a member of another JSON type than Pi writes is now kept, as Pi keeps it. Examples are a string `timestamp`, numeric `content`, a text block whose `text` is a number, a usage count written as a string, `isError: "no"`, a numeric or missing `role`, and a message that is a number, a string or an array rather than an object. Before, Ompig dropped the message from the session context, the projection and RPC `get_messages`. The message is written exactly as it was read. Ompig reads a wrong-typed member as absent. An object or array member keeps the parts that have the right types. A content block with an unknown or wrong-typed `type` is left out of the provider request, as Pi's provider conversions skip it.
+- **Release note:** A session message with a member of another JSON type than Pi writes is now kept, as Pi keeps it. Examples are a string `timestamp`, numeric `content`, a text block whose `text` is a number, a usage count written as a string, `isError: "no"`, a numeric or missing `role`, and a message that is a number, a string or an array rather than an object. Before, PiG dropped the message from the session context, the projection and RPC `get_messages`. The message is written exactly as it was read. PiG reads a wrong-typed member as absent. An object or array member keeps the parts that have the right types. A content block with an unknown or wrong-typed `type` is left out of the provider request, as Pi's provider conversions skip it.
 
 ### BF-6ee6eae
 
@@ -8445,17 +8445,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-70d51e5-2
 
-**Fixed the message-format page: it said Ompig does not carry the `nestedCalls` record on tool result messages…**
+**Fixed the message-format page: it said PiG does not carry the `nestedCalls` record on tool result messages…**
 
 - **Source:** A fix Pi shipped that Ompig ported
-- **Symptom:** Fixed the message-format page: it said Ompig does not carry the `nestedCalls` record on tool result messages, which it has written since 1.0.4, and it now lists the field; the page also stops citing a `replace` field that Pi's page no longer lists.
+- **Symptom:** Fixed the message-format page: it said PiG does not carry the `nestedCalls` record on tool result messages, which it has written since 1.0.4, and it now lists the field; the page also stops citing a `replace` field that Pi's page no longer lists.
 - **Root cause:** durationMs (agent-loop.ts executePreparedToolCall, createToolResultMessage, emitToolExecutionEnd; extensions/types.ts ToolRenderContext and ToolExecutionEndEvent; nested-tool-calls.ts; renderers/bash.ts): - agent loop records execute() time in whole ms on a monotonic clock, excluding hooks, on the tool result message (between isError and timestamp), tool_execution_end (JSON/RPC and extensions, all SDKs) and RunToolCall outcomes; a call that did not run has none; a throwing tool still has one. - the tool render context carries durationMs (nil while partial, for a call that did not run and for legacy results); bash/PowerShell Took shows the recorded value live and after a session reload…
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `70d51e54f4` (2026-10-07)
 - **Tests:** `agent/agent_loop_upstream_test.go::TestAgentLoop_RecordsDurationOfThrowingTool`, `agent/agent_loop_upstream_test.go::TestAgentLoop_RecordsToolExecutionDurationExcludingHooks`, `agent/agent_loop_upstream_test.go::TestRunToolCallOutcomeCarriesDurationMs`, `agent/message_json_test.go::TestAgentMessageJSONToolResultDurationMs`, `agent/tool_result_fields_test.go::TestToolResultMessageFieldsMatchUpstream`, `coding/nested_tool_call_events_test.go::TestNestedToolCallEndEventForwardsOutcomeDurationMs`, `coding/session_tool_duration_test.go::TestSessionRecordsToolDurationOnEventsAndPersistedResult`, `internal/codingagent/interactive_resume_tools_test.go::TestInteractiveMode_ResumeShellToolsShowRecordedDuration` and 8 more in docs/bug-ledger.json
-- **Release note:** Fixed the message-format page: it said Ompig does not carry the `nestedCalls` record on tool result messages, which it has written since 1.0.4, and it now lists the field; the page also stops citing a `replace` field that Pi's page no longer lists.
+- **Release note:** Fixed the message-format page: it said PiG does not carry the `nestedCalls` record on tool result messages, which it has written since 1.0.4, and it now lists the field; the page also stops citing a `replace` field that Pi's page no longer lists.
 
 ### BF-70d8a41
 
@@ -8463,7 +8463,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Keybinding conflict detection ignores user bindings for actions the table does not define, as Pi's `KeybindingsManager.rebuild` does, so a typo'd action no longer appears in a conflict (oracles `TestKeybindingsManagerMatchesPi`, `TestAppKeybindingsManagerMatchesPi`).
-- **Root cause:** Matching already agreed everywhere. Fixed in both managers; reverting either fails the matching test (2 failures). Pi orders conflicts by the user's JSON key order, which Ompig's map decoding does not keep, so conflicts compare as sorted sets.
+- **Root cause:** Matching already agreed everywhere. Fixed in both managers; reverting either fails the matching test (2 failures). Pi orders conflicts by the user's JSON key order, which Pig's map decoding does not keep, so conflicts compare as sorted sets.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -8477,7 +8477,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** /settings warnings submenu: a warning the settings never set shows as on and a toggle always reports the warning as set (Pi's `?? true`).
-- **Root cause:** Every callback with its arguments, the callback count after each key, and every frame's text are compared; Pi's callbacks reached include onThemePreview, onThemeChange, onModelThinkingLevelChange/Remove and 30 more. Pi has no Ompig 'Mask secret input' row (D80), so the driver inserts that row and its callback into a temp copy of Pi's settings-selector.js at Ompig's position. One real difference: Pi's WarningSettingsSubmenu shows '(this.state.anthropicExtraUsage ?? true)' and always writes the toggled value; Ompig's submenu used the Go zero value, so a warning the settings never set showed as off and its first toggle reported {} (the Set flag was never set). It now defaults to on and marks the…
+- **Root cause:** Every callback with its arguments, the callback count after each key, and every frame's text are compared; Pi's callbacks reached include onThemePreview, onThemeChange, onModelThinkingLevelChange/Remove and 30 more. Pi has no PiG 'Mask secret input' row (D80), so the driver inserts that row and its callback into a temp copy of Pi's settings-selector.js at Pig's position. One real difference: Pi's WarningSettingsSubmenu shows '(this.state.anthropicExtraUsage ?? true)' and always writes the toggled value; Pig's submenu used the Go zero value, so a warning the settings never set showed as off and its first toggle reported {} (the Set flag was never set). It now defaults to on and marks the…
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -8491,7 +8491,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(tui): card of an unregistered tool is Pi's formatToolExecution
-- **Root cause:** tool-execution.ts updateDisplay draws a tool without a definition (hasRendererDefinition false, e.g. a hallucinated tool name) as one Text: toolTitle name, a blank line, JSON.stringify(args, null, 2) and the ANSI-stripped result on the next line. Ompig drew a compact 'x:1' summary (with sorted keys, cut at 40/80 chars) and a blank row before the result. Found by running scripted replies through the real Pi and Ompig (mock OpenAI-completions server, tmux, session files compared too). TestUnregisteredToolCardIsUpstreamFormatToolExecution is red without the change; the two component-only tests that used a definition-less card for a registered tool now give it a definition.…
+- **Root cause:** tool-execution.ts updateDisplay draws a tool without a definition (hasRendererDefinition false, e.g. a hallucinated tool name) as one Text: toolTitle name, a blank line, JSON.stringify(args, null, 2) and the ANSI-stripped result on the next line. Pig drew a compact 'x:1' summary (with sorted keys, cut at 40/80 chars) and a blank row before the result. Found by running scripted replies through the real Pi and Pig (mock OpenAI-completions server, tmux, session files compared too). TestUnregisteredToolCardIsUpstreamFormatToolExecution is red without the change; the two component-only tests that used a definition-less card for a registered tool now give it a definition.…
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -8503,14 +8503,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **The upstream test inventory records Pi's `shell-path-exists.test.ts` as ported instead of partial: Pi mocks…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** The upstream test inventory records Pi's `shell-path-exists.test.ts` as ported instead of partial: Pi mocks `accessSync` and `spawnSync`, Ompig's Windows alias and Unix cases match them case for case, and the native Windows check ran and passed on the Windows runner.
+- **Symptom:** The upstream test inventory records Pi's `shell-path-exists.test.ts` as ported instead of partial: Pi mocks `accessSync` and `spawnSync`, PiG's Windows alias and Unix cases match them case for case, and the native Windows check ran and passed on the Windows runner.
 - **Root cause:** Not recorded.
 - **User impact:** Wrong output or ordering
 - **Platform:** Windows
 - **Fixed in:** 0.5.2
 - **Fix commits:** `725e104b55` (2026-10-20)
 - **Tests:** None recorded.
-- **Release note:** The upstream test inventory records Pi's `shell-path-exists.test.ts` as ported instead of partial: Pi mocks `accessSync` and `spawnSync`, Ompig's Windows alias and Unix cases match them case for case, and the native Windows check ran and passed on the Windows runner. The release gate no longer reports it as an open hot-path gap.
+- **Release note:** The upstream test inventory records Pi's `shell-path-exists.test.ts` as ported instead of partial: Pi mocks `accessSync` and `spawnSync`, PiG's Windows alias and Unix cases match them case for case, and the native Windows check ran and passed on the Windows runner. The release gate no longer reports it as an open hot-path gap.
 
 ### BF-72db80f
 
@@ -8653,17 +8653,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-7375fe4
 
-**After `ompig ompiglet update` installs a new release of a pulled Ompiglet Binary, `ompig ompiglet list` shows the…**
+**After `pig piglet update` installs a new release of a pulled Piglet Binary, `pig piglet list` shows the…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Each release of a Ompiglet without a source was listed as its own Ompiglet and `show` printed only the first.
-- **Root cause:** After `ompig ompiglet update` installed a new release of a pulled Ompiglet Binary, each installed release became its own binary-only Ompiglet: `ompig ompiglet list` printed the name twice and `ompig ompiglet show <name>` printed only the first release, not the one the update installed. Records without a matching source now join the one binary-only Ompiglet of their name, and the list names a target that several releases share once.
+- **Symptom:** Each release of a Piglet without a source was listed as its own Piglet and `show` printed only the first.
+- **Root cause:** After `pig piglet update` installed a new release of a pulled Piglet Binary, each installed release became its own binary-only Piglet: `pig piglet list` printed the name twice and `pig piglet show <name>` printed only the first release, not the one the update installed. Records without a matching source now join the one binary-only Piglet of their name, and the list names a target that several releases share once.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `265b6a9022` (2026-10-07), `7375fe4edc` (2026-10-07)
-- **Tests:** `coding/ompiglet/prune_test.go::TestPigletPruneRemovesOldBuildsOnly`, `coding/ompiglet/resolve_test.go::TestListGroupsBinaryOnlyRecordsOfOnePiglet`, `coding/ompiglet/signature/verifycache_test.go::TestCheckCached_ChangedIdentityOrPolicyRehashes`, `coding/ompiglet/signature/verifycache_test.go::TestCheckCached_EntryForAnotherPathIsNotTrusted`, `coding/ompiglet/signature/verifycache_test.go::TestCheckCached_FailedVerificationIsNeverRemembered`, `coding/ompiglet/signature/verifycache_test.go::TestCheckCached_FileChangedDuringTheHashIsNotRemembered`, `coding/ompiglet/signature/verifycache_test.go::TestCheckCached_KeepsOneEntryPerPathAndEvictsTheOldest`, `coding/ompiglet/signature/verifycache_test.go::TestCheckCached_RememberFailureKeepsTheResult` and 7 more in docs/bug-ledger.json
-- **Release note:** After `ompig ompiglet update` installs a new release of a pulled Ompiglet Binary, `ompig ompiglet list` shows the Ompiglet once and `ompig ompiglet show <name>` lists every installed release, including the one the update installed. Before, each release of a Ompiglet without a source was listed as its own Ompiglet and `show` printed only the first.
+- **Tests:** `coding/pigletbuild/binarypiglet/signature_test.go::TestVerify_CacheWriteFailureIsReportedNotFatal`, `coding/pigletbuild/binarypiglet/signature_test.go::TestVerify_RequireSignatureAppliesToARememberedBinary`, `coding/pigletbuild/binarypiglet/signature_test.go::TestVerify_SignedBinaryBoundToItsBuildPassesAndIsRemembered`
+- **Release note:** After `pig piglet update` installs a new release of a pulled Piglet Binary, `pig piglet list` shows the Piglet once and `pig piglet show <name>` lists every installed release, including the one the update installed. Before, each release of a Piglet without a source was listed as its own Piglet and `show` printed only the first.
 
 ### BF-73a09eb
 
@@ -8684,7 +8684,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Every id in the request was rewritten, including the model's own.
-- **Root cause:** openai-completions.ts convertMessages gives normalizeToolCallId to transformMessages, which applies it to a tool call of another model (transform-messages.ts:136-139) and maps its result to the new id. Ompig instead rewrote every id in the converted request messages, so a same-model call with a '|' id or, on provider openai, an id over 40 characters was changed where Pi sends it as is. convertTranscript now passes the normalizer to transformMessages and the post-pass is gone.
+- **Root cause:** openai-completions.ts convertMessages gives normalizeToolCallId to transformMessages, which applies it to a tool call of another model (transform-messages.ts:136-139) and maps its result to the new id. PiG instead rewrote every id in the converted request messages, so a same-model call with a '|' id or, on provider openai, an id over 40 characters was changed where Pi sends it as is. convertTranscript now passes the normalizer to transformMessages and the post-pass is gone.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -8722,17 +8722,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-7489735
 
-**`ompig -e <directory>` now loads a Node extension whose entry file is `index.mjs` and that has no…**
+**`pig -e <directory>` now loads a Node extension whose entry file is `index.mjs` and that has no…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig -e <directory>` now loads a Node extension whose entry file is `index.mjs` and that has no `package.json`, `index.ts` or `index.js`, as Pi does.
-- **Root cause:** A directory with no package manifest and no index.ts or index.js is itself the extension path in Pi (package-manager.ts:1379-1384), and the loader's jiti import of it loads index.mjs. ompig failed with "cannot resolve node extension entrypoint". resolveNodeEntrypoint and hasNodeSource now fall back to extsource.NodeDirectoryImport. Regression: TestResolveNodeEntrypointImportsAnIndexMjsDirectoryAsJiti (fails with the fallback removed).
+- **Symptom:** `pig -e <directory>` now loads a Node extension whose entry file is `index.mjs` and that has no `package.json`, `index.ts` or `index.js`, as Pi does.
+- **Root cause:** A directory with no package manifest and no index.ts or index.js is itself the extension path in Pi (package-manager.ts:1379-1384), and the loader's jiti import of it loads index.mjs. pig failed with "cannot resolve node extension entrypoint". resolveNodeEntrypoint and hasNodeSource now fall back to extsource.NodeDirectoryImport. Regression: TestResolveNodeEntrypointImportsAnIndexMjsDirectoryAsJiti (fails with the fallback removed).
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `0f6fdc2093` (2026-10-07), `7489735c3f` (2026-10-09)
 - **Tests:** `coding/cli/package_update_workers_test.go::TestPackageUpdateChecksBoundWorkers`, `coding/extension/host/subprocess/builder_node_entry_test.go::TestResolveNodeEntrypointImportsAnIndexMjsDirectoryAsJiti`
-- **Release note:** `ompig -e <directory>` now loads a Node extension whose entry file is `index.mjs` and that has no `package.json`, `index.ts` or `index.js`, as Pi does.
+- **Release note:** `pig -e <directory>` now loads a Node extension whose entry file is `index.mjs` and that has no `package.json`, `index.ts` or `index.js`, as Pi does.
 
 ### BF-74bc69b
 
@@ -8779,7 +8779,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Markdown list items lex their text line by line like Pi: an HTML block starts at any item line, and an item line indented four or more spaces past the content joins the text before it (so a heading, quote, rule, fence, table or bullet there stays text) and leaves an empty row before the text that follows.
-- **Root cause:** Pi lexes a list item's text with top false: no paragraph rule, so an HTML block (including a custom tag, comment or pre) starts at any item line indented up to three spaces, and a line indented four or more past the item's content is indented code that blockTokens joins to the text before it with four spaces removed, plus a newline that leaves an empty row before the text that follows. Ompig kept the indentation of an html line, and re-lexed a joined line as a heading, quote, rule, fence, table, bullet or setext underline.
+- **Root cause:** Pi lexes a list item's text with top false: no paragraph rule, so an HTML block (including a custom tag, comment or pre) starts at any item line indented up to three spaces, and a line indented four or more past the item's content is indented code that blockTokens joins to the text before it with four spaces removed, plus a newline that leaves an empty row before the text that follows. Pig kept the indentation of an html line, and re-lexed a joined line as a heading, quote, rule, fence, table, bullet or setext underline.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -8983,31 +8983,31 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-78c4c6c
 
-**`ompig ompiglet add` now names the offending bundled path and where it came from (for example `Package herdr…**
+**`pig piglet add` now names the offending bundled path and where it came from (for example `Package herdr…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig ompiglet add` now names the offending bundled path and where it came from (for example `Package herdr origin "local:../../components/herdr"`) and says it leaves the added subdirectory, instead of a bare "must be a portable relative path" error.
-- **Root cause:** Adding a Ompiglet from a monorepo subdirectory whose Packages point outside it failed with 'Ompiglet closure path must be a portable relative path'. The error now names the path, the origin it came from, and why it is rejected.
+- **Symptom:** `pig piglet add` now names the offending bundled path and where it came from (for example `Package herdr origin "local:../../components/herdr"`) and says it leaves the added subdirectory, instead of a bare "must be a portable relative path" error.
+- **Root cause:** Adding a Piglet from a monorepo subdirectory whose Packages point outside it failed with 'Piglet closure path must be a portable relative path'. The error now names the path, the origin it came from, and why it is rejected.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `78c4c6c647` (2026-10-13)
-- **Tests:** `coding/ompiglet/monorepo_closure_test.go::TestBundledPigletClosureErrorNamesPathAndOrigin`
-- **Release note:** `ompig ompiglet add` now names the offending bundled path and where it came from (for example `Package herdr origin "local:../../components/herdr"`) and says it leaves the added subdirectory, instead of a bare "must be a portable relative path" error.
+- **Tests:** None recorded.
+- **Release note:** `pig piglet add` now names the offending bundled path and where it came from (for example `Package herdr origin "local:../../components/herdr"`) and says it leaves the added subdirectory, instead of a bare "must be a portable relative path" error.
 
 ### BF-78f2d55
 
-**`ompig mcp login --help` described `--timeout` as only the wait for the browser; it limits the whole sign-in…**
+**`pig mcp login --help` described `--timeout` as only the wait for the browser; it limits the whole sign-in…**
 
 - **Source:** A fix Pi shipped that Ompig ported
-- **Symptom:** `ompig mcp login --help` described `--timeout` as only the wait for the browser; it limits the whole sign-in, as Pi 148622bc now says.
+- **Symptom:** `pig mcp login --help` described `--timeout` as only the wait for the browser; it limits the whole sign-in, as Pi 148622bc now says.
 - **Root cause:** Ports Pi packages/coding-agent/src/extensions/mcp/cli.ts HELP: the --timeout line reads "Time limit for the whole sign-in (default: 300)". The Go docs (docs/site/docs/mcp.md, internal/pigdocs/content/mcp.md) already describe --timeout as limiting the whole sign-in.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `78f2d55ded` (2026-10-12)
 - **Tests:** `coding/cli/mcp_command_test.go::TestPigMcpHelpIsPisHelpWithPiGsIdentity`, `coding/mcpext/cli_oracle_test.go::TestMcpCommandMatchesPi`, `coding/mcpext/cli_test.go::TestMcpCommandHelpIsPisHelpWithPiGsIdentity`
-- **Release note:** `ompig mcp login --help` described `--timeout` as only the wait for the browser; it limits the whole sign-in, as Pi 148622bc now says.
+- **Release note:** `pig mcp login --help` described `--timeout` as only the wait for the browser; it limits the whole sign-in, as Pi 148622bc now says.
 
 ### BF-79eadcf
 
@@ -9065,31 +9065,31 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-7b59fe2
 
-**`ompig ompiglet build --format binary` from a Ompig source directory that is not a Git checkout (for example…**
+**`pig piglet build --format binary` from a Pig source directory that is not a Git checkout (for example…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig ompiglet build --format binary` from a Ompig source directory that is not a Git checkout (for example `OMPIG_SOURCE_ROOT` pointing at an extracted archive) now says the directory must be a Git checkout of Ompig, names it, and suggests cloning Ompig or unsetting `OMPIG_SOURCE_ROOT`, instead of failing with `resolve Ompig source revision: exit status 128`.
-- **Root cause:** A Ompiglet Binary build from a plain copy of the Ompig source failed with 'resolve Ompig source revision: exit status 128'. The error now names the directory, says it must be a Git checkout and how to fix it; other git failures keep git's stderr line.
+- **Symptom:** `pig piglet build --format binary` from a Pig source directory that is not a Git checkout (for example `PIG_SOURCE_ROOT` pointing at an extracted archive) now says the directory must be a Git checkout of PiG, names it, and suggests cloning PiG or unsetting `PIG_SOURCE_ROOT`, instead of failing with `resolve Pig source revision: exit status 128`.
+- **Root cause:** A Piglet Binary build from a plain copy of the PiG source failed with 'resolve Pig source revision: exit status 128'. The error now names the directory, says it must be a Git checkout and how to fix it; other git failures keep git's stderr line.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `375de4a98c` (2026-10-12), `35006c8baf` (2026-10-13), `7b59fe2605` (2026-10-13)
 - **Tests:** `coding/cli/strip_providers_binary_test.go::TestStripBedrockConverseStreamBuildOmitsAWSSDK`, `coding/pigletbuild/source_fetch_test.go::TestSourceRevisionOutsideGitCheckoutNamesDirectory`, `internal/codingagent/program_status_reporter_oracle_test.go::TestProgramStatusReporterRandomSequencesMatchPi`, `third_party/awssdk/internal/endpoints/v2/lazy_test.go::TestLazyRegexpMatchesLikeRegexp`
-- **Release note:** `ompig ompiglet build --format binary` from a Ompig source directory that is not a Git checkout (for example `OMPIG_SOURCE_ROOT` pointing at an extracted archive) now says the directory must be a Git checkout of Ompig, names it, and suggests cloning Ompig or unsetting `OMPIG_SOURCE_ROOT`, instead of failing with `resolve Ompig source revision: exit status 128`. Other git failures now include git's error line.
+- **Release note:** `pig piglet build --format binary` from a Pig source directory that is not a Git checkout (for example `PIG_SOURCE_ROOT` pointing at an extracted archive) now says the directory must be a Git checkout of PiG, names it, and suggests cloning PiG or unsetting `PIG_SOURCE_ROOT`, instead of failing with `resolve Pig source revision: exit status 128`. Other git failures now include git's error line.
 
 ### BF-7b92429
 
 **`find` and `grep` trim like JavaScript: `FindTool` trimmed each fd output line with `strings.TrimSpace` where…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `find` and `grep` trim like JavaScript: `FindTool` trimmed each fd output line with `strings.TrimSpace` where find.ts:270 uses `String.prototype.trim`, so a file whose name ends with U+FEFF lost nothing in Pi but a name ending in U+0085 lost it in Ompig (and the reverse).
-- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). Ompig's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
+- **Symptom:** `find` and `grep` trim like JavaScript: `FindTool` trimmed each fd output line with `strings.TrimSpace` where find.ts:270 uses `String.prototype.trim`, so a file whose name ends with U+FEFF lost nothing in Pi but a name ending in U+0085 lost it in PiG (and the reverse).
+- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). PiG's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
 - **User impact:** Lost or altered data
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `6a6fffa638` (2026-10-10), `7b92429a25` (2026-10-11), `a2755058da` (2026-10-11)
 - **Tests:** `agent/message_json_number_spelling_test.go::TestAgentMessageDecodeKeepsANonNumberWhereAnIntegerIsExpected`, `agent/message_json_test.go::TestAgentMessageJSONRejectsInvalidUnion`, `agent/message_type_mismatch_test.go::TestDecodedMessageKeepsMembersOfAnyType`, `agent/provider_content_block_decode_test.go::TestUnknownContentBlockCostsOnlyThatBlock`, `coding/discover_extensions_oracle_test.go::TestDiscoverExtensionPathsMatchPi`, `internal/codingagent/armin_test.go::TestArminFramesMatchPinnedPi`, `internal/codingagent/custom_message_components_oracle_test.go::TestCustomMessageAndEntryComponentsMatchPi`, `internal/codingagent/session_context_settings_test.go::TestGetSessionContextSettingsBoundaries` and 9 more in docs/bug-ledger.json
-- **Release note:** `find` and `grep` trim like JavaScript: `FindTool` trimmed each fd output line with `strings.TrimSpace` where find.ts:270 uses `String.prototype.trim`, so a file whose name ends with U+FEFF lost nothing in Pi but a name ending in U+0085 lost it in Ompig (and the reverse). `find`'s lines and stderr message and `grep`'s stderr message and blank-line check now use `jsstring.Trim` (find.ts:252,270; grep.ts:220,252). New live-Pi oracle `TestFindTrimsOutputLinesLikeJavaScript` (`internal/codingagent/tools/find_trim_names_oracle_test.go`: names beginning or ending with U+FEFF, U+0085, U+00A0 or a space, and names that are only U+FEFF or U+0085); red before the fix (3 of 7 directories), green after; `./internal/codingagent/tools -race` green. The stderr and ripgrep blank-line trims are not reachable by the oracle (they need fd or rg to fail or emit a blank JSON line) and are changed for the same rule only.
+- **Release note:** `find` and `grep` trim like JavaScript: `FindTool` trimmed each fd output line with `strings.TrimSpace` where find.ts:270 uses `String.prototype.trim`, so a file whose name ends with U+FEFF lost nothing in Pi but a name ending in U+0085 lost it in PiG (and the reverse). `find`'s lines and stderr message and `grep`'s stderr message and blank-line check now use `jsstring.Trim` (find.ts:252,270; grep.ts:220,252). New live-Pi oracle `TestFindTrimsOutputLinesLikeJavaScript` (`internal/codingagent/tools/find_trim_names_oracle_test.go`: names beginning or ending with U+FEFF, U+0085, U+00A0 or a space, and names that are only U+FEFF or U+0085); red before the fix (3 of 7 directories), green after; `./internal/codingagent/tools -race` green. The stderr and ripgrep blank-line trims are not reachable by the oracle (they need fd or rg to fail or emit a blank JSON line) and are changed for the same rule only.
 
 ### BF-7ba3211
 
@@ -9103,7 +9103,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `7ba3211bdc` (2026-10-11)
 - **Tests:** None recorded.
-- **Release note:** A resumed session no longer holds its whole file in memory. Ompig keeps a small index of every entry and decodes only what the active context needs (the latest compaction's kept messages and everything after them); older entries are read back from the session file when a command such as `/tree`, `/fork` or export needs them. On a real 314 MB session, an interactive resume measured 150-190 MB after loading and 225-285 MB after opening `/tree` (two profiling runs on macOS), where Ompig 0.4.1 took 1.2-1.3 GB and Pi 1.1.0 about 700 MB. History outside the active context is not kept decoded, so a long-open session file does not accumulate it in memory.
+- **Release note:** A resumed session no longer holds its whole file in memory. PiG keeps a small index of every entry and decodes only what the active context needs (the latest compaction's kept messages and everything after them); older entries are read back from the session file when a command such as `/tree`, `/fork` or export needs them. On a real 314 MB session, an interactive resume measured 150-190 MB after loading and 225-285 MB after opening `/tree` (two profiling runs on macOS), where PiG 0.4.1 took 1.2-1.3 GB and Pi 1.1.0 about 700 MB. History outside the active context is not kept decoded, so a long-open session file does not accumulate it in memory.
 
 ### BF-7bcd404
 
@@ -9137,7 +9137,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A Node extension can default-import TypeBox (`import Type from "typebox"`, and likewise `typebox/value`, `typebox/compile` and `@sinclair/typebox*`), as it can in Pi.
-- **Root cause:** - runner.ts returns to partial: Pi renders before_agent_start's event.systemPrompt and ctx.getSystemPrompt() from the shared options on every read (runner.ts:1421-1438); Ompig hands each handler the pre-edit string. Probed on the pinned Pi runner. - TestNodeRuntimeVirtualModulesMatchPiNamespaces read Pi's namespaces through Ompig's loader hooks and compared Ompig with itself; it now reads them in a hook-free process. - That comparison found the TypeBox shims had no default export; vendor-typebox.sh re-exports it, and TestTypeBoxDefaultImportsLoadInANodeExtension loads such an extension through the host.
+- **Root cause:** - runner.ts returns to partial: Pi renders before_agent_start's event.systemPrompt and ctx.getSystemPrompt() from the shared options on every read (runner.ts:1421-1438); Pig hands each handler the pre-edit string. Probed on the pinned Pi runner. - TestNodeRuntimeVirtualModulesMatchPiNamespaces read Pi's namespaces through Pig's loader hooks and compared Pig with itself; it now reads them in a hook-free process. - That comparison found the TypeBox shims had no default export; vendor-typebox.sh re-exports it, and TestTypeBoxDefaultImportsLoadInANodeExtension loads such an extension through the host.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -9205,7 +9205,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Resource resolution follows Pi's `DefaultPackageManager.resolve` in two cases: built-in extensions come after file and package extensions, and a Package listed twice in the same project settings uses its last entry (and its filters), keeping the first position.
-- **Root cause:** TestLoadMcpConfigMatchesPiOnRandomFiles loads 1500 random global and project mcp.json files through Pi's loadMcpConfig and Ompig's LoadMcpConfig: 187 differed, among them every file with a numeric server name, because Object.entries lists array-index keys first and orderedjson.Object kept file order. Object.Set now inserts an array-index key at its ascending place before the other keys (Keys, MarshalJSON, Clone follow), with TestObjectEnumeratesArrayIndexKeysFirst. Dependent packages (codingagent, extension, mcpext, mcp, packagecontent) pass; the failures left in tools and the node-backed subprocess tests are the fd/rg and node-shim environment ones.
+- **Root cause:** TestLoadMcpConfigMatchesPiOnRandomFiles loads 1500 random global and project mcp.json files through Pi's loadMcpConfig and PiG's LoadMcpConfig: 187 differed, among them every file with a numeric server name, because Object.entries lists array-index keys first and orderedjson.Object kept file order. Object.Set now inserts an array-index key at its ascending place before the other keys (Keys, MarshalJSON, Clone follow), with TestObjectEnumeratesArrayIndexKeysFirst. Dependent packages (codingagent, extension, mcpext, mcp, packagecontent) pass; the failures left in tools and the node-backed subprocess tests are the fd/rg and node-shim environment ones.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -9233,7 +9233,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A `ChordError` of code `invalid` from a failed args, result, state or input check carries TypeBox's whole error objects as `details` (keyword, schemaPath, instancePath, params and message), as Pi's does; it carried only instancePath and message.
-- **Root cause:** Pi's assertValid throws invalid with the first three Value.Errors as details: keyword, schemaPath, instancePath, params and message of each. Ompig kept only instancePath and message, so a caller reading ChordError.Details of a failed args, result, state or input check saw less than Pi shows. internal/typebox.ValueError now carries the keyword, the schema path of the failing schema and the params of every keyword TypeBox reports, and the walker threads the schema path the way the engine does (properties/<key>, items/<index>, anyOf/<index>, then, else, $ref restarting at #). chord/host assertValid builds the details from them in Pi's member order.
+- **Root cause:** Pi's assertValid throws invalid with the first three Value.Errors as details: keyword, schemaPath, instancePath, params and message of each. PiG kept only instancePath and message, so a caller reading ChordError.Details of a failed args, result, state or input check saw less than Pi shows. internal/typebox.ValueError now carries the keyword, the schema path of the failing schema and the params of every keyword TypeBox reports, and the walker threads the schema path the way the engine does (properties/<key>, items/<index>, anyOf/<index>, then, else, $ref restarting at #). chord/host assertValid builds the details from them in Pi's member order.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -9328,13 +9328,13 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Tool-call header argument preview no longer splits a character: `truncateArg` (`tui/tool_execution.go`) cut to `max-1` bytes, so a non-ASCII argument longer than the budget ended in a half character that the JSON quoting turned into a visible U+FFFD before the ellipsis (`text:"ééé…é�…"`); it now backs up to the start of a character.
-- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). Ompig's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
+- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). PiG's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `6a6fffa638` (2026-10-10), `8048c851e3` (2026-10-11)
 - **Tests:** `agent/message_json_number_spelling_test.go::TestAgentMessageDecodeKeepsANonNumberWhereAnIntegerIsExpected`, `agent/message_json_test.go::TestAgentMessageJSONRejectsInvalidUnion`, `agent/message_type_mismatch_test.go::TestDecodedMessageKeepsMembersOfAnyType`, `agent/provider_content_block_decode_test.go::TestUnknownContentBlockCostsOnlyThatBlock`, `internal/codingagent/session_context_settings_test.go::TestGetSessionContextSettingsBoundaries`, `internal/codingagent/session_messagefor_cache_test.go::TestMessageForReportsAnUnparseableEntryWithoutParsingItAgain`, `test/longsession/session_oracle_test.go::TestSessionManagerMatchesPi`, `test/parity/scenarios/rpc/58-rpc-session-wrong-typed-members.toml` and 1 more in docs/bug-ledger.json
-- **Release note:** Tool-call header argument preview no longer splits a character: `truncateArg` (`tui/tool_execution.go`) cut to `max-1` bytes, so a non-ASCII argument longer than the budget ended in a half character that the JSON quoting turned into a visible U+FFFD before the ellipsis (`text:"ééé…é�…"`); it now backs up to the start of a character. Regression `TestFormatToolArgsTruncatesAtACharacterBoundary` (red before: é, 日 and 🙂 at four byte offsets; both mutations, no back-up and cutting at `max`, red); `./tui -race` green (1,139 s). Found by scanning production code for byte `len()` comparisons against limits. `HeaderForTool`'s fallback (`FormatToolArgs`: `name path:"x"`) is Ompig's own format for a tool with no builtin formatter and no definition, where Pi renders `formatToolCallWithArgs`; that mismatch is the open "tool card with no definition" ruling request in questions/lg-help-4.md.
+- **Release note:** Tool-call header argument preview no longer splits a character: `truncateArg` (`tui/tool_execution.go`) cut to `max-1` bytes, so a non-ASCII argument longer than the budget ended in a half character that the JSON quoting turned into a visible U+FFFD before the ellipsis (`text:"ééé…é�…"`); it now backs up to the start of a character. Regression `TestFormatToolArgsTruncatesAtACharacterBoundary` (red before: é, 日 and 🙂 at four byte offsets; both mutations, no back-up and cutting at `max`, red); `./tui -race` green (1,139 s). Found by scanning production code for byte `len()` comparisons against limits. `HeaderForTool`'s fallback (`FormatToolArgs`: `name path:"x"`) is PiG's own format for a tool with no builtin formatter and no definition, where Pi renders `formatToolCallWithArgs`; that mismatch is the open "tool card with no definition" ruling request in questions/lg-help-4.md.
 
 ### BF-8070fcc
 
@@ -9356,7 +9356,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A legacy `oauth.json` or `settings.json` that starts with a byte order mark migrates to `auth.json`, as in Pi.
-- **Root cause:** migrateAuthToAuthJson parses JSON.parse(stripBom(...)) for both files (migrations.ts:36,51). Ompig parsed the raw bytes, so a BOM-prefixed file failed to parse and its credentials were not migrated. Regression: TestMigrateAuthToAuthJSONStripsTheBOM (red before).
+- **Root cause:** migrateAuthToAuthJson parses JSON.parse(stripBom(...)) for both files (migrations.ts:36,51). Pig parsed the raw bytes, so a BOM-prefixed file failed to parse and its credentials were not migrated. Regression: TestMigrateAuthToAuthJSONStripsTheBOM (red before).
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -9369,28 +9369,28 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **The Go SDK page now says that leaving `AgentDir` empty in `CreateAgentSessionServicesOptions` makes a program…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** The Go SDK page now says that leaving `AgentDir` empty in `CreateAgentSessionServicesOptions` makes a program read `OMPIG_CODING_AGENT_DIR` the way the `ompig` command does.
+- **Symptom:** The Go SDK page now says that leaving `AgentDir` empty in `CreateAgentSessionServicesOptions` makes a program read `PIG_CODING_AGENT_DIR` the way the `pig` command does.
 - **Root cause:** Not recorded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `80970da292` (2026-10-11)
 - **Tests:** None recorded.
-- **Release note:** The Go SDK page now says that leaving `AgentDir` empty in `CreateAgentSessionServicesOptions` makes a program read `OMPIG_CODING_AGENT_DIR` the way the `ompig` command does.
+- **Release note:** The Go SDK page now says that leaving `AgentDir` empty in `CreateAgentSessionServicesOptions` makes a program read `PIG_CODING_AGENT_DIR` the way the `pig` command does.
 
 ### BF-80b912a
 
-**A failed install-receipt write during `ompig update` or install, such as one rejected because the update CA…**
+**A failed install-receipt write during `pig update` or install, such as one rejected because the update CA…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** A failed install-receipt write during `ompig update` or install, such as one rejected because the update CA file is not owner-only, no longer keeps its staged `.install-receipt-*` temp file open.
-- **Root cause:** A failed install-receipt write during `ompig update` or install, such as one rejected because the update CA file is not owner-only, no longer keeps its staged `.install-receipt-*` temp file open.
+- **Symptom:** A failed install-receipt write during `pig update` or install, such as one rejected because the update CA file is not owner-only, no longer keeps its staged `.install-receipt-*` temp file open.
+- **Root cause:** A failed install-receipt write during `pig update` or install, such as one rejected because the update CA file is not owner-only, no longer keeps its staged `.install-receipt-*` temp file open.
 - **User impact:** Credential or permission exposure
 - **Platform:** Windows
 - **Fixed in:** Unreleased
 - **Fix commits:** `80b912a3e2` (2026-10-24)
 - **Tests:** None recorded.
-- **Release note:** A failed install-receipt write during `ompig update` or install, such as one rejected because the update CA file is not owner-only, no longer keeps its staged `.install-receipt-*` temp file open. The handle is closed before the temp file is removed, so no stray file is left on Windows.
+- **Release note:** A failed install-receipt write during `pig update` or install, such as one rejected because the update CA file is not owner-only, no longer keeps its staged `.install-receipt-*` temp file open. The handle is closed before the temp file is removed, so no stray file is left on Windows.
 
 ### BF-80bb522
 
@@ -9420,7 +9420,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Removed when Pi fixes it:** Pi keeps the function responses of one model turn in one user turn (Pi's routing test changes), at which point delete the deferral and the two rewrites.
 - **Commit that wrote the release note (the fix commit is not identified):** `82a06d586d` (2026-10-09), `85152a825d` (2026-10-10), `80bb5229b5` (2026-10-12)
 - **Tests:** `ai/google_contract_0861_test.go::TestGeminiToolResultImageOrderingMatchesUpstream`, `ai/google_generative_ai_payload_oracle_test.go::TestGoogleGenerativeAIPayloadMatchesPi`, `ai/google_generative_ai_payload_oracle_test.go::TestGoogleVertexPayloadMatchesPi`, `ai/google_image_tool_results_d115_test.go::TestGoogleImageToolResultOfASingleCallMatchesPiD115`, `ai/google_image_tool_results_d115_test.go::TestGoogleImageToolResultsKeepFunctionResponsesInOneTurnD115`, `test/pipeline-diff/diff_test.go::TestAIPipelineMatchesPi`, `test/pipeline-diff/diff_test.go::TestPipelineMatchesPi`
-- **Release note:** Gemini 2.x models (Google Generative AI and Vertex) no longer reject a conversation in which a parallel tool call other than the last returned an image. Ompig keeps all function responses of one model turn in a single user turn and sends the image turns after them. Pi 1.2.0 splits that turn (D115).
+- **Release note:** Gemini 2.x models (Google Generative AI and Vertex) no longer reject a conversation in which a parallel tool call other than the last returned an image. PiG keeps all function responses of one model turn in a single user turn and sends the image turns after them. Pi 1.2.0 splits that turn (D115).
 
 ### BF-80bb522-3
 
@@ -9472,7 +9472,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Streaming a tool call's arguments allocates less per delta.
-- **Root cause:** Pi's incremental parse of tool-call arguments () costs a snapshot per delta. Ompig paid more than Pi on top of it: the parser recorded the changes nobody read, and every publish of the message cell copied the arguments the parser had just copied.
+- **Root cause:** Pi's incremental parse of tool-call arguments () costs a snapshot per delta. PiG paid more than Pi on top of it: the parser recorded the changes nobody read, and every publish of the message cell copied the arguments the parser had just copied.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -9514,7 +9514,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A Mistral stream chunk with a member of an unexpected type is read as Pi's JavaScript reads it instead of ending the turn with a JSON decode error: a finish reason that is not a string ends the turn with `Provider stopped with: <its string form>`, a content item's non-string text ends it with Pi's `text.replace is not a function`, a content item that is not an object is skipped, a `tool_calls` value that is not an array ends it with `toolCalls is not iterable` (a string with Pi's error for its first character), a usage that is not an object reads as zeros, a prompt count sent as a string counts as its number, and a cached-token count that is not a number reads as 0.
-- **Root cause:** processResponsesStream reads each member with its own expression (openai-responses-shared.ts:463-800). Ompig ended the turn with "openai-responses: invalid SSE JSON" for a mistyped event member and silently skipped an output_item.added/.done whose item did not decode (the two AI-08 stream-parse-continue hits), where Pi: - appends String(delta) with `+=` on every delta event, "null"/"undefined" for a null/absent delta; - joins a done message's `content.map((c) => c.type === "output_text" ? c.text : c.refusal).join("")` and a done reasoning item's summary/content texts with String() for each value and "" for null/undefined, and throws `item.content?.map is not a function` (or summary) for a…
+- **Root cause:** processResponsesStream reads each member with its own expression (openai-responses-shared.ts:463-800). PiG ended the turn with "openai-responses: invalid SSE JSON" for a mistyped event member and silently skipped an output_item.added/.done whose item did not decode (the two AI-08 stream-parse-continue hits), where Pi: - appends String(delta) with `+=` on every delta event, "null"/"undefined" for a null/absent delta; - joins a done message's `content.map((c) => c.type === "output_text" ? c.text : c.refusal).join("")` and a done reasoning item's summary/content texts with String() for each value and "" for null/undefined, and throws `item.content?.map is not a function` (or summary) for a…
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -9538,17 +9538,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-83d5488
 
-**`ompig install <dir>` of a local directory with no package manifest and no `extensions/`, `skills/`, `prompts/`…**
+**`pig install <dir>` of a local directory with no package manifest and no `extensions/`, `skills/`, `prompts/`…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Previously Ompig recorded the Package and loaded nothing from it.
+- **Symptom:** Previously Pig recorded the Package and loaded nothing from it.
 - **Root cause:** Pi resolves every local source, configured Package or -e, through resolveLocalExtensionSource (package-manager.ts:1296-1299, 1377-1384): when collectPackageResources reports no filter, no "pi" manifest and no conventional resource directory (:2214-2262), the directory itself is one enabled extension.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `0f6fdc2093` (2026-10-07), `382156cdb7` (2026-10-07), `66bb7180b3` (2026-10-07), `8723a419d7` (2026-10-07), `a79de03e7f` (2026-10-07), `7489735c3f` (2026-10-09), `83d54886a6` (2026-10-09)
 - **Tests:** `coding/cli/package_local_directory_extension_test.go::TestInstalledLocalDirectoryWithoutPackageResourcesLoadsAsAnExtension`, `coding/cli/package_update_workers_test.go::TestPackageUpdateChecksBoundWorkers`, `coding/extension/host/subprocess/builder_node_entry_test.go::TestResolveNodeEntrypointImportsAnIndexMjsDirectoryAsJiti`, `coding/resource_loader_extend_test.go::TestResourceLoaderInterfaceExtendsAndReloads`, `internal/codingagent/interactive_test.go::TestHasAssistantUsageAfterCompaction`, `internal/codingagent/tools/bash_spawn_hook_test.go::TestBashSpawnHookTypeIsSharedByPowerShell`, `internal/packagemanager/local_file_source_test.go::TestLocalDirectoryPackageSourceThatDescribesResourcesIsNotItselfAnExtension`, `internal/packagemanager/local_file_source_test.go::TestLocalDirectoryPackageSourceWithoutResourcesIsItselfAnExtension` and 4 more in docs/bug-ledger.json
-- **Release note:** `ompig install <dir>` of a local directory with no package manifest and no `extensions/`, `skills/`, `prompts/` or `themes/` directory now loads the directory itself as an extension, as `pi install` does. Previously Ompig recorded the Package and loaded nothing from it.
+- **Release note:** `pig install <dir>` of a local directory with no package manifest and no `extensions/`, `skills/`, `prompts/` or `themes/` directory now loads the directory itself as an extension, as `pi install` does. Previously Pig recorded the Package and loaded nothing from it.
 
 ### BF-83fea11
 
@@ -9593,17 +9593,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-852652e
 
-**Ompig no longer names documentation that does not exist**
+**PiG no longer names documentation that does not exist**
 
 - **Source:** Ompig's own defect
 - **Symptom:** They named `<config root>/docs` files that were never written.
-- **Root cause:** Pi names the docs of its installed package, which exist wherever Pi runs. Ompig writes its bundle under the config root at startup (D22) and ignored a failed write, so a config root this user cannot write and that held no bundle of the running build left the system prompt, login help and the codemode description naming files that were never written.
+- **Root cause:** Pi names the docs of its installed package, which exist wherever Pi runs. PiG writes its bundle under the config root at startup (D22) and ignored a failed write, so a config root this user cannot write and that held no bundle of the running build left the system prompt, login help and the codemode description naming files that were never written.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `852652e3ae` (2026-10-09), `da99854d1b` (2026-10-09)
 - **Tests:** `coding/cli/piglet_verify_cache_startup_test.go::TestSignedPigletBinaryRunsWhenItsVerifyCacheCannotBeWritten`, `coding/cli/readonly_config_root_binary_test.go::TestReadOnlyConfigRootStartsQuietlyAndNamesOnlyDocsThatExist`, `coding/cli/strip_app_features_test.go::TestStripExportHTMLBuildOmitsExportPackage`, `internal/codingagent/auth_guidance_test.go::TestNoTextNamesADocsBundleStartupCouldNotWrite`
-- **Release note:** Ompig no longer names documentation that does not exist. When the config root (`OMPIG_HOME`) cannot be written and holds no documentation bundle of the running build, the system prompt has no docs section, and login help and the codemode description name no docs page. Before, they named `<config root>/docs` files that were never written. `ompig docs show` still prints the embedded pages.
+- **Release note:** PiG no longer names documentation that does not exist. When the config root (`PIG_HOME`) cannot be written and holds no documentation bundle of the running build, the system prompt has no docs section, and login help and the codemode description name no docs page. Before, they named `<config root>/docs` files that were never written. `pig docs show` still prints the embedded pages.
 
 ### BF-852f029
 
@@ -9653,14 +9653,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **A prompt now fails with Pi's error when the Session's history holds a system message whose `content` is a…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Ompig read such a member as absent and sent the request.
+- **Symptom:** PiG read such a member as absent and sent the request.
 - **Root cause:** AgentSession.prompt runs _preparePromptAndToolLoadout after before_agent_start; it applies the run's tool loadout and then replays the transcript's system messages with getCurrentSystemMessage (agent-session.ts:1738-1748). The replay renders each system message's content with contentText and then applies every toolsRemoved and toolsAdded list (pi-ai utils/transcript.ts getCurrentSystemMessage, getCurrentTools; utils/text.ts contentText). Pi parses a session without validation, so a system message with a numeric content makes the prompt fail with "content.filter is not a function", and one with toolsAdded 5 with "number 5 is not iterable (cannot read property Symbol(Symbol.iterator))"; the…
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `6a6fffa638` (2026-10-10), `85a7b010a8` (2026-10-10)
 - **Tests:** `agent/message_json_number_spelling_test.go::TestAgentMessageDecodeKeepsANonNumberWhereAnIntegerIsExpected`, `agent/message_json_test.go::TestAgentMessageJSONRejectsInvalidUnion`, `agent/message_type_mismatch_test.go::TestDecodedMessageKeepsMembersOfAnyType`, `agent/provider_content_block_decode_test.go::TestUnknownContentBlockCostsOnlyThatBlock`, `agent/system_replay_error_test.go::TestCurrentSystemMessageErrorMatchesPi`, `internal/codingagent/interactive_prompt_validation_test.go::TestInteractivePromptValidationPrecedesBeforeAgentStart`, `internal/codingagent/session_context_settings_test.go::TestGetSessionContextSettingsBoundaries`, `internal/codingagent/session_messagefor_cache_test.go::TestMessageForReportsAnUnparseableEntryWithoutParsingItAgain` and 3 more in docs/bug-ledger.json
-- **Release note:** A prompt now fails with Pi's error when the Session's history holds a system message whose `content` is a number, a boolean or an object (`content.filter is not a function`), whose content array holds `null`, or whose `toolsAdded` or `toolsRemoved` is a number, a boolean, an object or an array that holds `null` (for example `number 5 is not iterable (cannot read property Symbol(Symbol.iterator))`). Before, Ompig read such a member as absent and sent the request. In RPC mode the prompt response reports the error, and in interactive mode the error is shown; no run starts.
+- **Release note:** A prompt now fails with Pi's error when the Session's history holds a system message whose `content` is a number, a boolean or an object (`content.filter is not a function`), whose content array holds `null`, or whose `toolsAdded` or `toolsRemoved` is a number, a boolean, an object or an array that holds `null` (for example `number 5 is not iterable (cannot read property Symbol(Symbol.iterator))`). Before, PiG read such a member as absent and sent the request. In RPC mode the prompt response reports the error, and in interactive mode the error is shown; no run starts.
 
 ### BF-85c98be
 
@@ -9674,7 +9674,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Fix commits:** `85c98bed2b` (2026-10-13)
 - **Tests:** None recorded.
-- **Release note:** `durable/interop/bench.mjs` and `sqlhost-bench seed|sample` report the process's own peak RSS on Linux (`VmHWM`), as `bench/durableperf` already did. getrusage's maxRSS lagged it by 6 to 20 MiB, and it took on the launcher's peak when that was larger: Go, Python and Node all spawn with vfork, so the child's maxRSS starts from the parent's. `peakRss` in the pi and ompig-native lines of earlier Linux runs is low by that lag.
+- **Release note:** `durable/interop/bench.mjs` and `sqlhost-bench seed|sample` report the process's own peak RSS on Linux (`VmHWM`), as `bench/durableperf` already did. getrusage's maxRSS lagged it by 6 to 20 MiB, and it took on the launcher's peak when that was larger: Go, Python and Node all spawn with vfork, so the child's maxRSS starts from the parent's. `peakRss` in the pi and pig-native lines of earlier Linux runs is low by that lag.
 
 ### BF-85ca0f5
 
@@ -9682,13 +9682,13 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Rebuilding the transcript (resume, `/tree`, display settings) now places cache-miss notices as Pi does in a session with branches: each response is compared with the request before it in the session file, as the live notice and `/session` do.
-- **Root cause:** renderSessionItems calls collectCacheMisses(sessionManager.getEntries()), which scans the whole file in file order. Ompig scanned only the rendered branch, so a response on a second branch missed the notice that the live path and /session report.
+- **Root cause:** renderSessionItems calls collectCacheMisses(sessionManager.getEntries()), which scans the whole file in file order. PiG scanned only the rendered branch, so a response on a second branch missed the notice that the live path and /session report.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `85ca0f547b` (2026-10-13)
 - **Tests:** `internal/codingagent/interactive_cache_miss_entries_test.go::TestRebuiltCacheMissNoticesScanEveryEntryInFileOrder`
-- **Release note:** Rebuilding the transcript (resume, `/tree`, display settings) now places cache-miss notices as Pi does in a session with branches: each response is compared with the request before it in the session file, as the live notice and `/session` do. Ompig compared only within the shown branch.
+- **Release note:** Rebuilding the transcript (resume, `/tree`, display settings) now places cache-miss notices as Pi does in a session with branches: each response is compared with the request before it in the session file, as the live notice and `/session` do. PiG compared only within the shown branch.
 
 ### BF-860776a
 
@@ -9832,7 +9832,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Fix in shipped code
-- **Root cause:** EACCES) and crashes when it must write auth.json or sessions; it has no SDK stage or Binary verify cache. Ompig's two additions stay quiet on EROFS/EACCES/EPERM and still warn otherwise.
+- **Root cause:** EACCES) and crashes when it must write auth.json or sessions; it has no SDK stage or Binary verify cache. PiG's two additions stay quiet on EROFS/EACCES/EPERM and still warn otherwise.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -9913,28 +9913,28 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **RPC `get_state` sent right after `new_session`, `fork`, `clone`, `switch_session` or `export_html` now…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** RPC `get_state` sent right after `new_session`, `fork`, `clone`, `switch_session` or `export_html` now answers first from the old Session, as in Pi; Ompig still answers the replacement when stdin ends, which Pi does not (D146).
+- **Symptom:** RPC `get_state` sent right after `new_session`, `fork`, `clone`, `switch_session` or `export_html` now answers first from the old Session, as in Pi; PiG still answers the replacement when stdin ends, which Pi does not (D146).
 - **Root cause:** One ordering mechanism, rpcAwaitInOrder on the executor's event-loop task queue, serves both awaited operations that Pi resumes in request order: - set_model's auth checks run concurrently and settle in input order. Two pipelined set_models used to apply in completion order, so the final model was wrong in 1 of 12 runs. - Session replacements chain: each starts after the previous one applied and answers after it, so the last one requested decides the final Session. Concurrent replacements raced in Runner.BindCommandActions and hung at stdin end about one run in two. - A fork or clone requested while an earlier replacement is pending reads its entry from the Session that was current when it…
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `8ab86c8219` (2026-10-10)
 - **Tests:** `coding/cli/rpc_replacement_order_test.go::TestRPCCloneAfterNewSessionOfOneBatchUsesTheRequestingSession`, `coding/cli/rpc_replacement_order_test.go::TestRPCReplacementStartsAfterItsBatchWasDispatched`, `coding/cli/rpc_replacement_order_test.go::TestRPCReplacementsOfOneBatchRunInRequestOrder`, `coding/cli/rpc_replacement_order_test.go::TestRPCSessionReplacementAnswersAfterALaterCommandOfItsBatch`, `coding/cli/rpc_replacement_order_test.go::TestRPCSessionReplacementsOfOneBatchSettleInDispatchOrder`, `coding/cli/rpc_resume_integration_test.go::TestRPCModeSessionReplacementAndExport`, `coding/cli/rpc_set_model_pipeline_test.go::TestRPCPipelinedSetModelsApplyInInputOrder`, `test/parity/scenarios/rpc/55-rpc-replacement-concurrent-get-state.toml`
-- **Release note:** RPC `get_state` sent right after `new_session`, `fork`, `clone`, `switch_session` or `export_html` now answers first from the old Session, as in Pi; Ompig still answers the replacement when stdin ends, which Pi does not (D146).
+- **Release note:** RPC `get_state` sent right after `new_session`, `fork`, `clone`, `switch_session` or `export_html` now answers first from the old Session, as in Pi; PiG still answers the replacement when stdin ends, which Pi does not (D146).
 
 ### BF-8b75dc0
 
-**Config selector (`ompig config`): every key that reaches the search input re-filters and resets the selection…**
+**Config selector (`pig config`): every key that reaches the search input re-filters and resets the selection…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Config selector (`ompig config`): every key that reaches the search input re-filters and resets the selection to the first item even when the query is unchanged, Tab no longer edits the search when project mode is unavailable, and the search is a callback-mode Input so Enter no longer freezes it, all as in Pi's `ResourceList.handleInput` (`tui/config_selector_oracle_test.go`, 648 probes against pinned Pi).
-- **Root cause:** Every callback with its arguments, the callback count after each key, and every frame's text are compared; Pi's callbacks reached include onThemePreview, onThemeChange, onModelThinkingLevelChange/Remove and 30 more. Pi has no Ompig 'Mask secret input' row (D80), so the driver inserts that row and its callback into a temp copy of Pi's settings-selector.js at Ompig's position. One real difference: Pi's WarningSettingsSubmenu shows '(this.state.anthropicExtraUsage ?? true)' and always writes the toggled value; Ompig's submenu used the Go zero value, so a warning the settings never set showed as off and its first toggle reported {} (the Set flag was never set). It now defaults to on and marks the…
+- **Symptom:** Config selector (`pig config`): every key that reaches the search input re-filters and resets the selection to the first item even when the query is unchanged, Tab no longer edits the search when project mode is unavailable, and the search is a callback-mode Input so Enter no longer freezes it, all as in Pi's `ResourceList.handleInput` (`tui/config_selector_oracle_test.go`, 648 probes against pinned Pi).
+- **Root cause:** Every callback with its arguments, the callback count after each key, and every frame's text are compared; Pi's callbacks reached include onThemePreview, onThemeChange, onModelThinkingLevelChange/Remove and 30 more. Pi has no PiG 'Mask secret input' row (D80), so the driver inserts that row and its callback into a temp copy of Pi's settings-selector.js at Pig's position. One real difference: Pi's WarningSettingsSubmenu shows '(this.state.anthropicExtraUsage ?? true)' and always writes the toggled value; Pig's submenu used the Go zero value, so a warning the settings never set showed as off and its first toggle reported {} (the Set flag was never set). It now defaults to on and marks the…
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `d1f258f335` (2026-10-06), `082355f166` (2026-10-07), `0aba908b97` (2026-10-07), `0ae3fcf17c` (2026-10-07), `4058f34548` (2026-10-07), `4d041349a7` (2026-10-07), `56a0400b9c` (2026-10-07), `5b0e90985b` (2026-10-07), `623553262c` (2026-10-07), `70e1841cd8` (2026-10-07), `8b75dc031c` (2026-10-07), `a7be906e71` (2026-10-07), `c8a90a61db` (2026-10-07), `c8e3d86378` (2026-10-07), `ccaade27af` (2026-10-07), `f2a2b3409b` (2026-10-07)
 - **Tests:** `internal/codingagent/extension_dialog_remapping_test.go::TestExtensionDialogRemappingThroughOwnerLoop`, `internal/codingagent/hidden_thinking_label_test.go::TestExtensionHiddenThinkingLabelReachesAssistantBlocks`, `internal/codingagent/remote_overlay_production_review_test.go::TestRemoteOverlayProductionRejectsCachedTerminalWidth`, `internal/codingagent/scoped_models_oracle_test.go::TestScopedModelsSelectorMatchesPi`, `internal/codingagent/session_selector_oracle_test.go::TestSessionSelectorInputMatchesPi`, `internal/codingagent/settings_selector_oracle_test.go::TestSettingsSelectorMatchesPi`, `internal/codingagent/settings_submenu_oracle_test.go::TestSettingsSubmenusMatchPi`, `internal/codingagent/thinking_selector_oracle_test.go::TestThinkingSelectorInputMatchesPi` and 29 more in docs/bug-ledger.json
-- **Release note:** Config selector (`ompig config`): every key that reaches the search input re-filters and resets the selection to the first item even when the query is unchanged, Tab no longer edits the search when project mode is unavailable, and the search is a callback-mode Input so Enter no longer freezes it, all as in Pi's `ResourceList.handleInput` (`tui/config_selector_oracle_test.go`, 648 probes against pinned Pi).
+- **Release note:** Config selector (`pig config`): every key that reaches the search input re-filters and resets the selection to the first item even when the query is unchanged, Tab no longer edits the search when project mode is unavailable, and the search is a callback-mode Input so Enter no longer freezes it, all as in Pi's `ResourceList.handleInput` (`tui/config_selector_oracle_test.go`, 648 probes against pinned Pi).
 
 ### BF-8b8f379
 
@@ -9952,17 +9952,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-8b9e467
 
-**`OMPIG_PROFILE=metrics` reports the exact cumulative allocation counts**
+**`PIG_PROFILE=metrics` reports the exact cumulative allocation counts**
 
 - **Source:** Ompig's own defect
 - **Symptom:** This fix it missed allocations still held in the runtime's per-processor caches, so a record could be as much as half a megabyte low, depending on whether a garbage collection happened to run shortly before exit.
-- **Root cause:** OMPIG_PROFILE=metrics read /gc/heap/allocs through runtime/metrics, which does not flush the per-P mcaches. A span still cached keeps its allocations out of the counter until a refill or a collection, so the record undercounted by up to ~500 KB depending on whether a GC happened to run shortly before exit. That made process.rpc_startup.bytes bimodal: 2.79 MB on a quiet host and 3.38 MB under load. The high value is the real one. CollectMetrics now flushes with ReadMemStats before it reads the counters (TestCollectMetricsCountsAllocations InCachedSpans; it was red 4/5 before).
+- **Root cause:** PIG_PROFILE=metrics read /gc/heap/allocs through runtime/metrics, which does not flush the per-P mcaches. A span still cached keeps its allocations out of the counter until a refill or a collection, so the record undercounted by up to ~500 KB depending on whether a GC happened to run shortly before exit. That made process.rpc_startup.bytes bimodal: 2.79 MB on a quiet host and 3.38 MB under load. The high value is the real one. CollectMetrics now flushes with ReadMemStats before it reads the counters (TestCollectMetricsCountsAllocations InCachedSpans; it was red 4/5 before).
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `8b9e467f20` (2026-10-12)
 - **Tests:** `ai/registry_index_test.go::TestRegistryIndexesMatchPerModelAppendInCatalogOrder`, `internal/profiling/metrics_test.go::TestCollectMetricsCountsAllocationsInCachedSpans`
-- **Release note:** `OMPIG_PROFILE=metrics` reports the exact cumulative allocation counts. Before this fix it missed allocations still held in the runtime's per-processor caches, so a record could be as much as half a megabyte low, depending on whether a garbage collection happened to run shortly before exit.
+- **Release note:** `PIG_PROFILE=metrics` reports the exact cumulative allocation counts. Before this fix it missed allocations still held in the runtime's per-processor caches, so a record could be as much as half a megabyte low, depending on whether a garbage collection happened to run shortly before exit.
 
 ### BF-8bc7c8f
 
@@ -10079,7 +10079,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** An OpenAI Chat Completions chunk with a member of an unexpected type (a number for `delta.content`, `delta.tool_calls` or `function.arguments`, a non-object `choices` or `delta`, a non-string `delta.role` or tool call `type`, a falsy `custom`, a tool call element that is not an object) is read as Pi's JavaScript reads it: the member is ignored, tool-call arguments append their string form, a `tool_calls` string makes one empty tool call per character, any other `tool_calls` value that is not an array ends the turn with `choice.delta.tool_calls is not iterable`, non-empty array content (or an object with a positive `length`) appends its string form, a truthy `finish_reason` that is not a string ends the turn with `Provider finish_reason: <its string form>`, a usage that is not an object resets the counts to 0, a falsy count or a details member that is not an object reads as 0, and a prompt count that is not a number counts as its Number() when that is an integer.
-- **Root cause:** Pi reads `event.message.id` and `event.message.usage.input_tokens` (anthropic-messages.ts:666, :679), `event.content_block.type` (:690), `event.delta.type` (:737) and `event.delta.stop_reason` (:818) without a guard, so a null or absent member throws `Cannot read properties of null (reading 'x')` (or `of undefined`) and the turn ends with that error; the response id and model are recorded before the usage read throws. Ompig's typed decode read each as an empty value and streamed on.
+- **Root cause:** Pi reads `event.message.id` and `event.message.usage.input_tokens` (anthropic-messages.ts:666, :679), `event.content_block.type` (:690), `event.delta.type` (:737) and `event.delta.stop_reason` (:818) without a guard, so a null or absent member throws `Cannot read properties of null (reading 'x')` (or `of undefined`) and the turn ends with that error; the response id and model are recorded before the usage read throws. PiG's typed decode read each as an empty value and streamed on.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -10093,7 +10093,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Compaction summaries, branch summaries and bug reports omit thinking blocks (Pi 15e7bdc1, Pi #9602): replayed thinking is often not in the live context, so including it could make the summarization request larger than the context it summarizes and compaction fail on every attempt.
-- **Root cause:** Pi (fix(coding-agent,durable): omit thinking from compaction summaries): replayed thinking is often not in the live context (radius drops it, Anthropic drops blocks that do not match the request), so including it made a summarization request larger than the context it summarizes (a ~996K of 1M session produced 1.38M-token requests that failed on every attempt). serializeConversation writes only the visible text, tool calls and tool results. Compaction, branch summaries and bug reports all go through it. Ompig's D141 (keep the first and last 1000 UTF-16 units of a thinking-only message) is retired: its remove-when ("Pi bounds thinking-only messages in compaction summaries") holds, and…
+- **Root cause:** Pi (fix(coding-agent,durable): omit thinking from compaction summaries): replayed thinking is often not in the live context (radius drops it, Anthropic drops blocks that do not match the request), so including it made a summarization request larger than the context it summarizes (a ~996K of 1M session produced 1.38M-token requests that failed on every attempt). serializeConversation writes only the visible text, tool calls and tool results. Compaction, branch summaries and bug reports all go through it. PiG's D141 (keep the first and last 1000 UTF-16 units of a thinking-only message) is retired: its remove-when ("Pi bounds thinking-only messages in compaction summaries") holds, and…
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -10106,14 +10106,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **On Windows, an extension's `exec` no longer returns no output for a command that printed, when the machine is…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** On Windows, an extension's `exec` no longer returns no output for a command that printed, when the machine is too busy to run Ompig's pipe reader within 100 ms of the command's exit.
+- **Symptom:** On Windows, an extension's `exec` no longer returns no output for a command that printed, when the machine is too busy to run PiG's pipe reader within 100 ms of the command's exit.
 - **Root cause:** extension.ExecCommand ended the post-exit wait when the 100 ms grace of Pi's waitForChildProcess elapsed, because on every platform it told childwait that a descendant might still hold the output pipes. On Windows nothing else can answer (a pipe cannot be asked without waiting behind the reader that is blocked in reading it: PeekNamedPipe blocked behind ReadFile on windows-latest), so a reader that a busy machine had not run for the grace lost what the child wrote before it exited, as the bash tool's shell did on Unix. The bash tool's shell does not have this on Windows: it starts suspended and joins a job object, and an empty job tells Wait that no process holds the pipe.
 - **User impact:** Wrong output or ordering
 - **Platform:** Windows
 - **Fixed in:** Unreleased
 - **Fix commits:** `8f88d43fa5` (2026-10-24)
 - **Tests:** `coding/extension/exec_drain_test.go::TestExecCommandKeepsTheOutputOfAChildThatExitedBeforeItsReadersRan`
-- **Release note:** On Windows, an extension's `exec` no longer returns no output for a command that printed, when the machine is too busy to run Ompig's pipe reader within 100 ms of the command's exit. The command now starts suspended and joins a job object before it can start another process, as the bash tool's shell already did, so Ompig knows when no process holds the output pipes any more and reads them to the end instead of dropping what the command had written before it exited.
+- **Release note:** On Windows, an extension's `exec` no longer returns no output for a command that printed, when the machine is too busy to run PiG's pipe reader within 100 ms of the command's exit. The command now starts suspended and joins a job object before it can start another process, as the bash tool's shell already did, so PiG knows when no process holds the output pipes any more and reads them to the end instead of dropping what the command had written before it exited.
 
 ### BF-905f3d0
 
@@ -10162,14 +10162,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **The terminal no longer stays in mouse-tracking, focus-reporting, Kitty keyboard, bracketed-paste or…**
 
 - **Source:** A fix Pi shipped that Ompig ported
-- **Symptom:** The terminal no longer stays in mouse-tracking, focus-reporting, Kitty keyboard, bracketed-paste or alternate-screen mode when ompig exits through a path that skips the normal teardown (a direct exit, an emergency exit, an off-loop crash, a panic unwinding through `Main`).
+- **Symptom:** The terminal no longer stays in mouse-tracking, focus-reporting, Kitty keyboard, bracketed-paste or alternate-screen mode when pig exits through a path that skips the normal teardown (a direct exit, an emergency exit, an off-loop crash, a panic unwinding through `Main`).
 - **Root cause:** Port Pi (#11170): Pi's process 'exit' handler writes the mode resets synchronously when stop() did not run. Go has no exit hook, so tui.RestoreTerminalOnExit is that handler and every exit path reachable while a TUI runs (coding/cli exitProcess; emergencyTerminalExit, handleInterruptSignal, uncaughtOffLoop) calls it before os.Exit. Order matches TuiAltScreen: end synchronized output, mouse off, autowrap on, cursor, progress clear, bracketed paste off, Kitty pop, modifyOtherKeys off, then alternate-screen exit and cursor show; cooked mode is restored as libuv does. Registered terminals and alt screens leave on normal stop, so nothing is written twice.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `909581ef0b` (2026-10-20)
 - **Tests:** `coding/cli/exit_restore_paths_test.go::TestEveryExitPathReachableWhileATUIRunsRestoresTheTerminal`, `tui/terminal_exit_restore_test.go::TestExitRestoreFixture`, `tui/terminal_exit_restore_test.go::TestRestoreTerminalOnExitMainScreenWritesOnceAndRestoresCookedMode`, `tui/terminal_exit_restore_test.go::TestTerminalRestoreOnProcessExit`, `tui/terminal_exit_restore_test.go::TestTerminalRestoreOnProcessExitDoesNotRepeatAfterStop`
-- **Release note:** The terminal no longer stays in mouse-tracking, focus-reporting, Kitty keyboard, bracketed-paste or alternate-screen mode when ompig exits through a path that skips the normal teardown (a direct exit, an emergency exit, an off-loop crash, a panic unwinding through `Main`). The modes are restored in Pi's order, once, and not again after a normal stop (Pi 9df819de, #11170).
+- **Release note:** The terminal no longer stays in mouse-tracking, focus-reporting, Kitty keyboard, bracketed-paste or alternate-screen mode when pig exits through a path that skips the normal teardown (a direct exit, an emergency exit, an off-loop crash, a panic unwinding through `Main`). The modes are restored in Pi's order, once, and not again after a normal stop (Pi 9df819de, #11170).
 
 ### BF-909a2e2
 
@@ -10191,7 +10191,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Fix in shipped code
-- **Root cause:** TestBuiltinToolCardsMatchPi and TestBuiltinToolCardsRandomMatchPi compared the bash card's Elapsed/Took row, which both Ompig (shellRenderCall and shellRenderResult) and Pi (renderers/bash.ts createShellRenderers) read from the wall clock between the start event and the result render. Under CPU load either side could cross a 50 ms rounding step the other did not, so the row flipped between 0.0s and 0.1s (or more).
+- **Root cause:** TestBuiltinToolCardsMatchPi and TestBuiltinToolCardsRandomMatchPi compared the bash card's Elapsed/Took row, which both PiG (shellRenderCall and shellRenderResult) and Pi (renderers/bash.ts createShellRenderers) read from the wall clock between the start event and the result render. Under CPU load either side could cross a 50 ms rounding step the other did not, so the row flipped between 0.0s and 0.1s (or more).
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -10256,17 +10256,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-91e912a
 
-**Two Ompig versions that share a config root (two installed versions, or Ompig beside a Ompiglet Binary) no longer…**
+**Two PiG versions that share a config root (two installed versions, or PiG beside a Piglet Binary) no longer…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Two Ompig versions that share a config root (two installed versions, or Ompig beside a Ompiglet Binary) no longer restage each other's extension SDKs at every start or delete each other's extension builds.
-- **Root cause:** Two Ompig builds that share a config root (two installed versions, or stock Ompig beside a Ompiglet Binary) staged into the same state/pigsdk/sdk, sdk-py and sdk-rs, so every switch restaged all three and pruned every extension build made against the other build's SDK, and a Python extension of one build could import the other build's SDK.
+- **Symptom:** Two PiG versions that share a config root (two installed versions, or PiG beside a Piglet Binary) no longer restage each other's extension SDKs at every start or delete each other's extension builds.
+- **Root cause:** Two PiG builds that share a config root (two installed versions, or stock PiG beside a Piglet Binary) staged into the same state/pigsdk/sdk, sdk-py and sdk-rs, so every switch restaged all three and pruned every extension build made against the other build's SDK, and a Python extension of one build could import the other build's SDK.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `0ae4683246` (2026-10-08), `e8cc072521` (2026-10-08), `395c46cbf2` (2026-10-09), `852652e3ae` (2026-10-09), `da99854d1b` (2026-10-09), `91e912aa90` (2026-10-10)
 - **Tests:** `chord/delta/own_key_order_test.go::TestDiffRevisionsVisitsArrayIndexKeysFirstInNumericOrder`, `coding/cli/piglet_verify_cache_startup_test.go::TestSignedPigletBinaryRunsWhenItsVerifyCacheCannotBeWritten`, `coding/cli/readonly_config_root_binary_test.go::TestReadOnlyConfigRootStartsQuietlyAndNamesOnlyDocsThatExist`, `coding/cli/startup_sdk_test.go::TestStartupSDKStageIsQuietOnAReadOnlyConfigRoot`, `coding/cli/strip_app_features_test.go::TestStripExportHTMLBuildOmitsExportPackage`, `coding/extension/pigsdk/pigsdk_stage_test.go::TestStagingLeavesAnotherBuildsStagingTrees`, `coding/extension/pigsdk/pigsdk_version_share_test.go::TestStagingEvictsLeastRecentlyUsedSDKsAndTheirBuilds`, `coding/extension/pigsdk/pigsdk_version_share_test.go::TestStagingKeepsAnotherBuildsSDKAndItsBuilds` and 12 more in docs/bug-ledger.json
-- **Release note:** Two Ompig versions that share a config root (two installed versions, or Ompig beside a Ompiglet Binary) no longer restage each other's extension SDKs at every start or delete each other's extension builds. Each version stages its SDKs into its own directory under `state/pigsdk`, named for the SDK's content hash, and reads only that directory, so a Python extension also always runs against its own version's SDK. After staging, Ompig keeps the 4 most recently used SDK directories per language and drops only the extension builds whose SDK is gone. `ompig reload --sdk-path` prints the running version's directory, and `ompig diagnose` shows it.
+- **Release note:** Two PiG versions that share a config root (two installed versions, or PiG beside a Piglet Binary) no longer restage each other's extension SDKs at every start or delete each other's extension builds. Each version stages its SDKs into its own directory under `state/pigsdk`, named for the SDK's content hash, and reads only that directory, so a Python extension also always runs against its own version's SDK. After staging, PiG keeps the 4 most recently used SDK directories per language and drops only the extension builds whose SDK is gone. `pig reload --sdk-path` prints the running version's directory, and `pig diagnose` shows it.
 
 ### BF-91f9946
 
@@ -10406,7 +10406,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Fix commits:** `928e15cd57` (2026-10-14)
 - **Tests:** None recorded.
-- **Release note:** Durable entries keep a present empty `edits` list (`"edits":[]`) when they are appended, stored and read back, as Pi does. Ompig previously dropped it.
+- **Release note:** Durable entries keep a present empty `edits` list (`"edits":[]`) when they are appended, stored and read back, as Pi does. Pig previously dropped it.
 
 ### BF-928e15c-18
 
@@ -11050,7 +11050,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `928e15cd57` (2026-10-14)
 - **Tests:** None recorded.
-- **Release note:** A provider HTTP error body that starts with two byte order marks reads as `response.text()` reads it: both marks are dropped, so a JSON error message is found. Ompig dropped one.
+- **Release note:** A provider HTTP error body that starts with two byte order marks reads as `response.text()` reads it: both marks are dropped, so a JSON error message is found. Pig dropped one.
 
 ### BF-928e15c-6
 
@@ -11071,14 +11071,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **A `models.json` whose `contextWindow`, `maxTokens` or a model override writes an integer as `128000.0` or…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** A `models.json` whose `contextWindow`, `maxTokens` or a model override writes an integer as `128000.0` or `1.28E5` loads as Pi's JSON.parse reads it; Ompig refused the whole file with "Failed to parse models.json".
+- **Symptom:** A `models.json` whose `contextWindow`, `maxTokens` or a model override writes an integer as `128000.0` or `1.28E5` loads as Pi's JSON.parse reads it; Pig refused the whole file with "Failed to parse models.json".
 - **Root cause:** Not recorded.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `928e15cd57` (2026-10-14)
 - **Tests:** None recorded.
-- **Release note:** A `models.json` whose `contextWindow`, `maxTokens` or a model override writes an integer as `128000.0` or `1.28E5` loads as Pi's JSON.parse reads it; Ompig refused the whole file with "Failed to parse models.json".
+- **Release note:** A `models.json` whose `contextWindow`, `maxTokens` or a model override writes an integer as `128000.0` or `1.28E5` loads as Pi's JSON.parse reads it; Pig refused the whole file with "Failed to parse models.json".
 
 ### BF-928e15c-61
 
@@ -11099,28 +11099,28 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **Amazon Bedrock streams read integers written as `12.0` or `1e0` (a content block index, a token count) as the…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Amazon Bedrock streams read integers written as `12.0` or `1e0` (a content block index, a token count) as the AWS SDK does after JSON.parse; Ompig ended the stream with a decode error.
+- **Symptom:** Amazon Bedrock streams read integers written as `12.0` or `1e0` (a content block index, a token count) as the AWS SDK does after JSON.parse; Pig ended the stream with a decode error.
 - **Root cause:** Not recorded.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `928e15cd57` (2026-10-14)
 - **Tests:** None recorded.
-- **Release note:** Amazon Bedrock streams read integers written as `12.0` or `1e0` (a content block index, a token count) as the AWS SDK does after JSON.parse; Ompig ended the stream with a decode error.
+- **Release note:** Amazon Bedrock streams read integers written as `12.0` or `1e0` (a content block index, a token count) as the AWS SDK does after JSON.parse; Pig ended the stream with a decode error.
 
 ### BF-928e15c-63
 
 **An OpenAI Codex HTTP error with an empty body reports the reason phrase the server sent, or "Request failed"…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** An OpenAI Codex HTTP error with an empty body reports the reason phrase the server sent, or "Request failed" when it sent none, as Pi does; Ompig used Go's status text, which is empty for a code such as 529.
+- **Symptom:** An OpenAI Codex HTTP error with an empty body reports the reason phrase the server sent, or "Request failed" when it sent none, as Pi does; Pig used Go's status text, which is empty for a code such as 529.
 - **Root cause:** Not recorded.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `928e15cd57` (2026-10-14)
 - **Tests:** None recorded.
-- **Release note:** An OpenAI Codex HTTP error with an empty body reports the reason phrase the server sent, or "Request failed" when it sent none, as Pi does; Ompig used Go's status text, which is empty for a code such as 529. A Codex error body behind three or four byte order marks is now read as Pi reads it, through `response.text()` twice.
+- **Release note:** An OpenAI Codex HTTP error with an empty body reports the reason phrase the server sent, or "Request failed" when it sent none, as Pi does; Pig used Go's status text, which is empty for a code such as 529. A Codex error body behind three or four byte order marks is now read as Pi reads it, through `response.text()` twice.
 
 ### BF-928e15c-64
 
@@ -11365,14 +11365,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **An OpenAI Codex login or refresh whose success response is not JSON reports JavaScript's own message, as Pi…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** An OpenAI Codex login or refresh whose success response is not JSON reports JavaScript's own message, as Pi does (for example `Unexpected token 'n', "not json" is not valid JSON`, without a Ompig prefix), and one whose body is cut off reports `terminated`, as Node's fetch does.
+- **Symptom:** An OpenAI Codex login or refresh whose success response is not JSON reports JavaScript's own message, as Pi does (for example `Unexpected token 'n', "not json" is not valid JSON`, without a PiG prefix), and one whose body is cut off reports `terminated`, as Node's fetch does.
 - **Root cause:** Not recorded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `928e15cd57` (2026-10-14)
 - **Tests:** None recorded.
-- **Release note:** An OpenAI Codex login or refresh whose success response is not JSON reports JavaScript's own message, as Pi does (for example `Unexpected token 'n', "not json" is not valid JSON`, without a Ompig prefix), and one whose body is cut off reports `terminated`, as Node's fetch does.
+- **Release note:** An OpenAI Codex login or refresh whose success response is not JSON reports JavaScript's own message, as Pi does (for example `Unexpected token 'n', "not json" is not valid JSON`, without a PiG prefix), and one whose body is cut off reports `terminated`, as Node's fetch does.
 
 ### BF-92da987
 
@@ -11436,27 +11436,27 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A local package source that is a file Node cannot import, such as a packed `.tgz`, fails to load as in Pi (`Failed to load extension: Unknown file extension ".tgz" for <path>`, exit 1) instead of being run as a program and failing with "permission denied".
-- **Root cause:** ompig install --validate-only on a Package root resolved the root as one Node extension, so a Package whose pi.extensions names a Go directory failed with "declares pi.extensions directories with no extension entry file" although ompig package validate and ompig install accept it. Validation now loads every extension the Package's discovery names, as an install does.
+- **Root cause:** pig install --validate-only on a Package root resolved the root as one Node extension, so a Package whose pi.extensions names a Go directory failed with "declares pi.extensions directories with no extension entry file" although pig package validate and pig install accept it. Validation now loads every extension the Package's discovery names, as an install does.
 - **User impact:** Credential or permission exposure
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `93c09d62ff` (2026-10-13)
 - **Tests:** `coding/cli/extension_validate_command_test.go::TestInstallValidateOnlyValidatesPackageRootMembers`, `coding/extension/source/resolve_test.go::TestResolveFileWithoutLoaderMatchesNode`
-- **Release note:** A local package source that is a file Node cannot import, such as a packed `.tgz`, fails to load as in Pi (`Failed to load extension: Unknown file extension ".tgz" for <path>`, exit 1) instead of being run as a program and failing with "permission denied". Like Pi, `ompig install ./x.tgz` still records the path; Pi does not unpack tarballs either.
+- **Release note:** A local package source that is a file Node cannot import, such as a packed `.tgz`, fails to load as in Pi (`Failed to load extension: Unknown file extension ".tgz" for <path>`, exit 1) instead of being run as a program and failing with "permission denied". Like Pi, `pig install ./x.tgz` still records the path; Pi does not unpack tarballs either.
 
 ### BF-93c09d6-2
 
-**`ompig install --validate-only` on a Package root validates every extension the Package names in…**
+**`pig install --validate-only` on a Package root validates every extension the Package names in…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig install --validate-only` on a Package root validates every extension the Package names in `pi.extensions` (or its conventional directories), in any language, as an install loads them.
-- **Root cause:** ompig install --validate-only on a Package root resolved the root as one Node extension, so a Package whose pi.extensions names a Go directory failed with "declares pi.extensions directories with no extension entry file" although ompig package validate and ompig install accept it. Validation now loads every extension the Package's discovery names, as an install does.
+- **Symptom:** `pig install --validate-only` on a Package root validates every extension the Package names in `pi.extensions` (or its conventional directories), in any language, as an install loads them.
+- **Root cause:** pig install --validate-only on a Package root resolved the root as one Node extension, so a Package whose pi.extensions names a Go directory failed with "declares pi.extensions directories with no extension entry file" although pig package validate and pig install accept it. Validation now loads every extension the Package's discovery names, as an install does.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `93c09d62ff` (2026-10-13)
 - **Tests:** `coding/cli/extension_validate_command_test.go::TestInstallValidateOnlyValidatesPackageRootMembers`, `coding/extension/source/resolve_test.go::TestResolveFileWithoutLoaderMatchesNode`
-- **Release note:** `ompig install --validate-only` on a Package root validates every extension the Package names in `pi.extensions` (or its conventional directories), in any language, as an install loads them. It no longer treats the root as one Node extension and fails with "declares pi.extensions directories with no extension entry file" for a Go member.
+- **Release note:** `pig install --validate-only` on a Package root validates every extension the Package names in `pi.extensions` (or its conventional directories), in any language, as an install loads them. It no longer treats the root as one Node extension and fails with "declares pi.extensions directories with no extension entry file" for a Go member.
 
 ### BF-93c5def
 
@@ -11464,7 +11464,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Every built-in loaded after the file extensions.
-- **Root cause:** Tests: TestExplicitBuiltinExtensionsPrecedeTheIndexOrderedOnes now drives the production build (loadProductionExtensionSetIn) and TestExtensionsInLoadOrderWithExplicitPutsExplicitBuiltinsFirst covers the ordering function (none, one, two, a path that did not load). Mutants killed: the build site using the plain order, the function ignoring explicit, the CLI passing no explicit paths. The reload sites share the function and are covered by the unit test, not by a reload-driving test. No generated files in this commit (exports change ompig-go.json; the merger regenerates). Signed-off-by: Michael Kinsy <mrkinsy5@gmail.com>
+- **Root cause:** Tests: TestExplicitBuiltinExtensionsPrecedeTheIndexOrderedOnes now drives the production build (loadProductionExtensionSetIn) and TestExtensionsInLoadOrderWithExplicitPutsExplicitBuiltinsFirst covers the ordering function (none, one, two, a path that did not load). Mutants killed: the build site using the plain order, the function ignoring explicit, the CLI passing no explicit paths. The reload sites share the function and are covered by the unit test, not by a reload-driving test. No generated files in this commit (exports change pig-go.json; the merger regenerates). Signed-off-by: Michael Kinsy <mrkinsy5@gmail.com>
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -11478,7 +11478,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(agent): a listener failure at agent_start ends the run as in Pi; failure messages carry the model's api
-- **Root cause:** Differential test of Pi's Agent class (agent.ts) against Ompig's: 3000 seeded programs of prompt/continue/steer/followUp/queue modes/reset/abort, listeners that unsubscribe, act and throw, and scripted turns (text, tool call, error), comparing every operation's error and state and every listener event with its state snapshot.
+- **Root cause:** Differential test of Pi's Agent class (agent.ts) against Pig's: 3000 seeded programs of prompt/continue/steer/followUp/queue modes/reset/abort, listeners that unsubscribe, act and throw, and scripted turns (text, tool call, error), comparing every operation's error and state and every listener event with its state snapshot.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -11500,17 +11500,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-94e3498
 
-**On Windows, Ompig no longer searches `C:\etc\ompig\ompiglets` or `C:\opt\ompig\ompiglet.yaml` for a Ompiglet**
+**On Windows, PiG no longer searches `C:\etc\pig\piglets` or `C:\opt\pig\piglet.yaml` for a Piglet**
 
 - **Source:** Ompig's own defect
-- **Symptom:** On Windows, Ompig no longer searches `C:\etc\ompig\ompiglets` or `C:\opt\ompig\ompiglet.yaml` for a Ompiglet.
+- **Symptom:** On Windows, PiG no longer searches `C:\etc\pig\piglets` or `C:\opt\pig\piglet.yaml` for a Piglet.
 - **Root cause:** testenv.Start/Run/Output/CombinedOutput start a child in its own process group (Windows: kill-on-close Job Object), bound Wait with WaitDelay, stop the group SIGTERM then SIGKILL at cleanup, and fail the test when a descendant outlives an exited child. The lazy-startup test's logging shim guards against a real tool that re-execs the shim (PID sentinel) and starts the real tool without the shim directory on PATH. The D157 read-only-root test now expects no warning, and the --no-stdin help line no longer trips the strip leak gate.
 - **User impact:** Behavior differed from Pi
 - **Platform:** Windows
 - **Fixed in:** 0.5.0
 - **Fix commits:** `5c5c1498a1` (2026-10-10), `94e3498530` (2026-10-10)
-- **Tests:** `coding/cli/extension_runtime_lazy_startup_upstream_test.go::TestRuntimeShimStopsWhenTheRealToolReentersIt`, `coding/cli/piglet_verify_cache_startup_test.go::TestSignedPigletBinaryRunsWhenItsVerifyCacheCannotBeWritten`, `coding/ompiglet/system_paths_test.go::TestClassifyLocationNamesTheSystemPigletDirectory`, `coding/ompiglet/system_paths_test.go::TestSystemPigletLocationsAreUnixOnly`, `internal/testenv/spawn_test.go::TestCleanupStopsARunningChild`, `internal/testenv/spawn_test.go::TestRunStopsADescendantOfAnExitedChild`, `internal/testenv/spawn_test.go::TestStopEndsAChildThatIgnoresSIGTERM`, `internal/testenv/spawn_test.go::TestWaitDoesNotBlockOnStdoutHeldByADescendant`
-- **Release note:** On Windows, Ompig no longer searches `C:\etc\ompig\ompiglets` or `C:\opt\ompig\ompiglet.yaml` for a Ompiglet. A rooted path without a volume is drive-relative there, so any local user could plant a Ompiglet that every other user's `ompig` loaded.
+- **Tests:** `coding/cli/extension_runtime_lazy_startup_upstream_test.go::TestRuntimeShimStopsWhenTheRealToolReentersIt`, `coding/cli/piglet_verify_cache_startup_test.go::TestSignedPigletBinaryRunsWhenItsVerifyCacheCannotBeWritten`, `internal/testenv/spawn_test.go::TestCleanupStopsARunningChild`, `internal/testenv/spawn_test.go::TestRunStopsADescendantOfAnExitedChild`, `internal/testenv/spawn_test.go::TestStopEndsAChildThatIgnoresSIGTERM`, `internal/testenv/spawn_test.go::TestWaitDoesNotBlockOnStdoutHeldByADescendant`
+- **Release note:** On Windows, PiG no longer searches `C:\etc\pig\piglets` or `C:\opt\pig\piglet.yaml` for a Piglet. A rooted path without a volume is drive-relative there, so any local user could plant a Piglet that every other user's `pig` loaded.
 
 ### BF-94e6796
 
@@ -11532,7 +11532,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(coding): a provider of only virtual models is configured with source virtual
-- **Root cause:** Pi's registerVirtualModel marks a virtual-only provider configured (auth source 'virtual') and withVirtualModels resolves its auth with that source: getProviderAuthStatus is {configured, environment, label virtual} and getAuth returns {source virtual}. Ompig reported unconfigured and nil. Known remaining (seeds 11, 13): provider list order for a provider of models.json plus virtual models, and allAvailable for an extension provider with virtual models; status after unvirtual keeps Pi's stale virtual entry when models.json exists.
+- **Root cause:** Pi's registerVirtualModel marks a virtual-only provider configured (auth source 'virtual') and withVirtualModels resolves its auth with that source: getProviderAuthStatus is {configured, environment, label virtual} and getAuth returns {source virtual}. Pig reported unconfigured and nil. Known remaining (seeds 11, 13): provider list order for a provider of models.json plus virtual models, and allAvailable for an extension provider with virtual models; status after unvirtual keeps Pi's stale virtual entry when models.json exists.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -11558,14 +11558,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **A tool call whose arguments hold a number out of float64 range (`1e999`, `-1e999`) no longer ends the session…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Pi reads such a number as an infinity, keeps it in the call's arguments, and writes `null` wherever it serializes them (events, the session file, requests); Ompig now does the same, for a streamed argument text, a tool call a Go caller or the faux provider supplies, and an Anthropic `content_block_start` input, which used to end the turn with a decode error.
-- **Root cause:** Pi's JSON.parse reads 1e999 as Infinity (and partial-json reads Infinity, -Infinity and NaN), keeps it in a tool call's arguments, and every serialization, JSON.stringify, writes null. A tool call in Ompig could hold a non-finite float64 (the streamed text of a provider that hands the cell the parser's number, a Go caller's FauxToolCall, a provider that decodes the whole input) but publishing it copied the arguments through cloneJSONValue, which panicked with "clone validated JSON value: json: unsupported value: +Inf" and ended the session.
+- **Symptom:** Pi reads such a number as an infinity, keeps it in the call's arguments, and writes `null` wherever it serializes them (events, the session file, requests); PiG now does the same, for a streamed argument text, a tool call a Go caller or the faux provider supplies, and an Anthropic `content_block_start` input, which used to end the turn with a decode error.
+- **Root cause:** Pi's JSON.parse reads 1e999 as Infinity (and partial-json reads Infinity, -Infinity and NaN), keeps it in a tool call's arguments, and every serialization, JSON.stringify, writes null. A tool call in PiG could hold a non-finite float64 (the streamed text of a provider that hands the cell the parser's number, a Go caller's FauxToolCall, a provider that decodes the whole input) but publishing it copied the arguments through cloneJSONValue, which panicked with "clone validated JSON value: json: unsupported value: +Inf" and ended the session.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
 - **Fix commits:** `4935bcbfcc` (2026-10-25), `958e80d99f` (2026-10-25)
 - **Tests:** `ai/tool_call_nonfinite_test.go::FuzzToolArgumentNumberLiterals`, `ai/tool_call_nonfinite_test.go::TestCellPublishesNonFiniteArguments`, `ai/tool_call_nonfinite_test.go::TestNonFiniteArgumentsAreValidCloneAndSerializeAsStringify`, `ai/tool_call_nonfinite_test.go::TestNonFiniteArgumentsDoNotExcuseOtherFaults`, `ai/tool_call_nonfinite_test.go::TestStreamedNonFiniteArgumentsDoNotPanic`, `ai/tool_call_nonfinite_test.go::TestStreamedNonFiniteArgumentsMatchPi`, `ai/transcript_frozen_test.go::TestFrozenContextStillValidatesAndStillCopiesTheCallersTools`, `ai/transcript_test.go::TestNormalizeContextAcceptsNonFiniteToolArguments` and 3 more in docs/bug-ledger.json
-- **Release note:** A tool call whose arguments hold a number out of float64 range (`1e999`, `-1e999`) no longer ends the session with a panic (`clone validated JSON value: json: unsupported value: +Inf`). Pi reads such a number as an infinity, keeps it in the call's arguments, and writes `null` wherever it serializes them (events, the session file, requests); Ompig now does the same, for a streamed argument text, a tool call a Go caller or the faux provider supplies, and an Anthropic `content_block_start` input, which used to end the turn with a decode error.
+- **Release note:** A tool call whose arguments hold a number out of float64 range (`1e999`, `-1e999`) no longer ends the session with a panic (`clone validated JSON value: json: unsupported value: +Inf`). Pi reads such a number as an infinity, keeps it in the call's arguments, and writes `null` wherever it serializes them (events, the session file, requests); PiG now does the same, for a streamed argument text, a tool call a Go caller or the faux provider supplies, and an Anthropic `content_block_start` input, which used to end the turn with a decode error.
 
 ### BF-95a5f79
 
@@ -11587,7 +11587,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** openai-completions thinking formats now match Pi (`ai/openai.go`, openai-completions.ts:885-985 and 1034-1075), found by the new live-Pi oracle `TestOpenAICompletionsThinkingFormatsPayloadMatchesPi` (3,000 probes: every `thinkingFormat`, `compat.chatTemplateKwargs`/`chatTemplateArgs` with scalars, null, `$var` placeholders, `omitWhenOff`, arrays, and model `thinkingLevelMap` entries; 32 of 1,200 probes differed before any fix, 4 more after widening the corpus).
-- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). Ompig's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
+- **Root cause:** JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than Pi writes, in its entries, branch, context, projection and RPC get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). PiG's AgentMessage decode failed on such a member and dropped the message from the context, the projection and get_messages: a string timestamp, numeric content, a text block with a numeric text, a usage count written "1", isError "no", a numeric or missing role, and so on.
 - **User impact:** Lost or altered data
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -11611,59 +11611,59 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-9740507
 
-**`ompig extension upgrade` now rewrites a `Context.ConfigHome()` call in an `if` or `switch` init statement and…**
+**`pig extension upgrade` now rewrites a `Context.ConfigHome()` call in an `if` or `switch` init statement and…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig extension upgrade` now rewrites a `Context.ConfigHome()` call in an `if` or `switch` init statement and in a call with other arguments, such as `if err := c.save(ctx.ConfigHome()); err != nil` or `planDispatch(ctx.Cwd(), ctx.ConfigHome(), name)`.
+- **Symptom:** `pig extension upgrade` now rewrites a `Context.ConfigHome()` call in an `if` or `switch` init statement and in a call with other arguments, such as `if err := c.save(ctx.ConfigHome()); err != nil` or `planDispatch(ctx.Cwd(), ctx.ConfigHome(), name)`.
 - **Root cause:** - Move a getter out of an if or switch init statement, and move a local Context accessor (Cwd, Mode, HasUI, Width, Height, ToolCallID) that runs before it in the statement out with it, so multi-argument calls such as validateStepRuntime(ctx.Cwd(), ctx.ConfigHome(), x) are rewritten with their order of evaluation kept. - Never discard Context.ConfigHome's error: the old getter could not fail, so in a function that does not return an error the use is listed for the author instead of rewritten to `home, _ :=`. Other getters keep their discard, which reproduces the old SDK's zero value on failure. - List a getter's method value passed where the old signature is wanted and classify its…
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `974050757c` (2026-10-12), `d305b76bda` (2026-10-12)
 - **Tests:** `coding/cli/extension_upgrade_test.go::TestUpgraderRestoresEveryFileWhenTheRebuildFails`, `coding/cli/extension_upgrade_test.go::TestUpgraderRestoresWrittenFilesWhenAWriteFails`, `coding/extension/host/runtimecell/go_sdk_override_test.go::TestGoSDKPathOverrideIgnoresRetiredStagedSDK`, `coding/extension/host/runtimecell/go_sdk_override_test.go::TestGoSDKPathOverrideKeepsCurrentStagedSDK`, `coding/extension/host/runtimecell/go_sdk_override_test.go::TestRustSDKPathOverrideIgnoresRetiredStagedSDK`, `coding/extension/host/subprocess/builder_test.go::TestGoNeedsStagedSDK`, `coding/extension/host/subprocess/builder_test.go::TestRustNeedsStagedSDK`, `extensions/sdk/upgrade/fixtures_test.go::TestFixturesUpgradeAndBuild` and 2 more in docs/bug-ledger.json
-- **Release note:** `ompig extension upgrade` now rewrites a `Context.ConfigHome()` call in an `if` or `switch` init statement and in a call with other arguments, such as `if err := c.save(ctx.ConfigHome()); err != nil` or `planDispatch(ctx.Cwd(), ctx.ConfigHome(), name)`. A `Cwd`, `Mode`, `HasUI`, `Width`, `Height` or `ToolCallID` call before the getter moves out with it, so the calls run in the same order as before.
+- **Release note:** `pig extension upgrade` now rewrites a `Context.ConfigHome()` call in an `if` or `switch` init statement and in a call with other arguments, such as `if err := c.save(ctx.ConfigHome()); err != nil` or `planDispatch(ctx.Cwd(), ctx.ConfigHome(), name)`. A `Cwd`, `Mode`, `HasUI`, `Width`, `Height` or `ToolCallID` call before the getter moves out with it, so the calls run in the same order as before.
 
 ### BF-9740507-2
 
-**`ompig extension upgrade` no longer discards the error of `Context.ConfigHome` with `home, _ :=…**
+**`pig extension upgrade` no longer discards the error of `Context.ConfigHome` with `home, _ :=…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig extension upgrade` no longer discards the error of `Context.ConfigHome` with `home, _ := ctx.ConfigHome()`.
+- **Symptom:** `pig extension upgrade` no longer discards the error of `Context.ConfigHome` with `home, _ := ctx.ConfigHome()`.
 - **Root cause:** - Move a getter out of an if or switch init statement, and move a local Context accessor (Cwd, Mode, HasUI, Width, Height, ToolCallID) that runs before it in the statement out with it, so multi-argument calls such as validateStepRuntime(ctx.Cwd(), ctx.ConfigHome(), x) are rewritten with their order of evaluation kept. - Never discard Context.ConfigHome's error: the old getter could not fail, so in a function that does not return an error the use is listed for the author instead of rewritten to `home, _ :=`. Other getters keep their discard, which reproduces the old SDK's zero value on failure. - List a getter's method value passed where the old signature is wanted and classify its…
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `974050757c` (2026-10-12), `d305b76bda` (2026-10-12)
 - **Tests:** `coding/cli/extension_upgrade_test.go::TestUpgraderRestoresEveryFileWhenTheRebuildFails`, `coding/cli/extension_upgrade_test.go::TestUpgraderRestoresWrittenFilesWhenAWriteFails`, `coding/extension/host/runtimecell/go_sdk_override_test.go::TestGoSDKPathOverrideIgnoresRetiredStagedSDK`, `coding/extension/host/runtimecell/go_sdk_override_test.go::TestGoSDKPathOverrideKeepsCurrentStagedSDK`, `coding/extension/host/runtimecell/go_sdk_override_test.go::TestRustSDKPathOverrideIgnoresRetiredStagedSDK`, `coding/extension/host/subprocess/builder_test.go::TestGoNeedsStagedSDK`, `coding/extension/host/subprocess/builder_test.go::TestRustNeedsStagedSDK`, `extensions/sdk/upgrade/fixtures_test.go::TestFixturesUpgradeAndBuild` and 2 more in docs/bug-ledger.json
-- **Release note:** `ompig extension upgrade` no longer discards the error of `Context.ConfigHome` with `home, _ := ctx.ConfigHome()`. The old `ConfigHome` could not fail, and an empty configuration root would make its paths relative to the working directory. A function that returns an error now returns it. In a function that does not, the upgrade lists the line for you to change. It also lists a getter passed as a function value where the old signature is wanted, instead of reporting it as an unrelated compile error. Listed lines are line numbers in your source as it was before the upgrade.
+- **Release note:** `pig extension upgrade` no longer discards the error of `Context.ConfigHome` with `home, _ := ctx.ConfigHome()`. The old `ConfigHome` could not fail, and an empty configuration root would make its paths relative to the working directory. A function that returns an error now returns it. In a function that does not, the upgrade lists the line for you to change. It also lists a getter passed as a function value where the old signature is wanted, instead of reporting it as an unrelated compile error. Listed lines are line numbers in your source as it was before the upgrade.
 
 ### BF-9740507-3
 
-**`ompig extension upgrade` is all or nothing**
+**`pig extension upgrade` is all or nothing**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig extension upgrade` is all or nothing.
+- **Symptom:** `pig extension upgrade` is all or nothing.
 - **Root cause:** - Move a getter out of an if or switch init statement, and move a local Context accessor (Cwd, Mode, HasUI, Width, Height, ToolCallID) that runs before it in the statement out with it, so multi-argument calls such as validateStepRuntime(ctx.Cwd(), ctx.ConfigHome(), x) are rewritten with their order of evaluation kept. - Never discard Context.ConfigHome's error: the old getter could not fail, so in a function that does not return an error the use is listed for the author instead of rewritten to `home, _ :=`. Other getters keep their discard, which reproduces the old SDK's zero value on failure. - List a getter's method value passed where the old signature is wanted and classify its…
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `974050757c` (2026-10-12)
 - **Tests:** `coding/cli/extension_upgrade_test.go::TestUpgraderRestoresEveryFileWhenTheRebuildFails`, `coding/cli/extension_upgrade_test.go::TestUpgraderRestoresWrittenFilesWhenAWriteFails`, `extensions/sdk/upgrade/fixtures_test.go::TestFixturesUpgradeAndBuild`, `extensions/sdk/upgrade/rules_test.go::TestGetterMovesOutOfASwitchInit`, `extensions/sdk/upgrade/rules_test.go::TestListedUsesNameTheirLineBeforeTheRewrite`
-- **Release note:** `ompig extension upgrade` is all or nothing. When writing a file or rebuilding the upgraded extension fails, it restores every file it changed and says so, instead of leaving the extension half rewritten.
+- **Release note:** `pig extension upgrade` is all or nothing. When writing a file or rebuilding the upgraded extension fails, it restores every file it changed and says so, instead of leaving the extension half rewritten.
 
 ### BF-976af87
 
-**The documentation said Ompig starts without a first-time setup screen and that Stock Ompig has no built-in sprites**
+**The documentation said PiG starts without a first-time setup screen and that Stock PiG has no built-in sprites**
 
 - **Source:** Ompig's own defect
-- **Symptom:** The documentation said Ompig starts without a first-time setup screen and that Stock Ompig has no built-in sprites.
+- **Symptom:** The documentation said PiG starts without a first-time setup screen and that Stock PiG has no built-in sprites.
 - **Root cause:** Not recorded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `976af87a3d` (2026-10-11)
 - **Tests:** None recorded.
-- **Release note:** The documentation said Ompig starts without a first-time setup screen and that Stock Ompig has no built-in sprites. Ompig shows a three-step setup (theme, sprite, anonymous usage data) on the first interactive start when no `settings.json` exists and `OMPIG_CODING_AGENT_DIR` is not set (D88), and the Stock binary includes fifteen built-in sprites and `/sprite`. The Quickstart, the embedded onboarding page and the concepts page now say so, and "Your first ten minutes" shows each setup screen.
+- **Release note:** The documentation said PiG starts without a first-time setup screen and that Stock PiG has no built-in sprites. PiG shows a three-step setup (theme, sprite, anonymous usage data) on the first interactive start when no `settings.json` exists and `PIG_CODING_AGENT_DIR` is not set (D88), and the Stock binary includes fifteen built-in sprites and `/sprite`. The Quickstart, the embedded onboarding page and the concepts page now say so, and "Your first ten minutes" shows each setup screen.
 
 ### BF-97cd675
 
@@ -11671,7 +11671,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(agent): nested records keep a message whatever the spelling of its numbers
-- **Root cause:** JSON.parse keeps any number, so Pi keeps a session message whatever the spelling of its numbers and writes it with JSON.stringify. made the agent's own integer members (timestamp, usage, durationMs) read any number spelling; the integer members of the records package ai decodes (diagnostics[].timestamp, deferred.expiresAt/pollAfterMs, nestedCalls.calls[].argumentsBytes/durationMs) still failed on 2.0e3 or 4.0e0, and Ompig dropped the message and the branch after it.
+- **Root cause:** JSON.parse keeps any number, so Pi keeps a session message whatever the spelling of its numbers and writes it with JSON.stringify. made the agent's own integer members (timestamp, usage, durationMs) read any number spelling; the integer members of the records package ai decodes (diagnostics[].timestamp, deferred.expiresAt/pollAfterMs, nestedCalls.calls[].argumentsBytes/durationMs) still failed on 2.0e3 or 4.0e0, and PiG dropped the message and the branch after it.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -11724,14 +11724,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **A `before_provider_request` replacement that is not an object leaves Anthropic Messages as Pi's `{ ...value…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** A `before_provider_request` replacement that is not an object leaves Anthropic Messages as Pi's `{ ...value, stream: true }` (`null`, a number or a boolean send `{"stream":true}`, an array or string its index members), `"betas": null` sends no `anthropic-beta` header, array-index keys lead a replacement body as in JavaScript, and a Codex WebSocket body's own `type` keeps the first position; a Codex payload hook that returns `null` no longer crashes Ompig.
+- **Symptom:** A `before_provider_request` replacement that is not an object leaves Anthropic Messages as Pi's `{ ...value, stream: true }` (`null`, a number or a boolean send `{"stream":true}`, an array or string its index members), `"betas": null` sends no `anthropic-beta` header, array-index keys lead a replacement body as in JavaScript, and a Codex WebSocket body's own `type` keeps the first position; a Codex payload hook that returns `null` no longer crashes PiG.
 - **Root cause:** After /tree navigation between parallel tool calls and their results, a branch summary followed by a new prompt sent a synthetic tool_result behind the summary, and Anthropic rejected it with an unexpected tool_use_id. Upstream runs transformMessages after convertToLlm, where a branch summary, compaction summary, bash execution or custom message is already a user message and closes the pending tool calls. NormalizeMessages ran first and did not see them.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `0ae4683246` (2026-10-08), `e8cc072521` (2026-10-08), `433d232815` (2026-10-09), `992f3cbc69` (2026-10-10), `d37c76932f` (2026-10-10)
 - **Tests:** `agent/convert_custom_upstream_test.go::TestConvertToLLMCustomMessagesMatchUpstreamConvertToLlm`, `agent/convert_custom_upstream_test.go::TestConvertToLLMToolFlowMatchesUpstreamTransformOrder`, `agent/convert_custom_upstream_test.go::TestCustomMessagesReachProvidersAsUpstreamContentBlocks`, `agent/transform_custom_user_boundary_test.go::TestAnthropicRequestAfterBranchSummaryHasNoOrphanToolResult`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMCustomMessageWithoutWireOutputKeepsToolFlow`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMCustomUserMessageInterruptsToolFlow`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMHoldsSystemMessageUntilToolFlowCloses`, `ai/anthropic_messages_payload_oracle_test.go::TestAnthropicMessagesPayloadMatchesPi` and 8 more in docs/bug-ledger.json
-- **Release note:** A `before_provider_request` replacement that is not an object leaves Anthropic Messages as Pi's `{ ...value, stream: true }` (`null`, a number or a boolean send `{"stream":true}`, an array or string its index members), `"betas": null` sends no `anthropic-beta` header, array-index keys lead a replacement body as in JavaScript, and a Codex WebSocket body's own `type` keeps the first position; a Codex payload hook that returns `null` no longer crashes Ompig.
+- **Release note:** A `before_provider_request` replacement that is not an object leaves Anthropic Messages as Pi's `{ ...value, stream: true }` (`null`, a number or a boolean send `{"stream":true}`, an array or string its index members), `"betas": null` sends no `anthropic-beta` header, array-index keys lead a replacement body as in JavaScript, and a Codex WebSocket body's own `type` keeps the first position; a Codex payload hook that returns `null` no longer crashes PiG.
 
 ### BF-99a06cf
 
@@ -11739,7 +11739,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Interactive startup paints the editor and footer first and adds the startup header once the terminal reports its colors or 100 ms pass, as Pi does.
-- **Root cause:** Ompig waited for the colors first, then mounted and painted editor and header in one frame.
+- **Root cause:** PiG waited for the colors first, then mounted and painted editor and header in one frame.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -11759,7 +11759,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** Unreleased
 - **Fix commits:** `9a9dc9900a` (2026-10-27)
 - **Tests:** `durable/harness/harness_tasks_test.go::TestPublicationAtAdoption`
-- **Release note:** `WaitForTask` on a task whose terminal commit was adopted no longer fails with "Harness is closed" when a close begins before the wait wakes: a host `SubscribeCommits` listener that closes the Harness on that commit, or a close that comes between the commit's adoption and its publication. Pi settles the wait at the commit, so a later close cannot reach it; Ompig settled it only after the host listeners, and the close's seal rejected it, turning a completed task into an error for its waiter. The receipt is now fixed at the commit and the wait only wakes after the listeners.
+- **Release note:** `WaitForTask` on a task whose terminal commit was adopted no longer fails with "Harness is closed" when a close begins before the wait wakes: a host `SubscribeCommits` listener that closes the Harness on that commit, or a close that comes between the commit's adoption and its publication. Pi settles the wait at the commit, so a later close cannot reach it; PiG settled it only after the host listeners, and the close's seal rejected it, turning a completed task into an error for its waiter. The receipt is now fixed at the commit and the wait only wakes after the listeners.
 
 ### BF-9abc6ac
 
@@ -11840,22 +11840,22 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Platform:** Windows
 - **Fixed in:** 0.5.0
 - **Fix commits:** `2e0f88f794` (2026-10-06, #160), `65b7c13e09` (2026-10-06, #168), `a4753ec61e` (2026-10-06, #170), `ba9c37b247` (2026-10-06, #171), `9b63b2bc4e` (2026-10-07, #176), `ce8587ef40` (2026-10-07, #179)
-- **Tests:** `coding/cli/rpc_initial_tools_test.go::TestRPCFreshPromptDeclaresStructuredSystemOnce`, `coding/cli/rpc_shutdown_test.go::TestRPCInputEndAfterExtensionCommandComparedWithPi`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleBusyEntriesAreSkippedNotErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledBeforeStartTouchesNothing`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledDuringTheLastEntryReportsTheCancellation`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleEntryLeasedAfterClassificationIsSkippedNotAnError`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleOtherErrorsStayErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleStopsWhenItsContextIsCancelled` and 88 more in docs/bug-ledger.json
+- **Tests:** `coding/cli/rpc_initial_tools_test.go::TestRPCFreshPromptDeclaresStructuredSystemOnce`, `coding/cli/rpc_shutdown_test.go::TestRPCInputEndAfterExtensionCommandComparedWithPi`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleBusyEntriesAreSkippedNotErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledBeforeStartTouchesNothing`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledDuringTheLastEntryReportsTheCancellation`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleEntryLeasedAfterClassificationIsSkippedNotAnError`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleOtherErrorsStayErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleStopsWhenItsContextIsCancelled` and 69 more in docs/bug-ledger.json
 - **Release note:** On Windows, the bash tool no longer risks waiting forever after a command exits while a process it started in the background still holds the output pipe. The check that asks Windows whether the command's job still has processes could read an empty answer when Go moved the goroutine stack during the call, and the tool then waited for the pipe to close. The buffers these job-object calls pass to Windows now stay in place.
 
 ### BF-9b63b2b-2
 
-**A running `!` command or bash tool command no longer outlives `ompig` when the session ends because its…**
+**A running `!` command or bash tool command no longer outlives `pig` when the session ends because its…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** A running `!` command or bash tool command no longer outlives `ompig` when the session ends because its terminal closed or `ompig` crashed.
+- **Symptom:** A running `!` command or bash tool command no longer outlives `pig` when the session ends because its terminal closed or `pig` crashed.
 - **Root cause:** The bash tool on Windows puts the shell in a job object. When the shell exits, `processGroupMayHoldOutput` asks Windows whether the job still has processes (`QueryInformationJobObject`, `JobObjectBasicAccountingInformation`). If the answer is zero, `childwait.waitIdle` waits for the output pipe to reach EOF with no further bound, because an empty job means no process can still hold the pipe.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `a4753ec61e` (2026-10-06, #170), `9b63b2bc4e` (2026-10-07, #176)
 - **Tests:** `coding/cli/rpc_initial_tools_test.go::TestRPCFreshPromptDeclaresStructuredSystemOnce`, `coding/extension/host/runtimecell/hash_inputs_test.go::TestCommandVersionCachesWarmProbeAndDetectsReplacement`, `coding/extension/host/subprocess/node_recovery_test.go::TestNodeUnattributableCrashRestartsWholeGroup`, `internal/codingagent/exit_record_test.go::TestBackgroundGroupPanicReachesTheHandlerWithItsStack`, `internal/codingagent/exit_record_test.go::TestBackgroundTaskPanicEndsTheSessionWithACrashRecord`, `internal/codingagent/exit_record_test.go::TestCacheWarmerDecisionPanicKeepsPisDecision`, `internal/codingagent/exit_record_test.go::TestCacheWarmerRefreshPanicOutsideTheCaughtRequestReachesTheUncaughtHandler`, `internal/codingagent/exit_record_test.go::TestCacheWarmerRefreshRequestPanicIsCaughtAndReschedules` and 16 more in docs/bug-ledger.json
-- **Release note:** A running `!` command or bash tool command no longer outlives `ompig` when the session ends because its terminal closed or `ompig` crashed. The command runs in its own process group, so the terminal's hangup never reached it, and `ompig` now kills it before it exits, as Pi does.
+- **Release note:** A running `!` command or bash tool command no longer outlives `pig` when the session ends because its terminal closed or `pig` crashed. The command runs in its own process group, so the terminal's hangup never reached it, and `pig` now kills it before it exits, as Pi does.
 
 ### BF-9ba2589
 
@@ -11863,7 +11863,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(agent): write a decoded message as the object it was decoded from
-- **Root cause:** Pi keeps the object JSON.parse returned for a session line or an extension result and every writer stringifies it, so a message whose members are in another order, or which holds members Ompig does not model, comes back unchanged from RPC get_messages, extension events and buildSessionContext. Ompig re-encoded the decoded fields in its own order.
+- **Root cause:** Pi keeps the object JSON.parse returned for a session line or an extension result and every writer stringifies it, so a message whose members are in another order, or which holds members PiG does not model, comes back unchanged from RPC get_messages, extension events and buildSessionContext. PiG re-encoded the decoded fields in its own order.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -11888,17 +11888,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-9be7181
 
-**Pasting in the shell no longer hangs after copying text in ompig and suspending it with Ctrl+Z on Linux: the…**
+**Pasting in the shell no longer hangs after copying text in pig and suspending it with Ctrl+Z on Linux: the…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Pasting in the shell no longer hangs after copying text in ompig and suspending it with Ctrl+Z on Linux: the `wl-copy`, `xclip` or `xsel` process that keeps serving the clipboard now runs in its own session and is not stopped with ompig (Pi f8ab362c, #11179).
-- **Root cause:** Ports Pi (#11179): runClipboardCommand spawns with detached on POSIX, so a wl-copy/xclip/xsel daemon leaves Ompig's process group. Ports the outside-process-group test.
+- **Symptom:** Pasting in the shell no longer hangs after copying text in pig and suspending it with Ctrl+Z on Linux: the `wl-copy`, `xclip` or `xsel` process that keeps serving the clipboard now runs in its own session and is not stopped with pig (Pi f8ab362c, #11179).
+- **Root cause:** Ports Pi (#11179): runClipboardCommand spawns with detached on POSIX, so a wl-copy/xclip/xsel daemon leaves PiG's process group. Ports the outside-process-group test.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** Linux
 - **Fixed in:** 0.5.2
 - **Fix commits:** `9be7181948` (2026-10-20)
 - **Tests:** `internal/codingagent/clipboard_command_pi_test.go::TestRunClipboardCommandRunsOutsideOwnProcessGroup`
-- **Release note:** Pasting in the shell no longer hangs after copying text in ompig and suspending it with Ctrl+Z on Linux: the `wl-copy`, `xclip` or `xsel` process that keeps serving the clipboard now runs in its own session and is not stopped with ompig (Pi f8ab362c, #11179).
+- **Release note:** Pasting in the shell no longer hangs after copying text in pig and suspending it with Ctrl+Z on Linux: the `wl-copy`, `xclip` or `xsel` process that keeps serving the clipboard now runs in its own session and is not stopped with pig (Pi f8ab362c, #11179).
 
 ### BF-9c1a0e9
 
@@ -11906,7 +11906,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** An OpenAI Responses stream event or output item with a member of an unexpected type is read as Pi's JavaScript reads it instead of ending the turn with `openai-responses: invalid SSE JSON` or silently skipping the item: a delta appends its string form (`null` and a missing delta append `null` and `undefined`), a finished message or reasoning item joins its parts' string forms and ends the turn with `item.content?.map is not a function` (or `item.summary?...`) when they are not an array, a function call's id interpolates a non-string `call_id`, non-string function-call arguments end the turn with Pi's `partialJson.trim is not a function` or `startsWith` error, a usage that is not an object reads as zeros, a status that is not a string ends the turn with `Unhandled stop reason: <its string form>`, and a failed response's non-string error code and message are written in their string form.
-- **Root cause:** google-generative-ai.ts:236-237 reads `output: (usageMetadata.candidatesTokenCount || 0) + (usageMetadata.thoughtsTokenCount || 0)`, so `true` adds 1 and the usage stays numeric. Ompig's JS read of a mistyped chunk refused a truthy non-number count and ended the turn with the decode error. normalizeGeminiUsage now reads a `true` candidates count as 1; every other count is stored as read (a truthy non-number thoughts, total or cached count still ends the turn, because Pi stores it raw). The prompt count is only subtracted from and already counted as its Number().
+- **Root cause:** google-generative-ai.ts:236-237 reads `output: (usageMetadata.candidatesTokenCount || 0) + (usageMetadata.thoughtsTokenCount || 0)`, so `true` adds 1 and the usage stays numeric. PiG's JS read of a mistyped chunk refused a truthy non-number count and ended the turn with the decode error. normalizeGeminiUsage now reads a `true` candidates count as 1; every other count is stored as read (a truthy non-number thoughts, total or cached count still ends the turn, because Pi stores it raw). The prompt count is only subtracted from and already counted as its Number().
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -11948,7 +11948,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Selecting a model or cycling models with Ctrl+P no longer freezes the interactive mode when an extension's `model_select` handler registers a tool.
-- **Root cause:** Pi's shutdown ends with process.exit and does not await a pending model_select (interactive-mode.ts:4251-4291). Ompig's notification Emit ran on the Session's background context, so Stop's backgroundTasks.Wait joined a slow or hung handler. /quit, Ctrl+D or a signal therefore tore the UI down but did not exit.
+- **Root cause:** Pi's shutdown ends with process.exit and does not await a pending model_select (interactive-mode.ts:4251-4291). PiG's notification Emit ran on the Session's background context, so Stop's backgroundTasks.Wait joined a slow or hung handler. /quit, Ctrl+D or a signal therefore tore the UI down but did not exit.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -11975,7 +11975,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Previously it was shown as a warning.
-- **Root cause:** Ompig used showWarning ("Warning: ...").
+- **Root cause:** PiG used showWarning ("Warning: ...").
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -11989,12 +11989,12 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** A Pi defect that Ompig fixed first (divergence D110)
 - **Symptom:** for (2) and (3) Pi's `parseGitUrl` returns a repository no Git client can clone (`https:////host/org/repo`, `https://HTTPS://host/org/repo`), so `pi install` of such a source fails at clone time.
-- **Root cause:** (1) is additive: `@<commit>#subdirectory=<path>` is how Ompig installs a Ompiglet that lives in a repository subdirectory, and no Pi input is rejected for it. (2) and (3) are Pi results that no Git client can clone; Ompig returns the repository the user wrote.
+- **Root cause:** (1) is additive: `@<commit>#subdirectory=<path>` is how PiG installs a Piglet that lives in a repository subdirectory, and no Pi input is rejected for it. (2) and (3) are Pi results that no Git client can clone; PiG returns the repository the user wrote.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
 - **Pi issue:** none recorded
-- **Removed when Pi fixes it:** Pi accepts a `#subdirectory=` spelling or Ompig stops installing Ompiglets from repository subdirectories (1); Pi fixes the `git://` and upper-case scheme repositories (2, 3) or parses `git:file://` sources (4).
+- **Removed when Pi fixes it:** Pi accepts a `#subdirectory=` spelling or PiG stops installing Piglets from repository subdirectories (1); Pi fixes the `git://` and upper-case scheme repositories (2, 3) or parses `git:file://` sources (4).
 - **Fix commits:** `478157bb22` (2026-10-09), `9be576533f` (2026-10-09), `eda54e987b` (2026-10-09)
 - **Tests:** `coding/source/parse_git_oracle_test.go::TestParseGitMatchesPi`, `coding/source/ref_test.go::TestParseGitFragmentIsARefUnlessItIsSubdirectory`, `coding/source/ref_test.go::TestParseGitSubdirectory`, `internal/nodeurl/genericurl_oracle_test.go::TestParseURLMatchesNode`
 
@@ -12003,8 +12003,8 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **`--no-stdin` skips the startup read of piped stdin (Pi #10415)**
 
 - **Source:** A Pi defect that Ompig fixed first (divergence D150)
-- **Symptom:** `ompig --no-stdin -p "prompt"` with an open stdin pipe runs the prompt; Pi hangs. Pi parses `--no-stdin` as an unknown extension flag.
-- **Root cause:** `pi -p hi < <(sleep 15)` never starts: `readPipedStdin` (`packages/coding-agent/src/main.ts:80-97`) waits for `end` on a pipe whose writer stays open, and the same happens in Ompig. An idle open pipe cannot be told from a slow producer, so a timeout would drop real input; an explicit opt-out is the only fix that cannot lose piped input. Callers that keep an input pipe open (agent harnesses, CI wrappers) pass the flag. Pi has no fix: Pi #10415 has an unmerged `--no-stdin` proposal and no PR. Pi #5571 discusses the same hang.
+- **Symptom:** `pig --no-stdin -p "prompt"` with an open stdin pipe runs the prompt; Pi hangs. Pi parses `--no-stdin` as an unknown extension flag.
+- **Root cause:** `pi -p hi < <(sleep 15)` never starts: `readPipedStdin` (`packages/coding-agent/src/main.ts:80-97`) waits for `end` on a pipe whose writer stays open, and the same happens in PiG. An idle open pipe cannot be told from a slow producer, so a timeout would drop real input; an explicit opt-out is the only fix that cannot lose piped input. Callers that keep an input pipe open (agent harnesses, CI wrappers) pass the flag. Pi has no fix: Pi #10415 has an unmerged `--no-stdin` proposal and no PR. Pi #5571 discusses the same hang.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -12033,7 +12033,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **The bash truncation notice names the size of the last line, not the bytes after the final newline (Pi #10015)**
 
 - **Source:** A Pi defect that Ompig fixed first (divergence D153)
-- **Symptom:** Ompig prints `line is 58.6KB`; Pi prints `line is 0B`. Output without a trailing newline is the same in both.
+- **Symptom:** PiG prints `line is 58.6KB`; Pi prints `line is 0B`. Output without a trailing newline is the same in both.
 - **Root cause:** The tail it shows belongs to line 1, which is 58.6KB. Pi has no fix (Pi #10015 is open, with no PR).
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
@@ -12063,7 +12063,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **MCP server `url` expands environment references (Pi #10654)**
 
 - **Source:** A Pi defect that Ompig fixed first (divergence D156)
-- **Symptom:** the `/mcp` server menu adds a `connects to: <expanded url>` line under a `url` that expands to something else (owner-approved; the expansion can contain a secret from the environment, and the menu shows it). An entry whose `url` is only a reference loads in Ompig and is rejected by Pi. An entry whose `url` contains `$$`, or `$NAME` or `${NAME}` with `NAME` set, connects to the expanded URL in Ompig and to the literal text in Pi. The stored config and `getMcpServers` keep the URL as written, and the server list shows it as written.
+- **Symptom:** the `/mcp` server menu adds a `connects to: <expanded url>` line under a `url` that expands to something else (owner-approved; the expansion can contain a secret from the environment, and the menu shows it). An entry whose `url` is only a reference loads in PiG and is rejected by Pi. An entry whose `url` contains `$$`, or `$NAME` or `${NAME}` with `NAME` set, connects to the expanded URL in PiG and to the literal text in Pi. The stored config and `getMcpServers` keep the URL as written, and the server list shows it as written.
 - **Root cause:** The reporter asks for the URL to be resolved with the same logic as headers and env values. Pi #10654 is open with no PR.
 - **User impact:** Credential or permission exposure
 - **Platform:** All platforms
@@ -12079,7 +12079,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** A Pi defect that Ompig fixed first (divergence D195)
 - **Symptom:** the failure is an AWS JavaScript SDK side effect that Pi's own `getProviderEnvValue` does not intend. Pi decides "no token" and the SDK decides "bearer".
-- **Root cause:** an empty variable names no credential. Failing every request because an unset secret was exported as an empty string breaks a working IAM or profile setup for no reason a user can act on, and Ompig's own lookup, like Pi's, already treats the value as absent. The Go SDK Ompig uses agrees: `resolveEnvBearerToken` returns on an empty value (`third_party/awssdk/service/bedrockruntime/api_client.go:980-984`).
+- **Root cause:** an empty variable names no credential. Failing every request because an unset secret was exported as an empty string breaks a working IAM or profile setup for no reason a user can act on, and PiG's own lookup, like Pi's, already treats the value as absent. The Go SDK PiG uses agrees: `resolveEnvBearerToken` returns on an empty value (`third_party/awssdk/service/bedrockruntime/api_client.go:980-984`).
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -12094,12 +12094,12 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** A Pi defect that Ompig fixed first (divergence D196)
 - **Symptom:** Pi sends a credential over plain HTTP because the JavaScript SDK has no HTTPS check for bearer tokens, and its skip-auth option does not stop the SDK from picking up the token.
-- **Root cause:** the refusal keeps a bearer token off an unencrypted connection. Pi's behavior sends it in clear text to a host the user chose; Ompig does not override the Go SDK's guard to repeat that.
+- **Root cause:** the refusal keeps a bearer token off an unencrypted connection. Pi's behavior sends it in clear text to a host the user chose; PiG does not override the Go SDK's guard to repeat that.
 - **User impact:** Credential or permission exposure
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
 - **Pi issue:** none recorded
-- **Removed when Pi fixes it:** Pi refuses to send a bearer token over HTTP (its SDK adds an HTTPS check, or Pi installs a signer that does), or Ompig installs `bedrockBearerSigner` under skip-auth and the owner approves sending the token over HTTP there; then the markers, the D196 case of the test and this record go.
+- **Removed when Pi fixes it:** Pi refuses to send a bearer token over HTTP (its SDK adds an HTTPS check, or Pi installs a signer that does), or PiG installs `bedrockBearerSigner` under skip-auth and the owner approves sending the token over HTTP there; then the markers, the D196 case of the test and this record go.
 - **Fix commits:** `cca788e454` (2026-10-24)
 - **Tests:** `ai/bedrock_bearer_divergence_test.go::TestBedrockBearerTokenDivergencesFromPi`
 
@@ -12109,7 +12109,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** A Pi defect that Ompig fixed first (divergence D197)
 - **Symptom:** none. Pi's daemon leaves the limit alone (no `setrlimit` call in any file of `packages/env/daemon/src`) and maps the system's `EMFILE` as it should (`src/sys/unix.rs:35`). The two counts differ because the two runtimes differ.
-- **Root cause:** nothing in Ompig reaches the limit on purpose. The Go runtime's raise is the toolchain's own behavior (every Go program on Unix has it), and undoing it to give a program Pi's smaller limit would make Ompig fail on workloads that succeed, in a daemon whose handle table already caps the count.
+- **Root cause:** nothing in PiG reaches the limit on purpose. The Go runtime's raise is the toolchain's own behavior (every Go program on Unix has it), and undoing it to give a program Pi's smaller limit would make PiG fail on workloads that succeed, in a daemon whose handle table already caps the count.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -12204,7 +12204,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Fix commits:** `a09da26616` (2026-10-13)
 - **Tests:** `coding/session_settings_json_test.go::TestSessionSettingsJSONIsTheEncodingOfGetSettings`, `internal/codingagent/settings_extension_json_test.go::TestExtensionSettingsJSONEncodesOncePerSettingsGeneration`, `internal/codingagent/settings_extension_json_test.go::TestExtensionSettingsJSONKeepsPiMemberOrder`, `internal/codingagent/settings_shared_read_test.go::TestSettingsReadHonorsPiWriterLock`, `internal/codingagent/tool_render_shell_details_test.go::TestShellCardIgnoresACaseVariantTruncatedBy`, `internal/codingagent/tool_render_shell_details_test.go::TestShellDetailsFromReadsTheExactKeys`
-- **Release note:** `pi.getSettings()` in a subprocess extension lists the settings in Pi's order: the global settings file's members as written (after the legacy-key migration), then members only the project file sets, with nested objects merged the same way and setters and overrides adding members after the others. Ompig sorted them alphabetically.
+- **Release note:** `pi.getSettings()` in a subprocess extension lists the settings in Pi's order: the global settings file's members as written (after the legacy-key migration), then members only the project file sets, with nested objects merged the same way and setters and overrides adding members after the others. PiG sorted them alphabetically.
 
 ### BF-a09da26-2
 
@@ -12253,7 +12253,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Previously these spellings failed, and image and text paste reported the clipboard as unavailable.
-- **Root cause:** Pi opens the clipboard with xcb_connect (linux-platform-x11.c:185), whose parser reads the display and screen with C strtoul into an int (libxcb 1.15 xcb_util.c:176, :186): leading white space and a sign are accepted, a minus negates modulo 2^64, an overflow saturates, the int keeps the low 32 bits, and a network display's port is the low 16 bits of 6000 plus the number (:244). Pi then steps past screen_number screens (linux-platform-x11.c:188), so a negative screen selects the first. Ompig used strconv.Atoi and rejected negative numbers and TCP displays above 59535, so DISPLAY=": 1", ":1.-1" or "host:65536+n" failed where Pi connects.
+- **Root cause:** Pi opens the clipboard with xcb_connect (linux-platform-x11.c:185), whose parser reads the display and screen with C strtoul into an int (libxcb 1.15 xcb_util.c:176, :186): leading white space and a sign are accepted, a minus negates modulo 2^64, an overflow saturates, the int keeps the low 32 bits, and a network display's port is the low 16 bits of 6000 plus the number (:244). Pi then steps past screen_number screens (linux-platform-x11.c:188), so a negative screen selects the first. PiG used strconv.Atoi and rejected negative numbers and TCP displays above 59535, so DISPLAY=": 1", ":1.-1" or "host:65536+n" failed where Pi connects.
 - **User impact:** An operation failed or was rejected
 - **Platform:** Linux
 - **Fixed in:** 0.5.0
@@ -12330,7 +12330,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Removed when Pi fixes it:** Pi fills the id at stream end and omits unreplayable calls on replay.
 - **Fix commits:** `3ef234b949` (2026-10-09), `82994975e6` (2026-10-09), `a3859aa658` (2026-10-09), `4180310931` (2026-10-10), `543dba2cbe` (2026-10-10), `66765600a6` (2026-10-10), `6693198f8c` (2026-10-10), `9cc4d406f7` (2026-10-10), `74ed845011` (2026-10-11), `b567ebab3c` (2026-10-11)
 - **Tests:** `ai/openai_empty_tool_call_reviewer_test.go::TestOpenAICompletionsGeneratedToolCallIDsAreUnique`, `ai/openai_empty_tool_call_reviewer_test.go::TestOpenAICompletionsReplayOmitsStoredToolCallsWithoutIDOrNameReviewed`, `ai/openai_empty_tool_call_test.go::TestOpenAICompletionsEmptyToolCallDoesNotWedgeReplay`, `ai/unreplayable_tool_call_test.go::TestReplayOmitsUnreplayableToolCallsOnEveryProviderPath`, `ai/unreplayable_tool_call_test.go::TestStreamedToolCallsWithoutIDGetDistinctIDsAcrossTurns`
-- **Release note:** An OpenAI-compatible provider that streams a tool call without an id or a function name (OpenRouter and GLM do) no longer leaves the session failing every later turn with `tool messages must include a non-empty string tool_call_id`. Ompig gives the call a unique id, leaves a call without a name or id and its results out of every provider's replayed request, and a stored session that already holds such a call works again (D120, pi-mono #10299).
+- **Release note:** An OpenAI-compatible provider that streams a tool call without an id or a function name (OpenRouter and GLM do) no longer leaves the session failing every later turn with `tool messages must include a non-empty string tool_call_id`. PiG gives the call a unique id, leaves a call without a name or id and its results out of every provider's replayed request, and a stored session that already holds such a call works again (D120, pi-mono #10299).
 
 ### BF-a3bfab2
 
@@ -12344,7 +12344,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Fix commits:** `093cf5c781` (2026-10-09), `a3bfab2c03` (2026-10-09), `b5356c4269` (2026-10-09), `d1b3ad0151` (2026-10-09), `da99854d1b` (2026-10-09)
 - **Tests:** `ai/error_body_oracle_test.go::TestErrorBodyHelpersMatchPiOnSeededProbes`, `ai/estimate_oracle_test.go::TestTokenEstimatesMatchPiOnSeededTranscripts`, `ai/overflow_oracle_test.go::TestContextOverflowMatchesPiOnSeededMessages`, `ai/radius_config_oracle_test.go::TestRadiusConfigMatchesPiOnSeededProbes`, `coding/cli/strip_app_features_test.go::TestStripExportHTMLBuildOmitsExportPackage`
-- **Release note:** A Radius gateway config cached on an OAuth credential is sanitized as Pi does. A model whose `contextWindow` or `maxTokens` is `null` is dropped (it was kept). A model with a fractional or out-of-range window, a non-object cost tier, `headers` that are not a string map or another member Ompig cannot represent is kept (it was dropped): a window keeps its integer part, clamped to the integer range, and any other such member is left at its zero value. `baseUrl`, `models` and each model member are read by their exact key, so a member such as `ID` or `contextwindow` no longer replaces `id` or `contextWindow`.
+- **Release note:** A Radius gateway config cached on an OAuth credential is sanitized as Pi does. A model whose `contextWindow` or `maxTokens` is `null` is dropped (it was kept). A model with a fractional or out-of-range window, a non-object cost tier, `headers` that are not a string map or another member Pig cannot represent is kept (it was dropped): a window keeps its integer part, clamped to the integer range, and any other such member is left at its zero value. `baseUrl`, `models` and each model member are read by their exact key, so a member such as `ID` or `contextwindow` no longer replaces `id` or `contextWindow`.
 
 ### BF-a40a16d
 
@@ -12365,7 +12365,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A Package configured as a settings object reads a resource kind its `pi` manifest does not declare (or declares empty, when patterns are given) from the conventional directory, and a `pi` manifest field that is not an array of strings counts as absent, as in Pi's `collectPackageResources`.
-- **Root cause:** TestLoadMcpConfigMatchesPiOnRandomFiles loads 1500 random global and project mcp.json files through Pi's loadMcpConfig and Ompig's LoadMcpConfig: 187 differed, among them every file with a numeric server name, because Object.entries lists array-index keys first and orderedjson.Object kept file order. Object.Set now inserts an array-index key at its ascending place before the other keys (Keys, MarshalJSON, Clone follow), with TestObjectEnumeratesArrayIndexKeysFirst. Dependent packages (codingagent, extension, mcpext, mcp, packagecontent) pass; the failures left in tools and the node-backed subprocess tests are the fd/rg and node-shim environment ones.
+- **Root cause:** TestLoadMcpConfigMatchesPiOnRandomFiles loads 1500 random global and project mcp.json files through Pi's loadMcpConfig and PiG's LoadMcpConfig: 187 differed, among them every file with a numeric server name, because Object.entries lists array-index keys first and orderedjson.Object kept file order. Object.Set now inserts an array-index key at its ascending place before the other keys (Keys, MarshalJSON, Clone follow), with TestObjectEnumeratesArrayIndexKeysFirst. Dependent packages (codingagent, extension, mcpext, mcp, packagecontent) pass; the failures left in tools and the node-backed subprocess tests are the fd/rg and node-shim environment ones.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -12375,17 +12375,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-a4753ec
 
-**A panic in a background goroutine of an interactive session no longer ends Ompig with only a stderr dump**
+**A panic in a background goroutine of an interactive session no longer ends PiG with only a stderr dump**
 
 - **Source:** Ompig's own defect
-- **Symptom:** A panic in a background goroutine of an interactive session no longer ends Ompig with only a stderr dump.
-- **Root cause:** Every other exit the user did not ask for now leaves a trace (D102, additive): an exit.log line in the agent directory for SIGHUP, SIGTERM, an external SIGINT, a closed terminal or input, an extension's shutdown() and a failed run; a crash record for a panic or fatal error in any goroutine (through a per-session crash-output marker the next start reconciles); and `ompig diagnose` lists the recent unexpected exits. The background cache warm recovers a panic and reschedules as Pi's does, the emergency terminal exit stops extension processes, and a reconciled crash keeps its real time.
+- **Symptom:** A panic in a background goroutine of an interactive session no longer ends PiG with only a stderr dump.
+- **Root cause:** Every other exit the user did not ask for now leaves a trace (D102, additive): an exit.log line in the agent directory for SIGHUP, SIGTERM, an external SIGINT, a closed terminal or input, an extension's shutdown() and a failed run; a crash record for a panic or fatal error in any goroutine (through a per-session crash-output marker the next start reconciles); and `pig diagnose` lists the recent unexpected exits. The background cache warm recovers a panic and reschedules as Pi's does, the emergency terminal exit stops extension processes, and a reconciled crash keeps its real time.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `a4753ec61e` (2026-10-06, #170), `c019ea9155` (2026-10-06, #163)
 - **Tests:** `coding/cli/rpc_initial_tools_test.go::TestRPCFreshPromptDeclaresStructuredSystemOnce`, `internal/codingagent/agent_env_isolation_test.go::TestPackageTestsDoNotReachTheExportedAgentDirectory`, `internal/codingagent/exit_record_test.go::TestBackgroundGroupPanicReachesTheHandlerWithItsStack`, `internal/codingagent/exit_record_test.go::TestBackgroundTaskPanicEndsTheSessionWithACrashRecord`, `internal/codingagent/exit_record_test.go::TestCacheWarmerDecisionPanicKeepsPisDecision`, `internal/codingagent/exit_record_test.go::TestCacheWarmerRefreshPanicOutsideTheCaughtRequestReachesTheUncaughtHandler`, `internal/codingagent/exit_record_test.go::TestCacheWarmerRefreshRequestPanicIsCaughtAndReschedules`, `internal/codingagent/exit_record_test.go::TestCleanEndLeavesNoMarker` and 23 more in docs/bug-ledger.json
-- **Release note:** A panic in a background goroutine of an interactive session no longer ends Ompig with only a stderr dump. Ompig restores the terminal, prints the error, records it in `crashes.json` and exits 1, as Pi does for an uncaught exception. Any other goroutine panic or runtime fatal error is copied to `<agent dir>/crash-output/` and becomes a crash record at the next start.
+- **Release note:** A panic in a background goroutine of an interactive session no longer ends PiG with only a stderr dump. PiG restores the terminal, prints the error, records it in `crashes.json` and exits 1, as Pi does for an uncaught exception. Any other goroutine panic or runtime fatal error is copied to `<agent dir>/crash-output/` and becomes a crash record at the next start.
 
 ### BF-a4753ec-2
 
@@ -12393,7 +12393,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The prompt-cache refresh that fires minutes after a prompt now treats a panic in the extension decision or in the refresh request as Pi treats a thrown error there: it keeps Pi's decision or skips that refresh and keeps warming, instead of ending the session.
-- **Root cause:** Every other exit the user did not ask for now leaves a trace (D102, additive): an exit.log line in the agent directory for SIGHUP, SIGTERM, an external SIGINT, a closed terminal or input, an extension's shutdown() and a failed run; a crash record for a panic or fatal error in any goroutine (through a per-session crash-output marker the next start reconciles); and `ompig diagnose` lists the recent unexpected exits. The background cache warm recovers a panic and reschedules as Pi's does, the emergency terminal exit stops extension processes, and a reconciled crash keeps its real time.
+- **Root cause:** Every other exit the user did not ask for now leaves a trace (D102, additive): an exit.log line in the agent directory for SIGHUP, SIGTERM, an external SIGINT, a closed terminal or input, an extension's shutdown() and a failed run; a crash record for a panic or fatal error in any goroutine (through a per-session crash-output marker the next start reconciles); and `pig diagnose` lists the recent unexpected exits. The background cache warm recovers a panic and reschedules as Pi's does, the emergency terminal exit stops extension processes, and a reconciled crash keeps its real time.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -12403,17 +12403,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-a4753ec-3
 
-**When the terminal's input ends while its output is still there, Ompig keeps running as Pi does instead of…**
+**When the terminal's input ends while its output is still there, PiG keeps running as Pi does instead of…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** When the terminal's input ends while its output is still there, Ompig keeps running as Pi does instead of exiting 1 with `Error: EOF`.
-- **Root cause:** Every other exit the user did not ask for now leaves a trace (D102, additive): an exit.log line in the agent directory for SIGHUP, SIGTERM, an external SIGINT, a closed terminal or input, an extension's shutdown() and a failed run; a crash record for a panic or fatal error in any goroutine (through a per-session crash-output marker the next start reconciles); and `ompig diagnose` lists the recent unexpected exits. The background cache warm recovers a panic and reschedules as Pi's does, the emergency terminal exit stops extension processes, and a reconciled crash keeps its real time.
+- **Symptom:** When the terminal's input ends while its output is still there, PiG keeps running as Pi does instead of exiting 1 with `Error: EOF`.
+- **Root cause:** Every other exit the user did not ask for now leaves a trace (D102, additive): an exit.log line in the agent directory for SIGHUP, SIGTERM, an external SIGINT, a closed terminal or input, an extension's shutdown() and a failed run; a crash record for a panic or fatal error in any goroutine (through a per-session crash-output marker the next start reconciles); and `pig diagnose` lists the recent unexpected exits. The background cache warm recovers a panic and reschedules as Pi's does, the emergency terminal exit stops extension processes, and a reconciled crash keeps its real time.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `a4753ec61e` (2026-10-06, #170)
 - **Tests:** `coding/cli/rpc_initial_tools_test.go::TestRPCFreshPromptDeclaresStructuredSystemOnce`, `internal/codingagent/exit_record_test.go::TestBackgroundGroupPanicReachesTheHandlerWithItsStack`, `internal/codingagent/exit_record_test.go::TestBackgroundTaskPanicEndsTheSessionWithACrashRecord`, `internal/codingagent/exit_record_test.go::TestCacheWarmerDecisionPanicKeepsPisDecision`, `internal/codingagent/exit_record_test.go::TestCacheWarmerRefreshPanicOutsideTheCaughtRequestReachesTheUncaughtHandler`, `internal/codingagent/exit_record_test.go::TestCacheWarmerRefreshRequestPanicIsCaughtAndReschedules`, `internal/codingagent/exit_record_test.go::TestCleanEndLeavesNoMarker`, `internal/codingagent/exit_record_test.go::TestDeadTerminalExitLeavesALineWithTheReason` and 13 more in docs/bug-ledger.json
-- **Release note:** When the terminal's input ends while its output is still there, Ompig keeps running as Pi does instead of exiting 1 with `Error: EOF`.
+- **Release note:** When the terminal's input ends while its output is still there, PiG keeps running as Pi does instead of exiting 1 with `Error: EOF`.
 
 ### BF-a47eb1a
 
@@ -12473,17 +12473,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-a690122
 
-**`OMPIG_PROFILE=heap` and the `heap_live_bytes` of `OMPIG_PROFILE=metrics` count only memory Ompig retains**
+**`PIG_PROFILE=heap` and the `heap_live_bytes` of `PIG_PROFILE=metrics` count only memory PiG retains**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `OMPIG_PROFILE=heap` and the `heap_live_bytes` of `OMPIG_PROFILE=metrics` count only memory Ompig retains.
-- **Root cause:** OMPIG_PROFILE=heap and metrics heap_live_bytes ran one runtime.GC before measuring. The first cycle only moves sync.Pool contents to the victim cache, which keeps them reachable until the next cycle, so pooled buffers counted as live: at a 1M-token session the encoding/json encoder buffer of the last provider request showed as 4.5 MB at ai/openai.go json.Marshal (test/longsession measure, GODEBUG=memprofilerate=1: heap total 17.8 MB -> 13.2 MB with the fix).
+- **Symptom:** `PIG_PROFILE=heap` and the `heap_live_bytes` of `PIG_PROFILE=metrics` count only memory PiG retains.
+- **Root cause:** PIG_PROFILE=heap and metrics heap_live_bytes ran one runtime.GC before measuring. The first cycle only moves sync.Pool contents to the victim cache, which keeps them reachable until the next cycle, so pooled buffers counted as live: at a 1M-token session the encoding/json encoder buffer of the last provider request showed as 4.5 MB at ai/openai.go json.Marshal (test/longsession measure, GODEBUG=memprofilerate=1: heap total 17.8 MB -> 13.2 MB with the fix).
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `a690122479` (2026-10-10)
 - **Tests:** `internal/profiling/profiling_test.go::TestHeapMeasurementsOmitPooledBuffers`
-- **Release note:** `OMPIG_PROFILE=heap` and the `heap_live_bytes` of `OMPIG_PROFILE=metrics` count only memory Ompig retains. They now run two garbage collections before measuring. After the single collection used before, buffers that pools keep for reuse still counted as live, such as the JSON encoder buffer that holds the last provider request. At a 1M-token session that buffer is about 4.5 MB.
+- **Release note:** `PIG_PROFILE=heap` and the `heap_live_bytes` of `PIG_PROFILE=metrics` count only memory PiG retains. They now run two garbage collections before measuring. After the single collection used before, buffers that pools keep for reuse still counted as live, such as the JSON encoder buffer that holds the last provider request. At a 1M-token session that buffer is about 4.5 MB.
 
 ### BF-a6932b4
 
@@ -12545,7 +12545,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Path autocomplete after resuming a session created in another directory now lists files from that session's directory instead of the launch directory.
-- **Root cause:** Pi builds the autocomplete provider on sessionManager.getCwd() (interactive-mode.ts:820); Ompig used os.Getwd(), so after resuming a session from another directory path completion listed the launch dir.
+- **Root cause:** Pi builds the autocomplete provider on sessionManager.getCwd() (interactive-mode.ts:820); PiG used os.Getwd(), so after resuming a session from another directory path completion listed the launch dir.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -12555,31 +12555,31 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-a81ec0d
 
-**A key pressed while an extension's custom overlay is open no longer freezes `ompig` when the key reaches the…**
+**A key pressed while an extension's custom overlay is open no longer freezes `pig` when the key reaches the…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** A key pressed while an extension's custom overlay is open no longer freezes `ompig` when the key reaches the overlay on the main input loop.
-- **Root cause:** Every other exit the user did not ask for now leaves a trace (D102, additive): an exit.log line in the agent directory for SIGHUP, SIGTERM, an external SIGINT, a closed terminal or input, an extension's shutdown() and a failed run; a crash record for a panic or fatal error in any goroutine (through a per-session crash-output marker the next start reconciles); and `ompig diagnose` lists the recent unexpected exits. The background cache warm recovers a panic and reschedules as Pi's does, the emergency terminal exit stops extension processes, and a reconciled crash keeps its real time.
+- **Symptom:** A key pressed while an extension's custom overlay is open no longer freezes `pig` when the key reaches the overlay on the main input loop.
+- **Root cause:** Every other exit the user did not ask for now leaves a trace (D102, additive): an exit.log line in the agent directory for SIGHUP, SIGTERM, an external SIGINT, a closed terminal or input, an extension's shutdown() and a failed run; a crash record for a panic or fatal error in any goroutine (through a per-session crash-output marker the next start reconciles); and `pig diagnose` lists the recent unexpected exits. The background cache warm recovers a panic and reschedules as Pi's does, the emergency terminal exit stops extension processes, and a reconciled crash keeps its real time.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `65b7c13e09` (2026-10-06, #168), `a4753ec61e` (2026-10-06, #170), `a81ec0dc55` (2026-10-08), `af1fe1a8fe` (2026-10-08, #175), `f680b9591a` (2026-10-08, #197)
 - **Tests:** `coding/cli/rpc_initial_tools_test.go::TestRPCFreshPromptDeclaresStructuredSystemOnce`, `coding/cli/rpc_shutdown_test.go::TestRPCInputEndAfterExtensionCommandComparedWithPi`, `coding/extension/host/subprocess/tool_call_input_reply_test.go::TestToolCallReplyEditsTheEventInputInPlace`, `internal/codingagent/auth_warnings_test.go::TestCycleModelChecksAnthropicSubscriptionAuth`, `internal/codingagent/exit_record_test.go::TestBackgroundGroupPanicReachesTheHandlerWithItsStack`, `internal/codingagent/exit_record_test.go::TestBackgroundTaskPanicEndsTheSessionWithACrashRecord`, `internal/codingagent/exit_record_test.go::TestCacheWarmerDecisionPanicKeepsPisDecision`, `internal/codingagent/exit_record_test.go::TestCacheWarmerRefreshPanicOutsideTheCaughtRequestReachesTheUncaughtHandler` and 35 more in docs/bug-ledger.json
-- **Release note:** A key pressed while an extension's custom overlay is open no longer freezes `ompig` when the key reaches the overlay on the main input loop. The loop read the overlay's state by queueing a task on itself and waiting for it, so the key never reached the extension. A caller already on the main loop now runs that work inline, as Pi's single event loop does, and a task the loop posts to its own full queue no longer blocks.
+- **Release note:** A key pressed while an extension's custom overlay is open no longer freezes `pig` when the key reaches the overlay on the main input loop. The loop read the overlay's state by queueing a task on itself and waiting for it, so the key never reached the extension. A caller already on the main loop now runs that work inline, as Pi's single event loop does, and a task the loop posts to its own full queue no longer blocks.
 
 ### BF-a8a04f4
 
-**`OMPIG_DEBUG` writes its log with mode 0600 and refuses a symlink or a file owned by another user in the shared…**
+**`PIG_DEBUG` writes its log with mode 0600 and refuses a symlink or a file owned by another user in the shared…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `OMPIG_DEBUG` writes its log with mode 0600 and refuses a symlink or a file owned by another user in the shared temporary directory; `OMPIG_DEBUG_KEYS` logs typed text and pastes only by length, so a key entered at a masked login prompt no longer reaches the log; `ompig-render.log` is private (0600).
+- **Symptom:** `PIG_DEBUG` writes its log with mode 0600 and refuses a symlink or a file owned by another user in the shared temporary directory; `PIG_DEBUG_KEYS` logs typed text and pastes only by length, so a key entered at a masked login prompt no longer reaches the log; `pig-render.log` is private (0600).
 - **Root cause:** Not recorded.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `a8a04f452d` (2026-10-10)
 - **Tests:** `internal/codingagent/debug_log_security_test.go::TestRedactKeyChunkHidesTypedAndPastedText`, `internal/codingagent/debug_log_security_unix_test.go::TestDebugLogRefusesASymlinkAndIsPrivate`
-- **Release note:** `OMPIG_DEBUG` writes its log with mode 0600 and refuses a symlink or a file owned by another user in the shared temporary directory; `OMPIG_DEBUG_KEYS` logs typed text and pastes only by length, so a key entered at a masked login prompt no longer reaches the log; `ompig-render.log` is private (0600).
+- **Release note:** `PIG_DEBUG` writes its log with mode 0600 and refuses a symlink or a file owned by another user in the shared temporary directory; `PIG_DEBUG_KEYS` logs typed text and pastes only by length, so a key entered at a masked login prompt no longer reaches the log; `pig-render.log` is private (0600).
 
 ### BF-a8ff0c7
 
@@ -12607,7 +12607,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.3
 - **Fix commits:** `a9015090a5` (2026-10-22)
 - **Tests:** `ai/openrouter_cost_test.go::TestAnthropicMessagesUsesOpenRouterReportedCost`, `ai/openrouter_cost_test.go::TestApplyOpenRouterReportedCost`, `ai/openrouter_cost_test.go::TestOpenAICompletionsOpenRouterReportedTotalWithoutCatalogRates`, `ai/openrouter_cost_test.go::TestOpenAICompletionsUsesOpenRouterReportedCost`, `internal/codingagent/export/upstream_test.go::TestExportHTMLPinnedAssets`
-- **Release note:** OpenRouter turns (the built-in provider and custom providers on OpenRouter's endpoint) now take OpenRouter's reported total as `usage.cost.total` for OpenAI Completions and Anthropic Messages streams, plus the upstream inference cost for a BYOK request, instead of the catalog estimate, and mark it provider-reported. The export HTML header uses the recorded total. Replaces Ompig's earlier D124 form of this fix with Pi's.
+- **Release note:** OpenRouter turns (the built-in provider and custom providers on OpenRouter's endpoint) now take OpenRouter's reported total as `usage.cost.total` for OpenAI Completions and Anthropic Messages streams, plus the upstream inference cost for a BYOK request, instead of the catalog estimate, and mark it provider-reported. The export HTML header uses the recorded total. Replaces PiG's earlier D124 form of this fix with Pi's.
 
 ### BF-a94455c
 
@@ -12657,7 +12657,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Key matching follows Pi for more terminal inputs and key identifiers.
-- **Root cause:** - keys.ts's sequence patterns use \d+ (:597, :609, :620, :641, :697); Ompig's Atoi accepted a sign (ESC[1;+5A, ESC[27;1;-1~ as up) and an arrow event with no digits (ESC[1;5:A). - parseInt yields a JavaScript number and the bitwise lock mask applies ToInt32, so ESC[1;4294967301A is ctrl+up in Pi; codepoints past 2^53 round (ESC[9007199254741039;5u is not ctrl+/). Ompig refused or misread both. - parseKeyId (:788) ignores a part that names no modifier and lowercases with toLowerCase: meta+a matches a, hyper+up matches up, meta+f1 matches f1, ctrl+İ matches nothing. Ompig matched none of the first three and read İ as i. Mutants killed: the inexact-modifier check, ToInt32 wrap, Unicode…
+- **Root cause:** - keys.ts's sequence patterns use \d+ (:597, :609, :620, :641, :697); Pig's Atoi accepted a sign (ESC[1;+5A, ESC[27;1;-1~ as up) and an arrow event with no digits (ESC[1;5:A). - parseInt yields a JavaScript number and the bitwise lock mask applies ToInt32, so ESC[1;4294967301A is ctrl+up in Pi; codepoints past 2^53 round (ESC[9007199254741039;5u is not ctrl+/). Pig refused or misread both. - parseKeyId (:788) ignores a part that names no modifier and lowercases with toLowerCase: meta+a matches a, hyper+up matches up, meta+f1 matches f1, ctrl+İ matches nothing. Pig matched none of the first three and read İ as i. Mutants killed: the inexact-modifier check, ToInt32 wrap, Unicode…
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -12671,7 +12671,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** An OpenAI Responses, Azure OpenAI Responses or Google stream event whose JSON is a number, string, boolean or array is skipped as Pi skips it, instead of ending the reply with a decode error; a null Responses event fails with Pi's TypeError message.
-- **Root cause:** Follows finding 108, the pi-messages instance, for the other providers. TestProviderStreamNonObjectEventsMatchPi puts `data: <value>` with 5, null, [1], "x" or false after the first record of 20 seeded bodies per provider and compares Pi's provider with Ompig's (anthropic, openai-completions, openai-responses, azure-openai-responses, google, mistral).
+- **Root cause:** Follows finding 108, the pi-messages instance, for the other providers. TestProviderStreamNonObjectEventsMatchPi puts `data: <value>` with 5, null, [1], "x" or false after the first record of 20 seeded bodies per provider and compares Pi's provider with Pig's (anthropic, openai-completions, openai-responses, azure-openai-responses, google, mistral).
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -12755,7 +12755,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A `session_start` handler that calls `ctx.shutdown()` during `/reload` ends the session and exits 0, as Pi does, instead of leaving the reload screen up.
-- **Root cause:** Ompig awaits each reload step with awaitReloadStep, whose loop serviced UI tasks but never checked requestExit. requestShutdown's wake reached that loop instead of the input loop it interrupted, so the request was recorded and ignored: ompig kept the "Reloading" box on screen and never exited.
+- **Root cause:** Pig awaits each reload step with awaitReloadStep, whose loop serviced UI tasks but never checked requestExit. requestShutdown's wake reached that loop instead of the input loop it interrupted, so the request was recorded and ignored: pig kept the "Reloading" box on screen and never exited.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -12769,7 +12769,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Pi-goal-x's `create_goal` could start a goal turn while the run was ending, print `Extension error (<runtime>): This extension ctx is stale ...` and leave the goal paused.
-- **Root cause:** Pi's print and JSON modes await each prompt and go on in the same continuation: to the next prompt, or to disposeRuntime(), which emits session_shutdown and then invalidates the runner (print-mode.ts:131-166, agent-session-runtime.ts:404-410, agent-session.ts:1379-1392). A timer or immediate an extension queues in the prompt's last call therefore runs only after its ctx is stale. Ompig's Node runtime answered over IPC and returned to its event loop first, so pi-goal-x's agent_settled continuation timer could start a goal turn during disposal, which failed with "This extension ctx is stale" and paused the goal.
+- **Root cause:** Pi's print and JSON modes await each prompt and go on in the same continuation: to the next prompt, or to disposeRuntime(), which emits session_shutdown and then invalidates the runner (print-mode.ts:131-166, agent-session-runtime.ts:404-410, agent-session.ts:1379-1392). A timer or immediate an extension queues in the prompt's last call therefore runs only after its ctx is stale. PiG's Node runtime answered over IPC and returned to its event loop first, so pi-goal-x's agent_settled continuation timer could start a goal turn during disposal, which failed with "This extension ctx is stale" and paused the goal.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -12779,17 +12779,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-ad49f9f
 
-**`ompig status` no longer reports a shared extension name as an unhealthy duplicate**
+**`pig status` no longer reports a shared extension name as an unhealthy duplicate**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig status` no longer reports a shared extension name as an unhealthy duplicate.
-- **Root cause:** `ompig status` built each resource identity from the public name alone, so two Packages that both expose `src/index.ts` resolved to the same "src" name and the second one became a fatal duplicate. The loader does not work that way: it identifies an extension by its path, and DisambiguateIdentities renames the later copies ("src:2", "src:3") and loads them all, as Pi loads every extension path. A shared extension name is therefore a supported condition, and `ompig status` exited 1 while the session it described was healthy.
+- **Symptom:** `pig status` no longer reports a shared extension name as an unhealthy duplicate.
+- **Root cause:** `pig status` built each resource identity from the public name alone, so two Packages that both expose `src/index.ts` resolved to the same "src" name and the second one became a fatal duplicate. The loader does not work that way: it identifies an extension by its path, and DisambiguateIdentities renames the later copies ("src:2", "src:3") and loads them all, as Pi loads every extension path. A shared extension name is therefore a supported condition, and `pig status` exited 1 while the session it described was healthy.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
 - **Fix commits:** `ad49f9f02e` (2026-10-23), `ee5fdb16d8` (2026-10-25, #348)
 - **Tests:** `coding/cli/status_command_test.go::TestStatusStillFailsOnDuplicateNonExtensionResourceIdentity`, `coding/cli/status_command_test.go::TestStatusWarnsOnDuplicatePackageExtensionIdentity`
-- **Release note:** `ompig status` no longer reports a shared extension name as an unhealthy duplicate. Two Packages that both expose `src/index.ts` resolve to the same `"src"` public name, and the loader identifies an extension by its path: it renames the later copies (`"src:2"`) and loads them all, as Pi loads every extension path. The report keeps them enabled and moves the finding to a new `warnings` list, so `ompig status` exits 0 and `ompig status --json` stays `"healthy": true`. Skills, prompts and themes key their runtime set by name, so their duplicates remain errors.
+- **Release note:** `pig status` no longer reports a shared extension name as an unhealthy duplicate. Two Packages that both expose `src/index.ts` resolve to the same `"src"` public name, and the loader identifies an extension by its path: it renames the later copies (`"src:2"`) and loads them all, as Pi loads every extension path. The report keeps them enabled and moves the finding to a new `warnings` list, so `pig status` exits 0 and `pig status --json` stays `"healthy": true`. Skills, prompts and themes key their runtime set by name, so their duplicates remain errors.
 
 ### BF-ad9ed64
 
@@ -12867,7 +12867,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Every provider build used to create its own transport, so each request and tool round trip opened a new TCP (and TLS, and proxy CONNECT) connection and left an idle socket with its goroutines for two minutes.
-- **Root cause:** Pi installs one process-wide dispatcher (core/http-dispatcher.ts configureHttpDispatcher), so requests reuse connections. Ompig built a transport per provider: 20 requests opened 20 TCP connections and left idle sockets and goroutines. Cache the transport by TLS mode, idle timeout and proxy environment.
+- **Root cause:** Pi installs one process-wide dispatcher (core/http-dispatcher.ts configureHttpDispatcher), so requests reuse connections. PiG built a transport per provider: 20 requests opened 20 TCP connections and left idle sockets and goroutines. Cache the transport by TLS mode, idle timeout and proxy environment.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -12909,7 +12909,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A streamed tool call whose arguments are valid JSON but not an object (`[]`, `null`, `5`, `"s"`) keeps them as the model sent them, so the model is told `root: must be object ... Received arguments: []` and the session stores them, as Pi does; they used to be replaced by `{}` and reported as missing required properties.
-- **Root cause:** parseStreamingJson returns the value JSON.parse reads. Ompig replaced [] / null / 5 / "s" with {}, so the model was told path was missing instead of root: must be object, and the session stored {}. ToolCall keeps the value's JSON text beside the nil Arguments (nonObjectArguments): ArgumentsJSON, MarshalJSON, UnmarshalJSON, the streaming parsers, clones and validation use it. The partial parser's null stays the empty object (result ?? {}); the nested-call recorder keeps arguments ?? {}.
+- **Root cause:** parseStreamingJson returns the value JSON.parse reads. PiG replaced [] / null / 5 / "s" with {}, so the model was told path was missing instead of root: must be object, and the session stored {}. ToolCall keeps the value's JSON text beside the nil Arguments (nonObjectArguments): ArgumentsJSON, MarshalJSON, UnmarshalJSON, the streaming parsers, clones and validation use it. The partial parser's null stays the empty object (result ?? {}); the nested-call recorder keeps arguments ?? {}.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -12989,17 +12989,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-b06ad92
 
-**An MCP server `url` can use environment variables (`"url": "${TOOLS_URL}"`): Ompig checks and connects to the…**
+**An MCP server `url` can use environment variables (`"url": "${TOOLS_URL}"`): PiG checks and connects to the…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** An MCP server `url` can use environment variables (`"url": "${TOOLS_URL}"`): Ompig checks and connects to the expanded URL, as it does for `headers` and `env` (Pi #10654).
+- **Symptom:** An MCP server `url` can use environment variables (`"url": "${TOOLS_URL}"`): PiG checks and connects to the expanded URL, as it does for `headers` and `env` (Pi #10654).
 - **Root cause:** validateMcpServerConfig, createDefaultTransport and oauthUrl use the raw url; headers and env are resolved. ExpandMcpURL expands $VAR/${VAR}/$$ when fully resolvable, else keeps the url as written.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `b06ad928d7` (2026-10-09)
 - **Tests:** `coding/extension/mcp_url_expansion_test.go::TestExpandMcpURL`, `coding/extension/mcp_url_expansion_test.go::TestValidateMcpServerConfigChecksTheExpandedURL`, `coding/mcpext/connection_test.go::TestMCPConnectionsExpandTheServerURLReferences`
-- **Release note:** An MCP server `url` can use environment variables (`"url": "${TOOLS_URL}"`): Ompig checks and connects to the expanded URL, as it does for `headers` and `env` (Pi #10654).
+- **Release note:** An MCP server `url` can use environment variables (`"url": "${TOOLS_URL}"`): PiG checks and connects to the expanded URL, as it does for `headers` and `env` (Pi #10654).
 
 ### BF-b1642ac
 
@@ -13070,31 +13070,31 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-b341a82
 
-**`go install github.com/tmih06/ompig/cmd/ompig@latest` works again**
+**`go install github.com/MichaelKinsy/PiG/cmd/pig@latest` works again**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `go install github.com/tmih06/ompig/cmd/ompig@latest` works again.
+- **Symptom:** `go install github.com/MichaelKinsy/PiG/cmd/pig@latest` works again.
 - **Root cause:** The 0.5.0 Go module was larger than the Go module size limit because it carried parity ledgers for every earlier Pi pin; only the current pin's ledgers ship now, and v0.5.0 is retracted.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `b341a82e9d` (2026-10-19, #221)
 - **Tests:** None recorded.
-- **Release note:** `go install github.com/tmih06/ompig/cmd/ompig@latest` works again. The 0.5.0 Go module was larger than the Go module size limit because it carried parity ledgers for every earlier Pi pin; only the current pin's ledgers ship now, and v0.5.0 is retracted.
+- **Release note:** `go install github.com/MichaelKinsy/PiG/cmd/pig@latest` works again. The 0.5.0 Go module was larger than the Go module size limit because it carried parity ledgers for every earlier Pi pin; only the current pin's ledgers ship now, and v0.5.0 is retracted.
 
 ### BF-b3543f8
 
-**Fixed MCP stdio servers staying alive after Ompig exited because the terminal closed, it crashed, or it…**
+**Fixed MCP stdio servers staying alive after PiG exited because the terminal closed, it crashed, or it…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Fixed MCP stdio servers staying alive after Ompig exited because the terminal closed, it crashed, or it received a termination signal.
-- **Root cause:** Fixed MCP stdio servers staying alive after Ompig exited because the terminal closed, it crashed, or it received a termination signal.
+- **Symptom:** Fixed MCP stdio servers staying alive after PiG exited because the terminal closed, it crashed, or it received a termination signal.
+- **Root cause:** Fixed MCP stdio servers staying alive after PiG exited because the terminal closed, it crashed, or it received a termination signal.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `1cbd9b094c` (2026-10-07), `b3543f848c` (2026-10-07)
 - **Tests:** `ai/abort_race_test.go::TestOperationSignalKeepsASignalAndSuppliesAnUncancelledOne`, `ai/abort_race_test.go::TestRaceWithAbortSignalSettlesWithTheFirstOfOperationAndAbort`, `ai/abort_utils_oracle_test.go::TestAbortUtilsMatchPi`, `internal/codingagent/tools/shell_tracked_test.go::TestKillTrackedDetachedChildrenEndsRunningMCPStdioServers`, `test/parity/scenarios/slash-commands/16-mcp-manager-while-connecting.toml`
-- **Release note:** Fixed MCP stdio servers staying alive after Ompig exited because the terminal closed, it crashed, or it received a termination signal. Pi ends their process groups from an exit hook; Ompig now does the same on those exits.
+- **Release note:** Fixed MCP stdio servers staying alive after PiG exited because the terminal closed, it crashed, or it received a termination signal. Pi ends their process groups from an exit hook; PiG now does the same on those exits.
 
 ### BF-b430c7a
 
@@ -13102,7 +13102,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Extension widgets now appear in the order they were set when Node or other extension-process widgets and Go in-process widgets share a side of the editor, as in Pi.
-- **Root cause:** Pi's renderWidgets walks one Map per side in insertion order. Ompig listed the extension-process widgets before the host-process ones. Widgets of both hosts now take a shared set sequence, and a replaced or moved one moves to the end.
+- **Root cause:** Pi's renderWidgets walks one Map per side in insertion order. PiG listed the extension-process widgets before the host-process ones. Widgets of both hosts now take a shared set sequence, and a replaced or moved one moves to the end.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -13112,17 +13112,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-b4504dd
 
-**Amazon Bedrock request bodies match Pi's: Ompig writes the ConverseStream body itself in the member order Pi's…**
+**Amazon Bedrock request bodies match Pi's: PiG writes the ConverseStream body itself in the member order Pi's…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Amazon Bedrock request bodies match Pi's: Ompig writes the ConverseStream body itself in the member order Pi's AWS SDK writes (`messages`, `system`, `inferenceConfig`, `toolConfig`, `additionalModelRequestFields`; `role` before `content`; `toolUseId`, `name`, `input`), tool schemas and tool call inputs keep their authored member order, and a tool schema with an empty property name no longer fails the request.
+- **Symptom:** Amazon Bedrock request bodies match Pi's: PiG writes the ConverseStream body itself in the member order Pi's AWS SDK writes (`messages`, `system`, `inferenceConfig`, `toolConfig`, `additionalModelRequestFields`; `role` before `content`; `toolUseId`, `name`, `input`), tool schemas and tool call inputs keep their authored member order, and a tool schema with an empty property name no longer fails the request.
 - **Root cause:** After /tree navigation between parallel tool calls and their results, a branch summary followed by a new prompt sent a synthetic tool_result behind the summary, and Anthropic rejected it with an unexpected tool_use_id. Upstream runs transformMessages after convertToLlm, where a branch summary, compaction summary, bash execution or custom message is already a user message and closes the pending tool calls. NormalizeMessages ran first and did not see them.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `433d232815` (2026-10-09), `da99854d1b` (2026-10-09), `2309604d80` (2026-10-10), `25a75ebc88` (2026-10-10), `8e4a778324` (2026-10-10), `b4504dd82c` (2026-10-10), `b4e83dbe17` (2026-10-10), `c10cde302d` (2026-10-10), `eeac307095` (2026-10-10), `f29e906cb3` (2026-10-10), `fc886e3bd2` (2026-10-10), `fe16108cc7` (2026-10-10)
 - **Tests:** `agent/assistant_member_order_oracle_test.go::TestAssistantLateMembersFollowPiCreationOrder`, `agent/convert_custom_upstream_test.go::TestConvertToLLMCustomMessagesMatchUpstreamConvertToLlm`, `agent/convert_custom_upstream_test.go::TestConvertToLLMToolFlowMatchesUpstreamTransformOrder`, `agent/convert_custom_upstream_test.go::TestCustomMessagesReachProvidersAsUpstreamContentBlocks`, `agent/transform_custom_user_boundary_test.go::TestAnthropicRequestAfterBranchSummaryHasNoOrphanToolResult`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMCustomMessageWithoutWireOutputKeepsToolFlow`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMCustomUserMessageInterruptsToolFlow`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMHoldsSystemMessageUntilToolFlowCloses` and 19 more in docs/bug-ledger.json
-- **Release note:** Amazon Bedrock request bodies match Pi's: Ompig writes the ConverseStream body itself in the member order Pi's AWS SDK writes (`messages`, `system`, `inferenceConfig`, `toolConfig`, `additionalModelRequestFields`; `role` before `content`; `toolUseId`, `name`, `input`), tool schemas and tool call inputs keep their authored member order, and a tool schema with an empty property name no longer fails the request.
+- **Release note:** Amazon Bedrock request bodies match Pi's: PiG writes the ConverseStream body itself in the member order Pi's AWS SDK writes (`messages`, `system`, `inferenceConfig`, `toolConfig`, `additionalModelRequestFields`; `role` before `content`; `toolUseId`, `name`, `input`), tool schemas and tool call inputs keep their authored member order, and a tool schema with an empty property name no longer fails the request.
 
 ### BF-b47b6bc
 
@@ -13139,17 +13139,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-b4822ef
 
-**`ompig install <dir>` now installs a local Go, Rust or Python extension folder and loads it as an extension, as…**
+**`pig install <dir>` now installs a local Go, Rust or Python extension folder and loads it as an extension, as…**
 
 - **Source:** Ompig's own defect
 - **Symptom:** It refused the folder with "is an extension, not a package".
-- **Root cause:** Pi's resolveLocalExtensionSource loads a local directory that declares no filter, "pi" manifest or conventional resource directory as one extension (package-manager.ts:1377-1384), and Ompig does so since. D57's refusal of a local Go, Rust or Python extension folder ("installing it as one loads nothing") was therefore false. VerifyContributesResources now refuses only npm and Git roots, where Pi's collectPackageResources has no such fallback (package-manager.ts:1317-1340).
+- **Root cause:** Pi's resolveLocalExtensionSource loads a local directory that declares no filter, "pi" manifest or conventional resource directory as one extension (package-manager.ts:1377-1384), and Pig does so since. D57's refusal of a local Go, Rust or Python extension folder ("installing it as one loads nothing") was therefore false. VerifyContributesResources now refuses only npm and Git roots, where Pi's collectPackageResources has no such fallback (package-manager.ts:1317-1340).
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `b4822efa1d` (2026-10-09)
 - **Tests:** `coding/cli/package_install_empty_test.go::TestInstallRecordsALocalExtensionDirectoryGivenRelativeToTheWorkingDirectory`, `coding/cli/package_install_empty_test.go::TestInstallRejectsAnExtensionDirectoryAsAPackage`
-- **Release note:** `ompig install <dir>` now installs a local Go, Rust or Python extension folder and loads it as an extension, as it already did for a Node folder. Before, it refused the folder with "is an extension, not a package". An npm or Git source whose root is a bare extension is still refused (D57).
+- **Release note:** `pig install <dir>` now installs a local Go, Rust or Python extension folder and loads it as an extension, as it already did for a Node folder. Before, it refused the folder with "is an extension, not a package". An npm or Git source whose root is a bare extension is still refused (D57).
 
 ### BF-b4c6569
 
@@ -13227,7 +13227,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A resumed session draws its `!` and `!!` command blocks, as Pi does.
-- **Root cause:** Every other exit the user did not ask for now leaves a trace (D102, additive): an exit.log line in the agent directory for SIGHUP, SIGTERM, an external SIGINT, a closed terminal or input, an extension's shutdown() and a failed run; a crash record for a panic or fatal error in any goroutine (through a per-session crash-output marker the next start reconciles); and `ompig diagnose` lists the recent unexpected exits. The background cache warm recovers a panic and reschedules as Pi's does, the emergency terminal exit stops extension processes, and a reconciled crash keeps its real time.
+- **Root cause:** Every other exit the user did not ask for now leaves a trace (D102, additive): an exit.log line in the agent directory for SIGHUP, SIGTERM, an external SIGINT, a closed terminal or input, an extension's shutdown() and a failed run; a crash record for a panic or fatal error in any goroutine (through a per-session crash-output marker the next start reconciles); and `pig diagnose` lists the recent unexpected exits. The background cache warm recovers a panic and reschedules as Pi's does, the emergency terminal exit stops extension processes, and a reconciled crash keeps its real time.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -13250,17 +13250,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-b607c35
 
-**Started from a directory reached through a symlink (a `$PWD` naming a link), ompig now uses the physical…**
+**Started from a directory reached through a symlink (a `$PWD` naming a link), pig now uses the physical…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Started from a directory reached through a symlink (a `$PWD` naming a link), ompig now uses the physical working directory as Pi does, so `@file` arguments are named by their physical path.
+- **Symptom:** Started from a directory reached through a symlink (a `$PWD` naming a link), pig now uses the physical working directory as Pi does, so `@file` arguments are named by their physical path.
 - **Root cause:** main.ts:593 takes cwd from process.cwd() (getcwd(3)); os.Getwd returns $PWD when it names the same directory through a symlink, so a relative @file argument was named <file name="<link>/a.txt"> where Pi writes the physical path. Use nodepath.Process(), which already mirrors process.cwd().
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `b607c35564` (2026-10-13)
 - **Tests:** `coding/cli/startup_physical_cwd_test.go::TestStartupWorkingDirectoryIsThePhysicalPath`, `internal/codingagent/file_processor_oracle_test.go::TestProcessCLIFileArgumentsMatchesPi`
-- **Release note:** Started from a directory reached through a symlink (a `$PWD` naming a link), ompig now uses the physical working directory as Pi does, so `@file` arguments are named by their physical path.
+- **Release note:** Started from a directory reached through a symlink (a `$PWD` naming a link), pig now uses the physical working directory as Pi does, so `@file` arguments are named by their physical path.
 
 ### BF-b684b81
 
@@ -13268,7 +13268,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** RPC and session JSON write an assistant message's members in the order Pi's providers assign them: `reasoning` before `totalTokens` in usage, and `responseId` after `timestamp`, in message events, `get_messages`, `get_entries`, `get_tree` and the session file.
-- **Root cause:** A provider builds its output as role, content, api, provider, model, usage, stopReason, timestamp and assigns responseId, responseModel and errorMessage afterwards (packages/ai/src/api/openai-completions.ts output literal and :564-566; the catch block's errorMessage). Ompig's encoder wrote responseModel, responseId, providerThinkingLevel and diagnostics before usage, so the session file and the get_entries and get_tree wire differed from Pi in member order. The order now equals the event encoder's. Found by the rpc-session journey.
+- **Root cause:** A provider builds its output as role, content, api, provider, model, usage, stopReason, timestamp and assigns responseId, responseModel and errorMessage afterwards (packages/ai/src/api/openai-completions.ts output literal and :564-566; the catch block's errorMessage). PiG's encoder wrote responseModel, responseId, providerThinkingLevel and diagnostics before usage, so the session file and the get_entries and get_tree wire differed from Pi in member order. The order now equals the event encoder's. Found by the rpc-session journey.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -13288,7 +13288,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Fix commits:** `b6c65b3c10` (2026-10-07)
 - **Tests:** `coding/session_bash_split_ansi_upstream_test.go::TestUpstreamBashEscapeSequencesSplitAcrossOutputChunks`
-- **Release note:** `!` command and RPC `bash` output no longer keeps fragments of color codes, such as a stray `m`, when an escape sequence is split across output chunks. Ompig holds a trailing unfinished sequence of up to 256 characters until the next chunk or the end of the command.
+- **Release note:** `!` command and RPC `bash` output no longer keeps fragments of color codes, such as a stray `m`, when an escape sequence is split across output chunks. PiG holds a trailing unfinished sequence of up to 256 characters until the next chunk or the end of the command.
 
 ### BF-b6d8ab0
 
@@ -13308,7 +13308,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **OpenRouter image models that only the Images API serves (for example `openai/gpt-image-2.5-flare`) now…**
 
 - **Source:** A Pi defect that Ompig fixed first (divergence D128)
-- **Symptom:** OpenRouter image models that only the Images API serves (for example `openai/gpt-image-2.5-flare`) now generate: when `chat/completions` refuses the model, Ompig retries through `/images` (D128, pi-mono #10652).
+- **Symptom:** OpenRouter image models that only the Images API serves (for example `openai/gpt-image-2.5-flare`) now generate: when `chat/completions` refuses the model, PiG retries through `/images` (D128, pi-mono #10652).
 - **Root cause:** the refusal is OpenRouter's own statement of which endpoint serves the model; the catalog carries no field that tells the two apart (FLUX and Gemini image models work through chat completions), so the endpoint is discovered from the response.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
@@ -13317,7 +13317,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Removed when Pi fixes it:** Pi sends these models to the Images API.
 - **Fix commits:** `9cc4d406f7` (2026-10-10), `b73020581b` (2026-10-10)
 - **Tests:** `ai/openrouter_images_api_endpoint_test.go::TestOpenRouterImagesAPIFallbackIsNarrowAndRunsOnce`, `ai/openrouter_images_api_endpoint_test.go::TestOpenRouterImagesAPIRequestRunsTheHooksAndJoinsTheTextInput`, `ai/openrouter_images_api_endpoint_test.go::TestOpenRouterImagesOtherFailuresDoNotUseTheImagesAPI`, `ai/openrouter_images_api_endpoint_test.go::TestOpenRouterImagesUsesTheImagesAPIWhenChatCompletionsRefusesTheModel`
-- **Release note:** OpenRouter image models that only the Images API serves (for example `openai/gpt-image-2.5-flare`) now generate: when `chat/completions` refuses the model, Ompig retries through `/images` (D128, pi-mono #10652).
+- **Release note:** OpenRouter image models that only the Images API serves (for example `openai/gpt-image-2.5-flare`) now generate: when `chat/completions` refuses the model, PiG retries through `/images` (D128, pi-mono #10652).
 
 ### BF-b751326
 
@@ -13325,7 +13325,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The message could only say "packed member connection closed".
-- **Root cause:** A Go extension in a packed Go cell that exits mid-tool-call stops its healthy siblings in the same process. Native packed cells are not restarted automatically; /reload recreates them (docs/runtime-cell-reload.md). The quarantine notice says so ("<names> stopped; /reload restarts them"), but when a member's socket-close handler detaches it before watchPackedProcess sees the process exit, the quarantine finds no members left. The user then sees only "extension "go" disabled: packed member connection closed", and later tool calls fail with "read failed: EOF" without explanation. Observed through ompig with the robust-notes Go extension beside a crashing one. The connection-closed notice now…
+- **Root cause:** A Go extension in a packed Go cell that exits mid-tool-call stops its healthy siblings in the same process. Native packed cells are not restarted automatically; /reload recreates them (docs/runtime-cell-reload.md). The quarantine notice says so ("<names> stopped; /reload restarts them"), but when a member's socket-close handler detaches it before watchPackedProcess sees the process exit, the quarantine finds no members left. The user then sees only "extension "go" disabled: packed member connection closed", and later tool calls fail with "read failed: EOF" without explanation. Observed through pig with the robust-notes Go extension beside a crashing one. The connection-closed notice now…
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -13349,17 +13349,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-b7d9b2b
 
-**`ompig install` and `ompig remove` no longer add ever deeper nested entries to the npm `package-lock.json` when…**
+**`pig install` and `pig remove` no longer add ever deeper nested entries to the npm `package-lock.json` when…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig install` and `ompig remove` no longer add ever deeper nested entries to the npm `package-lock.json` when the agent directory is reached through a symlink, such as `~/.pi` linked into a dotfiles repository.
+- **Symptom:** `pig install` and `pig remove` no longer add ever deeper nested entries to the npm `package-lock.json` when the agent directory is reached through a symlink, such as `~/.pi` linked into a dotfiles repository.
 - **Root cause:** Install, temporary install and the update batch now pass the root's real path when it exists (RealInstallRoot, package-manager.ts getNpmInstallArgs), and uninstall passes the real path after its existence check (uninstallNpm).
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
 - **Fix commits:** `b7d9b2b676` (2026-10-25)
 - **Tests:** `coding/cli/npm_command_name_test.go::TestNpmCommandClassificationAtInstallAndRemove`, `coding/cli/package_batch_upstream_test.go::TestPackageBatchedConcurrentUpdatesOriginal`, `coding/cli/package_cli_output_test.go::TestPackageChildOutputAndFailure`, `internal/packagemanager/package_manager_ops_gaps_test.go::TestPackageManagerNpmInstallAndUninstallPassTheRealPathWhenTheAgentDirIsASymlink`, `internal/packagemanager/package_manager_ops_gaps_test.go::TestPackageManagerNpmUninstallAndUpdateCheckUseTheConfiguredCommand`
-- **Release note:** `ompig install` and `ompig remove` no longer add ever deeper nested entries to the npm `package-lock.json` when the agent directory is reached through a symlink, such as `~/.pi` linked into a dotfiles repository. Ompig now passes the resolved real path to npm as `--prefix` (or `--cwd` for Bun).
+- **Release note:** `pig install` and `pig remove` no longer add ever deeper nested entries to the npm `package-lock.json` when the agent directory is reached through a symlink, such as `~/.pi` linked into a dotfiles repository. PiG now passes the resolved real path to npm as `--prefix` (or `--cwd` for Bun).
 
 ### BF-b84facb
 
@@ -13367,7 +13367,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(codingagent,tui): extension editor follows the terminal rows; title and image fallback close only the foreground
-- **Root cause:** Pi's ExtensionEditorComponent builds its Editor with the TUI (extension-editor.ts), so the window is max(5, floor(rows*0.3)) lines; Ompig fixed it at 5. The title used Accent+Reset (ESC[0m) where theme.fg closes with ESC[39m, and DefaultImageTheme did the same for the image fallback line.
+- **Root cause:** Pi's ExtensionEditorComponent builds its Editor with the TUI (extension-editor.ts), so the window is max(5, floor(rows*0.3)) lines; Pig fixed it at 5. The title used Accent+Reset (ESC[0m) where theme.fg closes with ESC[39m, and DefaultImageTheme did the same for the image fallback line.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -13479,7 +13479,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** `/logout` reads stored credentials with Pi's 15-second signal, so an unreadable `auth.json` reports "Could not read stored credentials" instead of "No stored credentials to remove".
-- **Root cause:** interactive-mode.ts:5836 calls listCredentials({ signal: AbortSignal.timeout(15_000) }); with a signal auth-storage.ts:431-432 readLatestData rethrows a failed reload instead of returning the last snapshot, and /logout shows "Could not read stored credentials" (interactive-mode.ts:6025-6029). Ompig listed with context.Background(), took the unsignalled fallback and reported no stored credentials.
+- **Root cause:** interactive-mode.ts:5836 calls listCredentials({ signal: AbortSignal.timeout(15_000) }); with a signal auth-storage.ts:431-432 readLatestData rethrows a failed reload instead of returning the last snapshot, and /logout shows "Could not read stored credentials" (interactive-mode.ts:6025-6029). PiG listed with context.Background(), took the unsignalled fallback and reported no stored credentials.
 - **User impact:** Credential or permission exposure
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -13489,17 +13489,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-ba9c37b
 
-**Starting `ompig` no longer waits for the daily cleanup of the extension cache**
+**Starting `pig` no longer waits for the daily cleanup of the extension cache**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Starting `ompig` no longer waits for the daily cleanup of the extension cache.
+- **Symptom:** Starting `pig` no longer waits for the daily cleanup of the extension cache.
 - **Root cause:** The prune loop checks for cancellation only before each entry. A busy failure that arrived after the cancellation counted as skipped, and the last entry's classification could be cut short with nothing to remove, so the collection returned success and the automatic collector wrote its marker for a run that did not finish. The collection now checks for cancellation before it reports success.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `ba9c37b247` (2026-10-06, #171)
 - **Tests:** `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleBusyEntriesAreSkippedNotErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledBeforeStartTouchesNothing`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledDuringTheLastEntryReportsTheCancellation`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleEntryLeasedAfterClassificationIsSkippedNotAnError`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleOtherErrorsStayErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleStopsWhenItsContextIsCancelled`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestIsBusyErrorLooksThroughWrappedJoins`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestRemoveTreeContextContinuesPastBusyFile` and 1 more in docs/bug-ledger.json
-- **Release note:** Starting `ompig` no longer waits for the daily cleanup of the extension cache. The cleanup now runs in the background after the session is running, stops when `ompig` exits, and skips entries that are in use or that the file system reports busy (such as NFS `.nfs*` files) instead of failing and repeating at every start. `ompig extensions cache prune` reports the skipped entries, and `ompig extensions cache stats` shows the last background failure.
+- **Release note:** Starting `pig` no longer waits for the daily cleanup of the extension cache. The cleanup now runs in the background after the session is running, stops when `pig` exits, and skips entries that are in use or that the file system reports busy (such as NFS `.nfs*` files) instead of failing and repeating at every start. `pig extensions cache prune` reports the skipped entries, and `pig extensions cache stats` shows the last background failure.
 
 ### BF-bada2af
 
@@ -13527,7 +13527,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Fix commits:** `bb324f78bc` (2026-10-09), `d3b72472fe` (2026-10-09)
 - **Tests:** `coding/extension/host/subprocess/command_extra_option_test.go::TestNodeCommandWithAnUnknownOptionLoadsLikePi`, `coding/extension/host/subprocess/register_declaration_fields_wiring_test.go::TestRegistrationDeclarationFieldsReachTheRegistry`
-- **Release note:** A JavaScript or TypeScript extension loads when its `registerCommand` options carry a member Pi does not define, such as `args`. Pi ignores such members; Ompig forwarded `args` to the host, which rejected a value that was not a string, and the extension failed to load.
+- **Release note:** A JavaScript or TypeScript extension loads when its `registerCommand` options carry a member Pi does not define, such as `args`. Pi ignores such members; PiG forwarded `args` to the host, which rejected a value that was not a string, and the extension failed to load.
 
 ### BF-bb3d661
 
@@ -13549,7 +13549,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The `/model` picker now keeps its model list when the catalog refresh times out, as in Pi.
-- **Root cause:** model-catalog-refresh.ts races the refresh with the selector's signal, so the 15 second timeout rejects the call: the picker shows the timeout and keeps the list it had. Ompig waited for the refresh to return and then reloaded the snapshot, showing models the aborted refresh added, and a refresh that ignored the abort never timed out.
+- **Root cause:** model-catalog-refresh.ts races the refresh with the selector's signal, so the 15 second timeout rejects the call: the picker shows the timeout and keeps the list it had. PiG waited for the refresh to return and then reloaded the snapshot, showing models the aborted refresh added, and a refresh that ignored the abort never timed out.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -13609,7 +13609,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Fix commits:** `433d232815` (2026-10-09), `bc8d37f470` (2026-10-10)
 - **Tests:** `agent/convert_custom_upstream_test.go::TestConvertToLLMCustomMessagesMatchUpstreamConvertToLlm`, `agent/convert_custom_upstream_test.go::TestConvertToLLMToolFlowMatchesUpstreamTransformOrder`, `agent/convert_custom_upstream_test.go::TestCustomMessagesReachProvidersAsUpstreamContentBlocks`, `agent/transform_custom_user_boundary_test.go::TestAnthropicRequestAfterBranchSummaryHasNoOrphanToolResult`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMCustomMessageWithoutWireOutputKeepsToolFlow`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMCustomUserMessageInterruptsToolFlow`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMHoldsSystemMessageUntilToolFlowCloses`, `ai/models_store_file_oracle_test.go::TestFileModelsStoreNonObjectRootsAndIndexKeysMatchPi` and 4 more in docs/bug-ledger.json
-- **Release note:** `FileModelsStore` roots and index keys: new live-Pi oracle `TestFileModelsStoreNonObjectRootsAndIndexKeysMatchPi` (`ai/models_store_file_oracle_test.go`; 900 models-store.json files x 1-5 operations; null, array, number and boolean roots, integer-index provider ids, valid files holding null/number/string/array entries; TypeError text compared). Real fixes: Ompig rejected every non-object root where Pi accepts JSON arrays (read as an index-keyed object, written back as an array: a deleted or unset element is `null`, an index write extends the array) and numbers/booleans (read as empty, delete rewrites the scalar, write throws `Cannot create property 'x' on number '5'`), and a null root now throws the per-operation TypeErrors (`Cannot read properties of null (reading 'x')`, `Cannot set properties of null (setting 'x')`, `Cannot convert undefined or null to object`). `TestFileModelsStoreRejectsInvalidJSONAndCancelledContexts` asserted the old `[]`-is-corrupt behaviour; it now uses corrupt text. 11 mutations red (+1 untestable: the 2^32-1 array-index bound). Not compared: a stored value that is not a catalog reads back as itself in Pi (Ompig's typed entry cannot hold it, so such files are only written and deleted), string-valued roots, V8 JSON parse text.
+- **Release note:** `FileModelsStore` roots and index keys: new live-Pi oracle `TestFileModelsStoreNonObjectRootsAndIndexKeysMatchPi` (`ai/models_store_file_oracle_test.go`; 900 models-store.json files x 1-5 operations; null, array, number and boolean roots, integer-index provider ids, valid files holding null/number/string/array entries; TypeError text compared). Real fixes: PiG rejected every non-object root where Pi accepts JSON arrays (read as an index-keyed object, written back as an array: a deleted or unset element is `null`, an index write extends the array) and numbers/booleans (read as empty, delete rewrites the scalar, write throws `Cannot create property 'x' on number '5'`), and a null root now throws the per-operation TypeErrors (`Cannot read properties of null (reading 'x')`, `Cannot set properties of null (setting 'x')`, `Cannot convert undefined or null to object`). `TestFileModelsStoreRejectsInvalidJSONAndCancelledContexts` asserted the old `[]`-is-corrupt behaviour; it now uses corrupt text. 11 mutations red (+1 untestable: the 2^32-1 array-index bound). Not compared: a stored value that is not a catalog reads back as itself in Pi (PiG's typed entry cannot hold it, so such files are only written and deleted), string-valued roots, V8 JSON parse text.
 
 ### BF-bcc2046
 
@@ -13636,7 +13636,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `a00dbe6901` (2026-10-13), `bd3e8ab24b` (2026-10-13)
-- **Tests:** `ai/device_code_poll_oracle_test.go::TestDeviceCodePollDeadlineRoundsTheProductLikePi`, `ai/oauth_expiry_arithmetic_test.go::TestBuiltinOAuthExpiryUsesJavaScriptArithmetic`, `ai/openai_codex_http_error_test.go::TestCodexHTTPErrorResetMinutesRoundTheProductFirst`, `internal/codingagent/cache_warmer_test.go::TestCacheWarmingExpectedSavingsRoundsTheProductLikePi`, `internal/codingagent/ompig_egg3d_test.go::TestPig3dFlightHomeOffsetsRoundLikePi`, `internal/codingagent/radius_login_oracle_test.go::TestRadiusLoginMenuRendersLikePi`
+- **Tests:** `ai/device_code_poll_oracle_test.go::TestDeviceCodePollDeadlineRoundsTheProductLikePi`, `ai/oauth_expiry_arithmetic_test.go::TestBuiltinOAuthExpiryUsesJavaScriptArithmetic`, `ai/openai_codex_http_error_test.go::TestCodexHTTPErrorResetMinutesRoundTheProductFirst`, `internal/codingagent/cache_warmer_test.go::TestCacheWarmingExpectedSavingsRoundsTheProductLikePi`, `internal/codingagent/radius_login_oracle_test.go::TestRadiusLoginMenuRendersLikePi`
 - **Release note:** On arm64 and other CPUs with a fused multiply-add, Kimi, Radius and xAI OAuth credentials store the `expires` time Pi computes for a fractional `expires_in`, the device-code login deadline matches Pi's, and the ChatGPT usage-limit message names the same "Try again in ~N min." as Pi: each `x * 1000` product is rounded before it is added, as JavaScript does. Before, the expiry could differ in the last digit and the minutes by one at a half-minute boundary.
 
 ### BF-bd3e8ab-2
@@ -13650,7 +13650,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `a00dbe6901` (2026-10-13), `bd3e8ab24b` (2026-10-13)
-- **Tests:** `ai/device_code_poll_oracle_test.go::TestDeviceCodePollDeadlineRoundsTheProductLikePi`, `ai/oauth_expiry_arithmetic_test.go::TestBuiltinOAuthExpiryUsesJavaScriptArithmetic`, `ai/openai_codex_http_error_test.go::TestCodexHTTPErrorResetMinutesRoundTheProductFirst`, `internal/codingagent/cache_warmer_test.go::TestCacheWarmingExpectedSavingsRoundsTheProductLikePi`, `internal/codingagent/ompig_egg3d_test.go::TestPig3dFlightHomeOffsetsRoundLikePi`, `internal/codingagent/radius_login_oracle_test.go::TestRadiusLoginMenuRendersLikePi`
+- **Tests:** `ai/device_code_poll_oracle_test.go::TestDeviceCodePollDeadlineRoundsTheProductLikePi`, `ai/oauth_expiry_arithmetic_test.go::TestBuiltinOAuthExpiryUsesJavaScriptArithmetic`, `ai/openai_codex_http_error_test.go::TestCodexHTTPErrorResetMinutesRoundTheProductFirst`, `internal/codingagent/cache_warmer_test.go::TestCacheWarmingExpectedSavingsRoundsTheProductLikePi`, `internal/codingagent/radius_login_oracle_test.go::TestRadiusLoginMenuRendersLikePi`
 - **Release note:** On arm64 and other CPUs with a fused multiply-add, the cache-warming expected savings (shown by `/session`, passed to extensions and compared with the $0.05 threshold), the "Sign in with Radius" shimmer and the 3D easter egg's blocks flying home match Pi: each product is rounded before it is added, as JavaScript does. Before, they could differ from Pi in the last digit, which changed some shimmer colors.
 
 ### BF-bdb7ad8
@@ -13658,14 +13658,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **A single server-sent-event line larger than 32 MiB (for example a base64 image chunk) no longer fails the…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** A single server-sent-event line larger than 32 MiB (for example a base64 image chunk) no longer fails the stream with `token too long` on the providers that use Ompig's SSE decoder.
+- **Symptom:** A single server-sent-event line larger than 32 MiB (for example a base64 image chunk) no longer fails the stream with `token too long` on the providers that use PiG's SSE decoder.
 - **Root cause:** An earlier change replaced the invented 32 MiB cap with math.MaxInt, so a server that never ends a line grows the buffer until the process runs out of memory. Pi is bounded: each of its SSE readers holds the line in a JavaScript string, and Node cannot make one longer than buffer.constants.MAX_STRING_LENGTH (2^29-24; the OpenAI SDK LineDecoder throws 'Cannot create a string longer than 0x1fffffe8 characters', string buffers throw 'RangeError: Invalid string length'). sseLineLimit is that bound.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `bdb7ad8292` (2026-10-09), `c715193fab` (2026-10-09)
 - **Tests:** `ai/sse_long_line_test.go::TestSSEDecoderAcceptsALineLargerThan32MiB`, `ai/sse_long_line_test.go::TestSSEDecoderBoundsALine`, `ai/sse_long_line_test.go::TestSSELineLimitIsNodesMaxStringLength`
-- **Release note:** A single server-sent-event line larger than 32 MiB (for example a base64 image chunk) no longer fails the stream with `token too long` on the providers that use Ompig's SSE decoder. A line is now bounded where Pi's runtime bounds it, at Node's maximum string length (512 MiB), so a server that never ends a line cannot exhaust memory (D134).
+- **Release note:** A single server-sent-event line larger than 32 MiB (for example a base64 image chunk) no longer fails the stream with `token too long` on the providers that use PiG's SSE decoder. A line is now bounded where Pi's runtime bounds it, at Node's maximum string length (512 MiB), so a server that never ends a line cannot exhaust memory (D134).
 
 ### BF-be6803c
 
@@ -13686,14 +13686,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **Running with no home directory now fails the way Pi's package manager does, instead of reading the project's…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** With no `HOME` and no entry for your user in the system's user database (a container run as a user its passwd file does not list), `ompig` used to take the home directory to be empty, so the `.agents/skills` directory of the current project was listed as the user's `~/.agents/skills`, with user scope and without the project-trust prompt.
-- **Root cause:** Ompig's PackageManagerHomeDir ported `process.env.HOME || homedir()` (package-manager.ts:233-235, the pin's getHomeDir) with a failing branch that returned "" where Node's os.homedir() throws `SystemError [ERR_SYSTEM_ERROR]: A system error occurred: uv_os_homedir returned ENOENT (no such file or directory)`. Pi's callers are resolvePath (:2213, :2217) and addAutoDiscoveredResources (:2464, the first statement that matters in resolve()), so Pi's resolve() rejects there; Ompig's collectors ignore errors and rely on ValidateAutoDiscoveredOverrides, which runs first in startup, reload and the config command (validateConfiguredResourceEntries), to report what Pi's resolve() rejects with. That…
+- **Symptom:** With no `HOME` and no entry for your user in the system's user database (a container run as a user its passwd file does not list), `pig` used to take the home directory to be empty, so the `.agents/skills` directory of the current project was listed as the user's `~/.agents/skills`, with user scope and without the project-trust prompt.
+- **Root cause:** PiG's PackageManagerHomeDir ported `process.env.HOME || homedir()` (package-manager.ts:233-235, the pin's getHomeDir) with a failing branch that returned "" where Node's os.homedir() throws `SystemError [ERR_SYSTEM_ERROR]: A system error occurred: uv_os_homedir returned ENOENT (no such file or directory)`. Pi's callers are resolvePath (:2213, :2217) and addAutoDiscoveredResources (:2464, the first statement that matters in resolve()), so Pi's resolve() rejects there; PiG's collectors ignore errors and rely on ValidateAutoDiscoveredOverrides, which runs first in startup, reload and the config command (validateConfiguredResourceEntries), to report what Pi's resolve() rejects with. That…
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
 - **Fix commits:** `beeb36afc7` (2026-10-24)
 - **Tests:** `coding/cli/no_home_directory_test.go::TestResourceLoadingFailsWhereNoHomeDirectoryExists`, `coding/cli/no_home_directory_test.go::TestStartupFailsWhereNoHomeDirectoryExists`, `coding/cli/no_home_directory_test.go::TestStartupFollowsNodeWhenThereIsNoHomeDirectory`, `coding/cli/package_agents_skills_upstream_test.go::TestPackageManagerHomeDirFallsBackToSystemHome`, `internal/codingagent/home_dir_test.go::TestNoHomeDirectoryLeavesTheProjectsAgentsSkillsTheProjectsOnly`, `internal/codingagent/home_dir_test.go::TestPackageManagerHomeDirThrowsWhereNodesHomedirDoes`, `internal/codingagent/home_dir_test.go::TestValidateAutoDiscoveredOverridesRejectsWhereNoHomeDirectoryExists`, `internal/nodehome/nodehome_test.go::TestDirIsNodesOSHomedir` and 1 more in docs/bug-ledger.json
-- **Release note:** Running with no home directory now fails the way Pi's package manager does, instead of reading the project's `.agents/skills` as your own. With no `HOME` and no entry for your user in the system's user database (a container run as a user its passwd file does not list), `ompig` used to take the home directory to be empty, so the `.agents/skills` directory of the current project was listed as the user's `~/.agents/skills`, with user scope and without the project-trust prompt. Startup in print and RPC mode, a reload and `ompig config` now stop with `A system error occurred: uv_os_homedir returned ENOENT (no such file or directory)` and exit status 1, which is what Node's `os.homedir()`, and so Pi, reports there. Pi stops even earlier, at load, whatever the mode; Ompig, which can run without a home directory by setting `OMPIG_HOME`, stops when it loads resources.
+- **Release note:** Running with no home directory now fails the way Pi's package manager does, instead of reading the project's `.agents/skills` as your own. With no `HOME` and no entry for your user in the system's user database (a container run as a user its passwd file does not list), `pig` used to take the home directory to be empty, so the `.agents/skills` directory of the current project was listed as the user's `~/.agents/skills`, with user scope and without the project-trust prompt. Startup in print and RPC mode, a reload and `pig config` now stop with `A system error occurred: uv_os_homedir returned ENOENT (no such file or directory)` and exit status 1, which is what Node's `os.homedir()`, and so Pi, reports there. Pi stops even earlier, at load, whatever the mode; PiG, which can run without a home directory by setting `PIG_HOME`, stops when it loads resources.
 
 ### BF-bf45320
 
@@ -13825,7 +13825,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(rpc): compaction_start precedes a refused replacement's error; D148 names the extra compaction_end; D141 end-to-end evidence
-- **Root cause:** The D148 text names Ompig's extra compaction_end(aborted). The request-time abort check keeps Pi's getAuth reason and its comment says why a caller-owned provider is not called after an abort.
+- **Root cause:** The D148 text names PiG's extra compaction_end(aborted). The request-time abort check keeps Pi's getAuth reason and its comment says why a caller-owned provider is not called after an abort.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -13834,17 +13834,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-c229e1c
 
-**A Pi Durable SQLite file written by Ompig can be read by Pi, and the reverse, when a task kind, request ID, or…**
+**A Pi Durable SQLite file written by PiG can be read by Pi, and the reverse, when a task kind, request ID, or…**
 
 - **Source:** Ompig's own defect
 - **Symptom:** A lookup by kind, request ID or document address missed rows written by the other implementation.
-- **Root cause:** The SQLite differential read each file back only through the storages, and its kinds, keys and request IDs were plain ASCII. encodeIndexedString and encodeJSON used encoding/json, which escapes <, >, & and U+2028/U+2029; Pi's sqlite/storage.ts uses JSON.stringify, which writes them literally. An indexed lookup compares the stored text, so scanTasks by kind, submissionByRequest, findDocument and scanDocuments by kind missed rows the other implementation wrote. This happened in both directions: Pi read Ompig's file and Ompig read Pi's. Both now use jsstring.MarshalJSON. The test now dumps each file through node:sqlite right after the writes and compares the schema and every row. That exposed a…
+- **Root cause:** The SQLite differential read each file back only through the storages, and its kinds, keys and request IDs were plain ASCII. encodeIndexedString and encodeJSON used encoding/json, which escapes <, >, & and U+2028/U+2029; Pi's sqlite/storage.ts uses JSON.stringify, which writes them literally. An indexed lookup compares the stored text, so scanTasks by kind, submissionByRequest, findDocument and scanDocuments by kind missed rows the other implementation wrote. This happened in both directions: Pi read Pig's file and Pig read Pi's. Both now use jsstring.MarshalJSON. The test now dumps each file through node:sqlite right after the writes and compares the schema and every row. That exposed a…
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `97e178f7f6` (2026-10-09), `c229e1cae8` (2026-10-10)
 - **Tests:** `ai/streaming_json_oracle_test.go::TestStreamingJSONMatchesPiOnSeededInput`, `durable/codecs_test.go::TestDocumentRecordMarshalsInPiStorageOrder`, `durable/storage/memory_pi_oracle_test.go::TestMemoryStorageMatchesPiOnSeededPrograms`, `durable/storage/sqlite_pi_oracle_test.go::TestSqliteStorageMatchesPiOnSeededPrograms`
-- **Release note:** A Pi Durable SQLite file written by Ompig can be read by Pi, and the reverse, when a task kind, request ID, or document kind or key contains `<`, `>`, `&`, U+2028 or U+2029. Ompig now stores indexed columns and records as `JSON.stringify` writes them. Before, a lookup by kind, request ID or document address missed rows written by the other implementation. Stored document records list `createdAt` and `retiredAt` after the other members, as Pi stores them.
+- **Release note:** A Pi Durable SQLite file written by PiG can be read by Pi, and the reverse, when a task kind, request ID, or document kind or key contains `<`, `>`, `&`, U+2028 or U+2029. PiG now stores indexed columns and records as `JSON.stringify` writes them. Before, a lookup by kind, request ID or document address missed rows written by the other implementation. Stored document records list `createdAt` and `retiredAt` after the other members, as Pi stores them.
 
 ### BF-c2b2b8b
 
@@ -13893,7 +13893,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Markdown rendering follows Pi for lines made only of Unicode spaces (U+00A0, U+3000, U+2003 and the others JavaScript's trim removes) in and after lists, a list item whose first line is one such space, a heading line holding U+2028 or U+2029, a table whose last line is such a space at a narrow width, and a `$$` or `\[` block whose text is only whitespace.
-- **Root cause:** Go's strings.TrimSpace strips U+0085 and keeps U+FEFF; JavaScript's trim() does the opposite, and marked's blank line, /^[ \t]*$/, is neither: a line of U+00A0, U+3000, U+2003 or U+2028 is text. Ompig used TrimSpace for Pi's `text.trim() === ""` and for blank lines: Text rendered a BOM-only string as a row where Pi renders nothing, an assistant text block of U+FEFF was shown, the model selector took `<U+0085>d` as a prefix of "default", and a full-width space line (common between CJK paragraphs) ended a paragraph, a code block, a table or a heading's spacing where Pi keeps it as text.
+- **Root cause:** Go's strings.TrimSpace strips U+0085 and keeps U+FEFF; JavaScript's trim() does the opposite, and marked's blank line, /^[ \t]*$/, is neither: a line of U+00A0, U+3000, U+2003 or U+2028 is text. Pig used TrimSpace for Pi's `text.trim() === ""` and for blank lines: Text rendered a BOM-only string as a row where Pi renders nothing, an assistant text block of U+FEFF was shown, the model selector took `<U+0085>d` as a prefix of "default", and a full-width space line (common between CJK paragraphs) ended a paragraph, a code block, a table or a heading's spacing where Pi keeps it as text.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -13920,7 +13920,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Extension shortcut conflict warnings name both extensions ("registered by both A and B.
-- **Root cause:** Pi's buildGroups uses a Map (insertion order) and a stable sort; Ompig collected groups from a Go map, so groups tying on origin, scope and source (auto resources from different baseDirs) came out in random order.
+- **Root cause:** Pi's buildGroups uses a Map (insertion order) and a stable sort; Pig collected groups from a Go map, so groups tying on origin, scope and source (auto resources from different baseDirs) came out in random order.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -13934,7 +13934,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The OpenAI Codex login reads the account id from the access token the way Pi does: the token payload is decoded as standard base64 with Pi's padding and whitespace rules (a payload using the URL-safe `-` or `_` characters is not accepted), and the decoded bytes are read as Latin-1 characters, so a non-ASCII account id comes out as Pi's text.
-- **Root cause:** A differential test runs Pi's private decodeJwt and getAccountId in Node (testdata/codex_account_id.mjs cuts them out of the pinned source) over 583 tokens and found 78 differences. Pi decodes the payload with atob(): the standard alphabet only, forgiving padding and ASCII whitespace, and one character per decoded byte, then JSON.parse. Ompig used base64url (raw, then padded): it refused a payload with whitespace Pi reads, accepted '-' and '_' that make atob throw, and read a UTF-8 account id as UTF-8 where Pi reads its bytes as Latin-1. jsAtob now implements the WHATWG forgiving-base64 decode. The length-1-mod-4 and alphabet checks were equivalent mutants (the unpadded standard decoder…
+- **Root cause:** A differential test runs Pi's private decodeJwt and getAccountId in Node (testdata/codex_account_id.mjs cuts them out of the pinned source) over 583 tokens and found 78 differences. Pi decodes the payload with atob(): the standard alphabet only, forgiving padding and ASCII whitespace, and one character per decoded byte, then JSON.parse. Pig used base64url (raw, then padded): it refused a payload with whitespace Pi reads, accepted '-' and '_' that make atob throw, and read a UTF-8 account id as UTF-8 where Pi reads its bytes as Latin-1. jsAtob now implements the WHATWG forgiving-base64 decode. The length-1-mod-4 and alphabet checks were equivalent mutants (the unpadded standard decoder…
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -13948,7 +13948,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Provider request bodies write a lone UTF-16 surrogate as its escape, as `JSON.stringify` does, instead of U+FFFD for each byte of its Go form.
-- **Root cause:** marshalRequestBody used encoding/json, which writes U+FFFD for each of the three WTF-8 bytes a Go string holds for a lone UTF-16 surrogate, where JSON.stringify writes the unit's escape. Pi leaves some strings unsanitized (the Codex instructions, openai-codex-responses.ts:552; an assistant message's reasoning fields), so Ompig sanitized the first and corrupted the second. A body with a U+FFFD character is now encoded with the JSON.stringify encoder (jsstring.MarshalJSON), also inside the request types' own MarshalJSON; any other body encodes as before, so the request allocation gates are unchanged.
+- **Root cause:** marshalRequestBody used encoding/json, which writes U+FFFD for each of the three WTF-8 bytes a Go string holds for a lone UTF-16 surrogate, where JSON.stringify writes the unit's escape. Pi leaves some strings unsanitized (the Codex instructions, openai-codex-responses.ts:552; an assistant message's reasoning fields), so PiG sanitized the first and corrupted the second. A body with a U+FFFD character is now encoded with the JSON.stringify encoder (jsstring.MarshalJSON), also inside the request types' own MarshalJSON; any other body encodes as before, so the request allocation gates are unchanged.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -13975,14 +13975,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **An extension that calls `registerTool({})` or `registerTool(null)` now fails to load with Pi's error text…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** An extension that calls `registerTool({})` or `registerTool(null)` now fails to load with Pi's error text (the missing parameter schema, or the TypeError of reading `parameters`), not a Ompig-only message.
+- **Symptom:** An extension that calls `registerTool({})` or `registerTool(null)` now fails to load with Pi's error text (the missing parameter schema, or the TypeError of reading `parameters`), not a PiG-only message.
 - **Root cause:** The Node runtime threw its own 'registerTool requires a definition with name' before Pi's checks. Pi's loader.ts:289-295 reads tool.parameters first, so {} fails the object-schema check (Tool "undefined" ...) and null throws the TypeError of the property read.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `c51c77e0b5` (2026-10-11)
 - **Tests:** `coding/extension/host/subprocess/upstream_tool_schema_test.go::TestRegisterToolWithoutANameFailsLikePisLoader`
-- **Release note:** An extension that calls `registerTool({})` or `registerTool(null)` now fails to load with Pi's error text (the missing parameter schema, or the TypeError of reading `parameters`), not a Ompig-only message.
+- **Release note:** An extension that calls `registerTool({})` or `registerTool(null)` now fails to load with Pi's error text (the missing parameter schema, or the TypeError of reading `parameters`), not a PiG-only message.
 
 ### BF-c58ceed
 
@@ -14018,7 +14018,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The durable `powershell` tool fails with "No command to run" when its program list is empty, instead of reporting success.
-- **Root cause:** Pi's runCommand throws "No command to run" when no command form ran, which createPowerShellTool({ programs: [] }) reaches (packages/durable/src/tools/bash.ts runCommand). Ompig returned success without running anything.
+- **Root cause:** Pi's runCommand throws "No command to run" when no command form ran, which createPowerShellTool({ programs: [] }) reaches (packages/durable/src/tools/bash.ts runCommand). PiG returned success without running anything.
 - **User impact:** An operation failed or was rejected
 - **Platform:** Windows
 - **Fixed in:** 0.5.0
@@ -14087,7 +14087,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Pressing the login dialog's cancel key again cancels again, and Enter after a cancelled prompt leaves the field unchanged, as in Pi.
-- **Root cause:** (1) login-dialog.ts handleInput has no done guard: a second cancel key aborts and calls onComplete again; Ompig ignored every key once cancelled. (2) The Input's onSubmit acts only while an input resolver is pending (replaceInputWithSubmittedText + resolve); after cancel Ompig still replaced the field with '> text'. HandleInput drops the done guard and OnSubmit returns when no input is pending.
+- **Root cause:** (1) login-dialog.ts handleInput has no done guard: a second cancel key aborts and calls onComplete again; Pig ignored every key once cancelled. (2) The Input's onSubmit acts only while an input resolver is pending (replaceInputWithSubmittedText + resolve); after cancel Pig still replaced the field with '> text'. HandleInput drops the done guard and OnSubmit returns when no input is pending.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -14101,7 +14101,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Settings submenus: the type-to-filter box no longer shows a hardware cursor marker (Pi never focuses it), and the highlight callback (theme preview) now fires on every up/down like Pi's SelectList, including when the highlight stays on the same item.
-- **Root cause:** The assignment is removed. SelectSubmenuComponent now has OnSelectionChange (set by newSelectSubmenuStep, its production caller) fired after up/down. Frames compare as text (Pi bold/fg closers vs Ompig SGR 0 differ, open renderer question). Overlapping rebinds (a key shared by cancel and up) are not probed: FilterableList checks cancel before up unlike Pi's SelectList; follow-up.
+- **Root cause:** The assignment is removed. SelectSubmenuComponent now has OnSelectionChange (set by newSelectSubmenuStep, its production caller) fired after up/down. Frames compare as text (Pi bold/fg closers vs Pig SGR 0 differ, open renderer question). Overlapping rebinds (a key shared by cancel and up) are not probed: FilterableList checks cancel before up unlike Pi's SelectList; follow-up.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -14115,7 +14115,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Without `HOME` set, the project trust check takes the home directory from the user database, as Pi's `os.homedir()` does, instead of treating the working directory as the home directory.
-- **Root cause:** hasTrustRequiringProjectResources canonicalizes process.env.HOME || homedir() (trust-manager.ts:187), and Node's os.homedir() reads the user database when HOME is unset or empty. Ompig fell back to os.UserHomeDir, which reads only HOME, and resolved the empty result against the working directory: the working directory then counted as the user's home, its .agents/skills never required project trust, and every trust check realpathed the working directory twice.
+- **Root cause:** hasTrustRequiringProjectResources canonicalizes process.env.HOME || homedir() (trust-manager.ts:187), and Node's os.homedir() reads the user database when HOME is unset or empty. PiG fell back to os.UserHomeDir, which reads only HOME, and resolved the empty result against the working directory: the working directory then counted as the user's home, its .agents/skills never required project trust, and every trust check realpathed the working directory twice.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -14271,7 +14271,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The `/thinking` selector edits its search like Pi's input, selects with the input's submit key, and no longer repeats a selection or cancel on the next navigation key.
-- **Root cause:** (1) tui.input.submit (ctrl+s here) must select through the search Input's onSubmit -> selectList.handleInput("\r"); Ompig's host-owned TextInput only marked itself done. (2) Ompig re-fired onSelect/onCancel on every later navigation key because it read the list's sticky Done state; Pi fires once per confirm/cancel key (new FilterableList.Reset, called by the selector after it dispatches). Scenario settings/06 (/thinking, m Down Left d -> '> dm') is red on the old selector ('> md') and byte-equal now.
+- **Root cause:** (1) tui.input.submit (ctrl+s here) must select through the search Input's onSubmit -> selectList.handleInput("\r"); Pig's host-owned TextInput only marked itself done. (2) Pig re-fired onSelect/onCancel on every later navigation key because it read the list's sticky Done state; Pi fires once per confirm/cancel key (new FilterableList.Reset, called by the selector after it dispatches). Scenario settings/06 (/thinking, m Down Left d -> '> dm') is red on the old selector ('> md') and byte-equal now.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -14291,21 +14291,21 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Fix commits:** `395c46cbf2` (2026-10-09), `69b9811164` (2026-10-09), `852652e3ae` (2026-10-09), `da99854d1b` (2026-10-09), `cd7fa1ca25` (2026-10-10)
 - **Tests:** `coding/cli/piglet_verify_cache_startup_test.go::TestSignedPigletBinaryRunsWhenItsVerifyCacheCannotBeWritten`, `coding/cli/readonly_config_root_binary_test.go::TestReadOnlyConfigRootStartsQuietlyAndNamesOnlyDocsThatExist`, `coding/cli/strip_app_features_test.go::TestStripExportHTMLBuildOmitsExportPackage`, `coding/extension/pigsdk/pigsdk_version_share_test.go::TestWarmStartRecordsTheUseOfThisBuildsSDKDirectories`, `internal/codingagent/auth_guidance_test.go::TestNoTextNamesADocsBundleStartupCouldNotWrite`, `internal/configroot/configroot_test.go::TestDocsDirIsThePigdocsBundleUnderTheConfigRoot`, `internal/contentdirs/contentdirs_test.go::TestEvictKeepsTheMostRecentlyUsedAndTheCallersOwn`, `internal/contentdirs/contentdirs_test.go::TestNameRequiresAHexHash` and 7 more in docs/bug-ledger.json
-- **Release note:** A read-only config root no longer prints warnings at every start. The extension SDK staging warning stays silent there, because each build reads only its own staged SDK directories and nothing another build staged can stand in for them, and a signed Ompiglet Binary no longer warns that it cannot write its verification cache; its next start checks it in full again. Other write errors still warn. The agent directory must stay writable, as in Pi.
+- **Release note:** A read-only config root no longer prints warnings at every start. The extension SDK staging warning stays silent there, because each build reads only its own staged SDK directories and nothing another build staged can stand in for them, and a signed Piglet Binary no longer warns that it cannot write its verification cache; its next start checks it in full again. Other write errors still warn. The agent directory must stay writable, as in Pi.
 
 ### BF-cda6e3a
 
-**Ompig opens a session file that holds a valid JSON line that is not an entry (an array, `true`, a string) or an…**
+**PiG opens a session file that holds a valid JSON line that is not an entry (an array, `true`, a string) or an…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Ompig opens a session file that holds a valid JSON line that is not an entry (an array, `true`, a string) or an entry whose `id` or `parentId` is not a string, as Pi does, instead of failing with `json: cannot unmarshal … SessionEntryBase`.
+- **Symptom:** PiG opens a session file that holds a valid JSON line that is not an entry (an array, `true`, a string) or an entry whose `id` or `parentId` is not a string, as Pi does, instead of failing with `json: cannot unmarshal … SessionEntryBase`.
 - **Root cause:** - sessionentry keeps an id or parentId that is not a string as the key of its JavaScript value. The key starts with a 0xFF byte, which no decoded string holds. An absent id or parentId is undefined, and a null id is null. Each parsed object or array gets a key of its own, because Map compares objects by identity. - Truthy is JavaScript truthiness. - ValueJSON writes the value back. A child's parentId is that value, and is omitted when undefined. - WireID is the leaf as a host-call string. - A LazyEntry keeps the keys it was indexed with. - The load no longer re-decodes the base of an undescribed record. Its leaf is the record's id, or null when that id is null. - getBranch, the context…
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `6a6fffa638` (2026-10-10), `cda6e3a715` (2026-10-11)
 - **Tests:** `agent/message_json_number_spelling_test.go::TestAgentMessageDecodeKeepsANonNumberWhereAnIntegerIsExpected`, `agent/message_json_test.go::TestAgentMessageJSONRejectsInvalidUnion`, `agent/message_type_mismatch_test.go::TestDecodedMessageKeepsMembersOfAnyType`, `agent/provider_content_block_decode_test.go::TestUnknownContentBlockCostsOnlyThatBlock`, `internal/codingagent/session_context_settings_test.go::TestGetSessionContextSettingsBoundaries`, `internal/codingagent/session_file_entry_union_test.go::TestSessionKeepsRecordsThatAreNotEntriesAsPiDoes`, `internal/codingagent/session_messagefor_cache_test.go::TestMessageForReportsAnUnparseableEntryWithoutParsingItAgain`, `internal/sessionentry/lazy_test.go::TestLazyEntryKeepsTheKeysOfObjectValuedIDs` and 3 more in docs/bug-ledger.json
-- **Release note:** Ompig opens a session file that holds a valid JSON line that is not an entry (an array, `true`, a string) or an entry whose `id` or `parentId` is not a string, as Pi does, instead of failing with `json: cannot unmarshal … SessionEntryBase`. The leaf, the branch, the context and the `parentId` of the next entry follow Pi: after a line with no `id` the next entry has no `parentId` member, after an entry whose `id` is `5` it has `"parentId":5`, and a falsy `parentId` ends a branch.
+- **Release note:** PiG opens a session file that holds a valid JSON line that is not an entry (an array, `true`, a string) or an entry whose `id` or `parentId` is not a string, as Pi does, instead of failing with `json: cannot unmarshal … SessionEntryBase`. The leaf, the branch, the context and the `parentId` of the next entry follow Pi: after a line with no `id` the next entry has no `parentId` member, after an entry whose `id` is `5` it has `"parentId":5`, and a falsy `parentId` ends a branch.
 
 ### BF-cdf0be7
 
@@ -14433,17 +14433,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-cf4fff8
 
-**A project whose only configuration is a project `mcp.json` (`.ompig/mcp.json`, or `.pi/mcp.json` with…**
+**A project whose only configuration is a project `mcp.json` (`.pig/mcp.json`, or `.pi/mcp.json` with…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** A project whose only configuration is a project `mcp.json` (`.ompig/mcp.json`, or `.pi/mcp.json` with `OMPIG_USE_PI_DIRS=1`, D2) now requires project trust, as Pi's `TRUST_REQUIRING_PROJECT_CONFIG_RESOURCES` does.
+- **Symptom:** A project whose only configuration is a project `mcp.json` (`.pig/mcp.json`, or `.pi/mcp.json` with `PIG_USE_PI_DIRS=1`, D2) now requires project trust, as Pi's `TRUST_REQUIRING_PROJECT_CONFIG_RESOURCES` does.
 - **Root cause:** A real-binary test runs print, print --no-session, JSON and RPC modes in a project whose only configuration is a project mcp.json with a stdio server. The server process must not start and its tool must not reach the model; a saved trust decision starts it. Without "mcp.json" in the trust list every untrusted mode starts the server.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `cf4fff8f78` (2026-10-10)
 - **Tests:** `coding/cli/mcp_builtin_binary_test.go::TestBuiltinMCPExtensionStartsProjectServersOnlyInATrustedProject`, `test/parity/scenarios/project-trust/22-mcp-json-only-project-requires-trust.toml`
-- **Release note:** A project whose only configuration is a project `mcp.json` (`.ompig/mcp.json`, or `.pi/mcp.json` with `OMPIG_USE_PI_DIRS=1`, D2) now requires project trust, as Pi's `TRUST_REQUIRING_PROJECT_CONFIG_RESOURCES` does. Ompig left `mcp.json` out of that list, so such a project counted as having nothing to trust and the commands of its stdio MCP servers started without a prompt in every mode. Interactive mode now asks for trust. Print, JSON and RPC modes, without a saved decision or `defaultProjectTrust: "always"`, now ignore the file, as they do for other project configuration.
+- **Release note:** A project whose only configuration is a project `mcp.json` (`.pig/mcp.json`, or `.pi/mcp.json` with `PIG_USE_PI_DIRS=1`, D2) now requires project trust, as Pi's `TRUST_REQUIRING_PROJECT_CONFIG_RESOURCES` does. PiG left `mcp.json` out of that list, so such a project counted as having nothing to trust and the commands of its stdio MCP servers started without a prompt in every mode. Interactive mode now asks for trust. Print, JSON and RPC modes, without a saved decision or `defaultProjectTrust: "always"`, now ignore the file, as they do for other project configuration.
 
 ### BF-cf648c7
 
@@ -14478,7 +14478,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A local file listed as a Package with `autoload: false` still loads as one enabled extension, and when a project lists a Package with `autoload: false`, every user-settings entry for that Package is kept, as in Pi's `resolveLocalExtensionSource` and `dedupePackages`.
-- **Root cause:** TestLoadMcpConfigMatchesPiOnRandomFiles loads 1500 random global and project mcp.json files through Pi's loadMcpConfig and Ompig's LoadMcpConfig: 187 differed, among them every file with a numeric server name, because Object.entries lists array-index keys first and orderedjson.Object kept file order. Object.Set now inserts an array-index key at its ascending place before the other keys (Keys, MarshalJSON, Clone follow), with TestObjectEnumeratesArrayIndexKeysFirst. Dependent packages (codingagent, extension, mcpext, mcp, packagecontent) pass; the failures left in tools and the node-backed subprocess tests are the fd/rg and node-shim environment ones.
+- **Root cause:** TestLoadMcpConfigMatchesPiOnRandomFiles loads 1500 random global and project mcp.json files through Pi's loadMcpConfig and PiG's LoadMcpConfig: 187 differed, among them every file with a numeric server name, because Object.entries lists array-index keys first and orderedjson.Object kept file order. Object.Set now inserts an array-index key at its ascending place before the other keys (Keys, MarshalJSON, Clone follow), with TestObjectEnumeratesArrayIndexKeysFirst. Dependent packages (codingagent, extension, mcpext, mcp, packagecontent) pass; the failures left in tools and the node-backed subprocess tests are the fd/rg and node-shim environment ones.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -14501,7 +14501,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-d11ca55
 
-**`ompig ompiglet build --format binary` from a Ompig checkout with a `go.work` builds a Ompiglet whose fused Go…**
+**`pig piglet build --format binary` from a Pig checkout with a `go.work` builds a Piglet whose fused Go…**
 
 - **Source:** Ompig's own defect
 - **Symptom:** The build stopped with `go: updates to go.sum needed, but go.sum is part of the overlay specified with -overlay`, because workspace mode needs checksums that `go mod tidy` does not write to the extension's `go.sum`.
@@ -14511,7 +14511,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Fix commits:** `da99854d1b` (2026-10-09), `8a5162f352` (2026-10-10), `d11ca55cdb` (2026-10-10)
 - **Tests:** `coding/cli/strip_app_features_test.go::TestStripExportHTMLBuildOmitsExportPackage`, `coding/pigletbuild/testmain_test.go::TestMain`, `coding/pigletbuild/workspace_sums_test.go::TestAppendMissingLinesKeepsBaseAndAddsOnlyNewLines`, `coding/pigletbuild/workspace_sums_test.go::TestBuildNativeArtifactCompletesWorkspaceChecksumsOffline`, `coding/pigletbuild/workspace_sums_test.go::TestCompleteWorkspaceSumsSkipsAModuleCacheSource`, `coding/pigletbuild/workspace_sums_test.go::TestScratchWorkFileAnchorsRelativePaths`
-- **Release note:** `ompig ompiglet build --format binary` from a Ompig checkout with a `go.work` builds a Ompiglet whose fused Go extension imports an external module, such as an `a2a-go` v2 package. Before, the build stopped with `go: updates to go.sum needed, but go.sum is part of the overlay specified with -overlay`, because workspace mode needs checksums that `go mod tidy` does not write to the extension's `go.sum`. The build now adds them to its own overlay and still never writes the checkout.
+- **Release note:** `pig piglet build --format binary` from a Pig checkout with a `go.work` builds a Piglet whose fused Go extension imports an external module, such as an `a2a-go` v2 package. Before, the build stopped with `go: updates to go.sum needed, but go.sum is part of the overlay specified with -overlay`, because workspace mode needs checksums that `go mod tidy` does not write to the extension's `go.sum`. The build now adds them to its own overlay and still never writes the checkout.
 
 ### BF-d133e3d
 
@@ -14547,7 +14547,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The crash message of a deterministic code mode VM that is told a result number it cannot take now reads as Pi's does, `Error: Result 2 has sequence number 5, expected 1 or later, once`, and names `undefined` for a result that carries no number, where it read `Result 2 has sequence number 0, ...`.
-- **Root cause:** A new test drives Pi's own serveCodemodeRemote, RemoteCodemodeSandbox, InlineCodemodeSandbox and CodemodeSandboxBase.start (the vendored pi-dist) and Ompig with the same cases and compares the frames of the remote exchange, the requests, the events of a deterministic run, what deliver refuses and the outcomes. It found three differences, all fixed here:
+- **Root cause:** A new test drives Pi's own serveCodemodeRemote, RemoteCodemodeSandbox, InlineCodemodeSandbox and CodemodeSandboxBase.start (the vendored pi-dist) and PiG with the same cases and compares the frames of the remote exchange, the requests, the events of a deterministic run, what deliver refuses and the outcomes. It found three differences, all fixed here:
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -14561,7 +14561,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The errors that name a code mode tool or global (`Tool "x" is already registered`, `Invalid global name "x"`, `Global "x" is already registered`, `Global "x" conflicts with the namespace "x"`) write the name as it was given, as Pi does, instead of Go-escaped (`"we\"ird"`).
-- **Root cause:** A new test drives Pi's own serveCodemodeRemote, RemoteCodemodeSandbox, InlineCodemodeSandbox and CodemodeSandboxBase.start (the vendored pi-dist) and Ompig with the same cases and compares the frames of the remote exchange, the requests, the events of a deterministic run, what deliver refuses and the outcomes. It found three differences, all fixed here:
+- **Root cause:** A new test drives Pi's own serveCodemodeRemote, RemoteCodemodeSandbox, InlineCodemodeSandbox and CodemodeSandboxBase.start (the vendored pi-dist) and PiG with the same cases and compares the frames of the remote exchange, the requests, the events of a deterministic run, what deliver refuses and the outcomes. It found three differences, all fixed here:
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -14575,7 +14575,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A code mode `done` message that carries no store writes now fails the execution with Pi's `store writes is not valid JSON` instead of `unknown message from the worker`.
-- **Root cause:** A new test drives Pi's own serveCodemodeRemote, RemoteCodemodeSandbox, InlineCodemodeSandbox and CodemodeSandboxBase.start (the vendored pi-dist) and Ompig with the same cases and compares the frames of the remote exchange, the requests, the events of a deterministic run, what deliver refuses and the outcomes. It found three differences, all fixed here:
+- **Root cause:** A new test drives Pi's own serveCodemodeRemote, RemoteCodemodeSandbox, InlineCodemodeSandbox and CodemodeSandboxBase.start (the vendored pi-dist) and PiG with the same cases and compares the frames of the remote exchange, the requests, the events of a deterministic run, what deliver refuses and the outcomes. It found three differences, all fixed here:
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -14613,17 +14613,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-d212cdf
 
-**`ompig --ompiglet ompiglets/standard/ompig-standard.yaml` no longer warns on every start that its `piglogin`…**
+**`pig --piglet piglets/standard/pig-standard.yaml` no longer warns on every start that its `piglogin`…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig --ompiglet ompiglets/standard/ompig-standard.yaml` no longer warns on every start that its `piglogin` extension registers `/sprite`, so the built-in `ompig-login` extension was not loaded.
-- **Root cause:** `ompig --ompiglet ompiglets/standard/ompig-standard.yaml` no longer warns on every start that its `piglogin` extension registers `/sprite`, so the built-in `ompig-login` extension was not loaded.
+- **Symptom:** `pig --piglet piglets/standard/pig-standard.yaml` no longer warns on every start that its `piglogin` extension registers `/sprite`, so the built-in `pig-login` extension was not loaded.
+- **Root cause:** `pig --piglet piglets/standard/pig-standard.yaml` no longer warns on every start that its `piglogin` extension registers `/sprite`, so the built-in `pig-login` extension was not loaded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `d212cdf056` (2026-10-13)
 - **Tests:** `coding/cli/standard_piglet_startup_test.go::TestStandardPigletStartsWithoutReplacedBuiltinWarning`
-- **Release note:** `ompig --ompiglet ompiglets/standard/ompig-standard.yaml` no longer warns on every start that its `piglogin` extension registers `/sprite`, so the built-in `ompig-login` extension was not loaded. Ompig Standard now strips the built-in `ompig-login` (`strip.extensions: [ompig-login]`), and its own `piglogin` extension owns `/sprite`.
+- **Release note:** `pig --piglet piglets/standard/pig-standard.yaml` no longer warns on every start that its `piglogin` extension registers `/sprite`, so the built-in `pig-login` extension was not loaded. PiG Standard now strips the built-in `pig-login` (`strip.extensions: [pig-login]`), and its own `piglogin` extension owns `/sprite`.
 
 ### BF-d249c70
 
@@ -14631,7 +14631,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** SDK: `Session.Dispose` now releases the Session as Pi's `dispose` does.
-- **Root cause:** Pi's AgentSession.dispose (agent-session.ts:1389-1416) is for "when completely done with the session". It drops every listener and disconnects from the agent, so nothing of the Session stays live. Ompig's Dispose cleared the listeners but left two things running until Close: - the event forwarder goroutine: the Events stream stayed open, and with no reader, producers blocked once the buffers filled; - the model registry observer. The services outlive a Session across replacement, so the registry observer kept a disposed Session reachable. An embedder that ends a Session with Dispose alone, as with Pi, leaked both.
+- **Root cause:** Pi's AgentSession.dispose (agent-session.ts:1389-1416) is for "when completely done with the session". It drops every listener and disconnects from the agent, so nothing of the Session stays live. PiG's Dispose cleared the listeners but left two things running until Close: - the event forwarder goroutine: the Events stream stayed open, and with no reader, producers blocked once the buffers filled; - the model registry observer. The services outlive a Session across replacement, so the registry observer kept a disposed Session reachable. An embedder that ends a Session with Dispose alone, as with Pi, leaked both.
 - **User impact:** Lost or altered data
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -14654,17 +14654,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-d276c00
 
-**`ompig ompiglet schema` lists the `apis` strip list**
+**`pig piglet schema` lists the `apis` strip list**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig ompiglet schema` lists the `apis` strip list.
-- **Root cause:** ompig ompiglet show lists the slot, the schema gains slots and removeSpec.slots, and a Binary's embedded Ompiglet carries no slots because the member is compiled in. The Binary record keeps the member's tree digest as a content-addressed frontend input.
+- **Symptom:** `pig piglet schema` lists the `apis` strip list.
+- **Root cause:** pig piglet show lists the slot, the schema gains slots and removeSpec.slots, and a Binary's embedded Piglet carries no slots because the member is compiled in. The Binary record keeps the member's tree digest as a content-addressed frontend input.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `f5190b9c48` (2026-10-04), `591f095784` (2026-10-05), `613c997d21` (2026-10-05), `d1c9dfddbb` (2026-10-05), `171aa56d63` (2026-10-06), `c20aeb351d` (2026-10-06), `ca7160566a` (2026-10-06), `1f98a7c315` (2026-10-07), `c0addf92cc` (2026-10-07), `44f92ab2d8` (2026-10-08), `d276c00c53` (2026-10-08)
-- **Tests:** `ai/bedrock_option_fields_upstream_test.go::TestBedrockBearerTokenOptionPrecedence`, `ai/bedrock_option_fields_upstream_test.go::TestBedrockThinkingDisplayOption`, `ai/bedrock_provider_options_wire_test.go::TestBedrockAppliesPreparedHeadersAndRequestEnvironment`, `ai/bedrock_provider_options_wire_test.go::TestBedrockReservedHeaderMiddlewarePreservesSDKValues`, `ai/bedrock_provider_options_wire_test.go::TestBedrockReservedHeadersCannotBeOverriddenOrDeleted`, `ai/bedrock_provider_response_test.go::TestBedrockResponseHeadersUpstream`, `ai/bedrock_stream_events_upstream_test.go::TestBedrockProviderStreamEventsUpstream`, `ai/bedrock_transport_error_test.go::TestBedrockMidStreamTransportFailureMatchesTerminated` and 85 more in docs/bug-ledger.json
-- **Release note:** `ompig ompiglet schema` lists the `apis` strip list.
+- **Tests:** `ai/bedrock_option_fields_upstream_test.go::TestBedrockBearerTokenOptionPrecedence`, `ai/bedrock_option_fields_upstream_test.go::TestBedrockThinkingDisplayOption`, `ai/bedrock_provider_options_wire_test.go::TestBedrockAppliesPreparedHeadersAndRequestEnvironment`, `ai/bedrock_provider_options_wire_test.go::TestBedrockReservedHeaderMiddlewarePreservesSDKValues`, `ai/bedrock_provider_options_wire_test.go::TestBedrockReservedHeadersCannotBeOverriddenOrDeleted`, `ai/bedrock_provider_response_test.go::TestBedrockResponseHeadersUpstream`, `ai/bedrock_stream_events_upstream_test.go::TestBedrockProviderStreamEventsUpstream`, `ai/bedrock_transport_error_test.go::TestBedrockMidStreamTransportFailureMatchesTerminated` and 62 more in docs/bug-ledger.json
+- **Release note:** `pig piglet schema` lists the `apis` strip list.
 
 ### BF-d2b1fc1
 
@@ -14710,17 +14710,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-d305b76
 
-**A Go extension whose `go.mod` replace (or a Rust extension whose `ompig-sdk` path dependency) points at an SDK…**
+**A Go extension whose `go.mod` replace (or a Rust extension whose `pig-sdk` path dependency) points at an SDK…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** A Go extension whose `go.mod` replace (or a Rust extension whose `ompig-sdk` path dependency) points at an SDK an earlier ompig staged under its configuration root, for example through a link made with `ompig reload --sdk-path go` before updating ompig, now builds against the SDK the current ompig staged. ompig never deletes the SDK directories older versions staged, so such a link kept resolving and the extension compiled against the old SDK, failing at load with `decode register payload: json: unknown field ...`.
-- **Root cause:** A go.mod replace (or Cargo path dependency) that resolves inside <config root>/state/pigsdk/ but outside the SDK this ompig stages now points at an SDK an earlier ompig staged; ompig never deletes those directories, so a link made with `ompig reload --sdk-path go` kept resolving after an update and the extension compiled against the old SDK, failing at register with `decode register payload: json: unknown field "can_block"` and making `ompig extension upgrade` type-check against the same old SDK. Treat such a replace like a missing one in the packed, isolated and upgrade-analysis paths, Go and Rust; a replace anywhere else still wins.
+- **Symptom:** A Go extension whose `go.mod` replace (or a Rust extension whose `pig-sdk` path dependency) points at an SDK an earlier pig staged under its configuration root, for example through a link made with `pig reload --sdk-path go` before updating pig, now builds against the SDK the current pig staged. pig never deletes the SDK directories older versions staged, so such a link kept resolving and the extension compiled against the old SDK, failing at load with `decode register payload: json: unknown field ...`.
+- **Root cause:** A go.mod replace (or Cargo path dependency) that resolves inside <config root>/state/pigsdk/ but outside the SDK this pig stages now points at an SDK an earlier pig staged; pig never deletes those directories, so a link made with `pig reload --sdk-path go` kept resolving after an update and the extension compiled against the old SDK, failing at register with `decode register payload: json: unknown field "can_block"` and making `pig extension upgrade` type-check against the same old SDK. Treat such a replace like a missing one in the packed, isolated and upgrade-analysis paths, Go and Rust; a replace anywhere else still wins.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `d305b76bda` (2026-10-12)
 - **Tests:** `coding/extension/host/runtimecell/go_sdk_override_test.go::TestGoSDKPathOverrideIgnoresRetiredStagedSDK`, `coding/extension/host/runtimecell/go_sdk_override_test.go::TestGoSDKPathOverrideKeepsCurrentStagedSDK`, `coding/extension/host/runtimecell/go_sdk_override_test.go::TestRustSDKPathOverrideIgnoresRetiredStagedSDK`, `coding/extension/host/subprocess/builder_test.go::TestGoNeedsStagedSDK`, `coding/extension/host/subprocess/builder_test.go::TestRustNeedsStagedSDK`
-- **Release note:** A Go extension whose `go.mod` replace (or a Rust extension whose `ompig-sdk` path dependency) points at an SDK an earlier ompig staged under its configuration root, for example through a link made with `ompig reload --sdk-path go` before updating ompig, now builds against the SDK the current ompig staged. ompig never deletes the SDK directories older versions staged, so such a link kept resolving and the extension compiled against the old SDK, failing at load with `decode register payload: json: unknown field ...`. An extension written for an older SDK now gets the `written for an older SDK` report instead. A replace that points anywhere else, such as your own SDK checkout or copy, still wins.
+- **Release note:** A Go extension whose `go.mod` replace (or a Rust extension whose `pig-sdk` path dependency) points at an SDK an earlier pig staged under its configuration root, for example through a link made with `pig reload --sdk-path go` before updating pig, now builds against the SDK the current pig staged. pig never deletes the SDK directories older versions staged, so such a link kept resolving and the extension compiled against the old SDK, failing at load with `decode register payload: json: unknown field ...`. An extension written for an older SDK now gets the `written for an older SDK` report instead. A replace that points anywhere else, such as your own SDK checkout or copy, still wins.
 
 ### BF-d36b329
 
@@ -14728,7 +14728,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The edit tool no longer accepts a JSON-string `edits` value that starts or ends with non-JSON whitespace such as a vertical tab or a no-break space; Pi's `JSON.parse` rejects it.
-- **Root cause:** prepareEditArguments JSON.parses a string edits (edit.ts:117-127), and JSON.parse accepts only space, tab, LF and CR around the value. strings.TrimSpace also stripped \v, \f, U+0085 and U+00A0, so Ompig accepted edits Pi leaves as a string.
+- **Root cause:** prepareEditArguments JSON.parses a string edits (edit.ts:117-127), and JSON.parse accepts only space, tab, LF and CR around the value. strings.TrimSpace also stripped \v, \f, U+0085 and U+00A0, so Pig accepted edits Pi leaves as a string.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -14890,17 +14890,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-d60d422
 
-**`pi.exec` gives the command Ompig's environment unchanged, as Pi does, so a command started in a symlinked…**
+**`pi.exec` gives the command PiG's environment unchanged, as Pi does, so a command started in a symlinked…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `pi.exec` gives the command Ompig's environment unchanged, as Pi does, so a command started in a symlinked directory no longer gets that directory as its `PWD`; `pwd` there now prints the physical directory, as in Pi.
+- **Symptom:** `pi.exec` gives the command PiG's environment unchanged, as Pi does, so a command started in a symlinked directory no longer gets that directory as its `PWD`; `pwd` there now prints the physical directory, as in Pi.
 - **Root cause:** os/exec sets PWD to cmd.Dir when cmd.Env is nil; Node's spawn without an env option passes process.env unchanged (normalizeSpawnArguments). pi.exec's child in a symlinked cwd (macOS /var -> /private/var) then printed the symlinked name from pwd where Pi prints the physical directory (TestExecCommandMatchesPi scenarios 11 and 48).
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `34f7594aa5` (2026-10-11), `d60d422e2e` (2026-10-13)
 - **Tests:** `coding/extension/exec_oracle_test.go::TestExecCommandMatchesPi`, `internal/codingagent/extension_ui_phase_shutdown_test.go::TestAwaitedExtensionPhaseWithoutShutdownReturnsItsResult`, `internal/codingagent/extension_ui_phase_shutdown_test.go::TestNewSessionEndedByShutdownIsNotAFatalRuntimeError`, `internal/codingagent/extension_ui_phase_shutdown_test.go::TestShutdownDuringAwaitedExtensionPhaseDoesNotWaitForAHandlerThatIgnoresCancellation`, `internal/codingagent/extension_ui_phase_shutdown_test.go::TestShutdownDuringAwaitedExtensionPhaseEndsThePhase`, `internal/nodespawn/start_other_test.go::TestStartWithoutEnvPassesPiGsEnvironmentAsNodeDoes`, `test/parity/scenarios/extensions-runtime/73-shutdown-from-session-before-fork.toml`, `test/parity/scenarios/extensions-runtime/73-shutdown-from-session-before-switch.toml` and 1 more in docs/bug-ledger.json
-- **Release note:** `pi.exec` gives the command Ompig's environment unchanged, as Pi does, so a command started in a symlinked directory no longer gets that directory as its `PWD`; `pwd` there now prints the physical directory, as in Pi.
+- **Release note:** `pi.exec` gives the command PiG's environment unchanged, as Pi does, so a command started in a symlinked directory no longer gets that directory as its `PWD`; `pwd` there now prints the physical directory, as in Pi.
 
 ### BF-d64f8ed
 
@@ -15014,17 +15014,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-d80c1cd
 
-**Where Pi calls `new URL(value)`, Ompig now parses a `ws:`, `wss:`, `ftp:` or `file:` URL, and a bracketed IPv6…**
+**Where Pi calls `new URL(value)`, Pig now parses a `ws:`, `wss:`, `ftp:` or `file:` URL, and a bracketed IPv6…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Where Pi calls `new URL(value)`, Ompig now parses a `ws:`, `wss:`, `ftp:` or `file:` URL, and a bracketed IPv6 host of any other scheme, instead of refusing it.
+- **Symptom:** Where Pi calls `new URL(value)`, Pig now parses a `ws:`, `wss:`, `ftp:` or `file:` URL, and a bracketed IPv6 host of any other scheme, instead of refusing it.
 - **Root cause:** ParseURL (genericurl.go) now also parses ws, wss and ftp through the WHATWG special parser (default ports 80, 443 and 21, shared with http and https via parseSpecialHref), file through the file URL parser (host, path, query, fragment), and a bracketed IPv6 host of a non-special scheme through opaqueHost, and reports Query next to Protocol, Username, Password, Hostname, Pathname and Hash. url.go (AnySchemeURL, ParseAnyScheme, parseNonSpecialAuthority) is removed; opaqueHost moved into genericurl.go and isForbiddenHostCodePoint, now duplicated by it, is gone. Callers updated: ai urlHostname (github-copilot enterprise domain) and authorizationURLQuery (pasted OAuth input) use ParseURL…
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `056bbfb74e` (2026-10-09), `15a5c0b670` (2026-10-09), `23aa78b173` (2026-10-09), `2c04c1445a` (2026-10-09), `7c4d874438` (2026-10-09), `97e178f7f6` (2026-10-09), `c4d51d5c1a` (2026-10-09), `d80c1cd150` (2026-10-09), `da99854d1b` (2026-10-09)
 - **Tests:** `ai/authorization_input_oracle_test.go::TestAuthorizationInputParsersMatchPi`, `ai/codex_account_id_oracle_test.go::TestCodexAccountIDMatchesPi`, `ai/githubcopilot_oracle_test.go::TestGitHubCopilotHelpersMatchPi`, `ai/streaming_json_oracle_test.go::TestStreamingJSONMatchesPiOnSeededInput`, `ai/trusted_url_oracle_test.go::TestTrustedVerificationURLsMatchPi`, `coding/cli/strip_app_features_test.go::TestStripExportHTMLBuildOmitsExportPackage`, `internal/nodeurl/genericurl_oracle_test.go::TestParseURLMatchesNode`, `internal/nodeurl/url_oracle_test.go::TestParseMatchesNodeURL` and 1 more in docs/bug-ledger.json
-- **Release note:** Where Pi calls `new URL(value)`, Ompig now parses a `ws:`, `wss:`, `ftp:` or `file:` URL, and a bracketed IPv6 host of any other scheme, instead of refusing it. This affects package and repository sources (`coding/source`), the OAuth paste and GitHub Copilot enterprise-domain inputs.
+- **Release note:** Where Pi calls `new URL(value)`, Pig now parses a `ws:`, `wss:`, `ftp:` or `file:` URL, and a bracketed IPv6 host of any other scheme, instead of refusing it. This affects package and repository sources (`coding/source`), the OAuth paste and GitHub Copilot enterprise-domain inputs.
 
 ### BF-d8357e2
 
@@ -15046,7 +15046,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A subprocess extension's custom component waited until the shown one closed, and a subprocess custom component kept reading the keys while another custom component shown over it had focus.
-- **Root cause:** Each SDK now holds the prompt the host rendered for the options the handler received and, once the options differ, asks the host to render them with renderSystemPrompt, reusing the result until they change again: - Go: data["systemPrompt"] is an *sdk.SystemPrompt (Get, MarshalJSON), since a map cannot run a getter; ctx.GetSystemPrompt() returns the same value. - Python: the event dict's "systemPrompt" and ctx.get_system_prompt() render. The Host answers renderSystemPrompt without a UI bridge too (an SDK session): the render is a pure function of the options the call carries. Callers of the Go string form move to Get(); the known gaps are deleted; ompig-go.json is regenerated by gointerfaces.
+- **Root cause:** Each SDK now holds the prompt the host rendered for the options the handler received and, once the options differ, asks the host to render them with renderSystemPrompt, reusing the result until they change again: - Go: data["systemPrompt"] is an *sdk.SystemPrompt (Get, MarshalJSON), since a map cannot run a getter; ctx.GetSystemPrompt() returns the same value. - Python: the event dict's "systemPrompt" and ctx.get_system_prompt() render. The Host answers renderSystemPrompt without a UI bridge too (an SDK session): the render is a pure function of the options the call carries. Callers of the Go string form move to Get(); the known gaps are deleted; pig-go.json is regenerated by gointerfaces.
 - **User impact:** Lost or altered data
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -15060,7 +15060,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** `harness.ToolTaskInput.Kind` and `ToolTaskResult.Kind` are the named string type `harness.ToolTaskKind` with `ToolTaskModel` and `ToolTaskNested`, and `harness.ToolHookCall` carries `Type` ("toolCall") like Pi's `ToolHookCall`; build one with `harness.NewToolHookCall`.
-- **Root cause:** .upstream/pin names the pinned Pi build: a release tag or a pi-mono commit (version 1.1.0+). pigversion.go is generated from it; coding gains UpstreamRef and UpstreamPackageVersion beside the display version. PI_UPSTREAM_REF=<tag|commit> overrides the pin for one run (make variables, a pigversion.go build overlay, OMPIG_UPSTREAM_* in the environment). make pin-bump moves the pin and regenerates what derives from it: SDK, CI-image and Durable package pins, README and ledger version fields, the source mirror, the inventories.
+- **Root cause:** .upstream/pin names the pinned Pi build: a release tag or a pi-mono commit (version 1.1.0+). pigversion.go is generated from it; coding gains UpstreamRef and UpstreamPackageVersion beside the display version. PI_UPSTREAM_REF=<tag|commit> overrides the pin for one run (make variables, a pigversion.go build overlay, PIG_UPSTREAM_* in the environment). make pin-bump moves the pin and regenerates what derives from it: SDK, CI-image and Durable package pins, README and ledger version fields, the source mirror, the inventories.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -15074,7 +15074,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** `auth.json` keeps every provider's entry as written, as Pi does.
-- **Root cause:** TestAuthStorageOnCorruptedFileMatchesPi runs 800 scripts (create, list, read, modify, delete, file rewritten between calls) over corrupted auth.json files against the installed AuthStorage: 293 differed. A wrong-typed field in one entry ("key": 5, "env": {"A": 1}) made every read, list and write fail with 'auth: parse: ...' (Pi keeps the value and the other providers work), and an incomplete entry ({"type":"oauth"}, {}) was rewritten into the typed form (empty refresh/access, "type": "") by an unrelated write. An entry now keeps its source when the typed credential cannot hold it exactly (decodeStoredCredential), written canonically unless the caller changed it (sourceUnchanged). Legacy Ompig…
+- **Root cause:** TestAuthStorageOnCorruptedFileMatchesPi runs 800 scripts (create, list, read, modify, delete, file rewritten between calls) over corrupted auth.json files against the installed AuthStorage: 293 differed. A wrong-typed field in one entry ("key": 5, "env": {"A": 1}) made every read, list and write fail with 'auth: parse: ...' (Pi keeps the value and the other providers work), and an incomplete entry ({"type":"oauth"}, {}) was rewritten into the typed form (empty refresh/access, "type": "") by an unrelated write. An entry now keeps its source when the typed credential cannot hold it exactly (decodeStoredCredential), written canonically unless the caller changed it (sourceUnchanged). Legacy PiG…
 - **User impact:** Credential or permission exposure
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -15084,17 +15084,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-d8d513a
 
-**With the Bun TypeScript runtime (`OMPIG_TS_RUNTIME=bun`), `/reload` now evaluates an edited ES module extension…**
+**With the Bun TypeScript runtime (`PIG_TS_RUNTIME=bun`), `/reload` now evaluates an edited ES module extension…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Bun kept the first evaluation until Ompig restarted.
+- **Symptom:** Bun kept the first evaluation until PiG restarted.
 - **Root cause:** Lead ruling 2026-10-11T20:57Z (2b): port D93 to the Bun runtime so Node and Bun behave the same.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `d8d513a98a` (2026-10-11)
 - **Tests:** `coding/extension/host/subprocess/runtime_modules_test.go::TestRuntimeModulesListsEveryLazyLoad`, `coding/extension/host/subprocess/xref_event_bus_test.go::TestXrefEventBusCloneLocalGraphsMatchPi`, `coding/extension/host/subprocess/xref_event_bus_test.go::TestXrefEventBusCloneMatchesPi`, `coding/extension/host/subprocess/xref_event_bus_test.go::TestXrefEventBusInspectMatchesPi`, `coding/extension/host/subprocess/xref_event_bus_test.go::TestXrefEventBusIntegrityLevelsMatchPi`, `coding/extension/host/subprocess/xref_event_bus_test.go::TestXrefEventBusRejectedWritesMatchPi`
-- **Release note:** With the Bun TypeScript runtime (`OMPIG_TS_RUNTIME=bun`), `/reload` now evaluates an edited ES module extension (`.mjs`, or `.js` under `"type": "module"`) and the extension modules that import it again, as it does on Node (D93). Before, Bun kept the first evaluation until Ompig restarted.
+- **Release note:** With the Bun TypeScript runtime (`PIG_TS_RUNTIME=bun`), `/reload` now evaluates an edited ES module extension (`.mjs`, or `.js` under `"type": "module"`) and the extension modules that import it again, as it does on Node (D93). Before, Bun kept the first evaluation until PiG restarted.
 
 ### BF-d90c2f4
 
@@ -15115,14 +15115,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **Anthropic requests whose strict `prefer` tools exceed a strict tool limit ("The compiled grammar is too…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Anthropic requests whose strict `prefer` tools exceed a strict tool limit ("The compiled grammar is too large", "Too many strict tools", too many union parameters) no longer fail every turn: Ompig retries once with the `prefer` tools non-strict, keeps `require` tools strict, and records an `anthropic_strict_tools_fallback` diagnostic, as Pi 1.2.0 does (pi-mono #10409).
+- **Symptom:** Anthropic requests whose strict `prefer` tools exceed a strict tool limit ("The compiled grammar is too large", "Too many strict tools", too many union parameters) no longer fail every turn: PiG retries once with the `prefer` tools non-strict, keeps `require` tools strict, and records an `anthropic_strict_tools_fallback` diagnostic, as Pi 1.2.0 does (pi-mono #10409).
 - **Root cause:** anthropic-messages.ts sends prefer tools with strict: true and has no fallback for 400 'compiled grammar is too large'. Retry once non-strict unless a tool requires strict.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `d983b74821` (2026-10-09)
 - **Tests:** None recorded.
-- **Release note:** Anthropic requests whose strict `prefer` tools exceed a strict tool limit ("The compiled grammar is too large", "Too many strict tools", too many union parameters) no longer fail every turn: Ompig retries once with the `prefer` tools non-strict, keeps `require` tools strict, and records an `anthropic_strict_tools_fallback` diagnostic, as Pi 1.2.0 does (pi-mono #10409).
+- **Release note:** Anthropic requests whose strict `prefer` tools exceed a strict tool limit ("The compiled grammar is too large", "Too many strict tools", too many union parameters) no longer fail every turn: PiG retries once with the `prefer` tools non-strict, keeps `require` tools strict, and records an `anthropic_strict_tools_fallback` diagnostic, as Pi 1.2.0 does (pi-mono #10409).
 
 ### BF-d9886fe
 
@@ -15156,7 +15156,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Pasting a ChatGPT sign-in callback URL with a `ws:`, `wss:` or `ftp:` scheme, a backslash path or an unusual host gives Pi's message: "Paste the full callback URL from the browser" only where `new URL` rejects the text, and "The pasted callback URL must start with ..." otherwise.
-- **Root cause:** authorizationResultFromManualInput, authorizationResultFromCallback and REDIRECT_URI are cut out of Pi's openai-chatgpt.ts (testdata/chatgpt_manual_input.mjs) and run on 4511 seeded pasted inputs (callback URLs with every shape of code/state/client_id/error, other origins, ports, schemes, relative and non-URL text, JS-whitespace padding). Ompig's hybrid (ParseHTTPURL plus a net/url error classifier) differed on every ws:, wss: and ftp: paste (rejected by the first parse, then classified by Go's url.Parse): Pi says 'The pasted callback URL must start with ...' for those and Ompig said 'Paste the full callback URL' whenever net/url disagreed with the WHATWG parser.
+- **Root cause:** authorizationResultFromManualInput, authorizationResultFromCallback and REDIRECT_URI are cut out of Pi's openai-chatgpt.ts (testdata/chatgpt_manual_input.mjs) and run on 4511 seeded pasted inputs (callback URLs with every shape of code/state/client_id/error, other origins, ports, schemes, relative and non-URL text, JS-whitespace padding). Pig's hybrid (ParseHTTPURL plus a net/url error classifier) differed on every ws:, wss: and ftp: paste (rejected by the first parse, then classified by Go's url.Parse): Pi says 'The pasted callback URL must start with ...' for those and Pig said 'Paste the full callback URL' whenever net/url disagreed with the WHATWG parser.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -15170,7 +15170,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The Go program in the SDK page now compiles.
-- **Root cause:** Each entry has symptom, root cause, user impact, platform, fix commits, guarding tests and a source class (Ompig's own defect, Pi defect fixed ahead of Pi with its divergence number, Pi issue and remove-when, or a Pi fix ported). The check fails when a fix has no entry, a fix-titled commit that changes shipped code is neither an entry nor listed in exempt.txt, an entry names a missing test, or the committed ledger is stale. Output: docs/bug-ledger.json and docs/site/docs/bug-ledger.md. D110 and D111 gain a "Pi bug:" line, which marks them as fixed ahead of Pi.
+- **Root cause:** Each entry has symptom, root cause, user impact, platform, fix commits, guarding tests and a source class (PiG's own defect, Pi defect fixed ahead of Pi with its divergence number, Pi issue and remove-when, or a Pi fix ported). The check fails when a fix has no entry, a fix-titled commit that changes shipped code is neither an entry nor listed in exempt.txt, an entry names a missing test, or the committed ledger is stale. Output: docs/bug-ledger.json and docs/site/docs/bug-ledger.md. D110 and D111 gain a "Pi bug:" line, which marks them as fixed ahead of Pi.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -15180,31 +15180,31 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-da907ca-2
 
-**The bundled command page (`ompig docs show commands`) and the website's CLI reference now agree with `ompig…**
+**The bundled command page (`pig docs show commands`) and the website's CLI reference now agree with `pig…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** The bundled command page (`ompig docs show commands`) and the website's CLI reference now agree with `ompig --help`.
-- **Root cause:** Each entry has symptom, root cause, user impact, platform, fix commits, guarding tests and a source class (Ompig's own defect, Pi defect fixed ahead of Pi with its divergence number, Pi issue and remove-when, or a Pi fix ported). The check fails when a fix has no entry, a fix-titled commit that changes shipped code is neither an entry nor listed in exempt.txt, an entry names a missing test, or the committed ledger is stale. Output: docs/bug-ledger.json and docs/site/docs/bug-ledger.md. D110 and D111 gain a "Pi bug:" line, which marks them as fixed ahead of Pi.
+- **Symptom:** The bundled command page (`pig docs show commands`) and the website's CLI reference now agree with `pig --help`.
+- **Root cause:** Each entry has symptom, root cause, user impact, platform, fix commits, guarding tests and a source class (PiG's own defect, Pi defect fixed ahead of Pi with its divergence number, Pi issue and remove-when, or a Pi fix ported). The check fails when a fix has no entry, a fix-titled commit that changes shipped code is neither an entry nor listed in exempt.txt, an entry names a missing test, or the committed ledger is stale. Output: docs/bug-ledger.json and docs/site/docs/bug-ledger.md. D110 and D111 gain a "Pi bug:" line, which marks them as fixed ahead of Pi.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `da907cab0b` (2026-10-09)
 - **Tests:** `automation/ci/bugledger/bugledger_test.go::TestBuildLedgerFromHistory`, `automation/ci/bugledger/bugledger_test.go::TestBuildNeedsTheReleaseCommit`, `automation/ci/bugledger/bugledger_test.go::TestExplicitFixMarkerNamesTheFixCommit`, `automation/ci/bugledger/bugledger_test.go::TestFixedBulletsReadOnlyTheFixedSectionOfLaterReleases`, `automation/ci/bugledger/bugledger_test.go::TestImpactAndPlatformComeFromTheWording`, `automation/ci/bugledger/bugledger_test.go::TestPublicTextDropsPrivateSentencesVersionsAndHashes`, `automation/ci/bugledger/bugledger_test.go::TestReleaseNotesDraftComesFromTheLedgers`, `automation/ci/bugledger/bugledger_test.go::TestRootCausePrefersALabelThenCauseWordsThenTheFirstParagraph` and 39 more in docs/bug-ledger.json
-- **Release note:** The bundled command page (`ompig docs show commands`) and the website's CLI reference now agree with `ompig --help`. The bundled page lacked `ompig mcp`, `ompig ompiglet prune`, `ompig extensions cache prune --failures` and the `+name` and `-name` forms of `--tools`; the website page omitted `ompig ompiglet pull`, `update` and `publish` from its Ompiglet verbs.
+- **Release note:** The bundled command page (`pig docs show commands`) and the website's CLI reference now agree with `pig --help`. The bundled page lacked `pig mcp`, `pig piglet prune`, `pig extensions cache prune --failures` and the `+name` and `-name` forms of `--tools`; the website page omitted `pig piglet pull`, `update` and `publish` from its Piglet verbs.
 
 ### BF-da907ca-3
 
-**`ompig docs show divergences` lists D110 and D111, and the README names the pinned Pi release (1.1.0) and its…**
+**`pig docs show divergences` lists D110 and D111, and the README names the pinned Pi release (1.1.0) and its…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig docs show divergences` lists D110 and D111, and the README names the pinned Pi release (1.1.0) and its commit.
-- **Root cause:** Each entry has symptom, root cause, user impact, platform, fix commits, guarding tests and a source class (Ompig's own defect, Pi defect fixed ahead of Pi with its divergence number, Pi issue and remove-when, or a Pi fix ported). The check fails when a fix has no entry, a fix-titled commit that changes shipped code is neither an entry nor listed in exempt.txt, an entry names a missing test, or the committed ledger is stale. Output: docs/bug-ledger.json and docs/site/docs/bug-ledger.md. D110 and D111 gain a "Pi bug:" line, which marks them as fixed ahead of Pi.
+- **Symptom:** `pig docs show divergences` lists D110 and D111, and the README names the pinned Pi release (1.1.0) and its commit.
+- **Root cause:** Each entry has symptom, root cause, user impact, platform, fix commits, guarding tests and a source class (PiG's own defect, Pi defect fixed ahead of Pi with its divergence number, Pi issue and remove-when, or a Pi fix ported). The check fails when a fix has no entry, a fix-titled commit that changes shipped code is neither an entry nor listed in exempt.txt, an entry names a missing test, or the committed ledger is stale. Output: docs/bug-ledger.json and docs/site/docs/bug-ledger.md. D110 and D111 gain a "Pi bug:" line, which marks them as fixed ahead of Pi.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `da907cab0b` (2026-10-09)
 - **Tests:** `automation/ci/bugledger/bugledger_test.go::TestBuildLedgerFromHistory`, `automation/ci/bugledger/bugledger_test.go::TestBuildNeedsTheReleaseCommit`, `automation/ci/bugledger/bugledger_test.go::TestExplicitFixMarkerNamesTheFixCommit`, `automation/ci/bugledger/bugledger_test.go::TestFixedBulletsReadOnlyTheFixedSectionOfLaterReleases`, `automation/ci/bugledger/bugledger_test.go::TestImpactAndPlatformComeFromTheWording`, `automation/ci/bugledger/bugledger_test.go::TestPublicTextDropsPrivateSentencesVersionsAndHashes`, `automation/ci/bugledger/bugledger_test.go::TestReleaseNotesDraftComesFromTheLedgers`, `automation/ci/bugledger/bugledger_test.go::TestRootCausePrefersALabelThenCauseWordsThenTheFirstParagraph` and 39 more in docs/bug-ledger.json
-- **Release note:** `ompig docs show divergences` lists D110 and D111, and the README names the pinned Pi release (1.1.0) and its commit. The README gave the pin of two releases ago.
+- **Release note:** `pig docs show divergences` lists D110 and D111, and the README names the pinned Pi release (1.1.0) and its commit. The README gave the pin of two releases ago.
 
 ### BF-da907ca-4
 
@@ -15212,7 +15212,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The Termux page's link to the Quickstart reaches its "Authenticate a provider" section.
-- **Root cause:** Each entry has symptom, root cause, user impact, platform, fix commits, guarding tests and a source class (Ompig's own defect, Pi defect fixed ahead of Pi with its divergence number, Pi issue and remove-when, or a Pi fix ported). The check fails when a fix has no entry, a fix-titled commit that changes shipped code is neither an entry nor listed in exempt.txt, an entry names a missing test, or the committed ledger is stale. Output: docs/bug-ledger.json and docs/site/docs/bug-ledger.md. D110 and D111 gain a "Pi bug:" line, which marks them as fixed ahead of Pi.
+- **Root cause:** Each entry has symptom, root cause, user impact, platform, fix commits, guarding tests and a source class (PiG's own defect, Pi defect fixed ahead of Pi with its divergence number, Pi issue and remove-when, or a Pi fix ported). The check fails when a fix has no entry, a fix-titled commit that changes shipped code is neither an entry nor listed in exempt.txt, an entry names a missing test, or the committed ledger is stale. Output: docs/bug-ledger.json and docs/site/docs/bug-ledger.md. D110 and D111 gain a "Pi bug:" line, which marks them as fixed ahead of Pi.
 - **User impact:** Behavior differed from Pi
 - **Platform:** Android and Termux
 - **Fixed in:** 0.5.0
@@ -15226,13 +15226,13 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A read of an entry behind the latest compaction failed or returned only the entry's id, parentId and type.
-- **Root cause:** Owner decision 5 B. Pi reads a session file into memory once (session-manager.ts setSessionFile, loadEntriesFromFile), so a change another program makes to the file afterwards reaches none of its reads. Ompig keeps only the active context resident and read the rest back from the session file, so an in-place rewrite, truncation, replacement or removal made the entries behind the latest compaction unreadable (GetEntries marshalled "unexpected end of JSON input").
+- **Root cause:** Owner decision 5 B. Pi reads a session file into memory once (session-manager.ts setSessionFile, loadEntriesFromFile), so a change another program makes to the file afterwards reaches none of its reads. PiG keeps only the active context resident and read the rest back from the session file, so an in-place rewrite, truncation, replacement or removal made the entries behind the latest compaction unreadable (GetEntries marshalled "unexpected end of JSON input").
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `6a6fffa638` (2026-10-10), `dac3cd5029` (2026-10-11)
 - **Tests:** `agent/message_json_number_spelling_test.go::TestAgentMessageDecodeKeepsANonNumberWhereAnIntegerIsExpected`, `agent/message_json_test.go::TestAgentMessageJSONRejectsInvalidUnion`, `agent/message_type_mismatch_test.go::TestDecodedMessageKeepsMembersOfAnyType`, `agent/provider_content_block_decode_test.go::TestUnknownContentBlockCostsOnlyThatBlock`, `internal/codingagent/session_context_settings_test.go::TestGetSessionContextSettingsBoundaries`, `internal/codingagent/session_lazy_test.go::TestLazyEntryOfAChangedRecordIsAnError`, `internal/codingagent/session_messagefor_cache_test.go::TestMessageForReportsAnUnparseableEntryWithoutParsingItAgain`, `internal/codingagent/session_snapshot_test.go::TestResumedSessionReadsAsLoadedAfterItsFileChanges` and 4 more in docs/bug-ledger.json
-- **Release note:** A session keeps reading its history as it loaded it when another program rewrites, truncates, replaces or removes its session file, as Pi does. Ompig reads history from a private snapshot of the session file. The snapshot is a file system clone where the file system supports one (Btrfs, XFS, APFS); elsewhere it is a copy that takes the file's size on disk. Before, a read of an entry behind the latest compaction failed or returned only the entry's id, parentId and type.
+- **Release note:** A session keeps reading its history as it loaded it when another program rewrites, truncates, replaces or removes its session file, as Pi does. PiG reads history from a private snapshot of the session file. The snapshot is a file system clone where the file system supports one (Btrfs, XFS, APFS); elsewhere it is a copy that takes the file's size on disk. Before, a read of an entry behind the latest compaction failed or returned only the entry's id, parentId and type.
 
 ### BF-dae37be
 
@@ -15253,7 +15253,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(agent): end the tool flow at custom user messages and hold system messages mid-flow
-- **Root cause:** Pi converts messages to LLM form and then runs transformMessages (ai/src/api/transform-messages.ts), where a branchSummary, compactionSummary, bashExecution or custom message is already a user message and closes the pending tool calls (closePendingToolCalls). Ompig normalizes AgentMessages before convertToLLM, so those custom messages did not interrupt the flow and the placeholders landed behind them.
+- **Root cause:** Pi converts messages to LLM form and then runs transformMessages (ai/src/api/transform-messages.ts), where a branchSummary, compactionSummary, bashExecution or custom message is already a user message and closes the pending tool calls (closePendingToolCalls). Pig normalizes AgentMessages before convertToLLM, so those custom messages did not interrupt the flow and the placeholders landed behind them.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -15290,17 +15290,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-dbe1ad3
 
-**`ompig setup` now flags a go on PATH older than Go 1.26, the extension SDK minimum, naming the version found…**
+**`pig setup` now flags a go on PATH older than Go 1.26, the extension SDK minimum, naming the version found…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig setup` now flags a go on PATH older than Go 1.26, the extension SDK minimum, naming the version found and the fix, and extension builds use the toolchain `ompig setup go` installed instead of that older go (ompig additive, D20).
-- **Root cause:** ompig setup listed a go on PATH older than the extension SDK's Go 1.26 floor without a warning, and after ompig setup go Ompig still built with that older go, so builds failed under GOTOOLCHAIN=local. ompig setup now marks it too old and names the fix, and Ompig builds with the toolchain ompig setup go installed when the PATH go is below the floor (D20).
+- **Symptom:** `pig setup` now flags a go on PATH older than Go 1.26, the extension SDK minimum, naming the version found and the fix, and extension builds use the toolchain `pig setup go` installed instead of that older go (pig additive, D20).
+- **Root cause:** pig setup listed a go on PATH older than the extension SDK's Go 1.26 floor without a warning, and after pig setup go PiG still built with that older go, so builds failed under GOTOOLCHAIN=local. pig setup now marks it too old and names the fix, and PiG builds with the toolchain pig setup go installed when the PATH go is below the floor (D20).
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `dbe1ad3c2c` (2026-10-13)
 - **Tests:** `coding/cli/setup_go_floor_test.go::TestSetupStatusFlagsAPathGoBelowTheSDKFloor`, `internal/toolchain/resolve_test.go::TestResolveGoKeepsAPathGoMeetingTheFloor`, `internal/toolchain/resolve_test.go::TestResolveGoPrefersManagedGoOverAPathGoBelowTheFloor`, `internal/toolchain/toolchain_test.go::TestMinGoVersionIsTheSDKGoDirective`
-- **Release note:** `ompig setup` now flags a go on PATH older than Go 1.26, the extension SDK minimum, naming the version found and the fix, and extension builds use the toolchain `ompig setup go` installed instead of that older go (ompig additive, D20).
+- **Release note:** `pig setup` now flags a go on PATH older than Go 1.26, the extension SDK minimum, naming the version found and the fix, and extension builds use the toolchain `pig setup go` installed instead of that older go (pig additive, D20).
 
 ### BF-dbe25ef
 
@@ -15346,31 +15346,31 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-dbe25ef-12
 
-**`ompig extension upgrade` finds and rewrites every changed API of an extension in one run**
+**`pig extension upgrade` finds and rewrites every changed API of an extension in one run**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig extension upgrade` finds and rewrites every changed API of an extension in one run.
+- **Symptom:** `pig extension upgrade` finds and rewrites every changed API of an extension in one run.
 - **Root cause:** Not recorded.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `dbe25ef5c1` (2026-10-21, #261)
 - **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAFixTitledSquashWithNoNoteIsRefusedNotAttributed`, `automation/ci/bugledger/bugledger_test.go::TestTheLedgerRefusesToAttributeTheTestsOfASquash`, `automation/ci/bugledger/bugledger_test.go::TestTheSquashThresholdIsTheCountOfTouchedFiles`, `automation/ci/changelogfrag/history_test.go::TestAFragmentNamedAfterAPreRebaseCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAMarkerNamingAnUnreachableCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAShallowCloneFailsTheCheckInsteadOfGuessing`, `automation/ci/changelogfrag/history_test.go::TestEveryCommitOfAMarkerMustBeReachable`, `automation/ci/changelogfrag/history_test.go::TestEveryFixedBulletNeedsAFixMarker` and 34 more in docs/bug-ledger.json
-- **Release note:** `ompig extension upgrade` finds and rewrites every changed API of an extension in one run. Startup offers each Go extension the upgrade would touch, not only those whose first ten compile errors all name an SDK change: a `len(ctx.GetAllTools())` or `panic(ctx.GetSessionID())` (a builtin that takes one value) is now recognised as the getter's change, and a recorded failure with no classification is read again by type checking. A `Context.ConfigHome` in a function that cannot return the error is rewritten to report the error through the call's own `Context` (`ctx.Notify`) and return, never to discard it; a getter that cannot move before its statement (a `&&` operand, an `else if`, a loop condition, a call after another call) takes a generated helper in `ompig_upgrade_getters.go` that returns the old getter's zero value on failure.
+- **Release note:** `pig extension upgrade` finds and rewrites every changed API of an extension in one run. Startup offers each Go extension the upgrade would touch, not only those whose first ten compile errors all name an SDK change: a `len(ctx.GetAllTools())` or `panic(ctx.GetSessionID())` (a builtin that takes one value) is now recognised as the getter's change, and a recorded failure with no classification is read again by type checking. A `Context.ConfigHome` in a function that cannot return the error is rewritten to report the error through the call's own `Context` (`ctx.Notify`) and return, never to discard it; a getter that cannot move before its statement (a `&&` operand, an `else if`, a loop condition, a call after another call) takes a generated helper in `pig_upgrade_getters.go` that returns the old getter's zero value on failure.
 
 ### BF-dbe25ef-13
 
-**`ompig extension upgrade` applies the rewrites that have one safe form and lists the rest with file, line and…**
+**`pig extension upgrade` applies the rewrites that have one safe form and lists the rest with file, line and…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig extension upgrade` applies the rewrites that have one safe form and lists the rest with file, line and the form to write, instead of restoring every file when one use has no mechanical form.
+- **Symptom:** `pig extension upgrade` applies the rewrites that have one safe form and lists the rest with file, line and the form to write, instead of restoring every file when one use has no mechanical form.
 - **Root cause:** Not recorded.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `dbe25ef5c1` (2026-10-21, #261)
 - **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAFixTitledSquashWithNoNoteIsRefusedNotAttributed`, `automation/ci/bugledger/bugledger_test.go::TestTheLedgerRefusesToAttributeTheTestsOfASquash`, `automation/ci/bugledger/bugledger_test.go::TestTheSquashThresholdIsTheCountOfTouchedFiles`, `automation/ci/changelogfrag/history_test.go::TestAFragmentNamedAfterAPreRebaseCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAMarkerNamingAnUnreachableCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAShallowCloneFailsTheCheckInsteadOfGuessing`, `automation/ci/changelogfrag/history_test.go::TestEveryCommitOfAMarkerMustBeReachable`, `automation/ci/changelogfrag/history_test.go::TestEveryFixedBulletNeedsAFixMarker` and 34 more in docs/bug-ledger.json
-- **Release note:** `ompig extension upgrade` applies the rewrites that have one safe form and lists the rest with file, line and the form to write, instead of restoring every file when one use has no mechanical form. It exits 1 and reports `partly upgraded` when uses are left. `--dry-run` compiles the rewritten extension in a temporary directory (the go command's overlay, with the staged SDK) and reports `would upgrade` only when it builds; a rewrite that would add a compile error of its own is not written. The load error of a drifted extension names the changed APIs and the exact command. The stale-copy warning also recognises an edited copy by its Go module path.
+- **Release note:** `pig extension upgrade` applies the rewrites that have one safe form and lists the rest with file, line and the form to write, instead of restoring every file when one use has no mechanical form. It exits 1 and reports `partly upgraded` when uses are left. `--dry-run` compiles the rewritten extension in a temporary directory (the go command's overlay, with the staged SDK) and reports `would upgrade` only when it builds; a rewrite that would add a compile error of its own is not written. The load error of a drifted extension names the changed APIs and the exact command. The stale-copy warning also recognises an edited copy by its Go module path.
 
 ### BF-dbe25ef-14
 
@@ -15416,17 +15416,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-dbe25ef-17
 
-**`ompig update --extensions` no longer fails when two Git Packages come from one repository**
+**`pig update --extensions` no longer fails when two Git Packages come from one repository**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig update --extensions` no longer fails when two Git Packages come from one repository.
+- **Symptom:** `pig update --extensions` no longer fails when two Git Packages come from one repository.
 - **Root cause:** Not recorded.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `dbe25ef5c1` (2026-10-21, #261)
 - **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAFixTitledSquashWithNoNoteIsRefusedNotAttributed`, `automation/ci/bugledger/bugledger_test.go::TestTheLedgerRefusesToAttributeTheTestsOfASquash`, `automation/ci/bugledger/bugledger_test.go::TestTheSquashThresholdIsTheCountOfTouchedFiles`, `automation/ci/changelogfrag/history_test.go::TestAFragmentNamedAfterAPreRebaseCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAMarkerNamingAnUnreachableCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAShallowCloneFailsTheCheckInsteadOfGuessing`, `automation/ci/changelogfrag/history_test.go::TestEveryCommitOfAMarkerMustBeReachable`, `automation/ci/changelogfrag/history_test.go::TestEveryFixedBulletNeedsAFixMarker` and 34 more in docs/bug-ledger.json
-- **Release note:** `ompig update --extensions` no longer fails when two Git Packages come from one repository. Packages of one repository share a managed checkout, and their updates ran at once: both fetched into one `FETCH_HEAD` and both ran `git reset --hard`, which failed with `Unable to create '.../.git/index.lock': File exists` and `git reset --hard FETCH_HEAD^{commit} failed with code 128`. The packages of one checkout now update one at a time, in the order of the settings file, and the last one decides the commit the checkout is left on. Packages from other repositories still update at the same time, and a package that fails does not stop the others.
+- **Release note:** `pig update --extensions` no longer fails when two Git Packages come from one repository. Packages of one repository share a managed checkout, and their updates ran at once: both fetched into one `FETCH_HEAD` and both ran `git reset --hard`, which failed with `Unable to create '.../.git/index.lock': File exists` and `git reset --hard FETCH_HEAD^{commit} failed with code 128`. The packages of one checkout now update one at a time, in the order of the settings file, and the last one decides the commit the checkout is left on. Packages from other repositories still update at the same time, and a package that fails does not stop the others.
 
 ### BF-dbe25ef-18
 
@@ -15454,21 +15454,21 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.2
 - **Fix commits:** `dbe25ef5c1` (2026-10-21, #261)
 - **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAFixTitledSquashWithNoNoteIsRefusedNotAttributed`, `automation/ci/bugledger/bugledger_test.go::TestTheLedgerRefusesToAttributeTheTestsOfASquash`, `automation/ci/bugledger/bugledger_test.go::TestTheSquashThresholdIsTheCountOfTouchedFiles`, `automation/ci/changelogfrag/history_test.go::TestAFragmentNamedAfterAPreRebaseCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAMarkerNamingAnUnreachableCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAShallowCloneFailsTheCheckInsteadOfGuessing`, `automation/ci/changelogfrag/history_test.go::TestEveryCommitOfAMarkerMustBeReachable`, `automation/ci/changelogfrag/history_test.go::TestEveryFixedBulletNeedsAFixMarker` and 34 more in docs/bug-ledger.json
-- **Release note:** Two calls of an extension tool in one assistant message now end in the order their tools answer, as Pi ends them. In Pi, two tools that each wait on a dialog (or on timers of equal length) continue in the order their answers arrive, so `tool_execution_end` for the call whose dialog was answered first comes first. Ompig woke the goroutines that waited for the two answers in no order, and on most runs the second call ended first, although its dialog was answered second. The host now records the order where the answers are read (a `tool_call` response from the extension's process, an RPC `extension_ui_response` line) and keeps it where the calls continue: the batch's `tool_execution_end` events, and the replies sent to the extension for its dialog calls. Tool-result messages still follow call order.
+- **Release note:** Two calls of an extension tool in one assistant message now end in the order their tools answer, as Pi ends them. In Pi, two tools that each wait on a dialog (or on timers of equal length) continue in the order their answers arrive, so `tool_execution_end` for the call whose dialog was answered first comes first. PiG woke the goroutines that waited for the two answers in no order, and on most runs the second call ended first, although its dialog was answered second. The host now records the order where the answers are read (a `tool_call` response from the extension's process, an RPC `extension_ui_response` line) and keeps it where the calls continue: the batch's `tool_execution_end` events, and the replies sent to the extension for its dialog calls. Tool-result messages still follow call order.
 
 ### BF-dbe25ef-2
 
-**CI: the Windows test jobs no longer fail the `ompig extension upgrade` notice tests when the temporary…**
+**CI: the Windows test jobs no longer fail the `pig extension upgrade` notice tests when the temporary…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** CI: the Windows test jobs no longer fail the `ompig extension upgrade` notice tests when the temporary directory holds a `~`, as a runner's 8.3 short name (`RUNNER~1`) does.
+- **Symptom:** CI: the Windows test jobs no longer fail the `pig extension upgrade` notice tests when the temporary directory holds a `~`, as a runner's 8.3 short name (`RUNNER~1`) does.
 - **Root cause:** Not recorded.
 - **User impact:** An operation failed or was rejected
 - **Platform:** Windows
 - **Fixed in:** 0.5.2
 - **Fix commits:** `dbe25ef5c1` (2026-10-21, #261)
 - **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAFixTitledSquashWithNoNoteIsRefusedNotAttributed`, `automation/ci/bugledger/bugledger_test.go::TestTheLedgerRefusesToAttributeTheTestsOfASquash`, `automation/ci/bugledger/bugledger_test.go::TestTheSquashThresholdIsTheCountOfTouchedFiles`, `automation/ci/changelogfrag/history_test.go::TestAFragmentNamedAfterAPreRebaseCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAMarkerNamingAnUnreachableCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAShallowCloneFailsTheCheckInsteadOfGuessing`, `automation/ci/changelogfrag/history_test.go::TestEveryCommitOfAMarkerMustBeReachable`, `automation/ci/changelogfrag/history_test.go::TestEveryFixedBulletNeedsAFixMarker` and 34 more in docs/bug-ledger.json
-- **Release note:** CI: the Windows test jobs no longer fail the `ompig extension upgrade` notice tests when the temporary directory holds a `~`, as a runner's 8.3 short name (`RUNNER~1`) does. The notice already quotes such a path for the Windows shell (`"C:\Users\RUNNER~1\..."`) and is unchanged; the tests expected the raw path and now expect the quoted word, as the notice test beside them does.
+- **Release note:** CI: the Windows test jobs no longer fail the `pig extension upgrade` notice tests when the temporary directory holds a `~`, as a runner's 8.3 short name (`RUNNER~1`) does. The notice already quotes such a path for the Windows shell (`"C:\Users\RUNNER~1\..."`) and is unchanged; the tests expected the raw path and now expect the quoted word, as the notice test beside them does.
 
 ### BF-dbe25ef-20
 
@@ -15482,25 +15482,25 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.2
 - **Fix commits:** `dbe25ef5c1` (2026-10-21, #261)
 - **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAFixTitledSquashWithNoNoteIsRefusedNotAttributed`, `automation/ci/bugledger/bugledger_test.go::TestTheLedgerRefusesToAttributeTheTestsOfASquash`, `automation/ci/bugledger/bugledger_test.go::TestTheSquashThresholdIsTheCountOfTouchedFiles`, `automation/ci/changelogfrag/history_test.go::TestAFragmentNamedAfterAPreRebaseCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAMarkerNamingAnUnreachableCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAShallowCloneFailsTheCheckInsteadOfGuessing`, `automation/ci/changelogfrag/history_test.go::TestEveryCommitOfAMarkerMustBeReachable`, `automation/ci/changelogfrag/history_test.go::TestEveryFixedBulletNeedsAFixMarker` and 34 more in docs/bug-ledger.json
-- **Release note:** A compaction, branch summary or bug-report summary request is now sent through the session's own stream function, as Pi sends it. Before, a session whose stream function was the stock one sent these requests straight to the model's provider, so the host never ran `before_provider_headers` for them. `/compact`, automatic and overflow-recovery compaction, `/tree` summaries and bug-report summaries now emit `before_provider_headers`, in every mode. They still do not emit `before_provider_request`, `after_provider_response` or `provider_stream_event`: Pi's summary requests carry none of the Agent's payload, response and stream-event callbacks, and neither do Ompig's now (agent requests are unchanged and emit all four). `Agent.EffectiveStreamFunction` is new: the stream function a run sends through, with the default stream in place of the nil `StreamFunction` returns for it. Reported by a user.
+- **Release note:** A compaction, branch summary or bug-report summary request is now sent through the session's own stream function, as Pi sends it. Before, a session whose stream function was the stock one sent these requests straight to the model's provider, so the host never ran `before_provider_headers` for them. `/compact`, automatic and overflow-recovery compaction, `/tree` summaries and bug-report summaries now emit `before_provider_headers`, in every mode. They still do not emit `before_provider_request`, `after_provider_response` or `provider_stream_event`: Pi's summary requests carry none of the Agent's payload, response and stream-event callbacks, and neither do PiG's now (agent requests are unchanged and emit all four). `Agent.EffectiveStreamFunction` is new: the stream function a run sends through, with the default stream in place of the nil `StreamFunction` returns for it. Reported by a user.
 
 ### BF-dbe25ef-21
 
-**Fixed `ompig --mode rpc` exiting 143 instead of 0 when stdin ended while a termination signal's shutdown was…**
+**Fixed `pig --mode rpc` exiting 143 instead of 0 when stdin ended while a termination signal's shutdown was…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Fixed `ompig --mode rpc` exiting 143 instead of 0 when stdin ended while a termination signal's shutdown was still running: the first exit of the shutdown now decides the exit status, as Pi's first `process.exit` does.
+- **Symptom:** Fixed `pig --mode rpc` exiting 143 instead of 0 when stdin ended while a termination signal's shutdown was still running: the first exit of the shutdown now decides the exit status, as Pi's first `process.exit` does.
 - **Root cause:** Not recorded.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `dbe25ef5c1` (2026-10-21, #261)
 - **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAFixTitledSquashWithNoNoteIsRefusedNotAttributed`, `automation/ci/bugledger/bugledger_test.go::TestTheLedgerRefusesToAttributeTheTestsOfASquash`, `automation/ci/bugledger/bugledger_test.go::TestTheSquashThresholdIsTheCountOfTouchedFiles`, `automation/ci/changelogfrag/history_test.go::TestAFragmentNamedAfterAPreRebaseCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAMarkerNamingAnUnreachableCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAShallowCloneFailsTheCheckInsteadOfGuessing`, `automation/ci/changelogfrag/history_test.go::TestEveryCommitOfAMarkerMustBeReachable`, `automation/ci/changelogfrag/history_test.go::TestEveryFixedBulletNeedsAFixMarker` and 34 more in docs/bug-ledger.json
-- **Release note:** Fixed `ompig --mode rpc` exiting 143 instead of 0 when stdin ended while a termination signal's shutdown was still running: the first exit of the shutdown now decides the exit status, as Pi's first `process.exit` does.
+- **Release note:** Fixed `pig --mode rpc` exiting 143 instead of 0 when stdin ended while a termination signal's shutdown was still running: the first exit of the shutdown now decides the exit status, as Pi's first `process.exit` does.
 
 ### BF-dbe25ef-3
 
-**`ompig extension upgrade`: the command a startup notice or the upgrade offer prints now quotes a POSIX path…**
+**`pig extension upgrade`: the command a startup notice or the upgrade offer prints now quotes a POSIX path…**
 
 - **Source:** Ompig's own defect
 - **Symptom:** The backslash printed bare and the shell read it as an escape, so the command named a different path.
@@ -15510,7 +15510,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.2
 - **Fix commits:** `dbe25ef5c1` (2026-10-21, #261)
 - **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAFixTitledSquashWithNoNoteIsRefusedNotAttributed`, `automation/ci/bugledger/bugledger_test.go::TestTheLedgerRefusesToAttributeTheTestsOfASquash`, `automation/ci/bugledger/bugledger_test.go::TestTheSquashThresholdIsTheCountOfTouchedFiles`, `automation/ci/changelogfrag/history_test.go::TestAFragmentNamedAfterAPreRebaseCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAMarkerNamingAnUnreachableCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAShallowCloneFailsTheCheckInsteadOfGuessing`, `automation/ci/changelogfrag/history_test.go::TestEveryCommitOfAMarkerMustBeReachable`, `automation/ci/changelogfrag/history_test.go::TestEveryFixedBulletNeedsAFixMarker` and 34 more in docs/bug-ledger.json
-- **Release note:** `ompig extension upgrade`: the command a startup notice or the upgrade offer prints now quotes a POSIX path that holds a backslash. Before, the backslash printed bare and the shell read it as an escape, so the command named a different path. A backslash stays plain in a Windows path, where it separates elements.
+- **Release note:** `pig extension upgrade`: the command a startup notice or the upgrade offer prints now quotes a POSIX path that holds a backslash. Before, the backslash printed bare and the shell read it as an escape, so the command named a different path. A backslash stays plain in a Windows path, where it separates elements.
 
 ### BF-dbe25ef-4
 
@@ -15528,31 +15528,31 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-dbe25ef-5
 
-**`ompig ompiglet verify <binary> --source <name|path>` and `ompig ompiglet lineage <binary> --source <name|path>`…**
+**`pig piglet verify <binary> --source <name|path>` and `pig piglet lineage <binary> --source <name|path>`…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig ompiglet verify <binary> --source <name|path>` and `ompig ompiglet lineage <binary> --source <name|path>` report `Provenance: matches` for a Binary built from that unchanged source.
+- **Symptom:** `pig piglet verify <binary> --source <name|path>` and `pig piglet lineage <binary> --source <name|path>` report `Provenance: matches` for a Binary built from that unchanged source.
 - **Root cause:** Not recorded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `dbe25ef5c1` (2026-10-21, #261)
 - **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAFixTitledSquashWithNoNoteIsRefusedNotAttributed`, `automation/ci/bugledger/bugledger_test.go::TestTheLedgerRefusesToAttributeTheTestsOfASquash`, `automation/ci/bugledger/bugledger_test.go::TestTheSquashThresholdIsTheCountOfTouchedFiles`, `automation/ci/changelogfrag/history_test.go::TestAFragmentNamedAfterAPreRebaseCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAMarkerNamingAnUnreachableCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAShallowCloneFailsTheCheckInsteadOfGuessing`, `automation/ci/changelogfrag/history_test.go::TestEveryCommitOfAMarkerMustBeReachable`, `automation/ci/changelogfrag/history_test.go::TestEveryFixedBulletNeedsAFixMarker` and 34 more in docs/bug-ledger.json
-- **Release note:** `ompig ompiglet verify <binary> --source <name|path>` and `ompig ompiglet lineage <binary> --source <name|path>` report `Provenance: matches` for a Binary built from that unchanged source. They compared the Ompiglet digest the Binary signs, which is the digest of its baked Ompiglet definition, with the extends graph digest, so every check reported `MISMATCH`. They now bake the source as the build does. A change to a file the build inlines, such as a system prompt file, is now a Ompiglet digest mismatch. The JSON `provenance` object's `effectiveDigest` field is renamed `pigletDigest`. Binaries built by 0.5.0 and 0.5.1 need no rebuild.
+- **Release note:** `pig piglet verify <binary> --source <name|path>` and `pig piglet lineage <binary> --source <name|path>` report `Provenance: matches` for a Binary built from that unchanged source. They compared the Piglet digest the Binary signs, which is the digest of its baked Piglet definition, with the extends graph digest, so every check reported `MISMATCH`. They now bake the source as the build does. A change to a file the build inlines, such as a system prompt file, is now a Piglet digest mismatch. The JSON `provenance` object's `effectiveDigest` field is renamed `pigletDigest`. Binaries built by 0.5.0 and 0.5.1 need no rebuild.
 
 ### BF-dbe25ef-6
 
-**`ompig ompiglet verify` accepts `--workspace <dir>`, and `ompig ompiglet lineage --workspace` now applies to the…**
+**`pig piglet verify` accepts `--workspace <dir>`, and `pig piglet lineage --workspace` now applies to the…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig ompiglet verify` accepts `--workspace <dir>`, and `ompig ompiglet lineage --workspace` now applies to the provenance check too.
+- **Symptom:** `pig piglet verify` accepts `--workspace <dir>`, and `pig piglet lineage --workspace` now applies to the provenance check too.
 - **Root cause:** Not recorded.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `dbe25ef5c1` (2026-10-21, #261)
 - **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAFixTitledSquashWithNoNoteIsRefusedNotAttributed`, `automation/ci/bugledger/bugledger_test.go::TestTheLedgerRefusesToAttributeTheTestsOfASquash`, `automation/ci/bugledger/bugledger_test.go::TestTheSquashThresholdIsTheCountOfTouchedFiles`, `automation/ci/changelogfrag/history_test.go::TestAFragmentNamedAfterAPreRebaseCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAMarkerNamingAnUnreachableCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAShallowCloneFailsTheCheckInsteadOfGuessing`, `automation/ci/changelogfrag/history_test.go::TestEveryCommitOfAMarkerMustBeReachable`, `automation/ci/changelogfrag/history_test.go::TestEveryFixedBulletNeedsAFixMarker` and 34 more in docs/bug-ledger.json
-- **Release note:** `ompig ompiglet verify` accepts `--workspace <dir>`, and `ompig ompiglet lineage --workspace` now applies to the provenance check too. A Ompiglet whose `agentEnv.devContainer` is a `workspace:` path is checked against the workspace its build used instead of failing to resolve from another directory.
+- **Release note:** `pig piglet verify` accepts `--workspace <dir>`, and `pig piglet lineage --workspace` now applies to the provenance check too. A Piglet whose `agentEnv.devContainer` is a `workspace:` path is checked against the workspace its build used instead of failing to resolve from another directory.
 
 ### BF-dbe25ef-7
 
@@ -15570,17 +15570,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-dbe25ef-8
 
-**`go install github.com/tmih06/ompig/cmd/ompig@main` builds again**
+**`go install github.com/MichaelKinsy/PiG/cmd/pig@main` builds again**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `go install github.com/tmih06/ompig/cmd/ompig@main` builds again.
+- **Symptom:** `go install github.com/MichaelKinsy/PiG/cmd/pig@main` builds again.
 - **Root cause:** Not recorded.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `dbe25ef5c1` (2026-10-21, #261)
 - **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAFixTitledSquashWithNoNoteIsRefusedNotAttributed`, `automation/ci/bugledger/bugledger_test.go::TestTheLedgerRefusesToAttributeTheTestsOfASquash`, `automation/ci/bugledger/bugledger_test.go::TestTheSquashThresholdIsTheCountOfTouchedFiles`, `automation/ci/changelogfrag/history_test.go::TestAFragmentNamedAfterAPreRebaseCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAMarkerNamingAnUnreachableCommitFails`, `automation/ci/changelogfrag/history_test.go::TestAShallowCloneFailsTheCheckInsteadOfGuessing`, `automation/ci/changelogfrag/history_test.go::TestEveryCommitOfAMarkerMustBeReachable`, `automation/ci/changelogfrag/history_test.go::TestEveryFixedBulletNeedsAFixMarker` and 34 more in docs/bug-ledger.json
-- **Release note:** `go install github.com/tmih06/ompig/cmd/ompig@main` builds again. The root `go.mod` required `extensions/sdk v0.5.0`, which lacks `Result.Drift`, `FileChange.Created` and `Skipped.Suggest` that `ompig extension upgrade` uses, so building the module outside the workspace failed, and `make module-size` failed on every pull request. Between releases the root `go.mod` (and `ompiglets/standard` and `ompiglets/aot`) now require the SDK at the pseudo-version of the `main` commit that holds the API the root uses; the release replaces it with the tag. `make module-publication` accepts such a pseudo-version, and proves by downloading it into an empty cache, with the committed checksums, that the commit is public.
+- **Release note:** `go install github.com/MichaelKinsy/PiG/cmd/pig@main` builds again. The root `go.mod` required `extensions/sdk v0.5.0`, which lacks `Result.Drift`, `FileChange.Created` and `Skipped.Suggest` that `pig extension upgrade` uses, so building the module outside the workspace failed, and `make module-size` failed on every pull request. Between releases the root `go.mod` (and `piglets/standard` and `piglets/aot`) now require the SDK at the pseudo-version of the `main` commit that holds the API the root uses; the release replaces it with the tag. `make module-publication` accepts such a pseudo-version, and proves by downloading it into an empty cache, with the committed checksums, that the commit is public.
 
 ### BF-dbe25ef-9
 
@@ -15640,17 +15640,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-dc53412
 
-**A `ompig_strip_bedrock_converse_stream` Ompiglet Binary no longer links the AWS SDK through the Bedrock retry…**
+**A `pig_strip_bedrock_converse_stream` Piglet Binary no longer links the AWS SDK through the Bedrock retry…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** A `ompig_strip_bedrock_converse_stream` Ompiglet Binary no longer links the AWS SDK through the Bedrock retry delay.
-- **Root cause:** bedrock_retry_backoff.go (, the @smithy retry delay) imports the AWS SDK and smithy but had no build tag, so a Ompiglet Binary built with ompig_strip_bedrock_converse_stream linked 27 github.com/aws/ packages again. Its only caller is bedrock.go, which the tag removes.
+- **Symptom:** A `pig_strip_bedrock_converse_stream` Piglet Binary no longer links the AWS SDK through the Bedrock retry delay.
+- **Root cause:** bedrock_retry_backoff.go (, the @smithy retry delay) imports the AWS SDK and smithy but had no build tag, so a Piglet Binary built with pig_strip_bedrock_converse_stream linked 27 github.com/aws/ packages again. Its only caller is bedrock.go, which the tag removes.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `dc53412cc2` (2026-10-11)
 - **Tests:** `coding/cli/strip_providers_binary_test.go::TestStripBedrockConverseStreamBuildOmitsAWSSDK`
-- **Release note:** A `ompig_strip_bedrock_converse_stream` Ompiglet Binary no longer links the AWS SDK through the Bedrock retry delay.
+- **Release note:** A `pig_strip_bedrock_converse_stream` Piglet Binary no longer links the AWS SDK through the Bedrock retry delay.
 
 ### BF-dca5763
 
@@ -15919,17 +15919,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-de0aaa7
 
-**RPC mode now writes the `OMPIG_PROFILE` files when it exits; it ended the process before they were written**
+**RPC mode now writes the `PIG_PROFILE` files when it exits; it ended the process before they were written**
 
 - **Source:** Ompig's own defect
-- **Symptom:** RPC mode now writes the `OMPIG_PROFILE` files when it exits; it ended the process before they were written.
+- **Symptom:** RPC mode now writes the `PIG_PROFILE` files when it exits; it ended the process before they were written.
 - **Root cause:** Adds the gates the performance scoreboard needs and that did not exist, all count based (allocations, bytes, GC cycles, RSS/PSS, goroutines, descriptors, children, temp entries, binary size), never time:
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `de0aaa7dec` (2026-10-09)
 - **Tests:** `ai/perf_gate_norace_test.go::TestProviderStreamPerFrameAllocationGate`, `ai/perf_gate_norace_test.go::TestStreamBuilderPerDeltaAllocationGate`, `automation/perf/test_scoreboard.py`, `coding/extension/host/subprocess/perf_gate_norace_test.go::TestExtensionEventRoundTripAllocationGate`, `internal/codingagent/compaction/perf_gate_norace_test.go::TestCompactionPreparePerEntryAllocationGate`, `internal/codingagent/perf_gate_norace_test.go::TestSessionLoadPerLineAllocationGate`, `internal/codingagent/perf_gate_norace_test.go::TestSessionTurnAllocationGate`, `internal/perfgate/perfgate_test.go::TestFormat` and 18 more in docs/bug-ledger.json
-- **Release note:** RPC mode now writes the `OMPIG_PROFILE` files when it exits; it ended the process before they were written.
+- **Release note:** RPC mode now writes the `PIG_PROFILE` files when it exits; it ended the process before they were written.
 
 ### BF-de38ce2
 
@@ -16021,7 +16021,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A `keybindings.json` key named like a property every JavaScript object inherits (`constructor`, `toString`, `__proto__` and the rest) is renamed on load the way Pi renames it (to that property's printed text), instead of being kept as written.
-- **Root cause:** Ompig kept those keys as written. legacyKeybindingName now returns Pi's rename for the twelve inherited names.
+- **Root cause:** PiG kept those keys as written. legacyKeybindingName now returns Pi's rename for the twelve inherited names.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -16048,7 +16048,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A Go, Rust or Python extension that calls `parseFrontmatter` or `Date.parse` while its factory runs, in a runtime cell shared with other extensions, no longer waits forever when another member of the cell has already connected.
-- **Root cause:** In a packed cell the host accepts members in order and serves a connection only after the members before it, so when the ui-peer member had registered first (thread order in the runner is not fixed) the rust-sdk-fixture factory's frontmatter.parse rode ui-peer's connection and waited for an answer the host would not send until the fixture had connected: a deadlock. strace of the stuck runner: the fixture thread sendto(fd of ui-peer's socket, frontmatter.parse) and never returned. Fix: running connections carry the socket they serve; with OMPIG_EXT_SOCKET set the helper uses the running extension on that socket and otherwise dials it (isolated extensions keep their own connection, an extension…
+- **Root cause:** In a packed cell the host accepts members in order and serves a connection only after the members before it, so when the ui-peer member had registered first (thread order in the runner is not fixed) the rust-sdk-fixture factory's frontmatter.parse rode ui-peer's connection and waited for an answer the host would not send until the fixture had connected: a deadlock. strace of the stuck runner: the fixture thread sendto(fd of ui-peer's socket, frontmatter.parse) and never returned. Fix: running connections carry the socket they serve; with PIG_EXT_SOCKET set the helper uses the running extension on that socket and otherwise dials it (isolated extensions keep their own connection, an extension…
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -16102,7 +16102,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A Gemini stream chunk with a member of an unexpected type is read as Pi's JavaScript reads it instead of ending the turn with `google: invalid SSE JSON`: a text that is not a string (or null) appends its string form, a `thought` or `thoughtSignature` of the wrong type is ignored, a `candidates`, candidate, content or `functionCall` that is not the expected shape reads as empty, `parts` that are a string are skipped and other non-arrays end the turn with `candidate.content.parts is not iterable`, a null part ends it with Pi's `Cannot read properties of null` error after the parts before it, a finish reason that is not a string ends it with `Unhandled stop reason: <its string form>`, and usage that is not an object reads as zeros, and a `candidatesTokenCount` of `true` counts as 1, as Pi's `+` makes it.
-- **Root cause:** google-generative-ai.ts:236-237 reads `output: (usageMetadata.candidatesTokenCount || 0) + (usageMetadata.thoughtsTokenCount || 0)`, so `true` adds 1 and the usage stays numeric. Ompig's JS read of a mistyped chunk refused a truthy non-number count and ended the turn with the decode error. normalizeGeminiUsage now reads a `true` candidates count as 1; every other count is stored as read (a truthy non-number thoughts, total or cached count still ends the turn, because Pi stores it raw). The prompt count is only subtracted from and already counted as its Number().
+- **Root cause:** google-generative-ai.ts:236-237 reads `output: (usageMetadata.candidatesTokenCount || 0) + (usageMetadata.thoughtsTokenCount || 0)`, so `true` adds 1 and the usage stays numeric. PiG's JS read of a mistyped chunk refused a truthy non-number count and ended the turn with the decode error. normalizeGeminiUsage now reads a `true` candidates count as 1; every other count is stored as read (a truthy non-number thoughts, total or cached count still ends the turn, because Pi stores it raw). The prompt count is only subtracted from and already counted as its Number().
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -16130,7 +16130,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A live `/skill:` message renders as the collapsed `[skill] name` block instead of the raw `<skill>` XML.
-- **Root cause:** Pi's message_start(user) handler calls addMessageToChat, which parses the skill block and shows a SkillInvocationMessageComponent plus the trailing user message (interactive-mode.ts:3501-3505, 3933-3952). Ompig did that only when rebuilding the transcript and printed the raw <skill> XML while the turn ran. The user case of the rebuild is now one method shared with the live path. Found by the skills journey.
+- **Root cause:** Pi's message_start(user) handler calls addMessageToChat, which parses the skill block and shows a SkillInvocationMessageComponent plus the trailing user message (interactive-mode.ts:3501-3505, 3933-3952). PiG did that only when rebuilding the transcript and printed the raw <skill> XML while the turn ran. The user case of the rebuild is now one method shared with the live path. Found by the skills journey.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -16154,10 +16154,10 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-e24487e
 
-**fix(cli): OMPIG_VERSION_FORMAT=pi prints the pinned Pi package version**
+**fix(cli): PIG_VERSION_FORMAT=pi prints the pinned Pi package version**
 
 - **Source:** Ompig's own defect
-- **Symptom:** fix(cli): OMPIG_VERSION_FORMAT=pi prints the pinned Pi package version
+- **Symptom:** fix(cli): PIG_VERSION_FORMAT=pi prints the pinned Pi package version
 - **Root cause:** Pi's --version prints the package version, which differs from the display version when the pin is a pi-mono commit. Use coding.UpstreamPackageVersion so the opt-in always matches pi --version.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
@@ -16181,31 +16181,31 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-e2db931
 
-**On Windows, refreshing an MCP server's OAuth token no longer fails with `EPERM` when another `ompig` process is…**
+**On Windows, refreshing an MCP server's OAuth token no longer fails with `EPERM` when another `pig` process is…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** On Windows, refreshing an MCP server's OAuth token no longer fails with `EPERM` when another `ompig` process is still deleting the refresh lock.
+- **Symptom:** On Windows, refreshing an MCP server's OAuth token no longer fails with `EPERM` when another `pig` process is still deleting the refresh lock.
 - **Root cause:** The prune loop checks for cancellation only before each entry. A busy failure that arrived after the cancellation counted as skipped, and the last entry's classification could be cut short with nothing to remove, so the collection returned success and the automatic collector wrote its marker for a run that did not finish. The collection now checks for cancellation before it reports success.
 - **User impact:** An operation failed or was rejected
 - **Platform:** Windows
 - **Fixed in:** 0.5.0
 - **Fix commits:** `ba9c37b247` (2026-10-06, #171), `e2db9318fa` (2026-10-06, #173)
 - **Tests:** `coding/extension/exec_tree_test.go::TestExecCommandKeepsOutputWrittenAfterTheLeaderExits`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleBusyEntriesAreSkippedNotErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledBeforeStartTouchesNothing`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleCancelledDuringTheLastEntryReportsTheCancellation`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleEntryLeasedAfterClassificationIsSkippedNotAnError`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleOtherErrorsStayErrors`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestCacheLifecycleStopsWhenItsContextIsCancelled`, `coding/extension/host/runtimecell/cache_lifecycle_busy_test.go::TestIsBusyErrorLooksThroughWrappedJoins` and 4 more in docs/bug-ledger.json
-- **Release note:** On Windows, refreshing an MCP server's OAuth token no longer fails with `EPERM` when another `ompig` process is still deleting the refresh lock. Lock acquisition that waits for a lock now retries every error, as Pi's lock does, and reports the most frequent error when it gives up.
+- **Release note:** On Windows, refreshing an MCP server's OAuth token no longer fails with `EPERM` when another `pig` process is still deleting the refresh lock. Lock acquisition that waits for a lock now retries every error, as Pi's lock does, and reports the most frequent error when it gives up.
 
 ### BF-e32c60c
 
-**A Ompiglet or Package installed under a symlinked agent directory keeps the origin integrity recorded in its…**
+**A Piglet or Package installed under a symlinked agent directory keeps the origin integrity recorded in its…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** A Ompiglet or Package installed under a symlinked agent directory keeps the origin integrity recorded in its npm lockfile.
-- **Root cause:** - env: the remote watcher reports paths as given (remote-env.ts #resolve); drop the symlink resolution from the test expectation. - cmd/ompig: the warning-only diagnostics name the package as listed (package-manager.ts packageRoot). - coding/ompiglet: resolve npm lockfile entries whose keys npm writes relative to a symlinked install root, so a symlinked agent directory no longer loses the origin integrity. - interactive thinking harness: drain the PTY until ompig exits. - subprocess and experimental tests: use short socket directories. - experimental: wait for a removed socket by polling under a deadline, since fsnotify v1.5.4 reports no removal on macOS. - CI: run cmd/ompig, env, the extension…
+- **Symptom:** A Piglet or Package installed under a symlinked agent directory keeps the origin integrity recorded in its npm lockfile.
+- **Root cause:** - env: the remote watcher reports paths as given (remote-env.ts #resolve); drop the symlink resolution from the test expectation. - cmd/pig: the warning-only diagnostics name the package as listed (package-manager.ts packageRoot). - coding/piglet: resolve npm lockfile entries whose keys npm writes relative to a symlinked install root, so a symlinked agent directory no longer loses the origin integrity. - interactive thinking harness: drain the PTY until pig exits. - subprocess and experimental tests: use short socket directories. - experimental: wait for a removed socket by polling under a deadline, since fsnotify v1.5.4 reports no removal on macOS. - CI: run cmd/pig, env, the extension…
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `e32c60c500` (2026-10-06)
-- **Tests:** `coding/extension/host/subprocess/node_frame_buffer_test.go::TestNodeProviderSocketFrameCopyIsLinear`, `coding/ompiglet/origin_integrity_test.go::TestReadNPMOriginIntegrityResolvesLockfileKeys`, `env/watch_test.go::TestRemoteWatcherOpensAgainAfterALostConnectionAndReportsOverflow`, `test/ci-images/macos_shards_test.go::TestMacOSShardsTestTheMacOSSensitivePackages`
-- **Release note:** A Ompiglet or Package installed under a symlinked agent directory keeps the origin integrity recorded in its npm lockfile. Lockfile entries that npm writes relative to a symlinked install root were not found.
+- **Tests:** `coding/extension/host/subprocess/node_frame_buffer_test.go::TestNodeProviderSocketFrameCopyIsLinear`, `env/watch_test.go::TestRemoteWatcherOpensAgainAfterALostConnectionAndReportsOverflow`, `test/ci-images/macos_shards_test.go::TestMacOSShardsTestTheMacOSSensitivePackages`
+- **Release note:** A Piglet or Package installed under a symlinked agent directory keeps the origin integrity recorded in its npm lockfile. Lockfile entries that npm writes relative to a symlinked install root were not found.
 
 ### BF-e3f39b7
 
@@ -16254,7 +16254,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(tui): filterable list drops the label when no cell remains (Pi select-list)
-- **Root cause:** select-list.ts renderItem computes maxWidth = width - 2 - 2 without a floor and truncateToWidth returns "" for maxWidth <= 0; Ompig's FilterableList floored it at 1, drawing one label cell at widths 3-4. TestFilterableListShowsNoLabelWhenNoCellRemains is red without the fix.
+- **Root cause:** select-list.ts renderItem computes maxWidth = width - 2 - 2 without a floor and truncateToWidth returns "" for maxWidth <= 0; Pig's FilterableList floored it at 1, drawing one label cell at widths 3-4. TestFilterableListShowsNoLabelWhenNoCellRemains is red without the fix.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -16295,13 +16295,13 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Durable: opening a store that pi-durable 1.3.0 wrote no longer leaves you unable to go back to it.
-- **Root cause:** Ompig's Durable writes schema version 2, which pi-durable 1.3.0 refuses, and opening a version 1 store by file path upgraded it in place, so a user could not go back to the released Pi. The fix copies such a store to <path>.schema-<N>.bak (VACUUM INTO) before the upgrade; an earlier copy is never replaced, and a failed copy fails the open.
+- **Root cause:** PiG's Durable writes schema version 2, which pi-durable 1.3.0 refuses, and opening a version 1 store by file path upgraded it in place, so a user could not go back to the released Pi. The fix copies such a store to <path>.schema-<N>.bak (VACUUM INTO) before the upgrade; an earlier copy is never replaced, and a failed copy fails the open.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `c6cb4f6c37` (2026-10-20), `e55895a96d` (2026-10-21)
 - **Tests:** `durable/core/driver/schema_backup_core_test.go::TestOpenHarnessCopiesAnOlderSchemaBeforeUpgrading`, `durable/storage/sqlite/node/schema_backup_test.go::TestOpenNodeSqliteStorageCopiesAnOlderSchemaBeforeUpgrading`, `durable/storage/sqlite/node/schema_backup_test.go::TestOpenNodeSqliteStorageDoesNotCopyANewOrCurrentStore`
-- **Release note:** Durable: opening a store that pi-durable 1.3.0 wrote no longer leaves you unable to go back to it. Ompig's Durable writes schema version 2, which no Pi release reads yet, and it upgraded the store in place. `driver.OpenHarness` and `node.OpenNodeSqliteStorage` now copy a store at an older schema version to `<path>.schema-1.bak` before upgrading it; pi-durable 1.3.0 opens that copy. An earlier copy is never replaced, and if the copy cannot be written the open fails and the store is left as it was. The copy is one extra file the size of the store, written once per older store (D188, #245; the commit that made the change calls it D186, its number before the renumber).
+- **Release note:** Durable: opening a store that pi-durable 1.3.0 wrote no longer leaves you unable to go back to it. PiG's Durable writes schema version 2, which no Pi release reads yet, and it upgraded the store in place. `driver.OpenHarness` and `node.OpenNodeSqliteStorage` now copy a store at an older schema version to `<path>.schema-1.bak` before upgrading it; pi-durable 1.3.0 opens that copy. An earlier copy is never replaced, and if the copy cannot be written the open fails and the store is left as it was. The copy is one extra file the size of the store, written once per older store (D188, #245; the commit that made the change calls it D186, its number before the renumber).
 
 ### BF-e55cdc2
 
@@ -16364,13 +16364,13 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The editor now enters bash mode (bash border color, Escape clears it) when the text starts with `!` after any JavaScript whitespace, including blank lines and non-breaking spaces, as in Pi.
-- **Root cause:** setupKeyHandlers' onChange sets isBashMode from the whole text after JavaScript trimStart. Ompig trimmed only spaces and tabs of the first line.
+- **Root cause:** setupKeyHandlers' onChange sets isBashMode from the whole text after JavaScript trimStart. PiG trimmed only spaces and tabs of the first line.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `e5aae639c1` (2026-10-13)
 - **Tests:** `internal/codingagent/tool_codemode_timer_test.go::TestCodemodeRowShowsElapsedWhileRunningAndTookOnceFinished`, `tui/bash_execution_test.go::TestEditorBashModeTrimsTheWholeTextAsJavaScript`, `tui/terminal_image_test.go::TestHerdrWithGraphicsSignalRendersKittyImage`
-- **Release note:** The editor now enters bash mode (bash border color, Escape clears it) when the text starts with `!` after any JavaScript whitespace, including blank lines and non-breaking spaces, as in Pi. Ompig looked only at spaces and tabs on the first line.
+- **Release note:** The editor now enters bash mode (bash border color, Escape clears it) when the text starts with `!` after any JavaScript whitespace, including blank lines and non-breaking spaces, as in Pi. PiG looked only at spaces and tabs on the first line.
 
 ### BF-e5f9fdd
 
@@ -16405,7 +16405,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** fix(tui): a tool error result collapses like any other (Pi updateResult)
-- **Root cause:** tool-execution.ts updateResult never changes the expansion; bash/read/write renderers show a collapsed preview for an error as for a success. Found by e2e runs of scripted replies through real Pi and Ompig (TUI panes and session files compared). TestErrorResultStaysCollapsedUntilExpanded is red without the change. NOTE: TestRefreshModelRuntimeHonoursNetworkForceErrorsAndRegistrationCover fails ('TempDir RemoveAll cleanup: directory not empty') at -count>1 and in full-package runs on the integrate base, unrelated.
+- **Root cause:** tool-execution.ts updateResult never changes the expansion; bash/read/write renderers show a collapsed preview for an error as for a success. Found by e2e runs of scripted replies through real Pi and Pig (TUI panes and session files compared). TestErrorResultStaysCollapsedUntilExpanded is red without the change. NOTE: TestRefreshModelRuntimeHonoursNetworkForceErrorsAndRegistrationCover fails ('TempDir RemoveAll cleanup: directory not empty') at -count>1 and in full-package runs on the integrate base, unrelated.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** Unreleased
@@ -16424,7 +16424,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** Unreleased
 - **Fix commits:** `e65ade9b1b` (2026-10-27)
 - **Tests:** `durable/harness/harness_tasks_test.go::TestPublicationAtAdoption`
-- **Release note:** `WaitForIdle` on the Harness or a Conversation no longer resumes before the `SubscribeCommits` listeners saw the commit that made the work idle. The idle settle that ends a reconcile pass, and the one the context expiry timer runs, could decide on a commit another goroutine had just adopted and resolve the waits ahead of its host listeners; Pi's continuation there cannot run between an adoption and its publication, and Ompig's now leaves the decision to the settle queued behind the listeners.
+- **Release note:** `WaitForIdle` on the Harness or a Conversation no longer resumes before the `SubscribeCommits` listeners saw the commit that made the work idle. The idle settle that ends a reconcile pass, and the one the context expiry timer runs, could decide on a commit another goroutine had just adopted and resolve the waits ahead of its host listeners; Pi's continuation there cannot run between an adoption and its publication, and PiG's now leaves the decision to the settle queued behind the listeners.
 
 ### BF-e69d018
 
@@ -16432,7 +16432,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Closing an `env` connection, or losing it, now ends its daemon process with SIGTERM, as in Pi, instead of SIGKILL, so a daemon reached through `ssh` can close its remote side.
-- **Root cause:** Pi's Connection #teardown (connection.ts:307-320) ends the daemon's stdin and calls child.kill(), Node's SIGTERM. Ompig's teardown called Process.Kill (SIGKILL), so an ssh child could not close its remote side. It now uses terminateProcess, the helper runSsh's timeout uses (a plain kill on Windows, as Node does).
+- **Root cause:** Pi's Connection #teardown (connection.ts:307-320) ends the daemon's stdin and calls child.kill(), Node's SIGTERM. PiG's teardown called Process.Kill (SIGKILL), so an ssh child could not close its remote side. It now uses terminateProcess, the helper runSsh's timeout uses (a plain kill on Windows, as Node does).
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -16460,13 +16460,13 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The external editor (`ctrl+g`) now edits `prompt.md` inside a private `pi-editor-*` directory under the system temp directory and removes the directory afterwards, as Pi does.
-- **Root cause:** - external-editor.ts (editInExternalEditor, external-editor.ts:15-45) writes prompt.md inside mkdtempSync(join(tmpdir(), "pi-editor-")) and removes the directory; OpenExternalEditor wrote ompig-editor-*.md straight into the shared temp directory. TestExternalEditorUpstream ports the three cases of external-editor.test.ts:36,52,58 (red on the old code: wrong directory, file name, entries, leftover directory); the test-mapping row now names it instead of "direct name match". They carry `// upstream:` references to session-selector.ts setStatusMessage (:837,858,862,1003) and formatSessionDate (:43). The cell names its load, status and delete helpers in prose again. - pi_wsl_test.go duplicated…
+- **Root cause:** - external-editor.ts (editInExternalEditor, external-editor.ts:15-45) writes prompt.md inside mkdtempSync(join(tmpdir(), "pi-editor-")) and removes the directory; OpenExternalEditor wrote pig-editor-*.md straight into the shared temp directory. TestExternalEditorUpstream ports the three cases of external-editor.test.ts:36,52,58 (red on the old code: wrong directory, file name, entries, leftover directory); the test-mapping row now names it instead of "direct name match". They carry `// upstream:` references to session-selector.ts setStatusMessage (:837,858,862,1003) and formatSessionDate (:43). The cell names its load, status and delete helpers in prose again. - pi_wsl_test.go duplicated…
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `e75a8b9cbd` (2026-10-09)
 - **Tests:** `internal/codingagent/external_editor_test.go::TestEditorHelperProcess`, `internal/codingagent/external_editor_test.go::TestExternalEditorUpstream`, `internal/codingagent/wsl_test.go::TestIsWSL`
-- **Release note:** The external editor (`ctrl+g`) now edits `prompt.md` inside a private `pi-editor-*` directory under the system temp directory and removes the directory afterwards, as Pi does. It previously wrote a `ompig-editor-*.md` file directly in the shared temp directory.
+- **Release note:** The external editor (`ctrl+g`) now edits `prompt.md` inside a private `pi-editor-*` directory under the system temp directory and removes the directory afterwards, as Pi does. It previously wrote a `pig-editor-*.md` file directly in the shared temp directory.
 
 ### BF-e79c70e
 
@@ -16555,7 +16555,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** An extension that calls a pi-ai function such as `completeSimple` at top level or in its factory no longer hangs startup; the Host answers the model stream while the module loads.
-- **Root cause:** An extension that awaited completeSimple at top level or in its factory hung Ompig: the Node runtime sent the modelStream host call before it had registered, and the Host answered extension calls only after the register handshake the factory was holding up. Pi runs pi-ai in the extension's own process with no registration gate.
+- **Root cause:** An extension that awaited completeSimple at top level or in its factory hung PiG: the Node runtime sent the modelStream host call before it had registered, and the Host answered extension calls only after the register handshake the factory was holding up. Pi runs pi-ai in the extension's own process with no registration gate.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -16680,7 +16680,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** `getSystemPromptOptions().hiddenTools` lists hidden tools in the order the `prepareLoadout` hooks hid them, as Pi does, instead of sorted.
-- **Root cause:** Ompig sorted the names, so getSystemPromptOptions().hiddenTools and the before_agent_start options listed them in a different order.
+- **Root cause:** PiG sorted the names, so getSystemPromptOptions().hiddenTools and the before_agent_start options listed them in a different order.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -16791,7 +16791,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Anthropic and Bedrock assistant messages write `providerThinkingLevel` after `model`, and write `cacheWrite1h` and `reasoning` after `cost` in `usage`, as Pi does.
-- **Root cause:** Pi passes a tool's parameters object through to the body (openai-completions.ts convertTools :1506-1514, openai-responses-shared.ts :386-390), so JSON.stringify writes the schema's members in declaration order; a strict schema is the same object rebuilt member by member (constrained-sampling.ts makeJsonSchemaNodeStrict: required, then additionalProperties are assigned after the existing members, and an optional property becomes {anyOf: [property, {type: "null"}]}). Ompig copied ToolSchema.Parameters as a map[string]any and dropped the recorded parameterOrder, so every schema object was written in sorted order.
+- **Root cause:** Pi passes a tool's parameters object through to the body (openai-completions.ts convertTools :1506-1514, openai-responses-shared.ts :386-390), so JSON.stringify writes the schema's members in declaration order; a strict schema is the same object rebuilt member by member (constrained-sampling.ts makeJsonSchemaNodeStrict: required, then additionalProperties are assigned after the existing members, and an optional property becomes {anyOf: [property, {type: "null"}]}). PiG copied ToolSchema.Parameters as a map[string]any and dropped the recorded parameterOrder, so every schema object was written in sorted order.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -16825,7 +16825,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Fix commits:** `f02269c6e1` (2026-10-10)
 - **Tests:** `ai/anthropic_replaced_payload_order_oracle_test.go::TestAnthropicReplacedPayloadKeepsPiMemberOrder`
-- **Release note:** When an extension's `before_provider_request` handler replaces an Anthropic request, or a Codex WebSocket request carries raw JSON, nested values are written as Pi's `JSON.stringify` writes them after `JSON.parse`: `\u00e9` becomes `é`, and a nested object's repeated key keeps its first place with its last value. Ompig copied the replacement's text unchanged.
+- **Release note:** When an extension's `before_provider_request` handler replaces an Anthropic request, or a Codex WebSocket request carries raw JSON, nested values are written as Pi's `JSON.stringify` writes them after `JSON.parse`: `\u00e9` becomes `é`, and a nested object's repeated key keeps its first place with its last value. PiG copied the replacement's text unchanged.
 
 ### BF-f06ab7e
 
@@ -16833,7 +16833,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A run that `sendMessage({ triggerTurn: true })` starts while idle emits `before_agent_start`, checks compaction first, applies the handlers' result and delivers pending `nextTurn` messages.
-- **Root cause:** Ompig did this only for idle triggerTurn custom messages (D139) and prepared a user prompt idle.
+- **Root cause:** PiG did this only for idle triggerTurn custom messages (D139) and prepared a user prompt idle.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -16976,21 +16976,21 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **MCP OAuth token and client registration responses keep empty lists, read `expires_in` like JavaScript's…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** MCP OAuth token and client registration responses keep empty lists, read `expires_in` like JavaScript's `Number()`, treat `null` timestamps as absent, and keep registration members Ompig does not model.
+- **Symptom:** MCP OAuth token and client registration responses keep empty lists, read `expires_in` like JavaScript's `Number()`, treat `null` timestamps as absent, and keep registration members PiG does not model.
 - **Root cause:** The release commit's --move-unreleased moves them under [0.4.2].
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `f288d69087` (2026-10-06)
 - **Tests:** None recorded.
-- **Release note:** MCP OAuth token and client registration responses keep empty lists, read `expires_in` like JavaScript's `Number()`, treat `null` timestamps as absent, and keep registration members Ompig does not model. A registration response keeps `token_endpoint_auth_method` and the other registered members when one member has an unexpected type, so the token request uses the authentication method the server registered, as in Pi.
+- **Release note:** MCP OAuth token and client registration responses keep empty lists, read `expires_in` like JavaScript's `Number()`, treat `null` timestamps as absent, and keep registration members PiG does not model. A registration response keeps `token_endpoint_auth_method` and the other registered members when one member has an unexpected type, so the token request uses the authentication method the server registered, as in Pi.
 
 ### BF-f288d69-2
 
-**On Windows, an npm self-update no longer fails when a virus scanner or indexer holds `ompig.exe` open for a…**
+**On Windows, an npm self-update no longer fails when a virus scanner or indexer holds `pig.exe` open for a…**
 
 - **Source:** A Pi defect that Ompig fixed first (divergence D99)
-- **Symptom:** On Windows, an npm self-update no longer fails when a virus scanner or indexer holds `ompig.exe` open for a moment.
+- **Symptom:** On Windows, an npm self-update no longer fails when a virus scanner or indexer holds `pig.exe` open for a moment.
 - **Root cause:** The release commit's --move-unreleased moves them under [0.4.2].
 - **User impact:** An operation failed or was rejected
 - **Platform:** Windows
@@ -16999,7 +16999,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Removed when Pi fixes it:** Pi retries the quarantine rename, or Windows stops refusing to rename a file that another process holds open.
 - **Commit that wrote the release note (the fix commit is not identified):** `6a96295659` (2026-10-06, #161), `cbbaa8d2d7` (2026-10-06), `f288d69087` (2026-10-06)
 - **Tests:** `coding/cli/self_update_windows_test.go::TestWindowsNpmSelfUpdateReplacesTheRunningInstallation`, `internal/codingagent/windows_self_update_windows_test.go::TestQuarantineWaitsOutAHandleHeldOnTheRunningImage`
-- **Release note:** On Windows, an npm self-update no longer fails when a virus scanner or indexer holds `ompig.exe` open for a moment. The update retries moving the loaded images for up to 10 seconds; any other error fails the update as before (D99).
+- **Release note:** On Windows, an npm self-update no longer fails when a virus scanner or indexer holds `pig.exe` open for a moment. The update retries moving the loaded images for up to 10 seconds; any other error fails the update as before (D99).
 
 ### BF-f288d69-3
 
@@ -17017,17 +17017,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-f288d69-4
 
-**Crash attribution reads Go goroutine traces as well as JavaScript stacks, so a crash in the Ompig process…**
+**Crash attribution reads Go goroutine traces as well as JavaScript stacks, so a crash in the PiG process…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Crash attribution reads Go goroutine traces as well as JavaScript stacks, so a crash in the Ompig process carries stack frames (D100).
+- **Symptom:** Crash attribution reads Go goroutine traces as well as JavaScript stacks, so a crash in the PiG process carries stack frames (D100).
 - **Root cause:** The release commit's --move-unreleased moves them under [0.4.2].
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `f288d69087` (2026-10-06)
 - **Tests:** None recorded.
-- **Release note:** Crash attribution reads Go goroutine traces as well as JavaScript stacks, so a crash in the Ompig process carries stack frames (D100).
+- **Release note:** Crash attribution reads Go goroutine traces as well as JavaScript stacks, so a crash in the PiG process carries stack frames (D100).
 
 ### BF-f29e906
 
@@ -17035,7 +17035,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** OpenAI Completions, OpenAI Responses and Codex request bodies list their fields in the order Pi writes them, and sampling parameters from `models.json` or the request replace a field in place and append new fields after the rest, as Pi's `Object.assign` does, instead of sorting every key of the body.
-- **Root cause:** JSON.stringify writes params in the order Pi's builders create the keys, and Object.assign(params, samplingParams) keeps an existing key's position and appends a new one. Ompig sorted every key of the body whenever sampling parameters or a non-default thinking budget field were set (marshal -> map[string]any -> marshal), and its struct order differed from Pi even without them (stream_options, store and prompt_cache_key landed late, tools early).
+- **Root cause:** JSON.stringify writes params in the order Pi's builders create the keys, and Object.assign(params, samplingParams) keeps an existing key's position and appends a new one. PiG sorted every key of the body whenever sampling parameters or a non-default thinking budget field were set (marshal -> map[string]any -> marshal), and its struct order differed from Pi even without them (stream_options, store and prompt_cache_key landed late, tools early).
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -17068,7 +17068,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Platform:** All platforms
 - **Fixed in:** 0.5.3
 - **Fix commits:** `f2c00f9dfa` (2026-10-22, #295)
-- **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAMergedFixOlderThanCommittedFixesOfTheSameTitleStaysAnEntry`, `automation/ci/bugledger/bugledger_test.go::TestLocateDoesNotDependOnTheOrderOfAMap`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationAfterAMergeThatBringsBackSquashedCommitsDropsOnlyTheDuplicate`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationDoesNotDependOnTheOrderOfTheCommittedEntries`, `automation/ci/changelogfrag/history_test.go::TestAnUnmarkedLegacyBulletFailsWithoutAGitCheckout`, `automation/ci/changelogfrag/history_test.go::TestLegacyFragmentsAreExemptFromReachabilityButNotFromTheMarker`, `automation/ci/changelogfrag/main_test.go::TestFoldRefusesABulletTheLedgerWouldGuessAbout`, `coding/cli/extension_validate_command_test.go::TestInstallValidateOnlyValidatesInstalledGitSource` and 30 more in docs/bug-ledger.json
+- **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAMergedFixOlderThanCommittedFixesOfTheSameTitleStaysAnEntry`, `automation/ci/bugledger/bugledger_test.go::TestLocateDoesNotDependOnTheOrderOfAMap`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationAfterAMergeThatBringsBackSquashedCommitsDropsOnlyTheDuplicate`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationDoesNotDependOnTheOrderOfTheCommittedEntries`, `automation/ci/changelogfrag/history_test.go::TestAnUnmarkedLegacyBulletFailsWithoutAGitCheckout`, `automation/ci/changelogfrag/history_test.go::TestLegacyFragmentsAreExemptFromReachabilityButNotFromTheMarker`, `automation/ci/changelogfrag/main_test.go::TestFoldRefusesABulletTheLedgerWouldGuessAbout`, `coding/cli/extension_validate_command_test.go::TestInstallValidateOnlyValidatesInstalledGitSource` and 23 more in docs/bug-ledger.json
 - **Release note:** A fused Go extension's built-in tool `execute` without an extension context (`createBashTool(cwd).execute(id, params)` and the other `create<Tool>Tool` forms) no longer fails with "extension stopped while waiting for builtinTool.execute response" when another extension in the same process stops while the tool runs. The call has no `Context`, so it was sent over the connection of the first running extension in the process. The host now runs the tool for a fused extension directly, reaching back into the extension in the same process for the functions of its options and its streamed updates.
 
 ### BF-f2c00f9-2
@@ -17082,7 +17082,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Platform:** All platforms
 - **Fixed in:** 0.5.3
 - **Fix commits:** `f2c00f9dfa` (2026-10-22, #295)
-- **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAMergedFixOlderThanCommittedFixesOfTheSameTitleStaysAnEntry`, `automation/ci/bugledger/bugledger_test.go::TestLocateDoesNotDependOnTheOrderOfAMap`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationAfterAMergeThatBringsBackSquashedCommitsDropsOnlyTheDuplicate`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationDoesNotDependOnTheOrderOfTheCommittedEntries`, `automation/ci/changelogfrag/history_test.go::TestAnUnmarkedLegacyBulletFailsWithoutAGitCheckout`, `automation/ci/changelogfrag/history_test.go::TestLegacyFragmentsAreExemptFromReachabilityButNotFromTheMarker`, `automation/ci/changelogfrag/main_test.go::TestFoldRefusesABulletTheLedgerWouldGuessAbout`, `coding/cli/extension_validate_command_test.go::TestInstallValidateOnlyValidatesInstalledGitSource` and 30 more in docs/bug-ledger.json
+- **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAMergedFixOlderThanCommittedFixesOfTheSameTitleStaysAnEntry`, `automation/ci/bugledger/bugledger_test.go::TestLocateDoesNotDependOnTheOrderOfAMap`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationAfterAMergeThatBringsBackSquashedCommitsDropsOnlyTheDuplicate`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationDoesNotDependOnTheOrderOfTheCommittedEntries`, `automation/ci/changelogfrag/history_test.go::TestAnUnmarkedLegacyBulletFailsWithoutAGitCheckout`, `automation/ci/changelogfrag/history_test.go::TestLegacyFragmentsAreExemptFromReachabilityButNotFromTheMarker`, `automation/ci/changelogfrag/main_test.go::TestFoldRefusesABulletTheLedgerWouldGuessAbout`, `coding/cli/extension_validate_command_test.go::TestInstallValidateOnlyValidatesInstalledGitSource` and 23 more in docs/bug-ledger.json
 - **Release note:** Extensions' `ui_prompt_start` and `ui_prompt_end` notifications are recorded in order when the host is slow to apply the start event's `ctx.ui.notify`: the dialog's answer is no longer let through, and the end event no longer sent, before the handler's own host call has applied. A blocked-on-a-host-call report from an extension runtime admitted the UI prompt drain as soon as it was read, while the call it announced was still queued; the admission now waits for that call.
 
 ### BF-f2c00f9-3
@@ -17096,36 +17096,36 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Platform:** Windows
 - **Fixed in:** 0.5.3
 - **Fix commits:** `f2c00f9dfa` (2026-10-22, #295)
-- **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAMergedFixOlderThanCommittedFixesOfTheSameTitleStaysAnEntry`, `automation/ci/bugledger/bugledger_test.go::TestLocateDoesNotDependOnTheOrderOfAMap`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationAfterAMergeThatBringsBackSquashedCommitsDropsOnlyTheDuplicate`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationDoesNotDependOnTheOrderOfTheCommittedEntries`, `automation/ci/changelogfrag/history_test.go::TestAnUnmarkedLegacyBulletFailsWithoutAGitCheckout`, `automation/ci/changelogfrag/history_test.go::TestLegacyFragmentsAreExemptFromReachabilityButNotFromTheMarker`, `automation/ci/changelogfrag/main_test.go::TestFoldRefusesABulletTheLedgerWouldGuessAbout`, `coding/cli/extension_validate_command_test.go::TestInstallValidateOnlyValidatesInstalledGitSource` and 30 more in docs/bug-ledger.json
+- **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAMergedFixOlderThanCommittedFixesOfTheSameTitleStaysAnEntry`, `automation/ci/bugledger/bugledger_test.go::TestLocateDoesNotDependOnTheOrderOfAMap`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationAfterAMergeThatBringsBackSquashedCommitsDropsOnlyTheDuplicate`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationDoesNotDependOnTheOrderOfTheCommittedEntries`, `automation/ci/changelogfrag/history_test.go::TestAnUnmarkedLegacyBulletFailsWithoutAGitCheckout`, `automation/ci/changelogfrag/history_test.go::TestLegacyFragmentsAreExemptFromReachabilityButNotFromTheMarker`, `automation/ci/changelogfrag/main_test.go::TestFoldRefusesABulletTheLedgerWouldGuessAbout`, `coding/cli/extension_validate_command_test.go::TestInstallValidateOnlyValidatesInstalledGitSource` and 23 more in docs/bug-ledger.json
 - **Release note:** A fused Go extension's `createLocalBashOperations().exec` (and `createLocalPowerShellOperations`) no longer fails with "extension stopped while waiting for builtinTool.localExec response" when another extension in the same process stops while the command runs; a command past its `timeout` rejects with Pi's `timeout:<seconds>`. The call has no `Context`, so it was sent over the connection of the first running extension in the process, and ended with that extension, whichever made the call. The host now runs the command for a fused extension directly, as it already does for the other helpers that have no `Context`, so the command depends on no extension, as Pi's exec depends on none.
 
 ### BF-f2c00f9-4
 
-**`ompig install <source> --validate-only` now validates git and npm sources that are not installed yet**
+**`pig install <source> --validate-only` now validates git and npm sources that are not installed yet**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig install <source> --validate-only` now validates git and npm sources that are not installed yet.
+- **Symptom:** `pig install <source> --validate-only` now validates git and npm sources that are not installed yet.
 - **Root cause:** Includes #290, #291, #292, #293, #294, #296 and #297, plus the Windows, macOS and validate-only follow-ups verified on the train.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.3
 - **Fix commits:** `f2c00f9dfa` (2026-10-22, #295)
-- **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAMergedFixOlderThanCommittedFixesOfTheSameTitleStaysAnEntry`, `automation/ci/bugledger/bugledger_test.go::TestLocateDoesNotDependOnTheOrderOfAMap`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationAfterAMergeThatBringsBackSquashedCommitsDropsOnlyTheDuplicate`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationDoesNotDependOnTheOrderOfTheCommittedEntries`, `automation/ci/changelogfrag/history_test.go::TestAnUnmarkedLegacyBulletFailsWithoutAGitCheckout`, `automation/ci/changelogfrag/history_test.go::TestLegacyFragmentsAreExemptFromReachabilityButNotFromTheMarker`, `automation/ci/changelogfrag/main_test.go::TestFoldRefusesABulletTheLedgerWouldGuessAbout`, `coding/cli/extension_validate_command_test.go::TestInstallValidateOnlyValidatesInstalledGitSource` and 30 more in docs/bug-ledger.json
-- **Release note:** `ompig install <source> --validate-only` now validates git and npm sources that are not installed yet. It fetches them into a temporary directory that is removed afterwards, and no longer reports `stat …/git/<host>/<owner>/<repo>: no such file or directory`. Installed packages and settings are not touched.
+- **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAMergedFixOlderThanCommittedFixesOfTheSameTitleStaysAnEntry`, `automation/ci/bugledger/bugledger_test.go::TestLocateDoesNotDependOnTheOrderOfAMap`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationAfterAMergeThatBringsBackSquashedCommitsDropsOnlyTheDuplicate`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationDoesNotDependOnTheOrderOfTheCommittedEntries`, `automation/ci/changelogfrag/history_test.go::TestAnUnmarkedLegacyBulletFailsWithoutAGitCheckout`, `automation/ci/changelogfrag/history_test.go::TestLegacyFragmentsAreExemptFromReachabilityButNotFromTheMarker`, `automation/ci/changelogfrag/main_test.go::TestFoldRefusesABulletTheLedgerWouldGuessAbout`, `coding/cli/extension_validate_command_test.go::TestInstallValidateOnlyValidatesInstalledGitSource` and 23 more in docs/bug-ledger.json
+- **Release note:** `pig install <source> --validate-only` now validates git and npm sources that are not installed yet. It fetches them into a temporary directory that is removed afterwards, and no longer reports `stat …/git/<host>/<owner>/<repo>: no such file or directory`. Installed packages and settings are not touched.
 
 ### BF-f2c00f9-5
 
-**Installing a Package or Ompiglet from a local `git:file://` source on Windows no longer fails with `fatal…**
+**Installing a Package or Piglet from a local `git:file://` source on Windows no longer fails with `fatal…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Installing a Package or Ompiglet from a local `git:file://` source on Windows no longer fails with `fatal: '$GIT_DIR' too big`.
+- **Symptom:** Installing a Package or Piglet from a local `git:file://` source on Windows no longer fails with `fatal: '$GIT_DIR' too big`.
 - **Root cause:** Includes #290, #291, #292, #293, #294, #296 and #297, plus the Windows, macOS and validate-only follow-ups verified on the train.
 - **User impact:** An operation failed or was rejected
 - **Platform:** Windows
 - **Fixed in:** 0.5.3
 - **Fix commits:** `f2c00f9dfa` (2026-10-22, #295)
-- **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAMergedFixOlderThanCommittedFixesOfTheSameTitleStaysAnEntry`, `automation/ci/bugledger/bugledger_test.go::TestLocateDoesNotDependOnTheOrderOfAMap`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationAfterAMergeThatBringsBackSquashedCommitsDropsOnlyTheDuplicate`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationDoesNotDependOnTheOrderOfTheCommittedEntries`, `automation/ci/changelogfrag/history_test.go::TestAnUnmarkedLegacyBulletFailsWithoutAGitCheckout`, `automation/ci/changelogfrag/history_test.go::TestLegacyFragmentsAreExemptFromReachabilityButNotFromTheMarker`, `automation/ci/changelogfrag/main_test.go::TestFoldRefusesABulletTheLedgerWouldGuessAbout`, `coding/cli/extension_validate_command_test.go::TestInstallValidateOnlyValidatesInstalledGitSource` and 30 more in docs/bug-ledger.json
-- **Release note:** Installing a Package or Ompiglet from a local `git:file://` source on Windows no longer fails with `fatal: '$GIT_DIR' too big`. A file URL now checks out to `<install root>/localhost/<12 hex of the path's sha256>/<basename>` instead of re-nesting the whole absolute path, which pushed `$GIT_DIR` past Git for Windows' own path limit that `core.longpaths` does not lift. Sources Pi accepts keep Pi's exact layout. A file URL checkout made by an earlier version is not reused and is cloned again.
+- **Tests:** `automation/ci/bugledger/bugledger_test.go::TestAMergedFixOlderThanCommittedFixesOfTheSameTitleStaysAnEntry`, `automation/ci/bugledger/bugledger_test.go::TestLocateDoesNotDependOnTheOrderOfAMap`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationAfterAMergeThatBringsBackSquashedCommitsDropsOnlyTheDuplicate`, `automation/ci/bugledger/bugledger_test.go::TestRegenerationDoesNotDependOnTheOrderOfTheCommittedEntries`, `automation/ci/changelogfrag/history_test.go::TestAnUnmarkedLegacyBulletFailsWithoutAGitCheckout`, `automation/ci/changelogfrag/history_test.go::TestLegacyFragmentsAreExemptFromReachabilityButNotFromTheMarker`, `automation/ci/changelogfrag/main_test.go::TestFoldRefusesABulletTheLedgerWouldGuessAbout`, `coding/cli/extension_validate_command_test.go::TestInstallValidateOnlyValidatesInstalledGitSource` and 23 more in docs/bug-ledger.json
+- **Release note:** Installing a Package or Piglet from a local `git:file://` source on Windows no longer fails with `fatal: '$GIT_DIR' too big`. A file URL now checks out to `<install root>/localhost/<12 hex of the path's sha256>/<basename>` instead of re-nesting the whole absolute path, which pushed `$GIT_DIR` past Git for Windows' own path limit that `core.longpaths` does not lift. Sources Pi accepts keep Pi's exact layout. A file URL checkout made by an earlier version is not reused and is cloned again.
 
 ### BF-f2c8b02
 
@@ -17161,7 +17161,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** `.gitignore`, `.ignore` and `.fdignore` rules that skills, packages and extension entry discovery read now follow the `ignore` package Pi uses: a pattern ending in a slash ignores directories only (a file named `build` survives `build/`), patterns match case-insensitively, a path inside an ignored directory stays ignored, a pattern with a slash before its end is anchored, `[a-c]` and `[!a]` bracket expressions work, and `**/x`, `x/**` and `x/**/y` follow Pi's forms.
-- **Root cause:** TestProviderRequestHeadersMatchPi reads the URL path, method and headers each API module sends through the pinned pi-ai's options.fetch and through Ompig's HTTP client (60 requests per API with session ids, caller header overrides, API-key forms and providers; client-library and transport headers excluded). The OpenAI-compatible requests now send accept, and directAPIProviderFor wires the Copilot dynamic headers (and bearer auth for anthropic) when the model's provider is github-copilot.
+- **Root cause:** TestProviderRequestHeadersMatchPi reads the URL path, method and headers each API module sends through the pinned pi-ai's options.fetch and through PiG's HTTP client (60 requests per API with session ids, caller header overrides, API-key forms and providers; client-library and transport headers excluded). The OpenAI-compatible requests now send accept, and directAPIProviderFor wires the Copilot dynamic headers (and bearer auth for anthropic) when the model's provider is github-copilot.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -17185,7 +17185,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-f5ecdc2
 
-**Settings and `models.json` compat objects keep the members Ompig does not model, as Pi 1.2.0 does**
+**Settings and `models.json` compat objects keep the members PiG does not model, as Pi 1.2.0 does**
 
 - **Source:** Ompig's own defect
 - **Symptom:** Both were dropped on load (Pi 1.2.0 `settings-manager.ts` getGlobalSettings and deepMergeSettings, `provider-composer.ts` mergeCompat, `config-schemas.test.ts`).
@@ -17195,7 +17195,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.0
 - **Fix commits:** `21654635e7` (2026-10-13), `f5ecdc24d2` (2026-10-13)
 - **Tests:** `coding/session_prompt_custom_run_upstream_test.go::TestUpstreamSessionPromptRunsStartedByACustomMessage`, `coding/session_tool_info_reaches_tools_test.go::TestGetAllToolsCarriesTheDefinitionsReachesTools`, `internal/codingagent/config_schemas_runtime_upstream_test.go::TestConfigSchemasAcceptCustomCompatibilitySettingsAndRejectMalformedKnownFields`, `internal/codingagent/config_schemas_runtime_upstream_test.go::TestConfigSchemasAcceptSchemaInKeybindingsJSONWithoutTreatingItAsAnAction`, `internal/codingagent/config_schemas_runtime_upstream_test.go::TestConfigSchemasAcceptSchemaInSettingsJSON`, `internal/codingagent/config_schemas_runtime_upstream_test.go::TestConfigSchemasValidateSchemaInModelsJSONAtRuntime`, `internal/codingagent/model_registry_merge_compat_fields_test.go::TestMergeCompatSpreadsEveryScalarCompatField`, `internal/codingagent/unmodeled_config_members_test.go::TestUnmodeledCompatMembersReachTheComposedModel` and 12 more in docs/bug-ledger.json
-- **Release note:** Settings and `models.json` compat objects keep the members Ompig does not model, as Pi 1.2.0 does. `getGlobalSettings()`, `getSettings()` and the settings JSON now include keys such as `$schema` or an extension's own setting, project values merge over global ones member by member, and only the legacy keys a migration rewrote (`queueMode`, `websockets`) are dropped. A provider or model `compat` object keeps keys such as a custom API's `customOption`, and the composed model carries them, so a custom API reads its own compat settings. Before, both were dropped on load (Pi 1.2.0 `settings-manager.ts` getGlobalSettings and deepMergeSettings, `provider-composer.ts` mergeCompat, `config-schemas.test.ts`).
+- **Release note:** Settings and `models.json` compat objects keep the members PiG does not model, as Pi 1.2.0 does. `getGlobalSettings()`, `getSettings()` and the settings JSON now include keys such as `$schema` or an extension's own setting, project values merge over global ones member by member, and only the legacy keys a migration rewrote (`queueMode`, `websockets`) are dropped. A provider or model `compat` object keeps keys such as a custom API's `customOption`, and the composed model carries them, so a custom API reads its own compat settings. Before, both were dropped on load (Pi 1.2.0 `settings-manager.ts` getGlobalSettings and deepMergeSettings, `provider-composer.ts` mergeCompat, `config-schemas.test.ts`).
 
 ### BF-f6305d9
 
@@ -17286,14 +17286,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **RPC `get_entries`, RPC `get_tree` and extension session reads now fail with an error naming the entry when…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** RPC `get_entries`, RPC `get_tree` and extension session reads now fail with an error naming the entry when the session file was changed under Ompig, instead of returning the entry's base members alone.
+- **Symptom:** RPC `get_entries`, RPC `get_tree` and extension session reads now fail with an error naming the entry when the session file was changed under PiG, instead of returning the entry's base members alone.
 - **Root cause:** Per lead rulings 01:42Z, 02:20Z item 3 and 04:25Z item 2 ((A)+(B)):
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `8b65157e36` (2026-10-10), `c9ba8f3dbf` (2026-10-10), `deadeb8d16` (2026-10-10), `e097327828` (2026-10-10), `f6e7d49d7b` (2026-10-10)
 - **Tests:** `bench/sessionscale/cmd/sessionscale/gate_test.go::TestResumeMemoryAndPromptCostFollowTheContext`, `bench/sessionscale/gen_test.go::TestGenerateWritesTheScaledOwnerShape`, `coding/cli/rpc_mode_test.go::TestRPCTreeSerializesUpstreamShape`, `internal/codingagent/session_lazy_test.go::TestHandleReadsMatchDecodedReads`, `internal/codingagent/session_lazy_test.go::TestLazyEntriesKeepTheirTimestamps`, `internal/codingagent/session_lazy_test.go::TestLazyEntryOfAChangedRecordIsAnError`, `internal/codingagent/session_store_norace_test.go::TestResumedSessionRetainsContextNotHistory`, `internal/codingagent/session_store_norace_test.go::TestSessionWithoutFileRetainsCompressedHistory` and 14 more in docs/bug-ledger.json
-- **Release note:** RPC `get_entries`, RPC `get_tree` and extension session reads now fail with an error naming the entry when the session file was changed under Ompig, instead of returning the entry's base members alone.
+- **Release note:** RPC `get_entries`, RPC `get_tree` and extension session reads now fail with an error naming the entry when the session file was changed under PiG, instead of returning the entry's base members alone.
 
 ### BF-f73c00c
 
@@ -17328,27 +17328,27 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A frontend member's main region now matches the transcript after an extension's custom entry is placed before the streaming message and a later child of the transcript changes in the same frame.
-- **Root cause:** ompig ompiglet show lists the slot, the schema gains slots and removeSpec.slots, and a Binary's embedded Ompiglet carries no slots because the member is compiled in. The Binary record keeps the member's tree digest as a content-addressed frontend input.
+- **Root cause:** pig piglet show lists the slot, the schema gains slots and removeSpec.slots, and a Binary's embedded Piglet carries no slots because the member is compiled in. The Binary record keeps the member's tree digest as a content-addressed frontend input.
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `f5190b9c48` (2026-10-04), `35ad0aaea9` (2026-10-05), `613c997d21` (2026-10-05), `69ee29f0d4` (2026-10-05), `70ca2f3ce2` (2026-10-05), `9846de83dc` (2026-10-05), `c027bb425f` (2026-10-05), `a03488a003` (2026-10-06), `f7b245a8c1` (2026-10-08)
-- **Tests:** `coding/ompiglet/frontend_dir_test.go::TestFrontendDirResolvesInsideThePigletDirectory`, `coding/ompiglet/frontend_slot_test.go::TestFrontendSlotInheritsReplacesAndRemoves`, `coding/ompiglet/piglet_test.go::TestParseBuildSpecRejectsInvalidDefaults`, `coding/ompiglet/schema_test.go::TestAC1SchemaParserAgreement`, `coding/pigletbuild/fuse_modules_test.go::TestMergeFusedModulesTakesTheHighestMemberVersionAndAnchorsLocalReplacements`, `coding/pigletbuild/native_build_test.go::TestOverlayFuseImportsFactoryPackageWithoutWritingGoMod`, `coding/pigletbuild/native_build_test.go::TestOverlayFuseRegistersFrontendMember`, `coding/pigletbuild/plan_test.go::TestValidateRejectsNonFusedExtensionWhenRequired` and 98 more in docs/bug-ledger.json
+- **Tests:** `coding/pigletbuild/fuse_modules_test.go::TestMergeFusedModulesTakesTheHighestMemberVersionAndAnchorsLocalReplacements`, `coding/pigletbuild/native_build_test.go::TestOverlayFuseImportsFactoryPackageWithoutWritingGoMod`, `coding/pigletbuild/native_build_test.go::TestOverlayFuseRegistersFrontendMember`, `coding/pigletbuild/plan_test.go::TestValidateRejectsNonFusedExtensionWhenRequired`, `coding/pigletbuild/with_settings_test.go::TestBakePigletInlinesAgentShapeAndStripsBuildOrigins`, `extensions/sdk/frontend/frontend_test.go::TestNodeKindsAreClosed`, `internal/codingagent/interactive_frontend_handoff_pty_test.go::TestFrontendHandoffChild`, `internal/codingagent/interactive_frontend_handoff_pty_test.go::TestFrontendSessionLendsTheTerminal` and 94 more in docs/bug-ledger.json
 - **Release note:** A frontend member's main region now matches the transcript after an extension's custom entry is placed before the streaming message and a later child of the transcript changes in the same frame. `Container.InsertBefore` did not report the children it kept, so the frame spliced a stale range: the session kept the removed entry and missed the inserted one. An insert alone also walked the whole transcript instead of the inserted entry.
 
 ### BF-f7c4b01
 
-**`ompig extension upgrade` no longer changes, breaks or rejects a Go extension that already builds against the…**
+**`pig extension upgrade` no longer changes, breaks or rejects a Go extension that already builds against the…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** `ompig extension upgrade` no longer changes, breaks or rejects a Go extension that already builds against the current SDK.
+- **Symptom:** `pig extension upgrade` no longer changes, breaks or rejects a Go extension that already builds against the current SDK.
 - **Root cause:** fmt.Println(ctx.ConfigHome()) compiles against the current SDK: the value and the error spread into ...any, so no compile error marks it and the error is printed instead of handled. Find a getter call that is the only argument of a variadic call (or print/println) syntactically, in files without compile errors too, and rewrite it as the other argument positions: hoist it and return the error, or list a ConfigHome whose function cannot return it. A non-variadic call whose parameters take the value and the error is the new shape and stays. The fixture test now also fails when a file with a golden source is not rewritten.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `63bb0b7eac` (2026-10-12), `974050757c` (2026-10-12), `d305b76bda` (2026-10-12), `f7c4b01ccc` (2026-10-12)
 - **Tests:** `coding/cli/extension_upgrade_test.go::TestUpgraderRestoresEveryFileWhenTheRebuildFails`, `coding/cli/extension_upgrade_test.go::TestUpgraderRestoresWrittenFilesWhenAWriteFails`, `coding/extension/host/runtimecell/go_sdk_override_test.go::TestGoSDKPathOverrideIgnoresRetiredStagedSDK`, `coding/extension/host/runtimecell/go_sdk_override_test.go::TestGoSDKPathOverrideKeepsCurrentStagedSDK`, `coding/extension/host/runtimecell/go_sdk_override_test.go::TestRustSDKPathOverrideIgnoresRetiredStagedSDK`, `coding/extension/host/subprocess/builder_test.go::TestGoNeedsStagedSDK`, `coding/extension/host/subprocess/builder_test.go::TestRustNeedsStagedSDK`, `extensions/sdk/upgrade/fixtures_test.go::TestFixturesUpgradeAndBuild` and 6 more in docs/bug-ledger.json
-- **Release note:** `ompig extension upgrade` no longer changes, breaks or rejects a Go extension that already builds against the current SDK. A getter passed straight into a variadic call, such as `fmt.Println(ctx.GetActiveTools())`, is current code when the getter returned its error in the SDK the extension's `go.mod` requires, so it is left as it is. The upgrade now rewrites only `ConfigHome` calls of this kind, in extensions that require an SDK older than 0.5.0, and lists such a call rather than discard its error. A call whose parameter for the error has the type `error` stays. Rewriting one of these calls no longer also rewrites `ContextUsage.Tokens` and `Percent` uses that were already correct. A getter in a `select` case is listed instead of making the upgrade fail with `the rewrite does not parse`.
+- **Release note:** `pig extension upgrade` no longer changes, breaks or rejects a Go extension that already builds against the current SDK. A getter passed straight into a variadic call, such as `fmt.Println(ctx.GetActiveTools())`, is current code when the getter returned its error in the SDK the extension's `go.mod` requires, so it is left as it is. The upgrade now rewrites only `ConfigHome` calls of this kind, in extensions that require an SDK older than 0.5.0, and lists such a call rather than discard its error. A call whose parameter for the error has the type `error` stays. Rewriting one of these calls no longer also rewrites `ContextUsage.Tokens` and `Percent` uses that were already correct. A getter in a `select` case is listed instead of making the upgrade fail with `the rewrite does not parse`.
 
 ### BF-f7d701e
 
@@ -17356,7 +17356,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A value that violated a format passed validation.
-- **Root cause:** Ompig compiled tool schemas without format assertions, so a value that breaks 'format' (email, uri, date-time...) passed where TypeBox's Check fails with 'must match format'. validate_formats.go ports typebox 1.3.27 build/format (17 of its 21 formats: date, time, date-time, duration, email, ipv4, ipv6, iri, iri-reference, json-pointer, json-pointer-uri-fragment, relative-json-pointer, uri, uri-reference, uri-template, url, uuid; the regexp sources are taken from the .mjs files; hostname, idn-hostname, idn-email and regex keep the schema library's checks) and registers them with AssertFormat.
+- **Root cause:** Pig compiled tool schemas without format assertions, so a value that breaks 'format' (email, uri, date-time...) passed where TypeBox's Check fails with 'must match format'. validate_formats.go ports typebox 1.3.27 build/format (17 of its 21 formats: date, time, date-time, duration, email, ipv4, ipv6, iri, iri-reference, json-pointer, json-pointer-uri-fragment, relative-json-pointer, uri, uri-reference, uri-template, url, uuid; the regexp sources are taken from the .mjs files; hostname, idn-hostname, idn-email and regex keep the schema library's checks) and registers them with AssertFormat.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -17370,7 +17370,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Tool argument conversion for TypeBox schemas lower-cases with JavaScript rules (an `İ` in `UNDEFİNED` no longer converts to null) and matches Record `patternProperties` keys as the anchored expression `^pattern$`, as TypeBox does.
-- **Root cause:** The generator now puts ~kind Object/Array/Tuple/Union on its nodes and adds a fixed matrix of kinds (Boolean, Number, Integer, String, Null, Literal, Array, Union, Tuple, Record) against 40+ padded, cased and typed argument spellings. Two differences found (typebox 1.3.27 build/value/convert): coerceArgumentPrimitive lower-cased with Go's ToLower, which maps U+0130 to 'i', so 'UNDEFİNED' converted to null where TypeBox's toLowerCase keeps 'i̇' (now jsstring.ToLower); and FromRecord tests each pattern as new RegExp('^'+key+'$') while Ompig compiled it unanchored (mutant killed: pattern anchor in the converter). Equivalent mutants: ToLower->strings.ToLower on the 'true/false' comparisons (no…
+- **Root cause:** The generator now puts ~kind Object/Array/Tuple/Union on its nodes and adds a fixed matrix of kinds (Boolean, Number, Integer, String, Null, Literal, Array, Union, Tuple, Record) against 40+ padded, cased and typed argument spellings. Two differences found (typebox 1.3.27 build/value/convert): coerceArgumentPrimitive lower-cased with Go's ToLower, which maps U+0130 to 'i', so 'UNDEFİNED' converted to null where TypeBox's toLowerCase keeps 'i̇' (now jsstring.ToLower); and FromRecord tests each pattern as new RegExp('^'+key+'$') while Pig compiled it unanchored (mutant killed: pattern anchor in the converter). Equivalent mutants: ToLower->strings.ToLower on the 'true/false' comparisons (no…
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -17390,7 +17390,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** Unreleased
 - **Fix commits:** `0869584873` (2026-10-24), `f9648c6fd5` (2026-10-24)
 - **Tests:** `internal/codingagent/keystroke_hop_test.go::TestKeystrokeReachesTheOwnerInOneHandOff`, `internal/codingagent/shutdown_input_owner_test.go::TestInteractiveShutdownLeavesTerminalFileForNextReader`, `tui/terminal_native_windows_test.go::TestWindowsInputWaiterTimesOutSignalsAndCancels`, `tui/terminal_pipe_windows_test.go::TestReadInputStreamDeliversAPipeToItsEnd`, `tui/terminal_pipe_windows_test.go::TestReadInputStreamLeavesAPipeForTheNextReader`
-- **Release note:** On Windows, stopping a terminal reader whose input is a pipe no longer hangs. The reader waited on the input handle for input, but a pipe handle reads as ready whether or not input is queued, so a reader over a pipe went into a read that cancellation could not end, and `Stop`, shutdown and an external-editor handoff waited on it for good (seen as a 30 minute `internal/codingagent` test timeout in Windows CI). A pipe is now waited on in a zero-byte read, as Node's libuv does, which takes no input and which cancelling the reader ends, so a cancelled reader returns at once and leaves later input to the next reader. A console, which `ompig` itself reads, is waited on as before.
+- **Release note:** On Windows, stopping a terminal reader whose input is a pipe no longer hangs. The reader waited on the input handle for input, but a pipe handle reads as ready whether or not input is queued, so a reader over a pipe went into a read that cancellation could not end, and `Stop`, shutdown and an external-editor handoff waited on it for good (seen as a 30 minute `internal/codingagent` test timeout in Windows CI). A pipe is now waited on in a zero-byte read, as Node's libuv does, which takes no input and which cancelling the reader ends, so a cancelled reader returns at once and leaves later input to the next reader. A console, which `pig` itself reads, is waited on as before.
 
 ### BF-f98d129
 
@@ -17557,14 +17557,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **Rust SDK: a `context` handler that returns a new list equal to the one it received now counts as a…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Rust SDK: a `context` handler that returns a new list equal to the one it received now counts as a replacement, and an in-place edit marked with `ompig_sdk::context_unchanged()` keeps system messages in place, as in Pi and the other SDKs.
+- **Symptom:** Rust SDK: a `context` handler that returns a new list equal to the one it received now counts as a replacement, and an in-place edit marked with `pig_sdk::context_unchanged()` keeps system messages in place, as in Pi and the other SDKs.
 - **Root cause:** changelog.d held 62 fragments in legacy.txt, which exempts them from the marker rule.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `fa3da978e2` (2026-10-22)
 - **Tests:** None recorded.
-- **Release note:** Rust SDK: a `context` handler that returns a new list equal to the one it received now counts as a replacement, and an in-place edit marked with `ompig_sdk::context_unchanged()` keeps system messages in place, as in Pi and the other SDKs. Return `None` for an unchanged conversation.
+- **Release note:** Rust SDK: a `context` handler that returns a new list equal to the one it received now counts as a replacement, and an in-place edit marked with `pig_sdk::context_unchanged()` keeps system messages in place, as in Pi and the other SDKs. Return `None` for an unchanged conversation.
 
 ### BF-fa3da97-18
 
@@ -17680,17 +17680,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-fa3da97-25
 
-**Fixed `ompig ompiglet build` failing on a Ompiglet that carries a single-file extension (a lone `.ts` or `.js`…**
+**Fixed `pig piglet build` failing on a Piglet that carries a single-file extension (a lone `.ts` or `.js`…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Fixed `ompig ompiglet build` failing on a Ompiglet that carries a single-file extension (a lone `.ts` or `.js` file): locking it read `<file>/go.mod`, which fails with ENOTDIR rather than ENOENT, so the build stopped with "local Go replacements: not a directory".
+- **Symptom:** Fixed `pig piglet build` failing on a Piglet that carries a single-file extension (a lone `.ts` or `.js` file): locking it read `<file>/go.mod`, which fails with ENOTDIR rather than ENOENT, so the build stopped with "local Go replacements: not a directory".
 - **Root cause:** changelog.d held 62 fragments in legacy.txt, which exempts them from the marker rule.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `fa3da978e2` (2026-10-22)
 - **Tests:** None recorded.
-- **Release note:** Fixed `ompig ompiglet build` failing on a Ompiglet that carries a single-file extension (a lone `.ts` or `.js` file): locking it read `<file>/go.mod`, which fails with ENOTDIR rather than ENOENT, so the build stopped with "local Go replacements: not a directory". A file extension has no Go replacements and now locks like a directory extension without a `go.mod`.
+- **Release note:** Fixed `pig piglet build` failing on a Piglet that carries a single-file extension (a lone `.ts` or `.js` file): locking it read `<file>/go.mod`, which fails with ENOTDIR rather than ENOENT, so the build stopped with "local Go replacements: not a directory". A file extension has no Go replacements and now locks like a directory extension without a `go.mod`.
 
 ### BF-fa3da97-26
 
@@ -17708,17 +17708,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-fa3da97-27
 
-**Ompig no longer hangs for 30 seconds at exit when two extensions share a Node process and one is still waiting…**
+**PiG no longer hangs for 30 seconds at exit when two extensions share a Node process and one is still waiting…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Ompig no longer hangs for 30 seconds at exit when two extensions share a Node process and one is still waiting on a host call (seen with a global project-trust extension and a project extension).
+- **Symptom:** PiG no longer hangs for 30 seconds at exit when two extensions share a Node process and one is still waiting on a host call (seen with a global project-trust extension and a project extension).
 - **Root cause:** changelog.d held 62 fragments in legacy.txt, which exempts them from the marker rule.
 - **User impact:** Crash, hang or runaway process
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `fa3da978e2` (2026-10-22)
 - **Tests:** None recorded.
-- **Release note:** Ompig no longer hangs for 30 seconds at exit when two extensions share a Node process and one is still waiting on a host call (seen with a global project-trust extension and a project extension).
+- **Release note:** PiG no longer hangs for 30 seconds at exit when two extensions share a Node process and one is still waiting on a host call (seen with a global project-trust extension and a project extension).
 
 ### BF-fa3da97-28
 
@@ -17858,7 +17858,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** 0.5.2
 - **Fix commits:** `fa3da978e2` (2026-10-22)
 - **Tests:** None recorded.
-- **Release note:** A `--print` or `--mode json` run that SIGTERM or SIGHUP reaches while its bash tool is starting the shell no longer has a data race on `os.Stdout`. Starting a child process (a shell, an extension command, a Durable child) decided which of the child's files to leave open by reading the `os.Stdout` variable, which the exit path's restore of the output guard assigns at the same time. It now compares them with the files `os.Stdin`, `os.Stdout` and `os.Stderr` held when ompig started, which stay open as before. The output and exit status are unchanged.
+- **Release note:** A `--print` or `--mode json` run that SIGTERM or SIGHUP reaches while its bash tool is starting the shell no longer has a data race on `os.Stdout`. Starting a child process (a shell, an extension command, a Durable child) decided which of the child's files to leave open by reading the `os.Stdout` variable, which the exit path's restore of the output guard assigns at the same time. It now compares them with the files `os.Stdin`, `os.Stdout` and `os.Stderr` held when pig started, which stay open as before. The output and exit status are unchanged.
 
 ### BF-fa3da97-37
 
@@ -18034,7 +18034,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** The extension editor dialog (`ctx.ui.editor()`, `/tree` summary prompt) shows the hint keys the user bound for submit, newline and cancel instead of the default key names (`internal/codingagent/extension_editor.go`, extension-editor.ts keyHint; extended `TestExtensionEditorHandleInputMatchesPi` renders the hint row under five rebindings, red before).
-- **Root cause:** Pi builds the hint with keyHint(action), which resolves tui.select.confirm, tui.input.newLine and tui.select.cancel against the current bindings; Ompig printed the default key names. Reverting the hint line fails them.
+- **Root cause:** Pi builds the hint with keyHint(action), which resolves tui.select.confirm, tui.input.newLine and tui.select.cancel against the current bindings; Pig printed the default key names. Reverting the hint line fails them.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -18048,7 +18048,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** `TestSettingsSelectorMatchesPi` walks every row under rebound, multi-key and unbound `app.message.followUp` / `app.thinking.cycle` and rebound select keys, so the row descriptions that name those keys are compared; no difference; fixed-key mutations on both descriptions are red.
-- **Root cause:** Pi builds the hint with keyHint(action), which resolves tui.select.confirm, tui.input.newLine and tui.select.cancel against the current bindings; Ompig printed the default key names. Reverting the hint line fails them.
+- **Root cause:** Pi builds the hint with keyHint(action), which resolves tui.select.confirm, tui.input.newLine and tui.select.cancel against the current bindings; Pig printed the default key names. Reverting the hint line fails them.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -18062,7 +18062,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** `TestSelectListInputMatchesPi` also runs under the Kitty keyboard protocol (CSI-u enter, escape, ctrl+j, ctrl+c, shift+enter, modified arrows, rebound select keys); no difference; a literal-LF confirm mutation is red only in Kitty mode.
-- **Root cause:** Pi builds the hint with keyHint(action), which resolves tui.select.confirm, tui.input.newLine and tui.select.cancel against the current bindings; Ompig printed the default key names. Reverting the hint line fails them.
+- **Root cause:** Pi builds the hint with keyHint(action), which resolves tui.select.confirm, tui.input.newLine and tui.select.cancel against the current bindings; Pig printed the default key names. Reverting the hint line fails them.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -18117,7 +18117,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A task list item whose first line looks like a heading, quote, rule, bullet, fence, table row or HTML tag renders that line as text, and a setext heading over it keeps the checkbox marker, as Pi does.
-- **Root cause:** marked splits `[ ] ` into a checkbox token and lexes the rest of the first line as a text token, so `- [ ] # h`, `- [ ] > q`, `- [ ] ---`, `- [ ] - a`, a fence, a table row, a definition or an HTML tag renders as text, while the lines after it are lexed normally; a setext heading over the first line (`- [ ] t` / `===`) takes the marker into its text and the item has no checkbox. Ompig stripped the marker and rendered the block. renderList now keeps the marker when setextHeadingEnd matches the original text, and otherwise lexes the first block with a leading control character that no block rule matches, removed from the rendered rows.
+- **Root cause:** marked splits `[ ] ` into a checkbox token and lexes the rest of the first line as a text token, so `- [ ] # h`, `- [ ] > q`, `- [ ] ---`, `- [ ] - a`, a fence, a table row, a definition or an HTML tag renders as text, while the lines after it are lexed normally; a setext heading over the first line (`- [ ] t` / `===`) takes the marker into its text and the item has no checkbox. Pig stripped the marker and rendered the block. renderList now keeps the marker when setextHeadingEnd matches the original text, and otherwise lexes the first block with a leading control character that no block rule matches, removed from the rendered rows.
 - **User impact:** Wrong display
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -18144,14 +18144,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **The "Your first ten minutes" and Quickstart pages now describe the first-time setup screen (theme, sprite and…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** They said Ompig had no setup screen.
+- **Symptom:** They said PiG had no setup screen.
 - **Root cause:** Not recorded.
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Commit that wrote the release note (the fix commit is not identified):** `fce99d3151` (2026-10-11)
 - **Tests:** None recorded.
-- **Release note:** The "Your first ten minutes" and Quickstart pages now describe the first-time setup screen (theme, sprite and usage data) that Ompig shows on a fresh install (D88). Before, they said Ompig had no setup screen. The first-run page also explains that `Enter` in the model list picks a model for one conversation and `Ctrl+S` makes it the default, what the footer fields mean, and what a `401` error after `/login` means.
+- **Release note:** The "Your first ten minutes" and Quickstart pages now describe the first-time setup screen (theme, sprite and usage data) that PiG shows on a fresh install (D88). Before, they said PiG had no setup screen. The first-run page also explains that `Enter` in the model list picks a model for one conversation and `Ctrl+S` makes it the default, what the footer fields mean, and what a `401` error after `/login` means.
 
 ### BF-fce99d4
 
@@ -18207,7 +18207,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** Unreleased
 - **Fix commits:** `fdbd6ca4f0` (2026-10-23)
 - **Tests:** `internal/codingagent/tools/tools_manager_status_test.go::TestEnsureToolSuccessfulStatusAndSilentReuse`, `internal/codingagent/tools/tools_manager_status_test.go::TestManagedToolCallbacksProbe`, `internal/codingagent/tools/tools_manager_test.go::TestReleaseTarget`, `internal/codingagent/tools/tools_manager_test.go::TestToolsTable_AssetNames`, `internal/codingagent/tools/tools_manager_upstream_test.go::TestEnsureToolUpstream`
-- **Release note:** Automatic `fd` and `rg` downloads no longer fetch x86-64 binaries on ARM32 and other architectures without a prebuilt release. Ompig now warns and recommends installing the tool with the system package manager.
+- **Release note:** Automatic `fd` and `rg` downloads no longer fetch x86-64 binaries on ARM32 and other architectures without a prebuilt release. PiG now warns and recommends installing the tool with the system package manager.
 
 ### BF-fdfb748
 
@@ -18229,7 +18229,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** Provider request bodies (OpenAI Completions, OpenAI Responses, Codex, Anthropic, Google and Mistral) write `<`, `>`, `&`, U+2028 and U+2029 as they are, as Pi's `JSON.stringify` does, instead of as `\u` escapes.
-- **Root cause:** Pi's provider SDKs send JSON.stringify(body) (openai 7.19.0 internal/request-options.js:29; the Anthropic, Google GenAI and Mistral SDKs stringify the same way), which writes these five characters as they are. Ompig wrote every body with encoding/json.Marshal, which escapes them, so a user message "a <b> & c" went out as "a \u003cb\u003e \u0026 c".
+- **Root cause:** Pi's provider SDKs send JSON.stringify(body) (openai 7.19.0 internal/request-options.js:29; the Anthropic, Google GenAI and Mistral SDKs stringify the same way), which writes these five characters as they are. PiG wrote every body with encoding/json.Marshal, which escapes them, so a user message "a <b> & c" went out as "a \u003cb\u003e \u0026 c".
 - **User impact:** Wrong output or ordering
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -18256,14 +18256,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **When an extension's `before_provider_request` handler returns a replacement body for OpenAI Completions…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** When an extension's `before_provider_request` handler returns a replacement body for OpenAI Completions, OpenAI Responses, Codex, Pi Messages, Mistral or Google, Ompig sends it as Pi's `JSON.stringify` writes what `JSON.parse` read: `\u00e9` becomes `é`, `1.50` becomes `1.5`, a repeated key keeps its first place with its last value, and array-index keys come first.
+- **Symptom:** When an extension's `before_provider_request` handler returns a replacement body for OpenAI Completions, OpenAI Responses, Codex, Pi Messages, Mistral or Google, PiG sends it as Pi's `JSON.stringify` writes what `JSON.parse` read: `\u00e9` becomes `é`, `1.50` becomes `1.5`, a repeated key keeps its first place with its last value, and array-index keys come first.
 - **Root cause:** After /tree navigation between parallel tool calls and their results, a branch summary followed by a new prompt sent a synthetic tool_result behind the summary, and Anthropic rejected it with an unexpected tool_use_id. Upstream runs transformMessages after convertToLlm, where a branch summary, compaction summary, bash execution or custom message is already a user message and closes the pending tool calls. NormalizeMessages ran first and did not see them.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `e8cc072521` (2026-10-08), `433d232815` (2026-10-09), `afa1dd5185` (2026-10-10), `f02269c6e1` (2026-10-10), `fe625bb5dd` (2026-10-10)
 - **Tests:** `agent/convert_custom_upstream_test.go::TestConvertToLLMCustomMessagesMatchUpstreamConvertToLlm`, `agent/convert_custom_upstream_test.go::TestConvertToLLMToolFlowMatchesUpstreamTransformOrder`, `agent/convert_custom_upstream_test.go::TestCustomMessagesReachProvidersAsUpstreamContentBlocks`, `agent/transform_custom_user_boundary_test.go::TestAnthropicRequestAfterBranchSummaryHasNoOrphanToolResult`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMCustomMessageWithoutWireOutputKeepsToolFlow`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMCustomUserMessageInterruptsToolFlow`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMHoldsSystemMessageUntilToolFlowCloses`, `ai/anthropic_messages_payload_oracle_test.go::TestAnthropicMessagesPayloadMatchesPi` and 18 more in docs/bug-ledger.json
-- **Release note:** When an extension's `before_provider_request` handler returns a replacement body for OpenAI Completions, OpenAI Responses, Codex, Pi Messages, Mistral or Google, Ompig sends it as Pi's `JSON.stringify` writes what `JSON.parse` read: `\u00e9` becomes `é`, `1.50` becomes `1.5`, a repeated key keeps its first place with its last value, and array-index keys come first. Ompig sent the handler's text unchanged.
+- **Release note:** When an extension's `before_provider_request` handler returns a replacement body for OpenAI Completions, OpenAI Responses, Codex, Pi Messages, Mistral or Google, PiG sends it as Pi's `JSON.stringify` writes what `JSON.parse` read: `\u00e9` becomes `é`, `1.50` becomes `1.5`, a repeated key keeps its first place with its last value, and array-index keys come first. PiG sent the handler's text unchanged.
 
 ### BF-ffcd800
 
@@ -18359,10 +18359,14 @@ Each divergence record is accounted for here. A divergence that fixes a Pi defec
 | D196 | Under skip-auth a bearer token from the process environment is not sent over an http:// endpoint, where Pi's… | [BF-D196](#bf-d196) |
 | D197 | The env daemon's limit of open files is the hard limit, where Pi's daemon keeps the soft limit it inherited | [BF-D197](#bf-d197) |
 | D198 | The Go, Rust and Python `Type` has no Codec family (`Codec`, `Decode`, `Encode`, `DecodeBuilder`… | [BF-D198](#bf-d198) |
-| D199 | Ompig lists OpenRouter's :nitro and :floor routing variants beside every OpenRouter model, where Pi lists only… | deliberate difference |
+| D199 | Ompig lists OpenRouter's :nitro and :floor routing variants beside every OpenRouter model, where Pi lists… | deliberate difference |
 | D200 | With no home directory Ompig still runs the commands that load no resources, where Pi crashes at import, and… | [BF-D200](#bf-d200) |
 | D203 | registerProvider with an empty `apiKey` leaves the provider unconfigured where Pi treats the empty string as… | [BF-D203](#bf-d203) |
 | D204 | The Go, Rust and Python SDKs do not yet export TuiAltScreen, Pi's alternate-screen TUI host, where the Node… | [BF-D204](#bf-d204) |
+| D205 | The default built-in tool set also carries `task`, `wait` and `agents` | deliberate difference |
+| D206 | An Agent Hub keybinding and roster that Pi has no equivalent of | deliberate difference |
+| D207 | Child sessions live beside the parent's session file, not in the project session bucket | deliberate difference |
+| D208 | Focusing an agent opens its transcript in an overlay instead of replacing the session | deliberate difference |
 
 ## Fix-titled commits that are not bugs in a release
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"sync/atomic"
 	"testing"
@@ -215,12 +216,7 @@ func TestSubagentArtifactLayout(t *testing.T) {
 }
 
 func containsString(list []string, want string) bool {
-	for _, value := range list {
-		if value == want {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(list, want)
 }
 
 // TestSubagentToolProgressReachesRegistry proves the live columns: a child's

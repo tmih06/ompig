@@ -21,7 +21,7 @@ The entities Ompig is built from, how they relate, where each lives, and the com
 | Ompig Standard | The optional curated Ompiglet: login identity, Ompig Runner, Angry Pigs. | `ompiglets/standard/ompig-standard.yaml` | `ompig ompiglet validate ompiglets/standard/ompig-standard.yaml` | [built-in-extensions.md](built-in-extensions.md) |
 | Ompiglet release | Pins the exact Resource closure and component plan of a Ompiglet. | `release.version and managed records` | `ompig ompiglet show --record <path>` | [ompiglets.md](ompiglets.md) |
 | Ompiglet Binary | Target-native ompig executable for one Ompiglet release; verifies its closure at startup. | `ompig ompiglet build --format binary` | `ompig verify` | [ompiglets.md](ompiglets.md) |
-| Builder | Produces Ompiglet Binaries: native (needs Go and Ompig source) or container (needs Docker or Podman). | `coding/pigletbuild` | `ompig setup` | [ompiglets.md](ompiglets.md) |
+| Builder | Produces Ompiglet Binaries: native (needs Go and Ompig source) or container (needs Docker or Podman). | `coding/ompigletbuild` | `ompig setup` | [ompiglets.md](ompiglets.md) |
 | Ompig Porter | Parity workbench Ompiglet Resource; proposes ports, never accepts its own work. | `ompiglets/porter` | `make porter-check (source checkout)` | [divergences.md](divergences.md) |
 | Divergence | A numbered, approved, user-visible difference from pinned Pi. | `docs/parity/DIVERGENCES.md` | `ompig docs show divergences` | [divergences.md](divergences.md) |
 

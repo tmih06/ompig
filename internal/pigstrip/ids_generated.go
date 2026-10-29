@@ -15,6 +15,7 @@ var knownIDs = map[string][]string{
 		"write",
 	},
 	ListCommands: {
+		"/agents",
 		"/bug",
 		"/changelog",
 		"/clone",

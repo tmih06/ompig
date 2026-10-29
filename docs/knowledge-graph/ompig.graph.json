@@ -15,9 +15,9 @@
     {"id": "package", "label": "Package", "kind": "distribution", "summary": "Versioned collection of Resources from npm, git, or a local path; never owns a Ompiglet.", "where": "~/.ompig/agent/npm, ~/.ompig/agent/git", "inspect": "ompig list", "doc": "packages.md"},
     {"id": "ompiglet", "label": "Ompiglet", "kind": "composition", "summary": "One named agent: selects and scopes Resources and sets defaults.", "where": "*.yaml Ompiglet file", "inspect": "ompig ompiglet validate <file>", "doc": "ompiglets.md"},
     {"id": "standard", "label": "Ompig Standard", "kind": "composition", "summary": "The optional curated Ompiglet: login identity, Ompig Runner, Angry Pigs.", "where": "ompiglets/standard/ompig-standard.yaml", "inspect": "ompig ompiglet validate ompiglets/standard/ompig-standard.yaml", "doc": "built-in-extensions.md"},
-    {"id": "piglet_release", "label": "Ompiglet release", "kind": "artifact", "summary": "Pins the exact Resource closure and component plan of a Ompiglet.", "where": "release.version and managed records", "inspect": "ompig ompiglet show --record <path>", "doc": "ompiglets.md"},
-    {"id": "piglet_binary", "label": "Ompiglet Binary", "kind": "artifact", "summary": "Target-native ompig executable for one Ompiglet release; verifies its closure at startup.", "where": "ompig ompiglet build --format binary", "inspect": "ompig verify", "doc": "ompiglets.md"},
-    {"id": "builder", "label": "Builder", "kind": "tool", "summary": "Produces Ompiglet Binaries: native (needs Go and Ompig source) or container (needs Docker or Podman).", "where": "coding/pigletbuild", "inspect": "ompig setup", "doc": "ompiglets.md"},
+    {"id": "ompiglet_release", "label": "Ompiglet release", "kind": "artifact", "summary": "Pins the exact Resource closure and component plan of a Ompiglet.", "where": "release.version and managed records", "inspect": "ompig ompiglet show --record <path>", "doc": "ompiglets.md"},
+    {"id": "ompiglet_binary", "label": "Ompiglet Binary", "kind": "artifact", "summary": "Target-native ompig executable for one Ompiglet release; verifies its closure at startup.", "where": "ompig ompiglet build --format binary", "inspect": "ompig verify", "doc": "ompiglets.md"},
+    {"id": "builder", "label": "Builder", "kind": "tool", "summary": "Produces Ompiglet Binaries: native (needs Go and Ompig source) or container (needs Docker or Podman).", "where": "coding/ompigletbuild", "inspect": "ompig setup", "doc": "ompiglets.md"},
     {"id": "porter", "label": "Ompig Porter", "kind": "resource", "summary": "Parity workbench Ompiglet Resource; proposes ports, never accepts its own work.", "where": "ompiglets/porter", "inspect": "make porter-check (source checkout)", "doc": "divergences.md"},
     {"id": "divergence", "label": "Divergence", "kind": "record", "summary": "A numbered, approved, user-visible difference from pinned Pi.", "where": "docs/parity/DIVERGENCES.md", "inspect": "ompig docs show divergences", "doc": "divergences.md"}
   ],
@@ -34,9 +34,9 @@
     ["extension_host", "hosts", "realization", "same contract in every realization"],
     ["ompiglet", "selects", "resource", "and scopes discovery"],
     ["standard", "is_a", "ompiglet", "explicit, never active in Stock"],
-    ["piglet_release", "pins", "ompiglet", "exact closure"],
-    ["piglet_binary", "realizes", "piglet_release", "per target"],
-    ["builder", "produces", "piglet_binary", "no silent fallback between builders"],
+    ["ompiglet_release", "pins", "ompiglet", "exact closure"],
+    ["ompiglet_binary", "realizes", "ompiglet_release", "per target"],
+    ["builder", "produces", "ompiglet_binary", "no silent fallback between builders"],
     ["porter", "is_a", "resource", "selected by the Porter Ompiglet"],
     ["divergence", "documents_difference_from", "pi", "numbered D<N>"]
   ]

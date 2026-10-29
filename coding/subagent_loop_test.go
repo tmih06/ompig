@@ -162,7 +162,7 @@ func TestSubagentBatchSpawnsEveryItem(t *testing.T) {
 func TestSubagentNameCollisionGetsSuffix(t *testing.T) {
 	session, _ := newSubagentTestSession(t, "ok")
 	runtime := session.SubagentRuntime()
-	for i := 0; i < 3; i++ {
+	for i := range 3 {
 		if _, err := runtime.Runner().Run(context.Background(), "", subagent.SpawnRequest{
 			Name: "Same", Task: "work",
 		}); err != nil {

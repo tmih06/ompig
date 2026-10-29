@@ -497,4 +497,5 @@ func (b *subagentToolBinding) sessionOrNil() *Session { return b.get() }
 
 // subagentToolNames are the tools the subagent runtime contributes to the
 // default built-in selection.
+// ompig divergence (D205): the default built-in set also carries task, wait and agents.
 var subagentToolNames = []string{"task", "wait", "agents"}

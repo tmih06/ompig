@@ -419,7 +419,7 @@ func (m *Model) renderWide(width int) []string {
 	inspect := m.renderInspector(rightWidth)
 	rows := max(len(roster), len(inspect))
 	out := make([]string, 0, rows)
-	for i := 0; i < rows; i++ {
+	for i := range rows {
 		left := ""
 		if i < len(roster) {
 			left = roster[i]

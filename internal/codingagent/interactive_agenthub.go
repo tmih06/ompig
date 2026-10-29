@@ -214,6 +214,8 @@ func (c *agentHubController) apply(request agenthub.Request, fn func(context.Con
 // Divergence D-SUBAGENT-3: focusing opens the agent's transcript in an overlay
 // instead of re-parenting the whole TUI to the child session, so Esc always
 // returns to the main session and no session replacement happens.
+// ompig divergence (D208): focus opens a transcript overlay instead of replacing
+// the interactive session with the child's.
 func (c *agentHubController) focus(id string) {
 	messages, ok := c.controls.SubagentTranscript(id)
 	if !ok {

@@ -2,48 +2,43 @@
   "mechanisms": [
     {
       "source": "test/parity/runner/asserts.go",
-      "sha256": "4b7eed1be1404cde27155939a2b82389fb8cc8cc91a72f51280ac4461a104991",
+      "sha256": "fea0e5e5df0d3c7f53bb30ab8fee85b6e6ceea40dc6e7cd0eba027818955b165",
       "reason": "Normalized/layout comparators are explicit plain-terminal contracts: ANSI, CR, trailing spaces and outer blank rows are not compared. They are not full wire proof. Exact comparators apply only scenario-declared, justified replacements."
     },
     {
       "source": "test/parity/runner/changelog_assert.go",
-      "sha256": "ce703c70d410d59e79c6f0e1df29268350b47148169f43ac809385659f1a3b4a",
+      "sha256": "e96f3688406603d1f5b3fba26595fb7769a460a237c10c3b718cdddbb523a50a",
       "reason": "D22: the products ship different changelog documents. Compare every rendered release header, in order, against that binary's independent source document; this does not claim cross-product equality of body text or styling."
     },
     {
       "source": "test/parity/runner/default_cwd.go",
-      "sha256": "87f96d163240967c16b07d885ae32e092d5bd23d6a9955b0500903b6c33c6e6d",
+      "sha256": "3d29d4ee884fd9c85eadea5135194afec2eeca796941c34e015cd408503247e9",
       "reason": "D2/D22 fixture control balances prompt paths. Only terminal captures use length-preserving cwd digit substitution; process records retain raw paths unless an explicit JSON alias selects them."
     },
     {
       "source": "test/parity/runner/driver_ht.go",
-      "sha256": "824387e750c2c0b0ee97d3b49255a9b42655b2003a1e31b0681e23b08ff86c69",
+      "sha256": "fe039f9b09e9f6d47dc598d1564bc696c5953572e9b2c7dc8542b79b294ad212",
       "reason": "Headless terminal state capture compares the declared visible surface, not transient bytes. Tool stderr is diagnostic transport noise, not product stderr."
     },
     {
       "source": "test/parity/runner/driver_rpc.go",
-      "sha256": "7970de354d9b59f85ed5a00c4179dccc53cd05c108d7aaed0acb144e5a4a668d",
+      "sha256": "5dc6c9af7347b621082e00a8a6972958f325ba6b88366a1180711e0545fdf8d0",
       "reason": "canonical_json sorts JSON object keys only and preserves terminal framing. Raw stdout and stderr are retained. wait_contains/wait_event are new-output barriers, not acceptance assertions. A poll_until step resends one read-only query until its response holds the awaited state and then leaves every response to that query out of the compared and raw output, because their count follows timing; every other record, including the commands that prove the settled state, is compared."
     },
     {
       "source": "test/parity/runner/driver_tmux.go",
-      "sha256": "4589a75c48e5103aadb9fcc9acbc08f84ab88fb282a0ddad24e2850e06a7a8d3",
+      "sha256": "2164d666a398a1f9e233dffe0e1c12e2f4d6f2e738e92e274082b433fccc278c",
       "reason": "Terminal state capture is not a byte-stream assertion. A scenario explicitly selects viewport or retained history and its crop. History capture uses session-local maximum retention without changing pane size or shared defaults; required anchors and source-derived assertions reject incomplete history. Readiness and new-output barriers are synchronization, not behavioral coverage."
     },
     {
       "source": "test/parity/runner/footer_crop.go",
-      "sha256": "d93dfd659682dd610f76a69e524ff8e9dfe342974c19c032bdc981cb38a8e03f",
+      "sha256": "224d48abf7035205306d3f30aa4040f5f17c8a347331c112792aacf803b00707",
       "reason": "Footer scenarios compare the complete owned footer rows rather than unrelated transcript rows; crop configuration is inventoried per scenario."
     },
     {
       "source": "test/parity/runner/json_compare.go",
-      "sha256": "fde6cb1d87a77f6e1ba4ff432e29e18fdc20482e3a9f434285fe9b93ab30599e",
+      "sha256": "11b5c9dd03cdf1a745a8aca3a64828448055a01c1e3f0f962cc9add70bd63c59",
       "reason": "Parsed full records ignore object-member order and equivalent JSON number spelling only. Explicit scalar aliases preserve field presence, types, ordered arrays and bijective ID references; no ignored-field list exists."
-    },
-    {
-      "source": "test/parity/testdata/list-limit-number-pi.mjs",
-      "sha256": "f1c046bca2b1daa796629ea8c6947f2165bbaec9983b69b552346193706043b9",
-      "reason": "This numeric-renderer probe selects the complete warning-bracket text from Pi's actual renderResult output under an explicit unstyled fixture theme. It claims number/notice text only, not terminal layout or ANSI styling; full themed body rows are checked by the Go caller regression."
     },
     {
       "source": "test/parity/testdata/list-limit-number-ompig.sh",
@@ -51,29 +46,29 @@
       "reason": "The wrapper retains every numeric warning observation and removes only Go test-framework framing after requiring successful test completion. Failed tests retain their diagnostics and nonzero exit status."
     },
     {
+      "source": "test/parity/testdata/list-limit-number-pi.mjs",
+      "sha256": "f1c046bca2b1daa796629ea8c6947f2165bbaec9983b69b552346193706043b9",
+      "reason": "This numeric-renderer probe selects the complete warning-bracket text from Pi's actual renderResult output under an explicit unstyled fixture theme. It claims number/notice text only, not terminal layout or ANSI styling; full themed body rows are checked by the Go caller regression."
+    },
+    {
       "source": "test/parity/testdata/npm-registry-scope.py",
-      "sha256": "4eb5fdfb028ad6abc11499dfdedd9abd1163769628ecd2690eb7c1fc5e3ad863",
+      "sha256": "c0993831e6e79a95403e27bfb8e15121adc04b74328010021c6c40df78d2de54",
       "reason": "This D79 probe measures metadata lookup cwd, selected-command argv, registry traffic and absence of reinstallation. It asserts the complete expected command sequence and exactly one package request before reporting scope labels. It does not claim complete CLI progress/stdout/stderr equality; failed commands retain their captured diagnostics."
     },
     {
-      "source": "test/parity/testdata/provider-wire-pi.mjs",
-      "sha256": "16312cb15fc4c7ceff57fcd00c32703f66fb2a198b21a34ec5d0c459198a38be",
+      "source": "test/parity/testdata/provider-wire-ompig/main.go",
+      "sha256": "83f671ac83f36241a5f6a7580595c5875d93927b1ca0a3b0fa9a2192dd5b785e",
       "reason": "Legacy role/key/auth summaries are diagnostic only: wireBody now compares the entire captured HTTP request body alongside them. Aggregated provider response summaries do not prove mode events; real-provider RPC/JSON scenarios compare those separately."
     },
     {
-      "source": "test/parity/testdata/provider-wire-ompig/main.go",
-      "sha256": "655543c20ca024ef74ec392531c1472e99fc928e216ad114e0a1b2c85ad3a798",
+      "source": "test/parity/testdata/provider-wire-pi.mjs",
+      "sha256": "50af1125d65c36294129c61543291ff9765901d8943d89f447942f7e470743d3",
       "reason": "Legacy role/key/auth summaries are diagnostic only: wireBody now compares the entire captured HTTP request body alongside them. Aggregated provider response summaries do not prove mode events; real-provider RPC/JSON scenarios compare those separately."
     },
     {
       "source": "test/parity/testdata/rpc-wire-drift.py",
-      "sha256": "8f4921e4970807abe6d0b809f5648871ca4f9fd05fabdf778edccf5baf23043e",
+      "sha256": "c5f64935660209b45b1c3063982a41bb912997365585f7403c6da2ec1db64aa7",
       "reason": "This probe emits complete mutation, UI, recovery, compaction, fork, switch and initial-state records without identity rewriting. The scenario's shared typed JSON comparator owns aliases. Other prompt events are outside these focused contracts and the complete RPC stream is captured as raw.json, not discarded. The fixture selects an explicit session directory, but generated filename syntax remains checked."
-    },
-    {
-      "source": "test/parity/testdata/session-collision-pi.mjs",
-      "sha256": "5e7e4c084f2907d33a97eb0f980d460747b5c68dd9d0a34d7fb10d314467fae5",
-      "reason": "This entry-allocation probe controls seed/duplicate/fresh entropy in the real Pi SessionManager and compares IDs, parent links, retained indexed content and generator calls. It makes no timestamp or whole-record claim; those contracts are covered by the Session wire probe."
     },
     {
       "source": "test/parity/testdata/session-collision-ompig.sh",
@@ -81,13 +76,18 @@
       "reason": "The wrapper requires the production Session collision test to succeed and retains its complete observation line. It removes only Go test-framework framing; a mutation failure remains a nonzero process result."
     },
     {
+      "source": "test/parity/testdata/session-collision-pi.mjs",
+      "sha256": "5e7e4c084f2907d33a97eb0f980d460747b5c68dd9d0a34d7fb10d314467fae5",
+      "reason": "This entry-allocation probe controls seed/duplicate/fresh entropy in the real Pi SessionManager and compares IDs, parent links, retained indexed content and generator calls. It makes no timestamp or whole-record claim; those contracts are covered by the Session wire probe."
+    },
+    {
       "source": "test/parity/testdata/session-wire.py",
-      "sha256": "796ae00ad8c91c26e1adf50e15d2808633246eeecb9ba6e8a6ae7cceeaaf662f",
+      "sha256": "fe2a4592ea05020d7766bbe1f87f08199c008a5424a439c1a52499ec36465b24",
       "reason": "The Session query probe validates unique eight-hex generated IDs and exact millisecond ISO timestamps before injective substitution. Imported IDs/times remain unchanged; only reconstructed label identities are aliased after collision checks. Complete get_entries records are compared, not unrelated mutation events. Signal probes compare process wait status after real provider/command barriers, not terminal rendering. The session_shutdown signal cases replace the probe's temporary directory with <root> in stderr, because the extension path a handler's error names lives there; the rest of stderr, stdout, the session records and the request count are compared exactly."
     },
     {
       "source": "test/parity/testdata/test-faux-provider.ts",
-      "sha256": "60ee89b311cc0b0b3d5f036e60ce01f0429fcb0ac083e4ac781eb03a1036b9c7",
+      "sha256": "1cd7db47f3e709ce170199ef56e108472bf2d76216fc7baa1889ba5b3b28eb5f",
       "reason": "Canned followups exercise specific orchestration/rendering questions, not complete result metadata. Full RPC tool records and real-provider mode scenarios supply result acceptance independently of final prose."
     }
   ],

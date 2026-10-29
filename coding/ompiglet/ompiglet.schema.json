@@ -279,6 +279,7 @@
     "stripCommandId": {
       "type": "string",
       "enum": [
+        "/agents",
         "/bug",
         "/changelog",
         "/clone",
