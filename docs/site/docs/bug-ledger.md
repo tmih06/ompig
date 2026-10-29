@@ -82,7 +82,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-11a6fcb](#bf-11a6fcb) | fix(extension): a restart adopts the new renderers; the late-registration row runs what it registered | Ompig's own defect | All platforms | Unreleased |
 | [BF-11b199d](#bf-11b199d) | Session lines (and every other JSON.stringify-mode encode) now write ill-formed UTF-8 the way Pi does: one… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-1268115](#bf-1268115) | fix(model runtime): a cancelled request to a caller-owned provider the runtime does not know is aborted, not… | Ompig's own defect | All platforms | Unreleased |
-| [BF-1356aae](#bf-1356aae) | fix(train): load pig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture… | Ompig's own defect | All platforms | Unreleased |
+| [BF-1356aae](#bf-1356aae) | fix(train): load ompig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture… | Ompig's own defect | All platforms | Unreleased |
 | [BF-1364791](#bf-1364791) | Stopping a codemode script or reaching its deadline no longer waits up to half a second for a built-in that… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-1390c9d](#bf-1390c9d) | fix(ai): the Anthropic event reader matches the type member exactly | Ompig's own defect | All platforms | Unreleased |
 | [BF-155d0f3](#bf-155d0f3) | In RPC mode, SIGTERM or SIGHUP during a tool call likewise stops the run while the `session_shutdown`… | Ompig's own defect | All platforms | 0.5.0 |
@@ -114,7 +114,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-1d1c8aa](#bf-1d1c8aa) | RPC mode now ends by the signal when a termination signal arrives while a quit `session_shutdown` handler is… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-1d5b272](#bf-1d5b272) | A text file passed as an `@file` argument that holds invalid UTF-8 now reaches the prompt as Pi sends it… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-1dcaef7](#bf-1dcaef7) | Durable: a JSONL line that starts with a byte order mark now opens, as in Pi, instead of failing with… | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-1ed43b3](#bf-1ed43b3) | fix(train): load pig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture… | Ompig's own defect | All platforms | Unreleased |
+| [BF-1ed43b3](#bf-1ed43b3) | fix(train): load ompig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture… | Ompig's own defect | All platforms | Unreleased |
 | [BF-1ee7dea](#bf-1ee7dea) | The Mistral request URL for a base URL with a non-special scheme or a host or port the WHATWG parser rejects… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-1f7fa2f](#bf-1f7fa2f) | In print and JSON mode, an extension in its own Node process no longer runs its callbacks with a stale ctx… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-1fbdabb](#bf-1fbdabb) | A CRLF that a proxy splits across two network chunks no longer aborts an Anthropic turn with `Could not parse… | A Pi defect that Ompig fixed first | All platforms | 0.5.0 |
@@ -216,7 +216,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-3b3dba6](#bf-3b3dba6) | A streamed tool argument of `-0` is held as `0`, so the serialized arguments write `0` as Pi's… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-3b8aa66](#bf-3b8aa66) | A Piglet Binary that strips `bedrock-converse-stream` links the AWS SDK again: the Bedrock retry backoff… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-3ba74f2](#bf-3ba74f2) | fix(codingagent): wait for a read's rest on the route snapshot that found no modal | Ompig's own defect | All platforms | Unreleased |
-| [BF-3cb7131](#bf-3cb7131) | fix(sdk-py): stage pig_sdk.tui with the package, which pig_sdk imports at load; keep the pi-ai patterns… | Ompig's own defect | All platforms | Unreleased |
+| [BF-3cb7131](#bf-3cb7131) | fix(sdk-py): stage ompig_sdk.tui with the package, which ompig_sdk imports at load; keep the pi-ai patterns… | Ompig's own defect | All platforms | Unreleased |
 | [BF-3ce6bcb](#bf-3ce6bcb) | fix(changelog,source): /i scheme tests fold as JavaScript does, not as RE2's (?i) | Ompig's own defect | All platforms | Unreleased |
 | [BF-3cf03c0](#bf-3cf03c0) | A faux provider error message that carries a response id writes `responseId` after `errorMessage` in session… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-3d12e48](#bf-3d12e48) | fix(tui): tree selector cursor follows Pi's selectedIndex over an empty list | Ompig's own defect | All platforms | Unreleased |
@@ -282,7 +282,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-4afdbac](#bf-4afdbac) | `ProjectTrustStore` reads entries in JavaScript order: `readTrustFile` named whichever invalid value Go's map… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-4bcc7da](#bf-4bcc7da) | `StreamProxy` merges the final tool call and reports abort and timeout as Pi does, and it no longer changes a… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-4c032a0](#bf-4c032a0) | A description decoded from the wire is written back with every schema member in the order it was declared in… | Ompig's own defect | All platforms | Unreleased |
-| [BF-4c45afa](#bf-4c45afa) | fix(sdk-py): stage pig_sdk.tui with the package, which pig_sdk imports at load; keep the pi-ai patterns… | Ompig's own defect | All platforms | Unreleased |
+| [BF-4c45afa](#bf-4c45afa) | fix(sdk-py): stage ompig_sdk.tui with the package, which ompig_sdk imports at load; keep the pi-ai patterns… | Ompig's own defect | All platforms | Unreleased |
 | [BF-4c7ccf2](#bf-4c7ccf2) | A classifier response that reports more than 2,147,483,647 input or output tokens keeps the reported count… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-4d04134](#bf-4d04134) | The cancel hint of extension loaders (`/share`, `/bug`) shows the key bound to `tui.select.cancel` instead of… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-4d33f78](#bf-4d33f78) | fix(tui): a tool error result collapses like any other (Pi updateResult) | Ompig's own defect | All platforms | Unreleased |
@@ -990,7 +990,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-d2b1fc1](#bf-d2b1fc1) | GitHub Copilot login reads an enterprise domain the way Pi does: an IPv6 host keeps its brackets, an… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d2b1fc1-2](#bf-d2b1fc1-2) | Pasting an OAuth authorization into the Anthropic, OpenAI Codex or OpenRouter login now reads it the way Pi… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d2d4384](#bf-d2d4384) | A streamed write card no longer slows down as its content grows | Ompig's own defect | All platforms | 0.5.0 |
-| [BF-d305b76](#bf-d305b76) | A Go extension whose `go.mod` replace (or a Rust extension whose `pig-sdk` path dependency) points at an SDK… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-d305b76](#bf-d305b76) | A Go extension whose `go.mod` replace (or a Rust extension whose `ompig-sdk` path dependency) points at an SDK… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d36b329](#bf-d36b329) | The edit tool no longer accepts a JSON-string `edits` value that starts or ends with non-JSON whitespace such… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d37c769](#bf-d37c769) | A replacement request body from a `before_provider_request` hook on Anthropic Messages, and every OpenAI… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-d38f3be](#bf-d38f3be) | fix(durable): record the requested thinking level without boxing a string in the turn package | Ompig's own defect | All platforms | Unreleased |
@@ -2126,10 +2126,10 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-1356aae
 
-**fix(train): load pig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture…**
+**fix(train): load ompig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** fix(train): load pig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture modules to the root SDK version
+- **Symptom:** fix(train): load ompig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture modules to the root SDK version
 - **Root cause:** Not recorded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
@@ -2565,10 +2565,10 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-1ed43b3
 
-**fix(train): load pig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture…**
+**fix(train): load ompig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** fix(train): load pig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture modules to the root SDK version
+- **Symptom:** fix(train): load ompig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture modules to the root SDK version
 - **Root cause:** Not recorded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
@@ -3979,10 +3979,10 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-3cb7131
 
-**fix(sdk-py): stage pig_sdk.tui with the package, which pig_sdk imports at load; keep the pi-ai patterns…**
+**fix(sdk-py): stage ompig_sdk.tui with the package, which ompig_sdk imports at load; keep the pi-ai patterns…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** fix(sdk-py): stage pig_sdk.tui with the package, which pig_sdk imports at load; keep the pi-ai patterns gofmt-clean
+- **Symptom:** fix(sdk-py): stage ompig_sdk.tui with the package, which ompig_sdk imports at load; keep the pi-ai patterns gofmt-clean
 - **Root cause:** Not recorded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
@@ -4883,10 +4883,10 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-4c45afa
 
-**fix(sdk-py): stage pig_sdk.tui with the package, which pig_sdk imports at load; keep the pi-ai patterns…**
+**fix(sdk-py): stage ompig_sdk.tui with the package, which ompig_sdk imports at load; keep the pi-ai patterns…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** fix(sdk-py): stage pig_sdk.tui with the package, which pig_sdk imports at load; keep the pi-ai patterns gofmt-clean
+- **Symptom:** fix(sdk-py): stage ompig_sdk.tui with the package, which ompig_sdk imports at load; keep the pi-ai patterns gofmt-clean
 - **Root cause:** Not recorded.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
@@ -5781,7 +5781,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 - **Source:** Ompig's own defect
 - **Symptom:** A provider object's flow got no options, so a flow that needs the device ID could not get it.
-- **Root cause:** Python: pig_sdk.LoginOptions(get_device_id, agent_name), with the same dispatch and proxy behavior. Only oauth.login receives it, because Pi declares apiKey.login with the interaction alone (types.ts:175).
+- **Root cause:** Python: ompig_sdk.LoginOptions(get_device_id, agent_name), with the same dispatch and proxy behavior. Only oauth.login receives it, because Pi declares apiKey.login with the interaction alone (types.ts:175).
 - **User impact:** An operation failed or was rejected
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
@@ -14738,17 +14738,17 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 
 ### BF-d305b76
 
-**A Go extension whose `go.mod` replace (or a Rust extension whose `pig-sdk` path dependency) points at an SDK…**
+**A Go extension whose `go.mod` replace (or a Rust extension whose `ompig-sdk` path dependency) points at an SDK…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** A Go extension whose `go.mod` replace (or a Rust extension whose `pig-sdk` path dependency) points at an SDK an earlier pig staged under its configuration root, for example through a link made with `pig reload --sdk-path go` before updating pig, now builds against the SDK the current pig staged. pig never deletes the SDK directories older versions staged, so such a link kept resolving and the extension compiled against the old SDK, failing at load with `decode register payload: json: unknown field ...`.
+- **Symptom:** A Go extension whose `go.mod` replace (or a Rust extension whose `ompig-sdk` path dependency) points at an SDK an earlier pig staged under its configuration root, for example through a link made with `pig reload --sdk-path go` before updating pig, now builds against the SDK the current pig staged. pig never deletes the SDK directories older versions staged, so such a link kept resolving and the extension compiled against the old SDK, failing at load with `decode register payload: json: unknown field ...`.
 - **Root cause:** A go.mod replace (or Cargo path dependency) that resolves inside <config root>/state/pigsdk/ but outside the SDK this pig stages now points at an SDK an earlier pig staged; pig never deletes those directories, so a link made with `pig reload --sdk-path go` kept resolving after an update and the extension compiled against the old SDK, failing at register with `decode register payload: json: unknown field "can_block"` and making `pig extension upgrade` type-check against the same old SDK. Treat such a replace like a missing one in the packed, isolated and upgrade-analysis paths, Go and Rust; a replace anywhere else still wins.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.0
 - **Fix commits:** `d305b76bda` (2026-10-12)
 - **Tests:** `coding/extension/host/runtimecell/go_sdk_override_test.go::TestGoSDKPathOverrideIgnoresRetiredStagedSDK`, `coding/extension/host/runtimecell/go_sdk_override_test.go::TestGoSDKPathOverrideKeepsCurrentStagedSDK`, `coding/extension/host/runtimecell/go_sdk_override_test.go::TestRustSDKPathOverrideIgnoresRetiredStagedSDK`, `coding/extension/host/subprocess/builder_test.go::TestGoNeedsStagedSDK`, `coding/extension/host/subprocess/builder_test.go::TestRustNeedsStagedSDK`
-- **Release note:** A Go extension whose `go.mod` replace (or a Rust extension whose `pig-sdk` path dependency) points at an SDK an earlier pig staged under its configuration root, for example through a link made with `pig reload --sdk-path go` before updating pig, now builds against the SDK the current pig staged. pig never deletes the SDK directories older versions staged, so such a link kept resolving and the extension compiled against the old SDK, failing at load with `decode register payload: json: unknown field ...`. An extension written for an older SDK now gets the `written for an older SDK` report instead. A replace that points anywhere else, such as your own SDK checkout or copy, still wins.
+- **Release note:** A Go extension whose `go.mod` replace (or a Rust extension whose `ompig-sdk` path dependency) points at an SDK an earlier pig staged under its configuration root, for example through a link made with `pig reload --sdk-path go` before updating pig, now builds against the SDK the current pig staged. pig never deletes the SDK directories older versions staged, so such a link kept resolving and the extension compiled against the old SDK, failing at load with `decode register payload: json: unknown field ...`. An extension written for an older SDK now gets the `written for an older SDK` report instead. A replace that points anywhere else, such as your own SDK checkout or copy, still wins.
 
 ### BF-d36b329
 
@@ -17585,14 +17585,14 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 **Rust SDK: a `context` handler that returns a new list equal to the one it received now counts as a…**
 
 - **Source:** Ompig's own defect
-- **Symptom:** Rust SDK: a `context` handler that returns a new list equal to the one it received now counts as a replacement, and an in-place edit marked with `pig_sdk::context_unchanged()` keeps system messages in place, as in Pi and the other SDKs.
+- **Symptom:** Rust SDK: a `context` handler that returns a new list equal to the one it received now counts as a replacement, and an in-place edit marked with `ompig_sdk::context_unchanged()` keeps system messages in place, as in Pi and the other SDKs.
 - **Root cause:** changelog.d held 62 fragments in legacy.txt, which exempts them from the marker rule.
 - **User impact:** Behavior differed from Pi
 - **Platform:** All platforms
 - **Fixed in:** 0.5.2
 - **Fix commits:** `fa3da978e2` (2026-10-22)
 - **Tests:** None recorded.
-- **Release note:** Rust SDK: a `context` handler that returns a new list equal to the one it received now counts as a replacement, and an in-place edit marked with `pig_sdk::context_unchanged()` keeps system messages in place, as in Pi and the other SDKs. Return `None` for an unchanged conversation.
+- **Release note:** Rust SDK: a `context` handler that returns a new list equal to the one it received now counts as a replacement, and an in-place edit marked with `ompig_sdk::context_unchanged()` keeps system messages in place, as in Pi and the other SDKs. Return `None` for an unchanged conversation.
 
 ### BF-fa3da97-18
 

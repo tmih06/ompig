@@ -66,7 +66,7 @@ func reloadSourceProbes(t *testing.T) []reloadSourceProbe {
 		{
 			name: "rust",
 			files: map[string]string{
-				"reload_probe_rs/Cargo.toml":     "[package]\nname = \"reload_probe_rs\"\nversion = \"0.0.0\"\nedition = \"2024\"\n\n[dependencies]\npig-sdk = { path = " + strconv.Quote(filepath.ToSlash(rustSDK)) + " }\n",
+				"reload_probe_rs/Cargo.toml":     "[package]\nname = \"reload_probe_rs\"\nversion = \"0.0.0\"\nedition = \"2024\"\n\n[dependencies]\nompig-sdk = { path = " + strconv.Quote(filepath.ToSlash(rustSDK)) + " }\n",
 				"reload_probe_rs/src/lib.rs":     "use ompig_sdk::{CommandResult, Extension};\nuse std::io::Write;\n\nmod version;\n\npub fn new_extension() -> Extension {\n    if let Ok(mut log) = std::fs::OpenOptions::new().create(true).append(true).open(std::env::var(\"RELOAD_PROBE_LOG\").unwrap_or_default()) {\n        let _ = writeln!(log, \"factory:{}\", version::VERSION);\n    }\n    let mut ext = Extension::new(\"reload_probe_rs\");\n    ext.command(\"rl\", \"Reload\", |ctx, _| match ctx.reload() {\n        Ok(()) => CommandResult::Ok,\n        Err(error) => CommandResult::Error(error.to_string()),\n    });\n    ext\n}\n",
 				"reload_probe_rs/src/version.rs": "pub const VERSION: &str = \"v1\";\n",
 			},

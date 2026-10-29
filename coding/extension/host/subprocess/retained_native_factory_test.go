@@ -198,7 +198,7 @@ func rustFactoryRetainedCases(t *testing.T, name string) {
 					t.Fatal(err)
 				}
 				crate := "retained_rs_" + isolation[:3]
-				cargo := fmt.Sprintf("[package]\nname = %q\nversion = \"0.0.0\"\nedition = \"2024\"\n\n[dependencies]\npig-sdk = { path = %q }\nserde_json = \"1\"\n", crate, filepath.ToSlash(sdkRoot))
+				cargo := fmt.Sprintf("[package]\nname = %q\nversion = \"0.0.0\"\nedition = \"2024\"\n\n[dependencies]\nompig-sdk = { path = %q }\nserde_json = \"1\"\n", crate, filepath.ToSlash(sdkRoot))
 				if err := os.WriteFile(filepath.Join(dir, "Cargo.toml"), []byte(cargo), 0o644); err != nil {
 					t.Fatal(err)
 				}

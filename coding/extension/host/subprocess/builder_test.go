@@ -360,7 +360,7 @@ func TestBuilderUsesStagedRustSDKWithoutCommittedPath(t *testing.T) {
 	if err := os.MkdirAll(filepath.Join(srcDir, "src"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	cargoToml := "[package]\nname=\"relocatable-rust\"\nversion=\"0.1.0\"\nedition=\"2024\"\n[dependencies]\npig-sdk=\"0.1.0\"\n"
+	cargoToml := "[package]\nname=\"relocatable-rust\"\nversion=\"0.1.0\"\nedition=\"2024\"\n[dependencies]\nompig-sdk=\"0.1.0\"\n"
 	if err := os.WriteFile(filepath.Join(srcDir, "Cargo.toml"), []byte(cargoToml), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -404,7 +404,7 @@ func TestBuilderExplicitSDKOverridesWin(t *testing.T) {
 
 	t.Run("rust path", func(t *testing.T) {
 		srcDir := t.TempDir()
-		manifest := "[package]\nname=\"explicit-rust\"\nversion=\"0.1.0\"\n[dependencies]\npig-sdk={path=\"./author-sdk\"}\n"
+		manifest := "[package]\nname=\"explicit-rust\"\nversion=\"0.1.0\"\n[dependencies]\nompig-sdk={path=\"./author-sdk\"}\n"
 		if err := os.WriteFile(filepath.Join(srcDir, "Cargo.toml"), []byte(manifest), 0o644); err != nil {
 			t.Fatal(err)
 		}
@@ -469,7 +469,7 @@ func TestBuilderExplicitSDKOverridesWin(t *testing.T) {
 
 	t.Run("rust path linking a retired staged SDK stages the current SDK", func(t *testing.T) {
 		builder, stagedDir, srcDir := retiredFixture(t, "rust", "sdk-rs", "Cargo.toml", "[package]\nname=\"ompig-sdk\"\n")
-		mustWrite(t, filepath.Join(srcDir, "Cargo.toml"), "[package]\nname=\"retired-rust\"\nversion=\"0.1.0\"\n[dependencies]\npig-sdk={path=\"../.sdk\"}\n")
+		mustWrite(t, filepath.Join(srcDir, "Cargo.toml"), "[package]\nname=\"retired-rust\"\nversion=\"0.1.0\"\n[dependencies]\nompig-sdk={path=\"../.sdk\"}\n")
 		if staged, err := builder.resolveStagedSDK(srcDir, "rust"); err != nil || staged != stagedDir {
 			t.Fatalf("retired Rust path resolved staged SDK %q (want %q), %v", staged, stagedDir, err)
 		}
@@ -982,7 +982,7 @@ func TestRewritePigSDKPath(t *testing.T) {
 
 func TestCopyCrateWithStagedSDK(t *testing.T) {
 	src := t.TempDir()
-	const origManifest = "[package]\nname = \"rust-factory\"\nversion = \"0.1.0\"\nedition = \"2024\"\n\n[dependencies]\npig-sdk = { path = \"../../../../unrelated-checkout/extensions/sdk-rs\" }\nserde_json = \"1\"\n"
+	const origManifest = "[package]\nname = \"rust-factory\"\nversion = \"0.1.0\"\nedition = \"2024\"\n\n[dependencies]\nompig-sdk = { path = \"../../../../unrelated-checkout/extensions/sdk-rs\" }\nserde_json = \"1\"\n"
 	mustWrite(t, filepath.Join(src, "Cargo.toml"), origManifest)
 	mustWrite(t, filepath.Join(src, "src", "main.rs"), "fn main() {}\n")
 	// A build-artifact dir that must NOT be copied.

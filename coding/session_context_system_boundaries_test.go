@@ -269,7 +269,7 @@ func TestContextPhaseIdentityThroughSDKTransports(t *testing.T) {
 	for name, body := range rustHandlers {
 		t.Run("rust/"+name, func(t *testing.T) {
 			dir := t.TempDir()
-			cargo := fmt.Sprintf("[package]\nname = %q\nversion = \"0.0.0\"\nedition = \"2024\"\n\n[dependencies]\npig-sdk = { path = %q }\nserde_json = \"1\"\n", "context-"+name, filepath.ToSlash(filepath.Join(root, "extensions", "sdk-rs")))
+			cargo := fmt.Sprintf("[package]\nname = %q\nversion = \"0.0.0\"\nedition = \"2024\"\n\n[dependencies]\nompig-sdk = { path = %q }\nserde_json = \"1\"\n", "context-"+name, filepath.ToSlash(filepath.Join(root, "extensions", "sdk-rs")))
 			program := fmt.Sprintf("use ompig_sdk::Extension;\nuse serde_json::json;\n\nfn main() {\n    let mut ext = Extension::new(%q);\n    ext.on_event(\"context\", |_ctx, data| { %s });\n    ext.run().unwrap();\n}\n", "context-"+name, body)
 			if err := os.WriteFile(filepath.Join(dir, "Cargo.toml"), []byte(cargo), 0o644); err != nil {
 				t.Fatal(err)

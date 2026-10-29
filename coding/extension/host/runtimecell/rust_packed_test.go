@@ -106,7 +106,7 @@ func writeRustFactoryCrate(t *testing.T, packageName, extName, toolName string) 
 	if err != nil {
 		t.Fatal(err)
 	}
-	cargo := fmt.Sprintf("[package]\nname = %q\nversion = \"0.0.0\"\nedition = \"2024\"\n\n[dependencies]\npig-sdk = { path = %q }\n", packageName, filepath.ToSlash(sdkRoot))
+	cargo := fmt.Sprintf("[package]\nname = %q\nversion = \"0.0.0\"\nedition = \"2024\"\n\n[dependencies]\nompig-sdk = { path = %q }\n", packageName, filepath.ToSlash(sdkRoot))
 	if err := os.WriteFile(filepath.Join(dir, "Cargo.toml"), []byte(cargo), 0o644); err != nil {
 		t.Fatal(err)
 	}

@@ -1819,8 +1819,8 @@
     },
     {
       "id": "BF-1356aae",
-      "title": "fix(train): load pig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture…",
-      "symptom": "fix(train): load pig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture modules to the root SDK version",
+      "title": "fix(train): load ompig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture…",
+      "symptom": "fix(train): load ompig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture modules to the root SDK version",
       "rootCause": "",
       "rootCauseSource": "",
       "userImpact": "Behavior differed from Pi",
@@ -2943,8 +2943,8 @@
     },
     {
       "id": "BF-1ed43b3",
-      "title": "fix(train): load pig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture…",
-      "symptom": "fix(train): load pig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture modules to the root SDK version",
+      "title": "fix(train): load ompig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture…",
+      "symptom": "fix(train): load ompig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture modules to the root SDK version",
       "rootCause": "",
       "rootCauseSource": "",
       "userImpact": "Behavior differed from Pi",
@@ -6134,8 +6134,8 @@
     },
     {
       "id": "BF-3cb7131",
-      "title": "fix(sdk-py): stage pig_sdk.tui with the package, which pig_sdk imports at load; keep the pi-ai patterns…",
-      "symptom": "fix(sdk-py): stage pig_sdk.tui with the package, which pig_sdk imports at load; keep the pi-ai patterns gofmt-clean",
+      "title": "fix(sdk-py): stage ompig_sdk.tui with the package, which ompig_sdk imports at load; keep the pi-ai patterns…",
+      "symptom": "fix(sdk-py): stage ompig_sdk.tui with the package, which ompig_sdk imports at load; keep the pi-ai patterns gofmt-clean",
       "rootCause": "",
       "rootCauseSource": "",
       "userImpact": "Behavior differed from Pi",
@@ -8197,8 +8197,8 @@
     },
     {
       "id": "BF-4c45afa",
-      "title": "fix(sdk-py): stage pig_sdk.tui with the package, which pig_sdk imports at load; keep the pi-ai patterns…",
-      "symptom": "fix(sdk-py): stage pig_sdk.tui with the package, which pig_sdk imports at load; keep the pi-ai patterns gofmt-clean",
+      "title": "fix(sdk-py): stage ompig_sdk.tui with the package, which ompig_sdk imports at load; keep the pi-ai patterns…",
+      "symptom": "fix(sdk-py): stage ompig_sdk.tui with the package, which ompig_sdk imports at load; keep the pi-ai patterns gofmt-clean",
       "rootCause": "",
       "rootCauseSource": "",
       "userImpact": "Behavior differed from Pi",
@@ -10335,7 +10335,7 @@
       "id": "BF-5c9d23f",
       "title": "A provider object's OAuth login receives Pi's login options, as `oauth.login(interaction, options)` does in Pi",
       "symptom": "A provider object's flow got no options, so a flow that needs the device ID could not get it.",
-      "rootCause": "Python: pig_sdk.LoginOptions(get_device_id, agent_name), with the same dispatch and proxy behavior. Only oauth.login receives it, because Pi declares apiKey.login with the interaction alone (types.ts:175).",
+      "rootCause": "Python: ompig_sdk.LoginOptions(get_device_id, agent_name), with the same dispatch and proxy behavior. Only oauth.login receives it, because Pi declares apiKey.login with the interaction alone (types.ts:175).",
       "rootCauseSource": "commit",
       "userImpact": "An operation failed or was rejected",
       "platform": "All platforms",
@@ -29135,15 +29135,15 @@
     },
     {
       "id": "BF-d305b76",
-      "title": "A Go extension whose `go.mod` replace (or a Rust extension whose `pig-sdk` path dependency) points at an SDK…",
-      "symptom": "A Go extension whose `go.mod` replace (or a Rust extension whose `pig-sdk` path dependency) points at an SDK an earlier pig staged under its configuration root, for example through a link made with `pig reload --sdk-path go` before updating pig, now builds against the SDK the current pig staged. pig never deletes the SDK directories older versions staged, so such a link kept resolving and the extension compiled against the old SDK, failing at load with `decode register payload: json: unknown field ...`.",
+      "title": "A Go extension whose `go.mod` replace (or a Rust extension whose `ompig-sdk` path dependency) points at an SDK…",
+      "symptom": "A Go extension whose `go.mod` replace (or a Rust extension whose `ompig-sdk` path dependency) points at an SDK an earlier pig staged under its configuration root, for example through a link made with `pig reload --sdk-path go` before updating pig, now builds against the SDK the current pig staged. pig never deletes the SDK directories older versions staged, so such a link kept resolving and the extension compiled against the old SDK, failing at load with `decode register payload: json: unknown field ...`.",
       "rootCause": "A go.mod replace (or Cargo path dependency) that resolves inside \u003cconfig root\u003e/state/pigsdk/ but outside the SDK this pig stages now points at an SDK an earlier pig staged; pig never deletes those directories, so a link made with `pig reload --sdk-path go` kept resolving after an update and the extension compiled against the old SDK, failing at register with `decode register payload: json: unknown field \"can_block\"` and making `pig extension upgrade` type-check against the same old SDK. Treat such a replace like a missing one in the packed, isolated and upgrade-analysis paths, Go and Rust; a replace anywhere else still wins.",
       "rootCauseSource": "commit",
       "userImpact": "Behavior differed from Pi",
       "platform": "All platforms",
       "class": "own",
       "fixedIn": "0.5.0",
-      "releaseNote": "A Go extension whose `go.mod` replace (or a Rust extension whose `pig-sdk` path dependency) points at an SDK an earlier pig staged under its configuration root, for example through a link made with `pig reload --sdk-path go` before updating pig, now builds against the SDK the current pig staged. pig never deletes the SDK directories older versions staged, so such a link kept resolving and the extension compiled against the old SDK, failing at load with `decode register payload: json: unknown field ...`. An extension written for an older SDK now gets the `written for an older SDK` report instead. A replace that points anywhere else, such as your own SDK checkout or copy, still wins.",
+      "releaseNote": "A Go extension whose `go.mod` replace (or a Rust extension whose `ompig-sdk` path dependency) points at an SDK an earlier pig staged under its configuration root, for example through a link made with `pig reload --sdk-path go` before updating pig, now builds against the SDK the current pig staged. pig never deletes the SDK directories older versions staged, so such a link kept resolving and the extension compiled against the old SDK, failing at load with `decode register payload: json: unknown field ...`. An extension written for an older SDK now gets the `written for an older SDK` report instead. A replace that points anywhere else, such as your own SDK checkout or copy, still wins.",
       "origin": "release note",
       "commits": [
         {
@@ -36681,14 +36681,14 @@
     {
       "id": "BF-fa3da97-17",
       "title": "Rust SDK: a `context` handler that returns a new list equal to the one it received now counts as a…",
-      "symptom": "Rust SDK: a `context` handler that returns a new list equal to the one it received now counts as a replacement, and an in-place edit marked with `pig_sdk::context_unchanged()` keeps system messages in place, as in Pi and the other SDKs.",
+      "symptom": "Rust SDK: a `context` handler that returns a new list equal to the one it received now counts as a replacement, and an in-place edit marked with `ompig_sdk::context_unchanged()` keeps system messages in place, as in Pi and the other SDKs.",
       "rootCause": "changelog.d held 62 fragments in legacy.txt, which exempts them from the marker rule.",
       "rootCauseSource": "commit",
       "userImpact": "Behavior differed from Pi",
       "platform": "All platforms",
       "class": "own",
       "fixedIn": "0.5.2",
-      "releaseNote": "Rust SDK: a `context` handler that returns a new list equal to the one it received now counts as a replacement, and an in-place edit marked with `pig_sdk::context_unchanged()` keeps system messages in place, as in Pi and the other SDKs. Return `None` for an unchanged conversation.",
+      "releaseNote": "Rust SDK: a `context` handler that returns a new list equal to the one it received now counts as a replacement, and an in-place edit marked with `ompig_sdk::context_unchanged()` keeps system messages in place, as in Pi and the other SDKs. Return `None` for an unchanged conversation.",
       "origin": "release note",
       "commits": [
         {

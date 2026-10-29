@@ -120,7 +120,7 @@ func writeSpriteProbe(t *testing.T, language string) string {
 	case "py":
 		write("spriteprobe.py", pySource)
 	case "rs":
-		write("Cargo.toml", fmt.Sprintf("[package]\nname = \"spriteprobe\"\nversion = \"0.1.0\"\nedition = \"2024\"\npublish = false\n\n[dependencies]\npig-sdk = { path = %q }\nserde_json = \"1\"\n", filepath.Join(fixtureSourceRoot, "extensions", "sdk-rs")))
+		write("Cargo.toml", fmt.Sprintf("[package]\nname = \"spriteprobe\"\nversion = \"0.1.0\"\nedition = \"2024\"\npublish = false\n\n[dependencies]\nompig-sdk = { path = %q }\nserde_json = \"1\"\n", filepath.Join(fixtureSourceRoot, "extensions", "sdk-rs")))
 		write("src/lib.rs", rsSource)
 	}
 	return root

@@ -101,7 +101,7 @@ def new_extension():
 `, name, name, name+" rule"))
 		return packedPythonFactoryConfig(name, dir, name, name)
 	case "rust":
-		write("Cargo.toml", fmt.Sprintf("[package]\nname = %q\nversion = \"0.1.0\"\nedition = \"2024\"\n[dependencies]\npig-sdk = { path = %q }\nserde_json = \"1\"\n", name, filepath.ToSlash(filepath.Join(root, "extensions", "sdk-rs"))))
+		write("Cargo.toml", fmt.Sprintf("[package]\nname = %q\nversion = \"0.1.0\"\nedition = \"2024\"\n[dependencies]\nompig-sdk = { path = %q }\nserde_json = \"1\"\n", name, filepath.ToSlash(filepath.Join(root, "extensions", "sdk-rs"))))
 		write("src/lib.rs", fmt.Sprintf(`use ompig_sdk::{Extension,ToolResult};
 use serde_json::json;
 use std::sync::{Arc,Mutex};

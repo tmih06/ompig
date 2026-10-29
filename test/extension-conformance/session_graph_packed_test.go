@@ -67,7 +67,7 @@ func sessionGraphPackedSDKs() map[string]sessionGraphLoader {
 		"rust-packed": pack("rust", func(t testing.TB, root string) (subprocess.ExtConfig, subprocess.ExtConfig) {
 			dir := t.TempDir()
 			manifest := func(name string) string {
-				return fmt.Sprintf("[package]\nname = %q\nversion = \"0.1.0\"\nedition = \"2024\"\n[dependencies]\npig-sdk = {path = %q}\nserde_json = {version = \"1\", features = [\"preserve_order\"]}\n", name, filepath.ToSlash(filepath.Join(root, "extensions", "sdk-rs")))
+				return fmt.Sprintf("[package]\nname = %q\nversion = \"0.1.0\"\nedition = \"2024\"\n[dependencies]\nompig-sdk = {path = %q}\nserde_json = {version = \"1\", features = [\"preserve_order\"]}\n", name, filepath.ToSlash(filepath.Join(root, "extensions", "sdk-rs")))
 			}
 			fixtureSource := filepath.Join(dir, "session-graph-fixture")
 			sources, err := filepath.Glob(filepath.Join(root, "test/extension-conformance/testdata/session-graph-rust/src/*.rs"))

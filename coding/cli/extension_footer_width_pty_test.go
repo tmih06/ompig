@@ -158,7 +158,7 @@ func writeFooterProbe(t *testing.T, language string) string {
 	case "py":
 		write("pyprobe.py", pyFooterProbeSource)
 	case "rs":
-		write("Cargo.toml", fmt.Sprintf("[package]\nname = \"rsprobe\"\nversion = \"0.1.0\"\nedition = \"2024\"\npublish = false\n\n[dependencies]\npig-sdk = { path = %q }\n", filepath.Join(fixtureSourceRoot, "extensions", "sdk-rs")))
+		write("Cargo.toml", fmt.Sprintf("[package]\nname = \"rsprobe\"\nversion = \"0.1.0\"\nedition = \"2024\"\npublish = false\n\n[dependencies]\nompig-sdk = { path = %q }\n", filepath.Join(fixtureSourceRoot, "extensions", "sdk-rs")))
 		write("src/lib.rs", rsFooterProbeSource)
 	}
 	return root

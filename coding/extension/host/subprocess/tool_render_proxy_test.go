@@ -264,7 +264,7 @@ def new_extension():
 `, name))
 		return packedPythonFactoryConfig(name, dir, name, name)
 	case "rust":
-		write("Cargo.toml", fmt.Sprintf("[package]\nname = %q\nversion = \"0.0.0\"\nedition = \"2024\"\n[dependencies]\npig-sdk = { path = %q }\nserde_json = \"1\"\n", name, filepath.Join(findModuleRoot(t), "extensions", "sdk-rs")))
+		write("Cargo.toml", fmt.Sprintf("[package]\nname = %q\nversion = \"0.0.0\"\nedition = \"2024\"\n[dependencies]\nompig-sdk = { path = %q }\nserde_json = \"1\"\n", name, filepath.Join(findModuleRoot(t), "extensions", "sdk-rs")))
 		if err := os.Mkdir(filepath.Join(dir, "src"), 0o700); err != nil {
 			t.Fatal(err)
 		}

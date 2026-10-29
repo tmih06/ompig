@@ -258,7 +258,7 @@ func providerPeer(t *testing.T, root string, native subprocess.ExtConfig) subpro
 		write("provider_peer.py", "import ompig_sdk\ndef new_extension():\n    return ompig_sdk.Extension('provider-peer')\n")
 	case "rust":
 		peer.Package = "provider-peer"
-		write("Cargo.toml", fmt.Sprintf("[package]\nname=\"provider-peer\"\nversion=\"0.1.0\"\nedition=\"2024\"\n[dependencies]\npig-sdk={path=%q}\n", filepath.ToSlash(filepath.Join(root, "extensions/sdk-rs"))))
+		write("Cargo.toml", fmt.Sprintf("[package]\nname=\"provider-peer\"\nversion=\"0.1.0\"\nedition=\"2024\"\n[dependencies]\nompig-sdk={path=%q}\n", filepath.ToSlash(filepath.Join(root, "extensions/sdk-rs"))))
 		write("src/lib.rs", "pub fn new_extension()->ompig_sdk::Extension{ompig_sdk::Extension::new(\"provider-peer\")}\n")
 	}
 	return peer

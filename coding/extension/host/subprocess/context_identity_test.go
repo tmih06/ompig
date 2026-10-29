@@ -255,7 +255,7 @@ func TestContextResultShapesCrossSDKTransports(t *testing.T) {
 		"rust": {load: func(t *testing.T) extension.Extension {
 			dir := t.TempDir()
 			sdkRoot := filepath.ToSlash(filepath.Join(findModuleRoot(t), "extensions", "sdk-rs"))
-			cargo := fmt.Sprintf("[package]\nname = \"context-result-shape\"\nversion = \"0.0.0\"\nedition = \"2024\"\n\n[dependencies]\npig-sdk = { path = %q }\nserde_json = \"1\"\n", sdkRoot)
+			cargo := fmt.Sprintf("[package]\nname = \"context-result-shape\"\nversion = \"0.0.0\"\nedition = \"2024\"\n\n[dependencies]\nompig-sdk = { path = %q }\nserde_json = \"1\"\n", sdkRoot)
 			if err := os.WriteFile(filepath.Join(dir, "Cargo.toml"), []byte(cargo), 0o644); err != nil {
 				t.Fatal(err)
 			}

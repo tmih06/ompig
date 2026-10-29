@@ -124,7 +124,7 @@ func TestGoSDKPathOverrideKeepsCurrentStagedSDK(t *testing.T) {
 // TestGoSDKPathOverrideIgnoresRetiredStagedSDK.
 func TestRustSDKPathOverrideIgnoresRetiredStagedSDK(t *testing.T) {
 	_, staged, extension := retiredStagedSDKFixture(t, "rust", "sdk-rs", "Cargo.toml")
-	manifest := "[package]\nname = \"ext\"\nversion = \"0.1.0\"\n\n[dependencies]\npig-sdk = { path = \"../.sdk\" }\n"
+	manifest := "[package]\nname = \"ext\"\nversion = \"0.1.0\"\n\n[dependencies]\nompig-sdk = { path = \"../.sdk\" }\n"
 	if err := os.WriteFile(filepath.Join(extension, "Cargo.toml"), []byte(manifest), 0o644); err != nil {
 		t.Fatal(err)
 	}

@@ -172,7 +172,7 @@ def new_extension():
     return e
 `, name))
 	case "rust":
-		write(filepath.Join(cfg.Source, "Cargo.toml"), fmt.Sprintf("[package]\nname=%q\nversion=\"0.0.0\"\nedition=\"2024\"\n[dependencies]\npig-sdk={path=%q}\nserde_json=\"1\"\n", name, filepath.ToSlash(filepath.Join(root, "extensions", "sdk-rs"))))
+		write(filepath.Join(cfg.Source, "Cargo.toml"), fmt.Sprintf("[package]\nname=%q\nversion=\"0.0.0\"\nedition=\"2024\"\n[dependencies]\nompig-sdk={path=%q}\nserde_json=\"1\"\n", name, filepath.ToSlash(filepath.Join(root, "extensions", "sdk-rs"))))
 		write(filepath.Join(cfg.Source, "src", "lib.rs"), fmt.Sprintf(`use ompig_sdk::{Extension,ToolDefinition,ToolReach,ToolResult,empty_schema};
 use serde_json::json;
 const NAME:&str=%q;

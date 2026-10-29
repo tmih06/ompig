@@ -181,7 +181,7 @@ func loadChildRust(t *testing.T, host *subprocess.Host, isolation string) extens
 	if err := os.WriteFile(filepath.Join(cfg.Source, "src", "lib.rs"), []byte(childSessionRust), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	manifest := fmt.Sprintf("[package]\nname=\"child-session\"\nversion=\"0.0.0\"\nedition=\"2024\"\n[dependencies]\npig-sdk={path=%q}\nserde_json={version=\"1\",features=[\"preserve_order\"]}\n", filepath.ToSlash(filepath.Join(root, "extensions", "sdk-rs")))
+	manifest := fmt.Sprintf("[package]\nname=\"child-session\"\nversion=\"0.0.0\"\nedition=\"2024\"\n[dependencies]\nompig-sdk={path=%q}\nserde_json={version=\"1\",features=[\"preserve_order\"]}\n", filepath.ToSlash(filepath.Join(root, "extensions", "sdk-rs")))
 	if err := os.WriteFile(filepath.Join(cfg.Source, "Cargo.toml"), []byte(manifest), 0o600); err != nil {
 		t.Fatal(err)
 	}

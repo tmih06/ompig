@@ -100,7 +100,7 @@ def new_extension():
 		cfg.SDKName = "ompig-sdk"
 		cfg.Package = name
 		cfg.Factory = "new_extension"
-		write(filepath.Join(dir, "Cargo.toml"), fmt.Sprintf("[package]\nname=%q\nversion=\"0.0.0\"\nedition=\"2024\"\n[dependencies]\npig-sdk={path=%q}\nserde_json=\"1\"\n", name, filepath.ToSlash(filepath.Join(root, "extensions", "sdk-rs"))))
+		write(filepath.Join(dir, "Cargo.toml"), fmt.Sprintf("[package]\nname=%q\nversion=\"0.0.0\"\nedition=\"2024\"\n[dependencies]\nompig-sdk={path=%q}\nserde_json=\"1\"\n", name, filepath.ToSlash(filepath.Join(root, "extensions", "sdk-rs"))))
 		write(filepath.Join(dir, "src", "lib.rs"), fmt.Sprintf(`use ompig_sdk::Extension;
 pub fn new_extension()->Extension{
  let mut e=Extension::new(%q);

@@ -296,7 +296,7 @@ func TestSetVersionWritesTheSDKManifestVersions(t *testing.T) {
 	untouched := map[string]string{
 		"extensions/sdk-rs/Cargo.toml":      "[package]\nname = \"ompig-sdk\"\nversion = \"0.1.0\"\nedition = \"2024\"\n",
 		"extensions/sdk-rs/Cargo.lock":      "[[package]]\nname = \"ompig-sdk\"\nversion = \"0.1.0\"\n",
-		"fixtures/consumer/Cargo.toml":      "[package]\nname = \"consumer\"\nversion = \"0.1.0\"\n\n[dependencies]\npig-sdk = \"0.1.0\"\n",
+		"fixtures/consumer/Cargo.toml":      "[package]\nname = \"consumer\"\nversion = \"0.1.0\"\n\n[dependencies]\nompig-sdk = \"0.1.0\"\n",
 		"fixtures/consumer/Cargo.lock":      "[[package]]\nname = \"ompig-sdk\"\nversion = \"0.1.0\"\n",
 		"fixtures/other-version/Cargo.toml": "[package]\nname = \"other\"\nversion = \"0.1.0\"\n",
 	}

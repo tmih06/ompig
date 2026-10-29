@@ -121,7 +121,7 @@ func TestFindRustSDKRootExplicitOverrideWins(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(sdkRoot, "Cargo.toml"), []byte("[package]\nname='ompig-sdk'\nversion='0.1.0'\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	cargo := "[package]\nname='ext'\nversion='0.1.0'\n[dependencies]\npig-sdk={path='" + filepath.ToSlash(sdkRoot) + "'}\n"
+	cargo := "[package]\nname='ext'\nversion='0.1.0'\n[dependencies]\nompig-sdk={path='" + filepath.ToSlash(sdkRoot) + "'}\n"
 	if err := os.WriteFile(filepath.Join(extRoot, "Cargo.toml"), []byte(cargo), 0o644); err != nil {
 		t.Fatal(err)
 	}
