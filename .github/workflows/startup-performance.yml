@@ -4,7 +4,7 @@ name: Startup timing (advisory)
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [master]
   workflow_dispatch:
   schedule:
     - cron: '17 7 * * 1'

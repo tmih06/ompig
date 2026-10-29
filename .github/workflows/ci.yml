@@ -19,8 +19,16 @@ on:
     # labeled starts the run that the ci:full label asks for; ready_for_review starts the one a draft's owner asks for.
     types: [opened, synchronize, reopened, ready_for_review, labeled]
   merge_group:
+  # A push to the default branch runs the full set (every non-pull-request event does), so a direct
+  # push is verified without waiting for a pull request. A pull request's own head is covered by the
+  # pull_request trigger above, so branches are limited to the default branch.
+  push:
+    branches: [master]
   schedule:
+    # Weekly full run, plus a nightly one: the two crons are the same full set, and the nightly run
+    # catches a dependency, toolchain or upstream drift within a day instead of a week.
     - cron: '41 6 * * 1'
+    - cron: '17 3 * * *'
   workflow_dispatch:
 
 permissions:

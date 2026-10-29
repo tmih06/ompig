@@ -6,7 +6,7 @@ name: Cache warm
 # no gate.
 on:
   push:
-    branches: [main]
+    branches: [master]
   schedule:
     - cron: '23 5 * * *'
   workflow_dispatch:

@@ -26,7 +26,7 @@ on:
       - automation/ci/seed-ci-image-bases.sh
       - .github/workflows/ci-images.yml
   push:
-    branches: [main]
+    branches: [master]
     paths:
       - .go-version
       - .node-version
