@@ -84243,17 +84243,6 @@
       "shapeHash": "sha256:2d01471604a0733d9fa4871a43ce728da3e3f34783a33288f888dd911db0dc26"
     },
     {
-      "id": "go:github.com/tmih06/ompig/coding#subagentToolBinding.sessionOrNil",
-      "package": "github.com/tmih06/ompig/coding",
-      "name": "subagentToolBinding.sessionOrNil",
-      "kind": "function",
-      "exported": false,
-      "shape": {
-        "type": "func() *Session"
-      },
-      "shapeHash": "sha256:2d01471604a0733d9fa4871a43ce728da3e3f34783a33288f888dd911db0dc26"
-    },
-    {
       "id": "go:github.com/tmih06/ompig/coding#subagentToolBinding.set",
       "package": "github.com/tmih06/ompig/coding",
       "name": "subagentToolBinding.set",
@@ -84626,17 +84615,6 @@
         "type": "func(entry github.com/tmih06/ompig/internal/codingagent.SessionEntry) (newLeafID *string, editorText string)"
       },
       "shapeHash": "sha256:806b1c00548ef090e04f4ce5a28e3cc5a07617a5c4b789710f38997607b7b5c5"
-    },
-    {
-      "id": "go:github.com/tmih06/ompig/coding#trimPrompt",
-      "package": "github.com/tmih06/ompig/coding",
-      "name": "trimPrompt",
-      "kind": "function",
-      "exported": false,
-      "shape": {
-        "type": "func(text string) string"
-      },
-      "shapeHash": "sha256:712aa1f912ed8b2a515afd3e016ad20e83192eda792ea2444cc3e25c00ffe2fd"
     },
     {
       "id": "go:github.com/tmih06/ompig/coding#truncateArgs",
@@ -183023,17 +183001,6 @@
       "shapeHash": "sha256:b3809f7651cf3600babea3c9dee9428e8284cc30d8d768935b3ae02b4fd0b3ea"
     },
     {
-      "id": "go:github.com/tmih06/ompig/coding/subagent#Runner.clearTool",
-      "package": "github.com/tmih06/ompig/coding/subagent",
-      "name": "Runner.clearTool",
-      "kind": "function",
-      "exported": false,
-      "shape": {
-        "type": "func(agentID string)"
-      },
-      "shapeHash": "sha256:e7680771f333e2518aee5b41ac2a75a29f3cb592af808c9773e6ed9429f04d9f"
-    },
-    {
       "id": "go:github.com/tmih06/ompig/coding/subagent#Runner.execute",
       "package": "github.com/tmih06/ompig/coding/subagent",
       "name": "Runner.execute",
@@ -183054,17 +183021,6 @@
         "type": "func(entry Entry, out Result, started time.Time) Result"
       },
       "shapeHash": "sha256:83a1bbf54605182c63c98da6d14a15ed715f0539606d6b842a791d91924fdee9"
-    },
-    {
-      "id": "go:github.com/tmih06/ompig/coding/subagent#Runner.noteTool",
-      "package": "github.com/tmih06/ompig/coding/subagent",
-      "name": "Runner.noteTool",
-      "kind": "function",
-      "exported": false,
-      "shape": {
-        "type": "func(agentID string, toolName string, intent string, args encoding/json.RawMessage)"
-      },
-      "shapeHash": "sha256:6aa73f185c7e1e407694fc50faceb014e00291da1cca1d8fd3aead0fe381b2fc"
     },
     {
       "id": "go:github.com/tmih06/ompig/coding/subagent#Runner.parentDefinition",
@@ -296851,6 +296807,17 @@
       "shapeHash": "sha256:55eb6c7cbd5bd23b1620437df692f528edc48b04d05d1a28535b09b74ba7c98c"
     },
     {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#DETAIL_MIN_WIDTH",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "DETAIL_MIN_WIDTH",
+      "kind": "constant",
+      "exported": true,
+      "shape": {
+        "type": "untyped int"
+      },
+      "shapeHash": "sha256:e464e6de3ad35418f6e6dfe34abdf0de696ea4b2b49704e3c41e4184b74f805f"
+    },
+    {
       "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model",
       "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
       "name": "Model",
@@ -296972,6 +296939,17 @@
       "shapeHash": "sha256:9147ba1b72694309295639daadac62c4a9314b50d07bc79e204e00aa916c5be0"
     },
     {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.aggregateUsage",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "Model.aggregateUsage",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func() string"
+      },
+      "shapeHash": "sha256:31cac5b359d9888bdbe3fe08c486b2e404a728edce6e0aaaa60e59ceafc92fb5"
+    },
+    {
       "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.changed",
       "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
       "name": "Model.changed",
@@ -296983,9 +296961,20 @@
       "shapeHash": "sha256:032e891204f123caf14d3d421fa9728efc3f31299c17e98859c219dccddd74fb"
     },
     {
-      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.footer",
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.entryLines",
       "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
-      "name": "Model.footer",
+      "name": "Model.entryLines",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func(entry github.com/tmih06/ompig/coding/subagent.Entry, selected bool, width int) []string"
+      },
+      "shapeHash": "sha256:eacf266d4919515607ff7c328d5b5675b985016bc552d42bd6a5ae3baa29af9e"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.footerLine",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "Model.footerLine",
       "kind": "function",
       "exported": false,
       "shape": {
@@ -297005,17 +296994,6 @@
       "shapeHash": "sha256:777482278ecafcaba7e897efc73e2e210f880db707a9f932b45f3d0a2c0e73bf"
     },
     {
-      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.header",
-      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
-      "name": "Model.header",
-      "kind": "function",
-      "exported": false,
-      "shape": {
-        "type": "func(width int) string"
-      },
-      "shapeHash": "sha256:e78d2008ad9beff79d03003d059f36b3d9038f1125ed43e806706253eb64cd6d"
-    },
-    {
       "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.observe",
       "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
       "name": "Model.observe",
@@ -297025,6 +297003,17 @@
         "type": "func(event github.com/tmih06/ompig/coding/subagent.Event)"
       },
       "shapeHash": "sha256:5d55b9bb39c44787f4ed1455259bee6f4cccced45c116021db939e72ded1ff40"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.projectionLabel",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "Model.projectionLabel",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func() string"
+      },
+      "shapeHash": "sha256:31cac5b359d9888bdbe3fe08c486b2e404a728edce6e0aaaa60e59ceafc92fb5"
     },
     {
       "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.reload",
@@ -297038,9 +297027,9 @@
       "shapeHash": "sha256:032e891204f123caf14d3d421fa9728efc3f31299c17e98859c219dccddd74fb"
     },
     {
-      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.renderActivity",
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.renderActivitySection",
       "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
-      "name": "Model.renderActivity",
+      "name": "Model.renderActivitySection",
       "kind": "function",
       "exported": false,
       "shape": {
@@ -297049,9 +297038,31 @@
       "shapeHash": "sha256:81761e7090d7bb4159cdc88ad1df72001d86a8280dab046ca793a8e9191bed39"
     },
     {
-      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.renderInspector",
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.renderDetailPanel",
       "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
-      "name": "Model.renderInspector",
+      "name": "Model.renderDetailPanel",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func(width int, rows int) []string"
+      },
+      "shapeHash": "sha256:1c64bc4a9183e691f3bb509472d0d129d6a7e64892638a7fdb1fb86420a7622f"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.renderEntries",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "Model.renderEntries",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func(width int, budget int) []string"
+      },
+      "shapeHash": "sha256:714a33924fe643002fb70b4efbaa8e33823d9fd66c42d7ba966cbed8b49201c1"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.renderRosterSection",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "Model.renderRosterSection",
       "kind": "function",
       "exported": false,
       "shape": {
@@ -297060,9 +297071,9 @@
       "shapeHash": "sha256:81761e7090d7bb4159cdc88ad1df72001d86a8280dab046ca793a8e9191bed39"
     },
     {
-      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.renderRoster",
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.renderSplit",
       "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
-      "name": "Model.renderRoster",
+      "name": "Model.renderSplit",
       "kind": "function",
       "exported": false,
       "shape": {
@@ -297071,9 +297082,9 @@
       "shapeHash": "sha256:81761e7090d7bb4159cdc88ad1df72001d86a8280dab046ca793a8e9191bed39"
     },
     {
-      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.renderWide",
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.summaryHeader",
       "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
-      "name": "Model.renderWide",
+      "name": "Model.summaryHeader",
       "kind": "function",
       "exported": false,
       "shape": {
@@ -297082,15 +297093,15 @@
       "shapeHash": "sha256:81761e7090d7bb4159cdc88ad1df72001d86a8280dab046ca793a8e9191bed39"
     },
     {
-      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.rosterRow",
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.theme",
       "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
-      "name": "Model.rosterRow",
+      "name": "Model.theme",
       "kind": "function",
       "exported": false,
       "shape": {
-        "type": "func(index int, entry github.com/tmih06/ompig/coding/subagent.Entry, now time.Time, width int) string"
+        "type": "func() *github.com/tmih06/ompig/tui.Theme"
       },
-      "shapeHash": "sha256:ca208fee1d5a1da7f1461069681c32849c56759237fe84122a4500260611e9db"
+      "shapeHash": "sha256:7a015e276b779fb06bee670d21ea375428a8eaea8ffe141b3d793dac39cca830"
     },
     {
       "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#New",
@@ -297135,6 +297146,17 @@
         "type": "Request"
       },
       "shapeHash": "sha256:992e88c53780578271c262901a11156adf7c05f7cd375d3397fcb37f8ca6ebab"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#SPLIT_MIN_WIDTH",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "SPLIT_MIN_WIDTH",
+      "kind": "constant",
+      "exported": true,
+      "shape": {
+        "type": "untyped int"
+      },
+      "shapeHash": "sha256:e464e6de3ad35418f6e6dfe34abdf0de696ea4b2b49704e3c41e4184b74f805f"
     },
     {
       "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Section",
@@ -297247,6 +297269,83 @@
       "shapeHash": "sha256:320fb558425a14a00fbd577d6039748c5f77ce012798ca00c729dadc2043bb42"
     },
     {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#cell",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "cell",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func(text string, width int, right bool) string"
+      },
+      "shapeHash": "sha256:59930fdf4b1c72db1d4bf0b7ddc51dccad2d496e01e478495700479ff15d373e"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#colAge",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "colAge",
+      "kind": "constant",
+      "exported": false,
+      "shape": {
+        "type": "untyped int"
+      },
+      "shapeHash": "sha256:e464e6de3ad35418f6e6dfe34abdf0de696ea4b2b49704e3c41e4184b74f805f"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#colCost",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "colCost",
+      "kind": "constant",
+      "exported": false,
+      "shape": {
+        "type": "untyped int"
+      },
+      "shapeHash": "sha256:e464e6de3ad35418f6e6dfe34abdf0de696ea4b2b49704e3c41e4184b74f805f"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#colDuration",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "colDuration",
+      "kind": "constant",
+      "exported": false,
+      "shape": {
+        "type": "untyped int"
+      },
+      "shapeHash": "sha256:e464e6de3ad35418f6e6dfe34abdf0de696ea4b2b49704e3c41e4184b74f805f"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#colRequests",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "colRequests",
+      "kind": "constant",
+      "exported": false,
+      "shape": {
+        "type": "untyped int"
+      },
+      "shapeHash": "sha256:e464e6de3ad35418f6e6dfe34abdf0de696ea4b2b49704e3c41e4184b74f805f"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#colTokens",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "colTokens",
+      "kind": "constant",
+      "exported": false,
+      "shape": {
+        "type": "untyped int"
+      },
+      "shapeHash": "sha256:e464e6de3ad35418f6e6dfe34abdf0de696ea4b2b49704e3c41e4184b74f805f"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#colTools",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "colTools",
+      "kind": "constant",
+      "exported": false,
+      "shape": {
+        "type": "untyped int"
+      },
+      "shapeHash": "sha256:e464e6de3ad35418f6e6dfe34abdf0de696ea4b2b49704e3c41e4184b74f805f"
+    },
+    {
       "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#compactJSON",
       "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
       "name": "compactJSON",
@@ -297258,37 +297357,213 @@
       "shapeHash": "sha256:e2866e9e17c10478a3aca49be070c3603d8cca2321897afe52cc8d3bbfc5fb85"
     },
     {
-      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#firstLine",
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#contextGauge",
       "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
-      "name": "firstLine",
+      "name": "contextGauge",
       "kind": "function",
       "exported": false,
       "shape": {
-        "type": "func(text string) string"
+        "type": "func(theme *github.com/tmih06/ompig/tui.Theme, tokens int, window int) string"
       },
-      "shapeHash": "sha256:712aa1f912ed8b2a515afd3e016ad20e83192eda792ea2444cc3e25c00ffe2fd"
+      "shapeHash": "sha256:8e27d59fa668bb3a19b533d9976420c17cd65f856926fd16f73457ea0c70af37"
     },
     {
-      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#formatDuration",
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#detailIndent",
       "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
-      "name": "formatDuration",
-      "kind": "function",
+      "name": "detailIndent",
+      "kind": "constant",
       "exported": false,
       "shape": {
-        "type": "func(d time.Duration) string"
+        "type": "untyped int"
       },
-      "shapeHash": "sha256:302011ad02e4345af9d24b6bde7bb176537ce10cb86b33b0302f1c190559c5d5"
+      "shapeHash": "sha256:e464e6de3ad35418f6e6dfe34abdf0de696ea4b2b49704e3c41e4184b74f805f"
     },
     {
-      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#formatTokens",
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#formatAge",
       "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
-      "name": "formatTokens",
+      "name": "formatAge",
       "kind": "function",
       "exported": false,
       "shape": {
-        "type": "func(count int64) string"
+        "type": "func(seconds int64) string"
       },
-      "shapeHash": "sha256:a1d36493a79b5c75fc1a5f9a828b0c2f6d7da8d358874e88670dc8e863f96995"
+      "shapeHash": "sha256:2924aeca57776e5c7d48d0b470d0593f015f7cd4c603d892ba7159f6ea0db565"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#formatCost",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "formatCost",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func(cost float64) string"
+      },
+      "shapeHash": "sha256:9d5da704c5ad354b38021afdcc87e9aa002872a4b3920e06b9a7393772d800e8"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#formatDurationMs",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "formatDurationMs",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func(ms int64) string"
+      },
+      "shapeHash": "sha256:36086e264a5d6d8b7ca966bc0cfb3de8d63dbe20c4eab1b0601f963785bf7708"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#formatMetricDuration",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "formatMetricDuration",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func(entry github.com/tmih06/ompig/coding/subagent.Entry, now int64) string"
+      },
+      "shapeHash": "sha256:b72682a9b75ea97af8e603fb519917a5f68c46b58560a0ebe9271e4784a5a3be"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#formatNumber",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "formatNumber",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func(value int64) string"
+      },
+      "shapeHash": "sha256:910dc572759401f2e63d8a2685bac6e3ebf993e919a16e99806565f37f06b950"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#glyphAborted",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "glyphAborted",
+      "kind": "constant",
+      "exported": false,
+      "shape": {
+        "type": "untyped string"
+      },
+      "shapeHash": "sha256:7eabd192b9f1c379102c8dc793881875f1f949f6b752e15a20b93080cb0b311d"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#glyphCursor",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "glyphCursor",
+      "kind": "constant",
+      "exported": false,
+      "shape": {
+        "type": "untyped string"
+      },
+      "shapeHash": "sha256:7eabd192b9f1c379102c8dc793881875f1f949f6b752e15a20b93080cb0b311d"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#glyphDot",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "glyphDot",
+      "kind": "constant",
+      "exported": false,
+      "shape": {
+        "type": "untyped string"
+      },
+      "shapeHash": "sha256:7eabd192b9f1c379102c8dc793881875f1f949f6b752e15a20b93080cb0b311d"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#glyphIdle",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "glyphIdle",
+      "kind": "constant",
+      "exported": false,
+      "shape": {
+        "type": "untyped string"
+      },
+      "shapeHash": "sha256:7eabd192b9f1c379102c8dc793881875f1f949f6b752e15a20b93080cb0b311d"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#glyphParent",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "glyphParent",
+      "kind": "constant",
+      "exported": false,
+      "shape": {
+        "type": "untyped string"
+      },
+      "shapeHash": "sha256:7eabd192b9f1c379102c8dc793881875f1f949f6b752e15a20b93080cb0b311d"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#glyphParked",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "glyphParked",
+      "kind": "constant",
+      "exported": false,
+      "shape": {
+        "type": "untyped string"
+      },
+      "shapeHash": "sha256:7eabd192b9f1c379102c8dc793881875f1f949f6b752e15a20b93080cb0b311d"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#glyphRunning",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "glyphRunning",
+      "kind": "constant",
+      "exported": false,
+      "shape": {
+        "type": "untyped string"
+      },
+      "shapeHash": "sha256:7eabd192b9f1c379102c8dc793881875f1f949f6b752e15a20b93080cb0b311d"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#glyphUnread",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "glyphUnread",
+      "kind": "constant",
+      "exported": false,
+      "shape": {
+        "type": "untyped string"
+      },
+      "shapeHash": "sha256:7eabd192b9f1c379102c8dc793881875f1f949f6b752e15a20b93080cb0b311d"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#metricColumns",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "metricColumns",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func(entry github.com/tmih06/ompig/coding/subagent.Entry, now int64) string"
+      },
+      "shapeHash": "sha256:b72682a9b75ea97af8e603fb519917a5f68c46b58560a0ebe9271e4784a5a3be"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#metricRowWidth",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "metricRowWidth",
+      "kind": "constant",
+      "exported": false,
+      "shape": {
+        "type": "untyped int"
+      },
+      "shapeHash": "sha256:e464e6de3ad35418f6e6dfe34abdf0de696ea4b2b49704e3c41e4184b74f805f"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#metricsText",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "metricsText",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func(theme *github.com/tmih06/ompig/tui.Theme, entry github.com/tmih06/ompig/coding/subagent.Entry, now int64) string"
+      },
+      "shapeHash": "sha256:e46553f29d8acbd83be115516ec84012bd932784b21acf31dffc8396755d3bb9"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#modelBadge",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "modelBadge",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func(theme *github.com/tmih06/ompig/tui.Theme, entry github.com/tmih06/ompig/coding/subagent.Entry) string"
+      },
+      "shapeHash": "sha256:725cc83f176551fed9f6258f969b054f0ed6e5132c5cbeef01bc33e78b2ea40c"
     },
     {
       "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#muted",
@@ -297300,17 +297575,6 @@
         "type": "func(text string) string"
       },
       "shapeHash": "sha256:712aa1f912ed8b2a515afd3e016ad20e83192eda792ea2444cc3e25c00ffe2fd"
-    },
-    {
-      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#orDash",
-      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
-      "name": "orDash",
-      "kind": "function",
-      "exported": false,
-      "shape": {
-        "type": "func(value string) string"
-      },
-      "shapeHash": "sha256:f626edcbe0f29a2966d57b2a9cd75b432b6461dc4d207531d4bc74bdcce089b7"
     },
     {
       "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#pad",
@@ -297335,26 +297599,92 @@
       "shapeHash": "sha256:9e0643142288f7b58ae01afd435cf83ba2489f96fae9c3477f220c00e28eca87"
     },
     {
-      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#sortEntriesByStart",
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#statusGlyph",
       "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
-      "name": "sortEntriesByStart",
+      "name": "statusGlyph",
       "kind": "function",
       "exported": false,
       "shape": {
-        "type": "func(entries []github.com/tmih06/ompig/coding/subagent.Entry) []github.com/tmih06/ompig/coding/subagent.Entry"
+        "type": "func(status github.com/tmih06/ompig/coding/subagent.Status) string"
       },
-      "shapeHash": "sha256:f0ffc7af1206512d38a79753ea171ee08af34b3ea7764735ba8aaf0fb50af3b8"
+      "shapeHash": "sha256:91b62427a2289a91c07436eec09e52be1a831746c659c52eabf25fe8de5a91e0"
     },
     {
-      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#statusLabel",
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#statusGlyphStyled",
       "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
-      "name": "statusLabel",
+      "name": "statusGlyphStyled",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func(theme *github.com/tmih06/ompig/tui.Theme, status github.com/tmih06/ompig/coding/subagent.Status) string"
+      },
+      "shapeHash": "sha256:2b9054b432a870d2a83dd3dfacc173fc547ad64433e4911ed6e882918779012c"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#statusSummary",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "statusSummary",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func(theme *github.com/tmih06/ompig/tui.Theme, entries []github.com/tmih06/ompig/coding/subagent.Entry) string"
+      },
+      "shapeHash": "sha256:416186183bad5de55105e9c891ba242c33311592a568ef0c24ad2858924ec3ac"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#statusText",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "statusText",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func(theme *github.com/tmih06/ompig/tui.Theme, status github.com/tmih06/ompig/coding/subagent.Status, text string) string"
+      },
+      "shapeHash": "sha256:1903abafab5bb0376b8db77fa042e0dc0d68d51ae82c21b2152433e4ca65825b"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#statusToken",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "statusToken",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func(status github.com/tmih06/ompig/coding/subagent.Status) string"
+      },
+      "shapeHash": "sha256:91b62427a2289a91c07436eec09e52be1a831746c659c52eabf25fe8de5a91e0"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#taskSummary",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "taskSummary",
       "kind": "function",
       "exported": false,
       "shape": {
         "type": "func(entry github.com/tmih06/ompig/coding/subagent.Entry) string"
       },
       "shapeHash": "sha256:5919d821ed38ed7d1862829bb5271b69a94e30861442af95873a28e0ac10747c"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#themeFgDim",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "themeFgDim",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func(theme *github.com/tmih06/ompig/tui.Theme, text string) string"
+      },
+      "shapeHash": "sha256:29d6feb358cf8988dd65bb02a501b136522c6d571e98ce04e55aec3be158e7e5"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#themeSep",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "themeSep",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func(theme *github.com/tmih06/ompig/tui.Theme) string"
+      },
+      "shapeHash": "sha256:2fb0aa97917d5682b2df1ed6b0d621a4cf19340759b6242808020b565cbfab72"
     },
     {
       "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#toolResultText",
@@ -297377,6 +297707,28 @@
         "type": "func(entries []github.com/tmih06/ompig/coding/subagent.Entry) []github.com/tmih06/ompig/coding/subagent.Entry"
       },
       "shapeHash": "sha256:f0ffc7af1206512d38a79753ea171ee08af34b3ea7764735ba8aaf0fb50af3b8"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#trimZero",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "trimZero",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func(value float64) string"
+      },
+      "shapeHash": "sha256:85769cdd02c3acdc920292e31af2b384468581b35a34e080c62f70c8dddb269b"
+    },
+    {
+      "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#truncate",
+      "package": "github.com/tmih06/ompig/internal/codingagent/agenthub",
+      "name": "truncate",
+      "kind": "function",
+      "exported": false,
+      "shape": {
+        "type": "func(text string, width int) string"
+      },
+      "shapeHash": "sha256:46f71e5eadfdd52e1e01bdc655a8232b4647a7139babf942145c42ee4d550df9"
     },
     {
       "id": "go:github.com/tmih06/ompig/internal/codingagent/agenthub#wrap",
