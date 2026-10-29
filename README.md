@@ -277,7 +277,7 @@ Start with:
 
 Use `pig extension init <directory>` to scaffold an extension. Use `pig install <path> --validate-only --json` to validate it.
 
-## Supply-chain evidence
+## Supply-chain evidences
 
 PiG treats scanner output as evidence input, not as proof by itself. Release preparation builds a validated dependency inventory and artifact-specific SPDX SBOMs. Reviewers reconcile scanner findings with Go modules, npm locks, Python metadata, Rust locks, embedded assets, generated data, and release contents.
 
