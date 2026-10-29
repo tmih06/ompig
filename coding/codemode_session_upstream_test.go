@@ -222,7 +222,9 @@ func TestUpstreamAgentSessionCodemodeTool(t *testing.T) {
 		if result.IsError {
 			t.Error("isError")
 		}
-		if got, want := codemodeResultText(t, result), "==> text 1/2 <==\necho,stats,screenshot\n==> text 2/2 <==\n"+`{"a":"echo: one","b":"echo: two","names":["a","b"]}`+"\n<console_output>\nfiles 2\n</console_output>"; got != want {
+		// ompig divergence (D205): the default tool set also carries the subagent
+		// tools, so the roster the script sees names them first.
+		if got, want := codemodeResultText(t, result), "==> text 1/2 <==\ntask,wait,agents,echo,stats,screenshot\n==> text 2/2 <==\n"+`{"a":"echo: one","b":"echo: two","names":["a","b"]}`+"\n<console_output>\nfiles 2\n</console_output>"; got != want {
 			t.Errorf("result = %q, want %q", got, want)
 		}
 		details := codemodeDetailsOf(t, result)

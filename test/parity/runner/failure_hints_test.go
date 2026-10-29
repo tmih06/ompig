@@ -14,7 +14,7 @@ func TestLineDiff_Equal(t *testing.T) {
 }
 
 func TestLineDiff_FirstDiffLine(t *testing.T) {
-	ompig := "a\nb\nPIG\nd\n"
+	ompig := "a\nb\nOMPIG\nd\n"
 	pi := "a\nb\nPI\nd\n"
 	d := LineDiff(ompig, pi)
 	if !strings.Contains(d, "first diff at line 3") {

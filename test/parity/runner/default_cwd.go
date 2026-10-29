@@ -147,9 +147,11 @@ func checkPromptPathRoot() error {
 const (
 	ompigHomePrefix = "parity-snap-OMPIG_HOME-"
 	piPackagePrefix = "parity-pi-pkg-"
-	// piPackageLink is padded so that Pi's three package paths are as long as ompig's two docs paths, which name the docs bundle directory.
+	// piPackageLink is padded so that Pi's three package paths are as long as ompig's two docs paths, which name the docs
+	// bundle directory. d22ConstantGap absorbs the rest: "ompig" is two characters wider than "pig" and appears twice in
+	// the docs path, so the gap is four smaller than Pi's.
 	piPackageLink  = "pi-coding-pkg-with-bundle-pad"
-	d22ConstantGap = 47
+	d22ConstantGap = 43
 	// ompigBundleDirLen is len("/bundle-") plus the 16 hex digits of the content hash that names ompig's docs bundle directory (internal/pigdocs).
 	ompigBundleDirLen = len("/bundle-") + 16
 )
