@@ -1333,7 +1333,7 @@
         },
         {
           "kind": "normalize_replace",
-          "pattern": "/[^\"]*parity-snap-cwd-[0-9]+/\\.ompig?",
+          "pattern": "/[^\"]*parity-snap-cwd-[0-9]+/\\.(?:ompig|pi)",
           "with": "<project>",
           "reason": "D2: the isolated project configuration root is .ompig versus .pi; preserve all resource-relative paths."
         },
@@ -1379,7 +1379,7 @@
         },
         {
           "kind": "normalize_replace",
-          "pattern": "/[^\"]*parity-snap-cwd-[0-9]+/\\.ompig?",
+          "pattern": "/[^\"]*parity-snap-cwd-[0-9]+/\\.(?:ompig|pi)",
           "with": "<project>",
           "reason": "D2: the isolated project configuration root is .ompig versus .pi; preserve all resource-relative paths."
         },
@@ -2219,7 +2219,7 @@
         },
         {
           "kind": "normalize_replace",
-          "pattern": "/[^\"]*parity-snap-cwd-[0-9]+/\\.ompig?",
+          "pattern": "/[^\"]*parity-snap-cwd-[0-9]+/\\.(?:ompig|pi)",
           "with": "<project>",
           "reason": "D2: the isolated project configuration root is .ompig versus .pi; preserve all resource-relative paths."
         },
@@ -5912,7 +5912,7 @@
           "kind": "terminal_crop",
           "configuration": {
             "capture_start": "This project is not trusted.",
-            "capture_end_regex": "then restart pi(g)?\\."
+            "capture_end_regex": "then restart (?:pi|ompig)\\."
           },
           "reason": "Owned visible surface: Cancelling startup trust shows the complete untrusted-project warning, even with quiet startup and extensions disabled.",
           "limitations": "No claim about output outside this crop or transient terminal bytes."
@@ -6027,7 +6027,7 @@
           "configuration": {
             "capture_start": "remember trust-warning-history",
             "capture_start_last": true,
-            "capture_end_regex": "then restart pi(g)?\\."
+            "capture_end_regex": "then restart (?:pi|ompig)\\."
           },
           "reason": "Owned visible surface: Explicitly denied trust still warns after the resumed transcript, with Pi's spacing.",
           "limitations": "No claim about output outside this crop or transient terminal bytes."
@@ -6088,7 +6088,7 @@
           "kind": "terminal_crop",
           "configuration": {
             "capture_start": "This project is not trusted.",
-            "capture_end_regex": "then restart pi(g)?\\."
+            "capture_end_regex": "then restart (?:pi|ompig)\\."
           },
           "reason": "Owned visible surface: A project whose only configuration is mcp.json asks for project trust, and cancelling it shows the untrusted-project warning.",
           "limitations": "No claim about output outside this crop or transient terminal bytes."
@@ -9819,7 +9819,7 @@
           "kind": "terminal_crop",
           "configuration": {
             "capture_start": "escape",
-            "capture_end_regex": "extend Pi(G)?\\."
+            "capture_end_regex": "extend (?:Pi|Ompig)\\."
           },
           "reason": "Owned visible surface: Default startup header renders Pi's compact help and onboarding, without the former cwd/config/bin report.",
           "limitations": "No claim about output outside this crop or transient terminal bytes."
@@ -9873,7 +9873,7 @@
           "kind": "terminal_crop",
           "configuration": {
             "capture_start": "escape",
-            "capture_end_regex": "extend Pi(G)?\\."
+            "capture_end_regex": "extend (?:Pi|Ompig)\\."
           },
           "reason": "Owned visible surface: Ctrl+O expands the built-in startup header to Pi's complete configured keybinding help.",
           "limitations": "No claim about output outside this crop or transient terminal bytes."
@@ -9915,7 +9915,7 @@
           "kind": "terminal_crop",
           "configuration": {
             "capture_start": "escape",
-            "capture_end_regex": "extend Pi(G)?\\."
+            "capture_end_regex": "extend (?:Pi|Ompig)\\."
           },
           "reason": "Owned visible surface: Verbose startup help remains collapsible after tool expansion toggles.",
           "limitations": "No claim about output outside this crop or transient terminal bytes."
@@ -9949,7 +9949,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "parity-snap-OMPIG?_CODING_AGENT_DIR-[0-9]+",
+          "pattern": "parity-snap-(?:OMPIG|PI)_CODING_AGENT_DIR-[0-9]+",
           "with": "<agent-dir>",
           "reason": "D2: the runner allocates independent agent-root names. Keep all resource-relative paths and their order."
         },
@@ -10111,7 +10111,7 @@
           "kind": "terminal_crop",
           "configuration": {
             "capture_start": "escape",
-            "capture_end_regex": "extend Pi(G)?\\."
+            "capture_end_regex": "extend (?:Pi|Ompig)\\."
           },
           "reason": "Owned visible surface: Below the ompig head's width Ompig's one-line text mark leaves Pi's header wrapping unchanged.",
           "limitations": "No claim about output outside this crop or transient terminal bytes."
