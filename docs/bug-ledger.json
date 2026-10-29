@@ -6369,6 +6369,28 @@
       ]
     },
     {
+      "id": "BF-3ec7785",
+      "title": "fix(ci): repair the bookkeeping gates the rebrand broke",
+      "symptom": "fix(ci): repair the bookkeeping gates the rebrand broke",
+      "rootCause": "The rename rewrote historical records, which the bookkeeping gates treat as data, not prose. Restore them and regenerate what is generated.",
+      "rootCauseSource": "commit",
+      "userImpact": "Behavior differed from Pi",
+      "platform": "All platforms",
+      "class": "own",
+      "fixedIn": "Unreleased",
+      "origin": "commit",
+      "commits": [
+        {
+          "hash": "3ec77852bc",
+          "date": "2026-10-29"
+        }
+      ],
+      "tests": [
+        "coding/subagent_loop_test.go::TestSubagentNameCollisionGetsSuffix",
+        "coding/subagent_resource_test.go::TestSubagentConcurrencyBound"
+      ]
+    },
+    {
       "id": "BF-3ee123c",
       "title": "CI: the `Linux / portmap` job (`make portmap-check`) no longer runs out its 60-minute limit",
       "symptom": "CI: the `Linux / portmap` job (`make portmap-check`) no longer runs out its 60-minute limit.",
@@ -38407,6 +38429,10 @@
     {
       "id": "D208",
       "title": "Focusing an agent opens its transcript in an overlay instead of replacing the session"
+    },
+    {
+      "id": "D209",
+      "title": "The subagent runtime's limits come from omp, not Pi"
     }
   ],
   "exemptCommits": {

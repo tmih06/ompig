@@ -134,9 +134,11 @@ type Runner struct {
 }
 
 // defaultOutputCap mirrors omp's MAX_OUTPUT_BYTES.
+// ompig divergence (D209): the subagent output caps come from omp, which Pi has no equivalent of.
 const defaultOutputCap = 500_000
 
 // defaultBriefCap mirrors omp's FULL_OUTPUT_THRESHOLD.
+// ompig divergence (D209): the subagent output caps come from omp.
 const defaultBriefCap = 5_000
 
 // NewRunner builds a runner over the given registry, jobs and artifacts.
@@ -153,6 +155,7 @@ func NewRunner(registry *Registry, jobs *Jobs, artifacts *Artifacts) *Runner {
 		artifacts:      artifacts,
 		Definitions:    map[string]Definition{},
 		DefaultAgent:   "task",
+		// ompig divergence (D209): omp's task.maxConcurrency default.
 		MaxConcurrency: 32,
 		MaxOutputBytes: defaultOutputCap,
 		BriefOutputCap: defaultBriefCap,

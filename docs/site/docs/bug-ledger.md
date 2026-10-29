@@ -224,6 +224,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-3def2a7](#bf-3def2a7) | MCP servers whose names are numbers (`"9"`, `"42"`) load and report their errors in the order Pi does: a JSON… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-3e755ef](#bf-3e755ef) | Fix in shipped code | Ompig's own defect | All platforms | Unreleased |
 | [BF-3e88414](#bf-3e88414) | fix(coding-agent): render system messages in HTML export (Pi) | A fix Pi shipped that Ompig ported | All platforms | Unreleased |
+| [BF-3ec7785](#bf-3ec7785) | fix(ci): repair the bookkeeping gates the rebrand broke | Ompig's own defect | All platforms | Unreleased |
 | [BF-3ee123c](#bf-3ee123c) | CI: the `Linux / portmap` job (`make portmap-check`) no longer runs out its 60-minute limit | Ompig's own defect | Linux | 0.5.2 |
 | [BF-3fa6e63](#bf-3fa6e63) | MCP servers with resources registered no tools until every resource was listed, so a slow listing (a large… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-3fbdfd2](#bf-3fbdfd2) | A configured number in settings text prints as JavaScript's `String(number)`: `-0` is `0`, and a magnitude of… | Ompig's own defect | All platforms | 0.5.0 |
@@ -4081,6 +4082,19 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** Unreleased
 - **Fix commits:** `3e88414c8c` (2026-10-22)
 - **Tests:** `internal/codingagent/export/upstream_test.go::TestExportHTMLPinnedAssets`, `internal/codingagent/export/upstream_test.go::TestExportHTMLRendering`, `internal/codingagent/export/upstream_test.go::TestExportHTMLSystemMessages`
+
+### BF-3ec7785
+
+**fix(ci): repair the bookkeeping gates the rebrand broke**
+
+- **Source:** Ompig's own defect
+- **Symptom:** fix(ci): repair the bookkeeping gates the rebrand broke
+- **Root cause:** The rename rewrote historical records, which the bookkeeping gates treat as data, not prose. Restore them and regenerate what is generated.
+- **User impact:** Behavior differed from Pi
+- **Platform:** All platforms
+- **Fixed in:** Unreleased
+- **Fix commits:** `3ec77852bc` (2026-10-29)
+- **Tests:** `coding/subagent_loop_test.go::TestSubagentNameCollisionGetsSuffix`, `coding/subagent_resource_test.go::TestSubagentConcurrencyBound`
 
 ### BF-3ee123c
 
@@ -18367,6 +18381,7 @@ Each divergence record is accounted for here. A divergence that fixes a Pi defec
 | D206 | An Agent Hub keybinding and roster that Pi has no equivalent of | deliberate difference |
 | D207 | Child sessions live beside the parent's session file, not in the project session bucket | deliberate difference |
 | D208 | Focusing an agent opens its transcript in an overlay instead of replacing the session | deliberate difference |
+| D209 | The subagent runtime's limits come from omp, not Pi | deliberate difference |
 
 ## Fix-titled commits that are not bugs in a release
 

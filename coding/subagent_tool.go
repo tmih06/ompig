@@ -21,6 +21,7 @@ import (
 )
 
 // waitTimeoutCap bounds a `wait` call, matching omp's 30 minute cap.
+// ompig divergence (D209): omp's wait cap.
 const waitTimeoutCap = 30 * time.Minute
 
 // taskToolParams is the batch-shaped `task` schema, plus the flat fields so a
@@ -254,6 +255,7 @@ func (t *subagentWaitTool) Execute(ctx context.Context, toolCallID string, param
 			return toolError("invalid wait arguments: " + err.Error()), nil
 		}
 	}
+	// ompig divergence (D209): omp's default wait timeout.
 	timeout := 300 * time.Second
 	if parsed.Timeout > 0 {
 		timeout = time.Duration(parsed.Timeout * float64(time.Second))

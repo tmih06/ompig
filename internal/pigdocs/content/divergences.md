@@ -112,6 +112,7 @@ Ompig preserves upstream pi-coding-agent's observable behavior unless an entry b
 | D206 | An Agent Hub keybinding and roster that Pi has no equivalent of | `app.agents.hub` (default `alt+a`) opens a roster of the session's subagents with status, current tool, model, elapsed time, tokens, requests, tool calls and cost, offering focus, message, revive and kill. Ompig's closed keybinding set is Pi's 43 plus this one. Owner-approved 2026-10-29. |
 | D207 | Child sessions live beside the parent's session file, not in the project session bucket | A subagent's transcript and outputs go to `<parent session base>-agents/<agent-id>.jsonl` and `<id>.md`/`<id>.json`, so a child never appears in the resume picker. Owner-approved 2026-10-29. |
 | D208 | Focusing an agent opens its transcript in an overlay instead of replacing the session | The hub's `enter` opens the selected agent's messages in an overlay; the main session stays the prompt target and `esc` closes it. Reviving is the explicit `r` action. Owner-approved 2026-10-29. |
+| D209 | The subagent runtime's limits come from omp, not Pi | The runtime carries omp's defaults: concurrency 32, recursion depth 2, idle TTL 7 minutes, a 300-second wait default with a 30-minute cap, and 500,000-byte / 5,000-character output caps. Pi has no subagents, so there is no Pi value to mirror. Owner-approved 2026-10-29. |
 
 ## Known gaps for 0.3.x
 

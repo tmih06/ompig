@@ -85,6 +85,7 @@ func (s *Session) SubagentRuntime() *SubagentRuntime {
 		runner.Async = true
 		// Two levels match omp's task.maxRecursionDepth default: a session, its
 		// subagents, and their subagents.
+		// ompig divergence (D209): omp's task.maxRecursionDepth default.
 		runner.MaxDepth = 2
 		spawner := &sessionSpawner{parent: s, runner: runner, live: map[string]*Session{},
 			parkTimers: map[string]*time.Timer{}, idleTTL: DefaultAgentIdleTTL}
@@ -828,6 +829,7 @@ func truncateArgs(args json.RawMessage) string {
 
 // DefaultAgentIdleTTL matches omp's task.agentIdleTtlMs: an idle agent's session
 // is released after this long, keeping its transcript for a revive.
+// ompig divergence (D209): omp's task.agentIdleTtlMs default.
 const DefaultAgentIdleTTL = 7 * time.Minute
 
 // parkIdleOnSettle arms the idle timer for an agent that just finished, so a

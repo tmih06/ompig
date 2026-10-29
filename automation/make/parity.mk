@@ -88,7 +88,13 @@ test-inventory: ## Test-inventory validates the reviewed disposition mapping ove
 # In a fork whose default branch is not "main" (this repository's is "master") there is no refs/remotes/origin/main, and
 # the gate would fail on a missing object rather than on a real drift. The default therefore falls back to the remote's
 # own default branch, which is what "public main" means for that clone. An explicit PUBLIC_MAIN_REF still wins.
-PUBLIC_MAIN_REF ?= $(shell git rev-parse --verify -q refs/remotes/origin/main >/dev/null 2>&1 && echo refs/remotes/origin/main || git symbolic-ref -q --short refs/remotes/origin/HEAD 2>/dev/null | sed 's|^origin/|refs/remotes/origin/|' || echo refs/remotes/origin/main)
+# Resolution order: an explicit override, then origin/main, then the remote's HEAD, then the local default branch, then
+# master. CI checks out a detached HEAD, where the symbolic ref is absent, so the last two keep the gate from passing an
+# empty revision to the checker.
+PUBLIC_MAIN_REF ?= $(shell \
+  for ref in refs/remotes/origin/main refs/remotes/origin/HEAD refs/heads/main refs/heads/master; do \
+    if git rev-parse --verify -q "$$ref" >/dev/null 2>&1; then echo "$$ref"; exit 0; fi; \
+  done; echo refs/remotes/origin/main)
 
 test-porting-release: ## Enforce hot-path closure or explicit approved known gaps, without lowering the committed baseline
 	@go run ./test/parity/cmd/testinventorycheck -public-main-ref '$(PUBLIC_MAIN_REF)' -release-policy test/parity/interfaces/test-porting-policy-v$(UPSTREAM_VERSION).json
