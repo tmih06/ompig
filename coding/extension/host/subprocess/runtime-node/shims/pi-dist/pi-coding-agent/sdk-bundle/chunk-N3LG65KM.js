@@ -8,14 +8,14 @@ import {
   startToolTimer,
   str,
   toolTimerText
-} from "./chunk-T5YZVFVX.js";
+} from "./chunk-FVGAPQFA.js";
 import {
   highlightCode,
   keyHint
-} from "./chunk-472CZNGH.js";
+} from "./chunk-2FD3YZOG.js";
 import {
   getDocsPath
-} from "./chunk-YXY3JV6E.js";
+} from "./chunk-BE5FKO3B.js";
 import {
   __name
 } from "./chunk-SHUYVCID.js";
@@ -204,7 +204,7 @@ import { CODEMODE_SOURCE_GRAMMAR } from "../../pi-codemode/source.js";
 import { Type as Type2 } from "../../../typebox.mjs";
 
 // pi-dist/pi-coding-agent/extensions/codemode/execute.lazy.js
-var loadCodemodeExecutor = /* @__PURE__ */ __name(() => import("./chunk-NY2GJK4E.js"), "loadCodemodeExecutor");
+var loadCodemodeExecutor = /* @__PURE__ */ __name(() => import("./chunk-55XXCZW5.js"), "loadCodemodeExecutor");
 
 // pi-dist/pi-coding-agent/extensions/codemode/renderer.js
 import { Container, Spacer, Text } from "../../../pi-tui.mjs";

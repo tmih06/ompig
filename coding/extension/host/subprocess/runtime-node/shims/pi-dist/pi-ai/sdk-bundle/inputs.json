@@ -3,7 +3,7 @@
   "inputs": [
     {
       "path": "pi-dist/pi-ai/api/anthropic-messages.js",
-      "sha256": "0b5cce888cbcf17639b286528d422fdd7152bcf5250b569721c1d339d53e0f21"
+      "sha256": "8775d32a13f7e656085e4265a08ec2eb1fff5594f274748f0994c1cd64ecc1a2"
     },
     {
       "path": "pi-dist/pi-ai/api/anthropic-messages.lazy.js",
@@ -15,7 +15,7 @@
     },
     {
       "path": "pi-dist/pi-ai/api/azure-openai-responses.js",
-      "sha256": "c2ad459d1f6ced2ed939bcdd92a942c3dd3fa4953489ea7c75e14164066c325c"
+      "sha256": "74780e7ef66a2f74dbcee3b1ea03c198d51af8c7629c9b403d43aac6d491cb7f"
     },
     {
       "path": "pi-dist/pi-ai/api/azure-openai-responses.lazy.js",
@@ -35,7 +35,7 @@
     },
     {
       "path": "pi-dist/pi-ai/api/google-generative-ai.js",
-      "sha256": "d6386e6305951cc59951f285dd2fa6928c07b7db1b18dc4137b03a9fecd21080"
+      "sha256": "f3184db4014d745fe6e21aafd93c9deae1ab7fce493fb663753966a320711c8c"
     },
     {
       "path": "pi-dist/pi-ai/api/google-generative-ai.lazy.js",
@@ -43,7 +43,7 @@
     },
     {
       "path": "pi-dist/pi-ai/api/google-vertex.js",
-      "sha256": "994129aa12e78966f965d01a32452cd5e4a18aea14517bc4083d519023409b3a"
+      "sha256": "d3c723a9b52aa035917a1bf078a83ff51849a5ea9a61efa97605f11c37df6ae5"
     },
     {
       "path": "pi-dist/pi-ai/api/google-vertex.lazy.js",
@@ -51,7 +51,7 @@
     },
     {
       "path": "pi-dist/pi-ai/api/mistral-conversations.js",
-      "sha256": "88c05c615487110302edcb25f05c55f0513fdd327ed6a8af74c8dc79abc53cef"
+      "sha256": "eacbc33dfa4495b80f40d73378b0ed501bd4c918ce13db903f08c12196887972"
     },
     {
       "path": "pi-dist/pi-ai/api/mistral-conversations.lazy.js",
@@ -59,7 +59,7 @@
     },
     {
       "path": "pi-dist/pi-ai/api/openai-codex-responses.js",
-      "sha256": "14f02e190bccd0a4e55d1f2d4e5ba35cac9dd25cfd171a5004bb5e781746bc99"
+      "sha256": "0cfbbd7b79f7ab7ddd810a2cd7d31285e7804220c0b8e5c59a99965584c70b3d"
     },
     {
       "path": "pi-dist/pi-ai/api/openai-codex-responses.lazy.js",
@@ -67,7 +67,7 @@
     },
     {
       "path": "pi-dist/pi-ai/api/openai-completions.js",
-      "sha256": "d1b07ac40b0c9e78d9c50c835daec6875e4d02108fed77d3fb77330cf7126206"
+      "sha256": "d4cda1383e9cd3a4b4a5cbec2d74d92a156366579938b5de2bbed068d11b5fcc"
     },
     {
       "path": "pi-dist/pi-ai/api/openai-completions.lazy.js",
@@ -83,7 +83,7 @@
     },
     {
       "path": "pi-dist/pi-ai/api/openai-responses.js",
-      "sha256": "a65ff962583f472764a01e512c9023a269de5308b552e45a4bd4e6a45047ec33"
+      "sha256": "e9625e76077595e0a4d572615a0625538ea3ec71115e65fab70bb34d589bfa71"
     },
     {
       "path": "pi-dist/pi-ai/api/openai-responses.lazy.js",
@@ -91,7 +91,7 @@
     },
     {
       "path": "pi-dist/pi-ai/api/openrouter-images.js",
-      "sha256": "e6f2ad4d6057123ee00a6bc68e4a9208cbface49885c99ce19017479745d590e"
+      "sha256": "0c5541207fa9e10f00660630f75592939d5450b74c1da98db27cc7339fd8c223"
     },
     {
       "path": "pi-dist/pi-ai/api/openrouter-images.lazy.js",
@@ -99,7 +99,7 @@
     },
     {
       "path": "pi-dist/pi-ai/api/pi-messages.js",
-      "sha256": "92da156357e1e610e604b36334d0da6f5fdd53b71a38e57faed6aa86c4427d7d"
+      "sha256": "4e9aa0b3eea07ce8cd71a0638bccdcbd011347aa5510a6c251f03ccb8517b5c8"
     },
     {
       "path": "pi-dist/pi-ai/api/pi-messages.lazy.js",
@@ -747,7 +747,7 @@
     },
     {
       "path": "pi-dist/pi-ai/utils/identity.js",
-      "sha256": "43c421e27a56974c8aa63017d558a6458e8284a0a5515fde8f84e08207f6922e"
+      "sha256": "d4cd5ee3fcd139596cadd720a8aa5e249627d3d50064f7aab9f91199a957db67"
     },
     {
       "path": "pi-dist/pi-ai/utils/json-parse.js",

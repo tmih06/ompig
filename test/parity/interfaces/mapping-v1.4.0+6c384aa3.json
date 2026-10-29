@@ -280419,14 +280419,15 @@
       ],
       "layers": {
         "behavior": "complete",
-        "production": "public-api-tested",
+        "production": "complete",
         "shape": "complete"
       },
       "production": [
-        "public-api:tui/renderer.go#TUI.AddInputListener"
+        "call:internal/codingagent/interactive_agenthub.go#InteractiveMode.openAgentHub"
       ],
       "evidence": [
-        "test:tui/tui_base_members_upstream_test.go#TestViewportTUIInheritedMembers"
+        "test:tui/tui_base_members_upstream_test.go#TestViewportTUIInheritedMembers",
+        "test:tui/viewport_tui_upstream_test.go#TestTUIInterfaceMembersBehaveLikePi"
       ]
     },
     {
@@ -280439,14 +280440,15 @@
       ],
       "layers": {
         "behavior": "complete",
-        "production": "public-api-tested",
+        "production": "complete",
         "shape": "complete"
       },
       "production": [
-        "public-api:tui/renderer.go#TUI.AddInputListener"
+        "call:internal/codingagent/interactive_agenthub.go#InteractiveMode.openAgentHub"
       ],
       "evidence": [
-        "test:tui/tui_base_members_upstream_test.go#TestViewportTUIInheritedMembers"
+        "test:tui/tui_base_members_upstream_test.go#TestViewportTUIInheritedMembers",
+        "test:tui/viewport_tui_upstream_test.go#TestTUIInterfaceMembersBehaveLikePi"
       ]
     },
     {
@@ -285625,14 +285627,15 @@
       ],
       "layers": {
         "behavior": "complete",
-        "production": "public-api-tested",
+        "production": "complete",
         "shape": "complete"
       },
       "production": [
-        "public-api:tui/renderer.go#TUI.AddInputListener"
+        "call:internal/codingagent/interactive_agenthub.go#InteractiveMode.openAgentHub"
       ],
       "evidence": [
-        "test:tui/tui_base_members_upstream_test.go#TestViewportTUIInheritedMembers"
+        "test:tui/tui_base_members_upstream_test.go#TestViewportTUIInheritedMembers",
+        "test:tui/viewport_tui_upstream_test.go#TestTUIInterfaceMembersBehaveLikePi"
       ]
     },
     {
@@ -285645,14 +285648,15 @@
       ],
       "layers": {
         "behavior": "complete",
-        "production": "public-api-tested",
+        "production": "complete",
         "shape": "complete"
       },
       "production": [
-        "public-api:tui/renderer.go#TUI.AddInputListener"
+        "call:internal/codingagent/interactive_agenthub.go#InteractiveMode.openAgentHub"
       ],
       "evidence": [
-        "test:tui/tui_base_members_upstream_test.go#TestViewportTUIInheritedMembers"
+        "test:tui/tui_base_members_upstream_test.go#TestViewportTUIInheritedMembers",
+        "test:tui/viewport_tui_upstream_test.go#TestTUIInterfaceMembersBehaveLikePi"
       ]
     },
     {

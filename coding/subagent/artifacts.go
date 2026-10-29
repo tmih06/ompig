@@ -149,33 +149,30 @@ func (a *Artifacts) JSONPath(id string, segments []string) (json.RawMessage, boo
 	if err != nil || !ok {
 		return nil, false, err
 	}
-	var current any
-	if err := json.Unmarshal(raw, &current); err != nil {
-		return nil, false, err
-	}
+	current := json.RawMessage(raw)
 	for _, segment := range segments {
-		switch node := current.(type) {
-		case map[string]any:
-			next, exists := node[segment]
+		// An object step decodes into a map of raw values, so the tree is walked
+		// without decoding anything into an interface value.
+		var object map[string]json.RawMessage
+		if err := json.Unmarshal(current, &object); err == nil {
+			next, exists := object[segment]
 			if !exists {
 				return nil, false, nil
 			}
 			current = next
-		case []any:
-			index, err := strconv.Atoi(segment)
-			if err != nil || index < 0 || index >= len(node) {
-				return nil, false, nil
-			}
-			current = node[index]
-		default:
+			continue
+		}
+		var array []json.RawMessage
+		if err := json.Unmarshal(current, &array); err != nil {
 			return nil, false, nil
 		}
+		index, convErr := strconv.Atoi(segment)
+		if convErr != nil || index < 0 || index >= len(array) {
+			return nil, false, nil
+		}
+		current = array[index]
 	}
-	encoded, err := json.Marshal(current)
-	if err != nil {
-		return nil, false, err
-	}
-	return encoded, true, nil
+	return current, true, nil
 }
 
 // List returns the ids with a stored output, sorted.

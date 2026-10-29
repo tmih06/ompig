@@ -84,7 +84,7 @@ func loadCorpus(root, sdk string) (string, error) {
 				return err
 			}
 			switch {
-			case sdk == "go" && !bytes.Contains(data, []byte(`Ompig/extensions/sdk"`)):
+			case sdk == "go" && !bytes.Contains(data, []byte(`tmih06/ompig/extensions/sdk"`)):
 				return nil
 			case sdk != "go" && strings.HasSuffix(path, ".go"):
 				data = rawStringLiterals(data)

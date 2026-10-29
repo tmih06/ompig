@@ -6,10 +6,10 @@ import {
   loadMcpConfig,
   openBrowser,
   updateMcpServerConfig
-} from "./chunk-N6HXWYKG.js";
+} from "./chunk-ZJAXOP6S.js";
 import {
   ArminComponent
-} from "./chunk-S7TFHYGY.js";
+} from "./chunk-JFNRRVCK.js";
 import {
   AgentSession,
   BUG_REPORT_CUSTOM_ENTRY_TYPE,
@@ -123,7 +123,7 @@ import {
   wrapRegisteredTools,
   writeBugReportArchive,
   writeRawStdout
-} from "./chunk-QLIWYORR.js";
+} from "./chunk-2JQRFCU5.js";
 import {
   convertToPng,
   createBashToolDefinition,
@@ -158,13 +158,13 @@ import {
   resolveReadPath,
   withFileMutationQueue,
   writeRenderers
-} from "./chunk-6HJCSATA.js";
+} from "./chunk-5HIZURID.js";
 import {
   CODEMODE_TOOL_NAME,
   TOOL_SEARCH_TOOL_NAME,
   createCodemodeToolDefinition,
   createToolSearchToolDefinition
-} from "./chunk-NF6AG2GL.js";
+} from "./chunk-N3LG65KM.js";
 import {
   SETTINGS_DEFAULTS,
   addUsageToTotals,
@@ -187,7 +187,7 @@ import {
   truncateTail,
   truncateToVisualLines,
   writeOutputFile
-} from "./chunk-T5YZVFVX.js";
+} from "./chunk-FVGAPQFA.js";
 import {
   SYSTEM_THEME_NAME,
   THEME_TOKENS,
@@ -221,7 +221,7 @@ import {
   setThemeJsonValidator,
   stopThemeWatcher,
   theme
-} from "./chunk-472CZNGH.js";
+} from "./chunk-2FD3YZOG.js";
 import {
   AuthStorage,
   LIST_MCP_RESOURCES_TOOL,
@@ -232,12 +232,12 @@ import {
   mcpNamespace,
   raceWithAbortSignal,
   readStoredCredential
-} from "./chunk-XNXPQFJN.js";
+} from "./chunk-3ZKQ5UTX.js";
 import {
   getPowerShellConfig,
   getShellConfig,
   killTrackedDetachedChildren
-} from "./chunk-OH2Z3DNC.js";
+} from "./chunk-2FXO4MUL.js";
 import {
   APP_NAME,
   APP_TITLE,
@@ -272,7 +272,7 @@ import {
   spawnProcessSync,
   stripBom,
   waitForChildProcess
-} from "./chunk-YXY3JV6E.js";
+} from "./chunk-BE5FKO3B.js";
 import {
   __name
 } from "./chunk-SHUYVCID.js";
@@ -828,7 +828,7 @@ function createMcpResourceToolDefinitions(options) {
 __name(createMcpResourceToolDefinitions, "createMcpResourceToolDefinitions");
 
 // pi-dist/pi-coding-agent/extensions/mcp/runtime.lazy.js
-var loadMcpRuntime = /* @__PURE__ */ __name(() => import("./chunk-XROSFU7A.js"), "loadMcpRuntime");
+var loadMcpRuntime = /* @__PURE__ */ __name(() => import("./chunk-A6CD5U27.js"), "loadMcpRuntime");
 
 // pi-dist/pi-coding-agent/extensions/mcp/ui.js
 import { Container as Container3, Input, SelectList, Spacer as Spacer2, Text as Text3, truncateToWidth, visibleWidth } from "../../../pi-tui.mjs";
@@ -6212,7 +6212,7 @@ var builtInExtensions = [
 ];
 
 // pi-dist/pi-coding-agent/extensions/mcp/cli.lazy.js
-var loadMcpCommand = /* @__PURE__ */ __name(() => import("./chunk-T2RT6V7W.js"), "loadMcpCommand");
+var loadMcpCommand = /* @__PURE__ */ __name(() => import("./chunk-EZGRW3DW.js"), "loadMcpCommand");
 
 // pi-dist/pi-coding-agent/migrations.js
 import chalk4 from "../../../chalk/source/index.js";
@@ -8504,7 +8504,7 @@ function playEasterEgg3d(tui, egg) {
   if (tui.hasOverlay())
     return true;
   const screen = tui.getScreenLines();
-  import("./chunk-6VZPGKDV.js").then((module) => module.playEasterEgg3d(tui, screen, egg), () => {
+  import("./chunk-JXPEKMMH.js").then((module) => module.playEasterEgg3d(tui, screen, egg), () => {
   });
   return true;
 }

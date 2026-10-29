@@ -28,7 +28,7 @@ const waitTimeoutCap = 30 * time.Minute
 // caller that omits `tasks` still works.
 type taskToolParams struct {
 	Context string         `json:"context,omitempty"`
-	Tasks   []taskToolItem `json:"tasks,omitempty"`
+	Tasks   []taskToolItem `json:"tasks"`
 	Task    string         `json:"task,omitempty"`
 	Name    string         `json:"name,omitempty"`
 	Agent   string         `json:"agent,omitempty"`

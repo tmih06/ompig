@@ -276,8 +276,9 @@ func (r *Registry) uniqueIDLocked(name, parentID string) string {
 	if _, taken := r.entries[base]; !taken {
 		return base
 	}
+	// Only a colliding name reaches the suffix loop.
 	for n := 2; ; n++ {
-		candidate := fmt.Sprintf("%s-%d", base, n)
+		candidate := fmt.Sprintf("%s-%d", base, n) //perf:ok a collision path, not the hot path
 		if _, taken := r.entries[candidate]; !taken {
 			return candidate
 		}

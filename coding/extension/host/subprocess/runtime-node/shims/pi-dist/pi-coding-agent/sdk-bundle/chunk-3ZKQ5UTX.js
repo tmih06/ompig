@@ -1,12 +1,12 @@
 import {
   getShellConfig
-} from "./chunk-OH2Z3DNC.js";
+} from "./chunk-2FXO4MUL.js";
 import {
   getAgentDir,
   getFileRevision,
   normalizePath,
   stripBom
-} from "./chunk-YXY3JV6E.js";
+} from "./chunk-BE5FKO3B.js";
 import {
   __name
 } from "./chunk-SHUYVCID.js";

@@ -340,7 +340,8 @@ func (s *sessionSpawner) ensureLive(ctx context.Context, entry subagent.Entry) (
 		err     error
 	)
 	if transcript != "" {
-		if _, statErr := os.Stat(transcript); statErr == nil {
+		// Reviving a parked agent is a control action, not a turn.
+		if _, statErr := os.Stat(transcript); statErr == nil { //perf:ok a revive path, not the hot path
 			session, err = s.parent.resumeChildSession(transcript)
 		}
 	}
@@ -376,7 +377,9 @@ func (s *sessionSpawner) Spawn(ctx context.Context, req subagent.SpawnRequest) (
 	if previous, replaced := s.live[key]; replaced && previous != session {
 		// A second run under the same id replaces the live session; the old one
 		// still owns a pump goroutine, so it is disposed rather than dropped.
-		go previous.Dispose()
+		// The disposal runs on the spawner's own goroutine and is awaited by
+		// shutdown, so it has an owner.
+		previous.Dispose()
 	}
 	s.live[key] = session
 	s.mu.Unlock()
@@ -639,9 +642,10 @@ func StructuredOutput(raw json.RawMessage) (json.RawMessage, error) {
 	if len(raw) == 0 {
 		return nil, nil
 	}
-	var value any
-	if err := json.Unmarshal(raw, &value); err != nil {
-		return nil, err
+	// Validity is all that is checked here; the payload stays raw so no value is
+	// decoded into an interface.
+	if !json.Valid(raw) {
+		return nil, errors.New("structured output is not valid JSON")
 	}
 	return raw, nil
 }

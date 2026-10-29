@@ -194,7 +194,14 @@ func decodeHubKey(data string) string {
 func (c *agentHubController) apply(request agenthub.Request, fn func(context.Context) error) {
 	ctx := c.ctx
 	if ctx == nil {
-		ctx = context.Background()
+		// The mode owns the lifetime: a nil caller context falls back to the
+		// session's own, so a shutdown cancels in-flight control actions.
+		ctx = c.mode.backgroundCtx
+	}
+	if ctx == nil {
+		// A mode built without a background context (a test) has no lifetime to
+		// inherit; the action is a single control call with no other owner.
+		ctx = context.Background() //portlint:allow ctxbackground a control action with no caller context
 	}
 	go func() {
 		err := fn(ctx)

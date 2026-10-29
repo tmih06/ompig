@@ -47,7 +47,7 @@
     },
     {
       "path": "pi-dist/pi-coding-agent/config.js",
-      "sha256": "a8afae21d0244f65285569ddb31faf207d3ced18480e2fee0505af732e25b56e"
+      "sha256": "675c0acca7f59a85dd0368046301765717986d421840e9aafe5c19aaf67e3d33"
     },
     {
       "path": "pi-dist/pi-coding-agent/core/agent-session-runtime.js",
@@ -75,7 +75,7 @@
     },
     {
       "path": "pi-dist/pi-coding-agent/core/bug-report-upload.js",
-      "sha256": "06c2144b0f21c965607e910b864e7d7fe5610f6d1263b0a84314d0a99c214a15"
+      "sha256": "eb4ea00f0e45dc192847a00affbd9f307c1fd81270dec5b390a5416a0679f222"
     },
     {
       "path": "pi-dist/pi-coding-agent/core/bug-report.js",
@@ -91,7 +91,7 @@
     },
     {
       "path": "pi-dist/pi-coding-agent/core/client-identity.js",
-      "sha256": "2dcacaca18b55ab82d8807b623084aaf1755bc64ebce12799c0c53bcb31b757f"
+      "sha256": "cfc2bcdb34d1e5f70d5762f59c498857f2f0741472e986cfa99009784a35626b"
     },
     {
       "path": "pi-dist/pi-coding-agent/core/compaction/branch-summarization.js",
@@ -251,7 +251,7 @@
     },
     {
       "path": "pi-dist/pi-coding-agent/core/remote-catalog-provider.js",
-      "sha256": "b6be36dac9547c6cb900fd9b2b5f4d547ec918986e268ad684fded989eaeb5d3"
+      "sha256": "e09d759de57c4875101c5120f939c90072ed7031ce8a89c0ef242d33432faafb"
     },
     {
       "path": "pi-dist/pi-coding-agent/core/resolve-config-value.js",
@@ -739,7 +739,7 @@
     },
     {
       "path": "pi-dist/pi-coding-agent/modes/interactive/interactive-mode.js",
-      "sha256": "4981866572b5602988f210d8d933fd35af14e73a11052143285015e34384fbe8"
+      "sha256": "34e94c7051209db63c0ab8bacd8878325d4dd827dc63853ee21b2882ab6bf26f"
     },
     {
       "path": "pi-dist/pi-coding-agent/modes/interactive/model-catalog-refresh.js",
@@ -755,7 +755,7 @@
     },
     {
       "path": "pi-dist/pi-coding-agent/modes/interactive/session-share.js",
-      "sha256": "e2a23335321de90ec3ac478ae1cf0ddb1bf9079228aa82af00a9ea424219884a"
+      "sha256": "bca5220491210e894d63e1edfa48cd9476f716c422f0a19860c825a02d07749d"
     },
     {
       "path": "pi-dist/pi-coding-agent/modes/interactive/theme/system-theme.js",
@@ -803,7 +803,7 @@
     },
     {
       "path": "pi-dist/pi-coding-agent/package-manager-cli.js",
-      "sha256": "66ff1f928b536290d8901fdbed7301d4d3848b426d70dca037ea7e4fb3b1dc1c"
+      "sha256": "240ae8b09092c8aa476defc30930df43bf83d58a978c73b2e340731877cc4905"
     },
     {
       "path": "pi-dist/pi-coding-agent/utils/abort.js",
@@ -899,7 +899,7 @@
     },
     {
       "path": "pi-dist/pi-coding-agent/utils/pi-user-agent.js",
-      "sha256": "20ef8740cd24f7a16d962c65f2a22211b99758565c49ac4acfafb5987e669d99"
+      "sha256": "023be972de057242c8c490abefa4ced4d90eb597cae536433c8bee5e6c0088ac"
     },
     {
       "path": "pi-dist/pi-coding-agent/utils/shell.js",
@@ -927,7 +927,7 @@
     },
     {
       "path": "pi-dist/pi-coding-agent/utils/version-check.js",
-      "sha256": "2b0b744cfec88b82b6e2c455e1409276b7513ebb3e7cca68d29c90d2af274fa7"
+      "sha256": "bf212c4032adbca5e1e164a1d1ec7c707f06ff40e14352a3bfb4220b4dcac334"
     },
     {
       "path": "pi-dist/pi-coding-agent/utils/windows-self-update.js",

@@ -19,14 +19,14 @@ import {
   truncateLine,
   truncateTail,
   wrapToolDefinition
-} from "./chunk-T5YZVFVX.js";
+} from "./chunk-FVGAPQFA.js";
 import {
   getLanguageFromPath,
   highlightCode,
   keyHint,
   keyText,
   theme
-} from "./chunk-472CZNGH.js";
+} from "./chunk-2FD3YZOG.js";
 import {
   getPowerShellConfig,
   getShellConfig,
@@ -34,7 +34,7 @@ import {
   killProcessTree,
   trackDetachedChildPid,
   untrackDetachedChildPid
-} from "./chunk-OH2Z3DNC.js";
+} from "./chunk-2FXO4MUL.js";
 import {
   VERSION,
   formatPathRelativeToCwdOrAbsolute,
@@ -43,7 +43,7 @@ import {
   resolvePath,
   splitBom,
   waitForChildProcess
-} from "./chunk-YXY3JV6E.js";
+} from "./chunk-BE5FKO3B.js";
 import {
   __name
 } from "./chunk-SHUYVCID.js";

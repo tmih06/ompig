@@ -527,6 +527,20 @@ func (r *Runner) runConcurrently(ctx context.Context, parentID string, plans []s
 		wg.Add(1)
 		go func(plan spawnPlan) {
 			defer wg.Done()
+			// One spawn's panic must not end the process: record it on the
+			// item's own result the way a returned error is recorded.
+			defer func() {
+				if recovered := recover(); recovered != nil {
+					name := SanitizeName(plan.req.Name)
+					if name == "" {
+						name = plan.def.Name
+					}
+					results[plan.index] = Result{
+						ID: name, Name: name, Agent: plan.def.Name, Task: plan.req.Task,
+						Status: StatusAborted, Error: fmt.Sprintf("spawn panicked: %v", recovered), //perf:ok a panic path, not the hot path
+					}
+				}
+			}()
 			result, err := r.Run(ctx, parentID, plan.req)
 			if err != nil {
 				name := SanitizeName(plan.req.Name)

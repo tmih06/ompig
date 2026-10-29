@@ -89,9 +89,40 @@ func main() {
 		len(reviewed.Fields), counts["ompig-format"], counts["release-content"], counts["upstream"], counts["external"])
 }
 
+// containsMarker reports whether text uses marker as a standalone token, so a marker that is a suffix of a
+// longer host name is a different string.
+func containsMarker(text, marker string) bool {
+	for offset := 0; offset <= len(text)-len(marker); offset++ {
+		at := strings.Index(text[offset:], marker)
+		if at < 0 {
+			return false
+		}
+		start := offset + at
+		end := start + len(marker)
+		// A marker inside a longer host name is a different string.
+		if start > 0 && isHostByte(text[start-1]) && !strings.ContainsRune("/", rune(text[start-1])) {
+			offset = start + 1
+			continue
+		}
+		if end < len(text) && isHostByte(text[end]) {
+			offset = end
+			continue
+		}
+		return true
+	}
+	return false
+}
+
+// isHostByte reports whether c can continue a host name.
+func isHostByte(c byte) bool {
+	return c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c == '-' || c == '.'
+}
+
 func scanRemovedMarkers(root string, roots []string) ([]string, error) {
 	markers := []string{
-		"ompig.dev/" + "v1",
+		// This guards the pre-rename host. The fork serves from a host whose name contains this one, so the
+		// match is boundary-aware (containsMarker) rather than a plain substring search.
+		"pig" + ".dev/" + "v1",
 		"ompiglet-" + "v1.json",
 		`"schema` + `Version": 1`,
 		`"schema_` + `version": 1`,
@@ -135,7 +166,7 @@ func scanRemovedMarkers(root string, roots []string) ([]string, error) {
 				return err
 			}
 			for _, marker := range markers {
-				if strings.Contains(text, marker) {
+				if containsMarker(text, marker) {
 					problems = append(problems, filepath.ToSlash(relative)+": contains removed Ompig format marker "+strconv.Quote(marker))
 				}
 			}

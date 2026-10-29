@@ -4,7 +4,7 @@ import {
   fetchWithRetry,
   getPiUserAgent,
   processImage
-} from "./chunk-6HJCSATA.js";
+} from "./chunk-5HIZURID.js";
 import {
   SETTINGS_DEFAULTS,
   addUsageToTotals,
@@ -19,7 +19,7 @@ import {
   stripAnsi,
   truncateTail,
   wrapToolDefinition
-} from "./chunk-T5YZVFVX.js";
+} from "./chunk-FVGAPQFA.js";
 import {
   FS_WATCH_RETRY_DELAY_MS,
   closeWatcher,
@@ -29,7 +29,7 @@ import {
   loadThemeFromPath,
   theme,
   watchWithErrorHandler
-} from "./chunk-472CZNGH.js";
+} from "./chunk-2FD3YZOG.js";
 import {
   AuthStorage,
   FileAuthStorageBackend,
@@ -45,10 +45,10 @@ import {
   resolveConfigValueOrThrow,
   resolveHeadersOrThrow,
   validateMcpServerConfig
-} from "./chunk-XNXPQFJN.js";
+} from "./chunk-3ZKQ5UTX.js";
 import {
   sanitizeBinaryOutput
-} from "./chunk-OH2Z3DNC.js";
+} from "./chunk-2FXO4MUL.js";
 import {
   APP_NAME,
   CONFIG_DIR_NAME,
@@ -73,7 +73,7 @@ import {
   spawnProcessSync,
   stripBom,
   waitForChildProcess
-} from "./chunk-YXY3JV6E.js";
+} from "./chunk-BE5FKO3B.js";
 import {
   __name
 } from "./chunk-SHUYVCID.js";

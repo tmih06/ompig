@@ -482,7 +482,8 @@ func (m *Model) renderActivity(width int) []string {
 	limit := min(len(m.activity), m.opts.Height)
 	lines := make([]string, 0, limit)
 	for _, event := range m.activity[:limit] {
-		line := fmt.Sprintf(" %s %-20s %s", event.At.Format("15:04:05"), event.AgentID, event.Message)
+		// The activity pane renders at most the visible rows, once per repaint.
+		line := fmt.Sprintf(" %s %-20s %s", event.At.Format("15:04:05"), event.AgentID, event.Message) //perf:ok a display path, not the hot path
 		lines = append(lines, pad(line, width))
 	}
 	return lines

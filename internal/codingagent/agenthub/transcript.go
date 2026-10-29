@@ -7,12 +7,12 @@ package agenthub
 // Upstream: omp docs/agent-hub.md "Read and steer a subagent".
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 
 	"github.com/tmih06/ompig/agent"
 	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/orderedjson"
 	"github.com/tmih06/ompig/tui"
 )
 
@@ -159,12 +159,13 @@ func toolResultText(result *agent.ToolResultMessage) string {
 	return b.String()
 }
 
-// compactJSON renders arguments on one line.
+// compactJSON renders arguments on one line, keeping insertion order and not
+// escaping <, > or &, as JSON.stringify does.
 func compactJSON(raw ai.JsonObject) string {
 	if raw == nil {
 		return ""
 	}
-	encoded, err := json.Marshal(raw)
+	encoded, err := orderedjson.Marshal(raw)
 	if err != nil {
 		return ""
 	}
