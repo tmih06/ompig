@@ -15122,6 +15122,25 @@
       ]
     },
     {
+      "id": "BF-6b1a48e",
+      "title": "fix(ci): satisfy the divergence guard and ref resolution in CI",
+      "symptom": "fix(ci): satisfy the divergence guard and ref resolution in CI",
+      "rootCause": "- Record D209 for the subagent runtime's omp-derived limits and mark each magic literal with it, so the guard does not read them as unattributed Pi values. - Resolve PUBLIC_MAIN_REF through a fallback chain: CI checks out a detached HEAD, where origin/HEAD has no symbolic ref and the previous resolution produced an empty revision. - Regenerate the bug ledger for the new commits and the gzipped changelog.",
+      "rootCauseSource": "commit",
+      "userImpact": "Behavior differed from Pi",
+      "platform": "All platforms",
+      "class": "own",
+      "fixedIn": "Unreleased",
+      "origin": "commit",
+      "commits": [
+        {
+          "hash": "6b1a48edbc",
+          "date": "2026-10-29"
+        }
+      ],
+      "tests": []
+    },
+    {
       "id": "BF-6b97207",
       "title": "An extension that overrides the `edit` tool with a definition built by the Go, Rust or Python SDK's…",
       "symptom": "An extension that overrides the `edit` tool with a definition built by the Go, Rust or Python SDK's `createEditToolDefinition` now has the model's legacy edit shapes normalised, as Pi's `{ ...createEditToolDefinition(cwd), execute }` does.",

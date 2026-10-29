@@ -522,6 +522,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-6a6fffa-8](#bf-6a6fffa-8) | In `--mode json`, SIGTERM or SIGHUP during a tool call now stops the output and the session file where Pi… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6a6fffa-9](#bf-6a6fffa-9) | `TestSettingsSelectorMatchesPi` opens each row under the Kitty keyboard protocol with CSI-u keys; no… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-6ac4c8c](#bf-6ac4c8c) | Ctrl+V pastes clipboard text in Termux | A fix Pi shipped that Ompig ported | Linux, Android and Termux | 0.5.0 |
+| [BF-6b1a48e](#bf-6b1a48e) | fix(ci): satisfy the divergence guard and ref resolution in CI | Ompig's own defect | All platforms | Unreleased |
 | [BF-6b97207](#bf-6b97207) | An extension that overrides the `edit` tool with a definition built by the Go, Rust or Python SDK's… | Ompig's own defect | All platforms | Unreleased |
 | [BF-6c26be3](#bf-6c26be3) | A submission's `Wait` no longer fails with "Harness is closed" when a close begins before the wait wakes: a… | Ompig's own defect | All platforms | Unreleased |
 | [BF-6cb29f0](#bf-6cb29f0) | Started from a directory reached through a symlink, `pig install`/`remove`/`list`/`update` resolve local… | Ompig's own defect | All platforms | 0.5.0 |
@@ -8219,6 +8220,19 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fix commits:** `6ac4c8c763` (2026-10-07)
 - **Tests:** `coding/cli/dotenv_autoload_test.go::TestLaunchDirectoryDotenvFilesDoNotReachPigEnvironment`, `internal/codingagent/clipboard_copy_test.go::TestCopyToClipboardReportsTheTermuxAPIRequirementOnAndroid`, `internal/codingagent/clipboard_copy_test.go::TestCopyToClipboardTermuxOnAndroidWritesThroughTermuxClipboardSet`, `internal/codingagent/clipboard_paste_test.go::TestClipboardPasteInsertsTermuxTextOnAndroid`, `internal/codingagent/clipboard_read_text_test.go::TestReadClipboardTextAndroidSkipsLinuxCommands`, `internal/codingagent/clipboard_read_text_test.go::TestReadClipboardTextTermuxReadsOnAndroid`, `internal/codingagent/selfupdate_test.go::TestSelfReplaceAtWithCommitKeepsOnlyTheNewExecutable`
 - **Release note:** Ctrl+V pastes clipboard text in Termux. PiG read `termux-clipboard-get` only where the platform is `linux`, and Termux reports `android`. A failed copy in Termux now also shows the Termux:API install hint on Android.
+
+### BF-6b1a48e
+
+**fix(ci): satisfy the divergence guard and ref resolution in CI**
+
+- **Source:** Ompig's own defect
+- **Symptom:** fix(ci): satisfy the divergence guard and ref resolution in CI
+- **Root cause:** - Record D209 for the subagent runtime's omp-derived limits and mark each magic literal with it, so the guard does not read them as unattributed Pi values. - Resolve PUBLIC_MAIN_REF through a fallback chain: CI checks out a detached HEAD, where origin/HEAD has no symbolic ref and the previous resolution produced an empty revision. - Regenerate the bug ledger for the new commits and the gzipped changelog.
+- **User impact:** Behavior differed from Pi
+- **Platform:** All platforms
+- **Fixed in:** Unreleased
+- **Fix commits:** `6b1a48edbc` (2026-10-29)
+- **Tests:** None recorded.
 
 ### BF-6b97207
 
