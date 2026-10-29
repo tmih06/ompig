@@ -27,7 +27,7 @@ ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "escape"
-capture_end_regex = 'extend Pi(G)?\.'
+capture_end_regex = 'extend (?:Pi|Ompig)\.'
 
 [[tmux.steps]]
 wait_visible_contains = ["drop files to attach"]

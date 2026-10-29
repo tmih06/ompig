@@ -31,7 +31,7 @@ ready_pattern_ompig = "Trust project folder?"
 ready_pattern_pi = "Trust project folder?"
 ready_timeout_seconds = 30
 capture_start = "This project is not trusted."
-capture_end_regex = 'then restart pi(g)?\.'
+capture_end_regex = 'then restart (?:pi|ompig)\.'
 
 [[tmux.steps]]
 keys = ["Escape"]

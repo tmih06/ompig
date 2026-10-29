@@ -54,6 +54,6 @@ runs = 3
 # parity-snap-OMPIG_CODING_AGENT_DIR-<n> or parity-snap-PI_CODING_AGENT_DIR-<n>;
 # only that directory name differs in the listed user paths.
 [[assert.normalize_replace]]
-pattern = 'parity-snap-OMPIG?_CODING_AGENT_DIR-[0-9]+'
+pattern = 'parity-snap-(?:OMPIG|PI)_CODING_AGENT_DIR-[0-9]+'
 with = "<agent-dir>"
 reason = "D2: the runner allocates independent agent-root names. Keep all resource-relative paths and their order."

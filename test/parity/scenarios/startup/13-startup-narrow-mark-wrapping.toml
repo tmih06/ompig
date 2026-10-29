@@ -28,14 +28,21 @@ ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "escape"
-capture_end_regex = 'extend Pi(G)?\.'
+capture_end_regex = 'extend (?:Pi|Ompig)\.'
 
 [assert]
 both_reach_ready = true
 both_contain = ["interrupt", "clear/exit", "commands", "bash", "more", "resources."]
 both_not_contain = ["Ready. Type", "config=", "bin=", "cwd="]
-escaped_output_equal = true
 runs = 3
+# lint-known-gap: Ompig's one-line text mark is six cells where Pi's wordmark is
+# four (D2, TextMarkWidth), so at 26 columns the hint line gets two cells less
+# and wraps on different words. Every hint, its order, its styling and the
+# blank-line structure still match; only the wrap points cannot. The hints are
+# asserted in order across the wraps instead of byte-equal.
+both_match_regex = [
+  '(?s)escape\s+interrupt.*ctrl\+c/ctrl\+d.*clear/exit\s+·\s+/ commands.*bash.*more.*Press ctrl\+o.*loaded resources\.',
+]
 
 # normalize-rationale: D2 substitutes the product name only; key labels,
 # descriptions, ANSI styling and all whitespace remain byte-faithful.

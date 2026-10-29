@@ -25,7 +25,7 @@ ready_pattern_pi = "This project is not trusted."
 ready_timeout_seconds = 30
 capture_start = "remember trust-warning-history"
 capture_start_last = true
-capture_end_regex = 'then restart pi(g)?\.'
+capture_end_regex = 'then restart (?:pi|ompig)\.'
 
 [assert]
 both_reach_ready = true

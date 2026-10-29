@@ -60,7 +60,7 @@ with = '<agent>'
 reason = "D2: the isolated agent-root prefix varies; retain resource paths, precedence and content."
 
 [[assert.normalize_replace]]
-pattern = '/[^"]*parity-snap-cwd-[0-9]+/\.ompig?'
+pattern = '/[^"]*parity-snap-cwd-[0-9]+/\.(?:ompig|pi)'
 with = '<project>'
 reason = "D2: the isolated project configuration root is .ompig versus .pi; preserve all resource-relative paths."
 
