@@ -326,9 +326,9 @@ func TestImageListsTheArmsAsTheBundleDoes(t *testing.T) {
 	for path, content := range map[string]string{
 		"arms/codex/package-lock.json":                       "{}",
 		"arms/codex/node_modules/@openai/codex/bin/codex.js": "js",
-		"arms/codex/BIN":                                     "node_modules/@openai/codex/bin/codex.js\n",
-		"arms/rpi/rpi":                                       "elf",
-		"arms/rpi/BIN":                                       "rpi\n",
+		"arms/codex/BIN": "node_modules/@openai/codex/bin/codex.js\n",
+		"arms/rpi/rpi":   "elf",
+		"arms/rpi/BIN":   "rpi\n",
 	} {
 		if err := os.MkdirAll(filepath.Join(dir, filepath.Dir(path)), 0o755); err != nil {
 			t.Fatal(err)

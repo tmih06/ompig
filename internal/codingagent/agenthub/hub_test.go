@@ -57,7 +57,7 @@ func TestHubRendersRosterInOperationalOrder(t *testing.T) {
 		}
 	}
 	scout, writer, broken := strings.Index(text, "Scout"), strings.Index(text, "Writer"), strings.Index(text, "Broken")
-	if !(scout < writer && writer < broken) {
+	if scout >= writer || writer >= broken {
 		t.Errorf("roster order Scout(%d) Writer(%d) Broken(%d) is not running→idle→aborted", scout, writer, broken)
 	}
 }

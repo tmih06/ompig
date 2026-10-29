@@ -90,11 +90,6 @@ func (f spawnerFunc) Spawn(ctx context.Context, req subagent.SpawnRequest) (suba
 	return f(ctx, req)
 }
 
-// atomicAdd increments value and returns its new value.
-func atomicAdd(value *int32) int32 {
-	return atomic.AddInt32(value, 1)
-}
-
 // TestIdleTTLParkingReleasesASession proves an idle agent's live session is
 // released after the TTL while its transcript and output survive, and that a
 // message arriving first cancels the timer.

@@ -7,8 +7,6 @@ package coding
 // Upstream: omp src/task/agents.ts EMBEDDED_AGENT_DEFS.
 
 import (
-	"strings"
-
 	"github.com/tmih06/ompig/coding/subagent"
 )
 
@@ -107,6 +105,3 @@ Look for injection, authorization gaps, unsafe deserialization, path traversal,
 secret exposure, SSRF, and unsafe defaults in the assigned surface.
 Every finding needs a concrete exploit path or a precise reason it is reachable.
 Mark unproven suspicions as [INFERENCE]. Do not modify files.`
-
-// trimPrompt removes a leading newline so a bundled prompt starts at its text.
-func trimPrompt(text string) string { return strings.TrimSpace(text) }

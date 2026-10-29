@@ -359,7 +359,7 @@ func (r *Registry) Update(id string, fn func(*Entry)) (Entry, bool) {
 
 // SetStatus transitions an entry and emits a status event.
 func (r *Registry) SetStatus(id string, status Status) (Entry, bool) {
-	var kind EventKind = EventStatus
+	kind := EventStatus
 	r.mu.Lock()
 	entry, ok := r.entries[id]
 	if !ok {

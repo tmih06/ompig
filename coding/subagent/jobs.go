@@ -76,17 +76,16 @@ var ErrNoJobs = errors.New("no background jobs to wait for")
 // consume-once: a waiter takes a settlement and the parent's next turn does
 // not replay it.
 type Jobs struct {
-	mu        sync.Mutex
-	jobs      map[string]*Job
-	order     []string
-	pending   []Settlement
-	waiters   map[uint64]chan Settlement
-	nextWait  uint64
-	nextID    uint64
-	now       func() time.Time
-	maxJobs   int
-	onUpdate  func(Job)
-	autoDeliv bool
+	mu       sync.Mutex
+	jobs     map[string]*Job
+	order    []string
+	pending  []Settlement
+	waiters  map[uint64]chan Settlement
+	nextWait uint64
+	nextID   uint64
+	now      func() time.Time
+	maxJobs  int
+	onUpdate func(Job)
 }
 
 // NewJobs returns a job manager. maxJobs of 0 means unbounded.

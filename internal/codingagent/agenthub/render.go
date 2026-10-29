@@ -317,11 +317,3 @@ func truncate(text string, width int) string {
 	}
 	return b.String()
 }
-
-// padTo pads to width, never truncating.
-func padTo(text string, width int) string {
-	if n := width - len([]rune(text)); n > 0 {
-		return text + strings.Repeat(" ", n)
-	}
-	return text
-}

@@ -35,8 +35,6 @@ import (
 type SubagentRuntime struct {
 	runner  *subagent.Runner
 	spawner *sessionSpawner
-	once    sync.Once
-	err     error
 
 	parent *Session
 	// restoreOnce guards the one-time roster scan from the artifact directory.

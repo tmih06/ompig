@@ -128,7 +128,6 @@ func TestBinaryUpdateChangelogURLComesFromTheManifestNote(t *testing.T) {
 // upstream: interactive-mode.ts:4504-4520. showPackageUpdateNotification uses
 // Text(..., 1, 0), so its lines carry the same one-column padding.
 func TestPackageUpdateNotificationPadsLikePi(t *testing.T) {
-	const rule = "────────────────────────────────────────────────────────────"
 	// Ompig's name is two cells wider than Pi's, so the notice is laid out two
 	// cells wider to keep the command on one line.
 	got := noticeLayout(t, func(m *InteractiveMode) {

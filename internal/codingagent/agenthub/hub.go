@@ -9,7 +9,6 @@ package agenthub
 
 import (
 	"fmt"
-	"sort"
 	"strings"
 	"time"
 
@@ -431,7 +430,7 @@ func (m *Model) renderEntries(width, budget int) []string {
 	}
 	// Keep the selection visible: grow a window outward from it.
 	start, end := m.selected, m.selected+1
-	used := len(m.entryLines(m.entries[m.selected], m.selected == m.selected, width))
+	used := len(m.entryLines(m.entries[m.selected], true, width))
 	for used < budget {
 		grew := false
 		if end < len(m.entries) {
@@ -654,68 +653,6 @@ func themeFgDim(theme *tui.Theme, text string) string {
 	return theme.Fg("dim", text)
 }
 
-// statusLabel is the fixed-width status column.
-func statusLabel(entry subagent.Entry) string {
-	switch entry.Status {
-	case subagent.StatusRunning:
-		return "running"
-	case subagent.StatusIdle:
-		return "idle"
-	case subagent.StatusParked:
-		return "parked"
-	case subagent.StatusAborted:
-		return "aborted"
-	default:
-		return string(entry.Status)
-	}
-}
-
-// formatTokens renders a token count compactly.
-func formatTokens(count int64) string {
-	switch {
-	case count >= 1_000_000:
-		return fmt.Sprintf("%.1fM", float64(count)/1_000_000)
-	case count >= 1_000:
-		return fmt.Sprintf("%.1fk", float64(count)/1_000)
-	default:
-		return fmt.Sprintf("%d", count)
-	}
-}
-
-// formatDuration renders an elapsed span.
-func formatDuration(d time.Duration) string {
-	if d < time.Second {
-		return fmt.Sprintf("%dms", d.Milliseconds())
-	}
-	if d < time.Minute {
-		return fmt.Sprintf("%.0fs", d.Seconds())
-	}
-	if d < time.Hour {
-		return fmt.Sprintf("%dm%02ds", int(d.Minutes()), int(d.Seconds())%60)
-	}
-	return fmt.Sprintf("%dh%02dm", int(d.Hours()), int(d.Minutes())%60)
-}
-
-// firstLine ends at the first line break and truncates.
-func firstLine(text string) string {
-	if at := strings.IndexByte(text, '\n'); at >= 0 {
-		text = text[:at]
-	}
-	text = strings.TrimSpace(text)
-	if len(text) > 60 {
-		text = text[:60] + "…"
-	}
-	return text
-}
-
-// orDash renders an empty field as a dash.
-func orDash(value string) string {
-	if value == "" {
-		return "—"
-	}
-	return value
-}
-
 // pad truncates or pads a line to exactly width cells, ignoring styling.
 func pad(line string, width int) string {
 	if width <= 0 {
@@ -749,13 +686,6 @@ func (m *Model) SetWide(wide bool) { m.wide = wide }
 
 // SetSection switches panes.
 func (m *Model) SetSection(section Section) { m.sections = section }
-
-// sortEntriesByStart is a helper kept for callers formatting their own lists.
-func sortEntriesByStart(entries []subagent.Entry) []subagent.Entry {
-	out := append([]subagent.Entry(nil), entries...)
-	sort.SliceStable(out, func(a, b int) bool { return out[a].StartedAt.Before(out[b].StartedAt) })
-	return out
-}
 
 var _ tui.Component = (*Model)(nil)
 

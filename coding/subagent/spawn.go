@@ -262,30 +262,6 @@ func (r *Runner) semaphore() chan struct{} {
 	return r.sem
 }
 
-// noteProgress records tool activity for the hub.
-func (r *Runner) noteTool(agentID, toolName, intent string, args json.RawMessage) {
-	r.registry.Update(agentID, func(e *Entry) {
-		e.CurrentTool = toolName
-		e.CurrentIntent = intent
-		if len(args) > 0 {
-			text := string(args)
-			if len(text) > 240 {
-				text = text[:240] + "…"
-			}
-			e.CurrentArgs = text
-		}
-	})
-}
-
-// clearTool clears the in-flight tool once a call ends.
-func (r *Runner) clearTool(agentID string) {
-	r.registry.Update(agentID, func(e *Entry) {
-		e.CurrentTool = ""
-		e.CurrentIntent = ""
-		e.CurrentArgs = ""
-	})
-}
-
 // Run executes one spawn request, registering the agent first so the hub sees
 // it while it runs.
 func (r *Runner) Run(ctx context.Context, parentID string, req SpawnRequest) (Result, error) {

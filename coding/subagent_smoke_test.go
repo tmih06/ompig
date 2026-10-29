@@ -17,9 +17,8 @@ import (
 // echoProvider replies to every request with a fixed text, so a child session
 // completes a turn without network access.
 type echoProvider struct {
-	reply  string
-	calls  atomic.Int64
-	lastAt atomic.Value
+	reply string
+	calls atomic.Int64
 }
 
 func (p *echoProvider) ID() string { return "echo" }
