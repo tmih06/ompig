@@ -1143,6 +1143,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-edb73db](#bf-edb73db) | fix(codingagent): one owner-overflow forwarder at a time; the drain test waits for it, not for the flag's… | Ompig's own defect | All platforms | Unreleased |
 | [BF-edd287c](#bf-edd287c) | Migrating a version 1 session file that holds a line parsing to a number, string, array or `true` no longer… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-eeac307](#bf-eeac307) | Anthropic and Bedrock assistant messages write `providerThinkingLevel` after `model`, and write… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-eee3a60](#bf-eee3a60) | fix(go.mod): require the published SDK tag | Ompig's own defect | All platforms | Unreleased |
 | [BF-ef0f95a](#bf-ef0f95a) | OpenCode Zen and OpenCode Go use the `opencode.ai/inference` endpoints, which fixes OpenCode Go Gemini models… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f02269c](#bf-f02269c) | When an extension's `before_provider_request` handler replaces an Anthropic request, or a Codex WebSocket… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f06ab7e](#bf-f06ab7e) | A run that `sendMessage({ triggerTurn: true })` starts while idle emits `before_agent_start`, checks… | Ompig's own defect | All platforms | 0.5.0 |
@@ -16854,6 +16855,19 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fix commits:** `2309604d80` (2026-10-10), `c10cde302d` (2026-10-10), `eeac307095` (2026-10-10), `f29e906cb3` (2026-10-10)
 - **Tests:** `agent/assistant_member_order_oracle_test.go::TestAssistantLateMembersFollowPiCreationOrder`, `ai/constrained_sampling_oracle_test.go::TestConstrainedSamplingMatchesPi`, `ai/openai_request_key_order_oracle_test.go::TestOpenAICompletionsRequestKeysFollowPiAssignmentOrder`, `ai/openai_responses_request_key_order_oracle_test.go::TestOpenAIResponsesRequestKeysFollowPiAssignmentOrder`, `coding/cli/rpc_assistant_member_order_test.go::TestRPCAssistantMessageMembersMatchTheSessionLineOrder`, `coding/cli/rpc_model_type_binary_test.go::TestRPCModelObjectsCarryTheRegistryModelType`, `coding/codemode_session_upstream_test.go::TestUpstreamCodemodeModels`, `coding/session_boundaries_drafts_upstream_test.go::TestUpstreamSessionBoundariesDrafts`
 - **Release note:** Anthropic and Bedrock assistant messages write `providerThinkingLevel` after `model`, and write `cacheWrite1h` and `reasoning` after `cost` in `usage`, as Pi does.
+
+### BF-eee3a60
+
+**fix(go.mod): require the published SDK tag**
+
+- **Source:** Ompig's own defect
+- **Symptom:** fix(go.mod): require the published SDK tag
+- **Root cause:** The fork's SDK module paths were renamed with it, so the root module now requires the fork's own extensions/sdk tag instead of the upstream pseudo-version, which the pushed SDK tags make resolvable. Keep the cloud.google.com/go/compute requirement the build needs; go mod tidy drops it because viper's older copy would otherwise win, and the two cannot coexist.
+- **User impact:** Behavior differed from Pi
+- **Platform:** All platforms
+- **Fixed in:** Unreleased
+- **Fix commits:** `eee3a60a05` (2026-10-29)
+- **Tests:** None recorded.
 
 ### BF-ef0f95a
 

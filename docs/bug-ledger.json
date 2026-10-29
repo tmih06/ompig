@@ -34584,6 +34584,25 @@
       ]
     },
     {
+      "id": "BF-eee3a60",
+      "title": "fix(go.mod): require the published SDK tag",
+      "symptom": "fix(go.mod): require the published SDK tag",
+      "rootCause": "The fork's SDK module paths were renamed with it, so the root module now requires the fork's own extensions/sdk tag instead of the upstream pseudo-version, which the pushed SDK tags make resolvable. Keep the cloud.google.com/go/compute requirement the build needs; go mod tidy drops it because viper's older copy would otherwise win, and the two cannot coexist.",
+      "rootCauseSource": "commit",
+      "userImpact": "Behavior differed from Pi",
+      "platform": "All platforms",
+      "class": "own",
+      "fixedIn": "Unreleased",
+      "origin": "commit",
+      "commits": [
+        {
+          "hash": "eee3a60a05",
+          "date": "2026-10-29"
+        }
+      ],
+      "tests": []
+    },
+    {
       "id": "BF-ef0f95a",
       "title": "OpenCode Zen and OpenCode Go use the `opencode.ai/inference` endpoints, which fixes OpenCode Go Gemini models…",
       "symptom": "OpenCode Zen and OpenCode Go use the `opencode.ai/inference` endpoints, which fixes OpenCode Go Gemini models failing with a 404; OpenCode Go MiniMax M2.7 uses the Anthropic Messages API, and OpenCode Go DeepSeek V4 Flash is no longer listed (carried Pi fix, Pi 195120a9).",
