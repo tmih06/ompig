@@ -24,7 +24,7 @@ func TestGitCheckoutPathOnThisPlatform(t *testing.T) {
 	windows := runtime.GOOS == "windows"
 
 	got, err := packagemanager.GitCheckoutPath(t.TempDir(), agentDir, "git:file://localhost/C:/Users/me/owner/ompiglet.git", false)
-	if want := filepath.Join(root, "localhost", "a91ac64502db", "ompiglet"); err != nil || got != want {
+	if want := filepath.Join(root, "localhost", "a7ceb009cf5b", "ompiglet"); err != nil || got != want {
 		t.Fatalf("file URL checkout = %q, %v; want %q", got, err, want)
 	}
 
