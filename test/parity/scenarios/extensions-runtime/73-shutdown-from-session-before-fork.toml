@@ -59,6 +59,6 @@ runs = 3
 
 # normalize-rationale: the resume command names each binary and the session's random id.
 [[assert.normalize_replace]]
-pattern = 'ompig? --session [0-9a-f-]{36}'
+pattern = '(?:ompig|pi) --session [0-9a-f-]{36}'
 with = '<bin> --session <session-id>'
 reason = "D2: the resume command names the host executable; the session id is random per run. The rest of the line and the session_shutdown line stay compared."

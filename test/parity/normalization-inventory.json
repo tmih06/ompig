@@ -1446,7 +1446,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "\"ompig? -ne\"",
+          "pattern": "\"(?:ompig|pi) -ne\"",
           "with": "\"<bin> -ne\"",
           "reason": "D2: the quoted no-extensions remediation command names the host executable; retain all error prose."
         },
@@ -1973,7 +1973,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "\"ompig? -ne\"",
+          "pattern": "\"(?:ompig|pi) -ne\"",
           "with": "\"<bin> -ne\"",
           "reason": "D2: the quoted no-extensions remediation command names the host executable; retain all error prose."
         },
@@ -2044,7 +2044,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "ompig? --session [0-9a-f-]{36}",
+          "pattern": "(?:ompig|pi) --session [0-9a-f-]{36}",
           "with": "<bin> --session <session-id>",
           "reason": "D2: the resume command names the host executable; the session id is random per run. The rest of the line and the session_shutdown line stay compared."
         },
@@ -2072,7 +2072,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "ompig? --session [0-9a-f-]{36}",
+          "pattern": "(?:ompig|pi) --session [0-9a-f-]{36}",
           "with": "<bin> --session <session-id>",
           "reason": "D2: the resume command names the host executable; the session id is random per run. The rest of the line and the session_shutdown line stay compared."
         },
@@ -2100,7 +2100,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "ompig? --session [0-9a-f-]{36}",
+          "pattern": "(?:ompig|pi) --session [0-9a-f-]{36}",
           "with": "<bin> --session <session-id>",
           "reason": "D2: the resume command names the host executable; the session id is random per run. The rest of the line and the session_shutdown line stay compared."
         },

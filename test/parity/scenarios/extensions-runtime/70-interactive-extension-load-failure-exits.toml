@@ -54,7 +54,7 @@ runs = 3
 
 # normalize-rationale: the hint names each binary's own command.
 [[assert.normalize_replace]]
-pattern = '"ompig? -ne"'
+pattern = '"(?:ompig|pi) -ne"'
 with = '"<bin> -ne"'
 reason = "D2: the quoted no-extensions remediation command names the host executable; retain all error prose."
 
