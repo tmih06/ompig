@@ -71,9 +71,9 @@ with = ""
 reason = "D205: the Agent Hub roster is an ompig command Pi has no counterpart for."
 
 [[assert.normalize_replace]]
-pattern = '\(1/27\)'
-with = "(1/26)"
-reason = "D205: the popup count includes the extra /agents command."
+pattern = "[(]1/[0-9]+[)]"
+with = "(1/N)"
+reason = "D205: the popup total includes the extra /agents command and also depends on which commands the environment registers; compare the visible window, not the total."
 
 [[assert.normalize_replace]]
 pattern = '(?m)^  scoped-models\s+Enable/disable models for Ctrl\+P cycling\n'
