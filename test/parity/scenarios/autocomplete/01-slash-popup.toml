@@ -61,3 +61,21 @@ both_not_contain = ["unknown command", "panic:", "goroutine "]
 output_equal = true
 runtime_ratio_max = 1.5
 runs = 1
+
+# normalize-rationale: /agents is D205's addition and shifts the "(1/N)" count
+# by one. Removing its row and pinning the count back leaves every other row,
+# its order, its padding and the rest of the popup compared byte for byte.
+[[assert.normalize_replace]]
+pattern = '(?m)^  agents\s+Open the Agent Hub roster of subagents\n'
+with = ""
+reason = "D205: the Agent Hub roster is an ompig command Pi has no counterpart for."
+
+[[assert.normalize_replace]]
+pattern = '\(1/27\)'
+with = "(1/26)"
+reason = "D205: the popup count includes the extra /agents command."
+
+[[assert.normalize_replace]]
+pattern = '(?m)^  scoped-models\s+Enable/disable models for Ctrl\+P cycling\n'
+with = ""
+reason = "D205: the extra /agents row pushes one more command past the popup's visible rows; drop the last row so the visible window compares."

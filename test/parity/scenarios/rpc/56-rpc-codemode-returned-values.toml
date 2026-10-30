@@ -64,6 +64,16 @@ reason = "Alias the isolated working-directory identity while preserving path su
 pattern = '"timestamp":[0-9]+'
 with = '"timestamp":0'
 reason = "Independent numeric wall clocks vary; retain field placement, type and every other byte."
+
+[[assert.normalize_replace]]
+pattern = '/[^" ]*/parity-snap-OMPIG_HOME-[0-9]+/docs/bundle-[0-9a-f]+/codemode\.md'
+with = '<docs>/codemode.md'
+reason = "D22: the codemode tool description points at each host's own documentation bundle; the file it names is the same."
+
+[[assert.normalize_replace]]
+pattern = '/[^" ]*/parity-pi-pkg-[0-9]+/pi-coding-pkg-with-bundle-pad[a-z]*/docs/codemode\.md'
+with = '<docs>/codemode.md'
+reason = "D22: Pi's side of the same documentation path."
 [[assert.normalize_replace]]
 pattern = '"durationMs":[0-9]+(\.[0-9]+)?(e-?[0-9]+)?'
 with = '"durationMs":0'

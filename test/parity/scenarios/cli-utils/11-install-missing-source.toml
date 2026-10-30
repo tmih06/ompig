@@ -25,6 +25,6 @@ runs = 3
 
 # normalize-rationale: D2 changes only the command identity. Keep every other diagnostic byte.
 [[assert.normalize_replace]]
-pattern = '\bpig\b'
+pattern = '\b(?:ompig|pig)\b'
 with = 'pi'
-reason = "D2: Ompig uses the ompig executable name instead of pi."
+reason = "D2: Ompig uses the ompig executable name instead of pi. The word boundary only matches the whole name, so both spellings are listed."

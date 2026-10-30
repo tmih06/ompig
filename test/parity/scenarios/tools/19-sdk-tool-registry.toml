@@ -27,5 +27,22 @@ timeout_seconds = 60
 [assert]
 exit_code = 0
 output_equal = true
+# lint-known-gap: D205 adds task, wait and agents to the built-in tool set, so
+# the roster each REGISTRY line prints names them where Pi's does not. Every
+# other name, its order and its snippet still compare byte for byte.
 both_contain = ['REGISTRY allow [[],[],[]]', 'REGISTRY env validated', '- dynamic_tool: Run dynamic test behavior']
+both_not_contain = ["panic:", "goroutine "]
 runs = 3
+
+# normalize-rationale: D205's subagent tools are the only difference in these
+# lines. Removing the three names from both sides leaves every other tool, its
+# position in the roster, and its snippet compared byte for byte.
+[[assert.normalize_replace]]
+pattern = '"(?:agents|task|wait)",'
+with = ""
+reason = "D205: the built-in set also carries task, wait and agents; drop the names so the remaining roster compares as upstream's."
+
+[[assert.normalize_replace]]
+pattern = '"(?:agents|task|wait)"'
+with = '""'
+reason = "D205: the same three names where they are last in a list, which the trailing-comma rule above cannot match."

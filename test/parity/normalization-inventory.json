@@ -96,6 +96,24 @@
       "scenario": "test/parity/scenarios/autocomplete/01-slash-popup.toml",
       "transforms": [
         {
+          "kind": "normalize_replace",
+          "pattern": "(?m)^  agents\\s+Open the Agent Hub roster of subagents\\n",
+          "with": "",
+          "reason": "D205: the Agent Hub roster is an ompig command Pi has no counterpart for."
+        },
+        {
+          "kind": "normalize_replace",
+          "pattern": "\\(1/27\\)",
+          "with": "(1/26)",
+          "reason": "D205: the popup count includes the extra /agents command."
+        },
+        {
+          "kind": "normalize_replace",
+          "pattern": "(?m)^  scoped-models\\s+Enable/disable models for Ctrl\\+P cycling\\n",
+          "with": "",
+          "reason": "D205: the extra /agents row pushes one more command past the popup's visible rows; drop the last row so the visible window compares."
+        },
+        {
           "kind": "terminal_crop",
           "configuration": {
             "capture_start": "/\n────────────────────────────────────────────────────────────────────────────────────────────────────",
@@ -399,9 +417,9 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "\\bpig\\b",
+          "pattern": "\\b(?:ompig|pig)\\b",
           "with": "pi",
-          "reason": "D2: Ompig uses the ompig executable name instead of pi."
+          "reason": "D2: Ompig uses the ompig executable name instead of pi. The word boundary only matches the whole name, so both spellings are listed."
         }
       ]
     },
@@ -410,9 +428,9 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "\\bpig\\b",
+          "pattern": "\\b(?:ompig|pig)\\b",
           "with": "pi",
-          "reason": "D2: Ompig uses the ompig executable name instead of pi."
+          "reason": "D2: Ompig uses the ompig executable name instead of pi. The word boundary only matches the whole name, so both spellings are listed."
         }
       ]
     },
@@ -7520,6 +7538,18 @@
         },
         {
           "kind": "normalize_replace",
+          "pattern": "/[^\" ]*/parity-snap-OMPIG_HOME-[0-9]+/docs/bundle-[0-9a-f]+/codemode\\.md",
+          "with": "<docs>/codemode.md",
+          "reason": "D22: the codemode tool description points at each host's own documentation bundle; the file it names is the same."
+        },
+        {
+          "kind": "normalize_replace",
+          "pattern": "/[^\" ]*/parity-pi-pkg-[0-9]+/pi-coding-pkg-with-bundle-pad[a-z]*/docs/codemode\\.md",
+          "with": "<docs>/codemode.md",
+          "reason": "D22: Pi's side of the same documentation path."
+        },
+        {
+          "kind": "normalize_replace",
           "pattern": "\"durationMs\":[0-9]+(\\.[0-9]+)?(e-?[0-9]+)?",
           "with": "\"durationMs\":0",
           "reason": "Pi 1.1.0 times responses, tool runs and codemode nested calls with a monotonic clock (codemode host.ts performance.now() differences are fractional); retain the field's presence and placement."
@@ -10216,6 +10246,23 @@
             "/**/durationMs"
           ],
           "reason": "Pi 1.1.0 (#10549) stamps durationMs from a monotonic clock, so two runs differ by whole milliseconds; retain the field's presence, placement and non-negative integer spelling."
+        }
+      ]
+    },
+    {
+      "scenario": "test/parity/scenarios/tools/19-sdk-tool-registry.toml",
+      "transforms": [
+        {
+          "kind": "normalize_replace",
+          "pattern": "\"(?:agents|task|wait)\",",
+          "with": "",
+          "reason": "D205: the built-in set also carries task, wait and agents; drop the names so the remaining roster compares as upstream's."
+        },
+        {
+          "kind": "normalize_replace",
+          "pattern": "\"(?:agents|task|wait)\"",
+          "with": "\"\"",
+          "reason": "D205: the same three names where they are last in a list, which the trailing-comma rule above cannot match."
         }
       ]
     },
