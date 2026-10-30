@@ -1126,6 +1126,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-e75a8b9](#bf-e75a8b9) | The external editor (`ctrl+g`) now edits `prompt.md` inside a private `pi-editor-*` directory under the… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-e79c70e](#bf-e79c70e) | fix(ai): Codex WebSocket, OpenRouter images, pi-messages and replaced Anthropic bodies write JSON.stringify… | Ompig's own defect | All platforms | Unreleased |
 | [BF-e8489d4](#bf-e8489d4) | A key hint for an app action the user unbound shows no key, as in Pi, instead of the action's default key | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-e885b47](#bf-e885b47) | fix(durable): regenerate the ABI tables for the ompig import names | Ompig's own defect | All platforms | Unreleased |
 | [BF-e8900e6](#bf-e8900e6) | fix: satisfy the remaining CI gates | Ompig's own defect | All platforms | Unreleased |
 | [BF-e90ac19](#bf-e90ac19) | Very long streamed answers no longer slow down with their length: each streamed frame renders only the last… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-e9332c8](#bf-e9332c8) | fix(codingagent): session search re: reads patterns as V8 does | Ompig's own defect | All platforms | Unreleased |
@@ -16623,6 +16624,19 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fix commits:** `e8489d4003` (2026-10-11), `fac470319e` (2026-10-11)
 - **Tests:** `internal/codingagent/extension_editor_test.go::TestExtensionEditorHandleInputMatchesPi`
 - **Release note:** A key hint for an app action the user unbound shows no key, as in Pi, instead of the action's default key. For example, the extension editor dialog showed `ctrl+g external editor` after `app.editor.external` was bound to `[]`; it now shows ` external editor` (`tui/keybinding_hints.go` AppKeyText, keybinding-hints.ts keyText; probe in `TestExtensionEditorHandleInputMatchesPi`, red before).
+
+### BF-e885b47
+
+**fix(durable): regenerate the ABI tables for the ompig import names**
+
+- **Source:** Ompig's own defect
+- **Symptom:** fix(durable): regenerate the ABI tables for the ompig import names
+- **Root cause:** The semantic imports are spelled ompig.uuidv7 and ompig.read, so the canonical rendering hashes differently from the id frozen under the pre-rename spelling. Regenerate the tables and pin the new id; the table set itself is unchanged. Also refresh the second copy of the git-checkout hash fixture.
+- **User impact:** Behavior differed from Pi
+- **Platform:** All platforms
+- **Fixed in:** Unreleased
+- **Fix commits:** `e885b47c79` (2026-10-30)
+- **Tests:** `durable/core/abi/spec/spec_test.go::TestTablesUnchanged`, `internal/packagemanager/git_checkout_relative_test.go::TestGitCheckoutRelativeFileSourceIsShort`
 
 ### BF-e8900e6
 

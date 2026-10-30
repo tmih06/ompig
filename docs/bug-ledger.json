@@ -33856,6 +33856,28 @@
       ]
     },
     {
+      "id": "BF-e885b47",
+      "title": "fix(durable): regenerate the ABI tables for the ompig import names",
+      "symptom": "fix(durable): regenerate the ABI tables for the ompig import names",
+      "rootCause": "The semantic imports are spelled ompig.uuidv7 and ompig.read, so the canonical rendering hashes differently from the id frozen under the pre-rename spelling. Regenerate the tables and pin the new id; the table set itself is unchanged. Also refresh the second copy of the git-checkout hash fixture.",
+      "rootCauseSource": "commit",
+      "userImpact": "Behavior differed from Pi",
+      "platform": "All platforms",
+      "class": "own",
+      "fixedIn": "Unreleased",
+      "origin": "commit",
+      "commits": [
+        {
+          "hash": "e885b47c79",
+          "date": "2026-10-30"
+        }
+      ],
+      "tests": [
+        "durable/core/abi/spec/spec_test.go::TestTablesUnchanged",
+        "internal/packagemanager/git_checkout_relative_test.go::TestGitCheckoutRelativeFileSourceIsShort"
+      ]
+    },
+    {
       "id": "BF-e8900e6",
       "title": "fix: satisfy the remaining CI gates",
       "symptom": "fix: satisfy the remaining CI gates",

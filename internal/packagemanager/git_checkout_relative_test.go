@@ -23,9 +23,9 @@ func checkoutRelative(t *testing.T, goos, source string) string {
 
 func TestGitCheckoutRelativeFileSourceIsShort(t *testing.T) {
 	for _, tc := range []struct{ goos, source, want string }{
-		{"linux", "git:file://localhost/tmp/x/ompiglet", filepath.Join("localhost", "fdb4f8773215", "ompiglet")},
-		{"windows", "git:file://localhost/C:/Users/me/owner/ompiglet.git", filepath.Join("localhost", "a91ac64502db", "ompiglet")},
-		{"windows", "git:file://localhost/c:/Users/me/owner/ompiglet.git", filepath.Join("localhost", "a91ac64502db", "ompiglet")},
+		{"linux", "git:file://localhost/tmp/x/ompiglet", filepath.Join("localhost", "72460493469a", "ompiglet")},
+		{"windows", "git:file://localhost/C:/Users/me/owner/ompiglet.git", filepath.Join("localhost", "a7ceb009cf5b", "ompiglet")},
+		{"windows", "git:file://localhost/c:/Users/me/owner/ompiglet.git", filepath.Join("localhost", "a7ceb009cf5b", "ompiglet")},
 	} {
 		if got := checkoutRelative(t, tc.goos, tc.source); got != tc.want {
 			t.Errorf("%s %s = %q; want %q", tc.goos, tc.source, got, tc.want)
