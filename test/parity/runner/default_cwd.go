@@ -148,10 +148,16 @@ const (
 	ompigHomePrefix = "parity-snap-OMPIG_HOME-"
 	piPackagePrefix = "parity-pi-pkg-"
 	// piPackageLink is padded so that Pi's three package paths are as long as ompig's two docs paths, which name the docs
-	// bundle directory. d22ConstantGap absorbs the rest: "ompig" is two characters wider than "pig" and appears twice in
-	// the docs path, so the gap is four smaller than Pi's.
-	piPackageLink  = "pi-coding-pkg-with-bundle-pad"
-	d22ConstantGap = 43
+	// bundle directory.
+	//
+	// d22ConstantGap is how many more characters ompig's fixed docs and preamble text has than Pi's, and it is a measured
+	// value, not a derived one: after the rebrand it is 58, found by the rpc get_session_stats scenario, which runs the
+	// real prompts and compares their chars/4 context estimate. The two sides cannot be made byte-equal, because ompig's
+	// docs paths appear twice and Pi's package paths three times, so Pi's side moves in threes while a change to the fixed
+	// text moves the gap in ones. The pad and the gap are therefore chosen together so the estimates match; the scenario
+	// is the check, and TestPromptPathLengthsBalance only guards the arithmetic below it.
+	piPackageLink  = "pi-coding-pkg-with-bundle-padxxxxx"
+	d22ConstantGap = 58
 	// ompigBundleDirLen is len("/bundle-") plus the 16 hex digits of the content hash that names ompig's docs bundle directory (internal/pigdocs).
 	ompigBundleDirLen = len("/bundle-") + 16
 )

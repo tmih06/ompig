@@ -59,20 +59,27 @@ func TestSocketRuntimeBaseWindowsWithoutLocalAppDataKeepsTheDirectory(t *testing
 	}
 }
 
-// The worst-case socket path below a base that socketRuntimeBase keeps is within the platform limit, for the Windows
-// CI geometry of TestWindowsUnixSocketPathsAreShortIsolatedAndCleaned with the longest suffixes MkdirTemp can produce
-// (a uint32 in decimal): every real directory name stays at or under the worst case.
+// A base that socketRuntimeBase keeps holds every socket path the Host can produce, and the Windows CI geometry of
+// TestWindowsUnixSocketPathsAreShortIsolatedAndCleaned, whose longest suffixes MkdirTemp can produce are a uint32 in
+// decimal, now reaches past the limit: "ompig" is two characters wider than the name the geometry was written for, so
+// the same directory that Pi kept falls back to the short per-user base. Both halves are asserted, because the fallback
+// must be decided by the limit, not by whether the directory happens to look like a CI path.
 func TestSocketRuntimeBaseKeptDirectoryHoldsEveryRuntimeSocketPath(t *testing.T) {
-	for _, dir := range []string{
-		`D:\a\_temp\ompig extension acceptance\ompig-sp-4294967295\ompig ext 4294967295\ompig`,
-	} {
-		if got := socketRuntimeBase("windows", dir, 0, `C:\L`); got != dir {
-			t.Fatalf("socketRuntimeBase fell back for %q: %q", dir, got)
-		}
-		worst := dir + `\h4294967295\e-9999.sock`
-		if err := validateUnixSocketPath("windows", worst); err != nil {
-			t.Fatal(err)
-		}
+	const localAppData = `C:\L`
+	overLimit := `D:\a\_temp\ompig extension acceptance\ompig-sp-4294967295\ompig ext 4294967295\ompig`
+	// socketRuntimeBase joins with the host separator, so compare after normalizing it.
+	got := strings.ReplaceAll(socketRuntimeBase("windows", overLimit, 0, localAppData), "/", `\`)
+	if want := localAppData + `\ompig\s`; got != want {
+		t.Fatalf("socketRuntimeBase(%d bytes) = %q, want the fallback %q: the worst socket below it is %d bytes",
+			len(overLimit), got, want, len(overLimit)+worstRuntimeSocketSuffix)
+	}
+	// One byte shorter is the longest directory the limit still keeps.
+	kept := overLimit[:len(overLimit)-1]
+	if got := socketRuntimeBase("windows", kept, 0, localAppData); got != kept {
+		t.Fatalf("socketRuntimeBase(%d bytes) fell back to %q, want the directory kept", len(kept), got)
+	}
+	if err := validateUnixSocketPath("windows", kept+`\h4294967295\e-9999.sock`); err != nil {
+		t.Fatal(err)
 	}
 }
 
