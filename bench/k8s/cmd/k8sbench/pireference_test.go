@@ -231,7 +231,10 @@ func TestCommittedPinHasADurableReference(t *testing.T) {
 	}
 	for _, name := range []string{"@earendil-works/pi-durable", "@earendil-works/pi-ai", "@earendil-works/chord"} {
 		entry := lock.Packages["node_modules/"+name]
-		if entry.Resolved != packPrefix+name || entry.Version != pin.PackageVersion || !strings.HasPrefix(entry.Integrity, "sha512-") {
+		// A closure frozen before the rename carries the legacy prefix; a new
+		// freeze writes only packPrefix. Both name the pinned source's pack.
+		packs := entry.Resolved == packPrefix+name || entry.Resolved == legacyPackPrefix+name
+		if !packs || entry.Version != pin.PackageVersion || !strings.HasPrefix(entry.Integrity, "sha512-") {
 			t.Errorf("%s: %+v, want the pinned source's pack at %s with its integrity", name, entry, pin.PackageVersion)
 		}
 		if got := lock.Packages[""].DevDependencies[name]; got != pin.PackageVersion {

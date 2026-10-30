@@ -55,6 +55,12 @@ var (
 // packPrefix marks a frozen closure entry that the pinned source packs (automation/pin/oracle.py PACK_PREFIX).
 const packPrefix = "ompig-pack:"
 
+// legacyPackPrefix is what the closures frozen before the rename carry
+// (automation/pin/oracle.py LEGACY_PACK_PREFIX). A closure is frozen data and is
+// never edited, so a reader accepts both while a new freeze writes only
+// packPrefix.
+const legacyPackPrefix = "pig-pack:"
+
 // piBuildStore is where `pin.py install-oracle` builds pinned commits (automation/pin/oracle.py store).
 func piBuildStore(getenv func(string) string) string {
 	if store := getenv("OMPIG_PI_BUILD_STORE"); store != "" {
@@ -117,7 +123,11 @@ func pinnedProject(root string, ref piReference, pin piPin) (manifest, lock []by
 	packs = map[string]string{}
 	for _, key := range slices.Sorted(maps.Keys(packages)) {
 		entry := packages[key]
-		name, ok := strings.CutPrefix(member(entry, "resolved"), packPrefix)
+		resolved := member(entry, "resolved")
+		name, ok := strings.CutPrefix(resolved, packPrefix)
+		if !ok {
+			name, ok = strings.CutPrefix(resolved, legacyPackPrefix)
+		}
 		if !ok {
 			continue
 		}
