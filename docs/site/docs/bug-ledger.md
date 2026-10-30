@@ -1143,6 +1143,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-ed05099-2](#bf-ed05099-2) | Tab at the start of a line no longer forces file completion while the text before the cursor is a… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-ed05099-3](#bf-ed05099-3) | `pi.exec` called while an extension loads, before the session binds, no longer fails with `extension… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-ed05099-4](#bf-ed05099-4) | Tool-call input keeps its object members in the order the model sent them through events, tool execution… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-ed3706d](#bf-ed3706d) | fix(fixtures): commit the Radius gateway credential | Ompig's own defect | All platforms | Unreleased |
 | [BF-edb73db](#bf-edb73db) | fix(codingagent): one owner-overflow forwarder at a time; the drain test waits for it, not for the flag's… | Ompig's own defect | All platforms | Unreleased |
 | [BF-edd287c](#bf-edd287c) | Migrating a version 1 session file that holds a line parsing to a number, string, array or `true` no longer… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-eeac307](#bf-eeac307) | Anthropic and Bedrock assistant messages write `providerThinkingLevel` after `model`, and write… | Ompig's own defect | All platforms | 0.5.0 |
@@ -16856,6 +16857,19 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fix commits:** `ed05099398` (2026-10-06)
 - **Tests:** `ai/pi_messages_event_type_test.go::TestPiMessagesEventTypeConstantsMatchTheWireLiterals`, `coding/extension/session_boundary_draft_type_test.go::TestSessionBoundaryDraftTypeSelectsTheUpstreamMember`, `internal/codingagent/interactive_resume_thinking_test.go::TestInteractiveModeSetHiddenThinkingLabelReachesExistingAndLaterBlocks`, `internal/codingagent/reload_trust_models_test.go::TestInitNoticesFollowUpstreamOrder`, `tui/assistant_message_block_label_test.go::TestAssistantMessageComponentSetHiddenThinkingLabel`, `tui/assistant_message_block_test.go::TestAssistantMessageBlock_SetHideThinkingBlock`, `tui/assistant_mouse_upstream_test.go::TestAssistantThinkingClicksThroughTerminal`, `tui/assistant_thinking_markdown_test.go::TestAssistantThinkingTransformIsSeparateAndTracksState` and 6 more in docs/bug-ledger.json
 - **Release note:** Tool-call input keeps its object members in the order the model sent them through events, tool execution, `tool_result` and the session file, where an edited input was sorted by key (#165).
+
+### BF-ed3706d
+
+**fix(fixtures): commit the Radius gateway credential**
+
+- **Source:** Ompig's own defect
+- **Symptom:** fix(fixtures): commit the Radius gateway credential
+- **Root cause:** The auth.json ignore rule hid this fixture, so CI ran the Radius metadata scenarios without a credential and both compared an empty model entry. The values are placeholders and the base URL is a closed port, the same as the tracked Pi-side fixture beside it.
+- **User impact:** Credential or permission exposure
+- **Platform:** All platforms
+- **Fixed in:** Unreleased
+- **Fix commits:** `ed3706dc99` (2026-10-30)
+- **Tests:** None recorded.
 
 ### BF-edb73db
 

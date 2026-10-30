@@ -73,6 +73,11 @@ auth.json
 # openai-codex OAuth credential (refresh-token presence gates registration;
 # the access token is never validated for listing) and carries no real secret.
 !test/parity/scenarios/providers-registry/testdata/oauth-agent/auth.json
+# Exception: the Radius metadata-import scenario needs its placeholder gateway
+# credential in both agent dirs. The values are fixtures ("fixture-access",
+# "fixture-refresh") and the base URL is a closed port, exactly as the tracked
+# Pi-side fixture beside it.
+!test/parity/scenarios/model-runtime-store-catalog/testdata/ompig-agent-radius/auth.json
 # Exception: the print-extension-tool-bridge parity scenario's echo_bridge
 # extension lives under a .ompig/ dir otherwise caught by the broad .ompig/ rule.
 !test/parity/scenarios/tools/testdata/.ompig/

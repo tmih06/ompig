@@ -34543,6 +34543,25 @@
       ]
     },
     {
+      "id": "BF-ed3706d",
+      "title": "fix(fixtures): commit the Radius gateway credential",
+      "symptom": "fix(fixtures): commit the Radius gateway credential",
+      "rootCause": "The auth.json ignore rule hid this fixture, so CI ran the Radius metadata scenarios without a credential and both compared an empty model entry. The values are placeholders and the base URL is a closed port, the same as the tracked Pi-side fixture beside it.",
+      "rootCauseSource": "commit",
+      "userImpact": "Credential or permission exposure",
+      "platform": "All platforms",
+      "class": "own",
+      "fixedIn": "Unreleased",
+      "origin": "commit",
+      "commits": [
+        {
+          "hash": "ed3706dc99",
+          "date": "2026-10-30"
+        }
+      ],
+      "tests": []
+    },
+    {
       "id": "BF-edb73db",
       "title": "fix(codingagent): one owner-overflow forwarder at a time; the drain test waits for it, not for the flag's…",
       "symptom": "fix(codingagent): one owner-overflow forwarder at a time; the drain test waits for it, not for the flag's early read",
