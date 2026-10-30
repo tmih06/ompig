@@ -45,7 +45,7 @@ func TestScanRemovedMarkersRejectsFormerPigFormats(t *testing.T) {
 		t.Fatal(err)
 	}
 	if err := os.WriteFile(filepath.Join(root, "manifest.go"), []byte(`package old
-const manifest = "ompig.dev/`+`v1"
+const manifest = "pig.dev/`+`v1"
 `), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -53,7 +53,7 @@ const manifest = "ompig.dev/`+`v1"
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, want := range []string{"version: 1", "ompig.dev/" + "v1"} {
+	for _, want := range []string{"version: 1", "pig.dev/" + "v1"} {
 		if !containsProblem(problems, want) {
 			t.Fatalf("problems missing %q: %v", want, problems)
 		}

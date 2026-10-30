@@ -121,7 +121,8 @@ func isHostByte(c byte) bool {
 func scanRemovedMarkers(root string, roots []string) ([]string, error) {
 	markers := []string{
 		// This guards the pre-rename host. The fork serves from a host whose name contains this one, so the
-		// match is boundary-aware (containsMarker) rather than a plain substring search.
+		// match is boundary-aware (containsMarker) rather than a plain substring search: "ompig.dev/v1"
+		// reaches here through the current spelling below, not through this entry.
 		"pig" + ".dev/" + "v1",
 		"ompiglet-" + "v1.json",
 		`"schema` + `Version": 1`,
