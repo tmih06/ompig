@@ -14,6 +14,7 @@
 package signature
 
 import (
+	"bytes"
 	"crypto/ed25519"
 	"crypto/sha256"
 	"encoding/base64"
@@ -159,10 +160,23 @@ func readBlock(file io.ReaderAt, size int64) (signedBlock, bool, error) {
 	if err != nil {
 		return signedBlock{}, true, fmt.Errorf("Ompiglet %w", err)
 	}
+	// The signature covers the decoded payload, not these bytes, so anything the
+	// envelope carries that the payload does not repeat is unauthenticated. A
+	// block Sign wrote re-encodes to exactly these bytes; one that does not was
+	// edited after signing, and its manifest cannot be trusted.
+	if canonical, err := json.Marshal(envelope); err != nil || !bytes.Equal(canonical, raw) {
+		return signedBlock{}, true, fmt.Errorf("Ompiglet signature block is not in signed form")
+	}
 	block.envelope = envelope
 	payload, err := base64.StdEncoding.DecodeString(envelope.Payload)
 	if err != nil {
 		return signedBlock{}, true, fmt.Errorf("Ompiglet signature payload: %w", err)
+	}
+	// base64 has several spellings for the same bytes in its final quantum, so
+	// decoding alone does not authenticate this field: a block whose payload
+	// does not re-encode to the text it carries was edited after signing.
+	if base64.StdEncoding.EncodeToString(payload) != envelope.Payload {
+		return signedBlock{}, true, fmt.Errorf("Ompiglet signature payload is not in signed form")
 	}
 	if err := strictJSON(payload, &block.manifest); err != nil {
 		return signedBlock{}, true, fmt.Errorf("Ompiglet signature manifest: %w", err)

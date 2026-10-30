@@ -451,6 +451,6 @@ func generatedREADME(name, description string) string {
 	if description != "" {
 		out.WriteString(description + "\n\n")
 	}
-	out.WriteString("A Ompiglet published for Ompig.\n\n## Install\n\n```sh\npig ompiglet add npm:" + name + "\n```\n")
+	out.WriteString("A Ompiglet published for Ompig.\n\n## Install\n\n```sh\nompig ompiglet add npm:" + name + "\n```\n")
 	return out.String()
 }

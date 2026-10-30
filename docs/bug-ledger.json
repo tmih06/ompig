@@ -27579,6 +27579,28 @@
       ]
     },
     {
+      "id": "BF-c726091",
+      "title": "fix: close the payload tampering gap and clear the last rename spellings",
+      "symptom": "fix: close the payload tampering gap and clear the last rename spellings",
+      "rootCause": "- The signed payload is base64 text that has several spellings for its final quantum, so a byte flipped there still decoded to the signed bytes and the check passed. Require the payload to re-encode to the text it carries, and the envelope to re-encode to its own bytes, so every changed byte now refuses. - The npm README, the dry-run label, a Go factory alias and an Ompiglet inventory still used the pre-rename spelling.",
+      "rootCauseSource": "commit",
+      "userImpact": "Behavior differed from Pi",
+      "platform": "All platforms",
+      "class": "own",
+      "fixedIn": "Unreleased",
+      "origin": "commit",
+      "commits": [
+        {
+          "hash": "c726091056",
+          "date": "2026-10-30"
+        }
+      ],
+      "tests": [
+        "coding/extension/source/resolve_test.go::TestResolveGoFactoryRecordsSDKModulePath",
+        "coding/pigletbuild/publish_npm_test.go::TestPublishNPMDryRunShowsThePlanAndPublishesNothing"
+      ]
+    },
+    {
       "id": "BF-c7ebb23",
       "title": "A cancelled prompt in a `config.oauth` login now rejects with Pi's `Login cancelled` in every SDK (it was…",
       "symptom": "A cancelled prompt in a `config.oauth` login now rejects with Pi's `Login cancelled` in every SDK (it was `oauth prompt cancelled`, and Node's `onSelect` resolved `undefined`), so `/login` returns to the menu instead of reporting a failed login.",

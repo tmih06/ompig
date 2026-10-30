@@ -948,6 +948,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-c625bb4](#bf-c625bb4) | The durable `powershell` tool fails with "No command to run" when its program list is empty, instead of… | Ompig's own defect | Windows | 0.5.0 |
 | [BF-c6c2cf3](#bf-c6c2cf3) | An `env` request whose context is already cancelled is now always sent to the daemon and then cancelled, as… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-c6cad39](#bf-c6cad39) | fix(session): fork writes the header and entries through one file (Pi,) | Ompig's own defect | All platforms | Unreleased |
+| [BF-c726091](#bf-c726091) | fix: close the payload tampering gap and clear the last rename spellings | Ompig's own defect | All platforms | Unreleased |
 | [BF-c7ebb23](#bf-c7ebb23) | A cancelled prompt in a `config.oauth` login now rejects with Pi's `Login cancelled` in every SDK (it was… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-c7ebb23-2](#bf-c7ebb23-2) | A `config.oauth` login's `onManualCodeInput` asks "Paste the authorization code", as Pi does, and a provider… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-c8a90a6](#bf-c8a90a6) | Pressing the login dialog's cancel key again cancels again, and Enter after a cancelled prompt leaves the… | Ompig's own defect | All platforms | 0.5.0 |
@@ -14154,6 +14155,19 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fixed in:** Unreleased
 - **Fix commits:** `c6cad39de5` (2026-10-23)
 - **Tests:** `internal/codingagent/session_manager_test.go::TestSessionManagerForkFromFile_CopiesAllEntriesUnchangedIntoTheForkedSession`
+
+### BF-c726091
+
+**fix: close the payload tampering gap and clear the last rename spellings**
+
+- **Source:** Ompig's own defect
+- **Symptom:** fix: close the payload tampering gap and clear the last rename spellings
+- **Root cause:** - The signed payload is base64 text that has several spellings for its final quantum, so a byte flipped there still decoded to the signed bytes and the check passed. Require the payload to re-encode to the text it carries, and the envelope to re-encode to its own bytes, so every changed byte now refuses. - The npm README, the dry-run label, a Go factory alias and an Ompiglet inventory still used the pre-rename spelling.
+- **User impact:** Behavior differed from Pi
+- **Platform:** All platforms
+- **Fixed in:** Unreleased
+- **Fix commits:** `c726091056` (2026-10-30)
+- **Tests:** `coding/extension/source/resolve_test.go::TestResolveGoFactoryRecordsSDKModulePath`, `coding/pigletbuild/publish_npm_test.go::TestPublishNPMDryRunShowsThePlanAndPublishesNothing`
 
 ### BF-c7ebb23
 

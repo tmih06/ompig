@@ -221,7 +221,7 @@ func TestResolveGoFactoryRecordsSDKModulePath(t *testing.T) {
 		{name: "current", imports: `import sdk "github.com/tmih06/ompig/extensions/sdk"`, sdkModulePath: GoSDKModulePath},
 		{name: "legacy", imports: `import sdk "github.com/mainstai/ompig/extensions/sdk"`, sdkModulePath: LegacyGoSDKModulePath},
 		{name: "legacy implicit name", imports: `import "github.com/mainstai/ompig/extensions/sdk"`, sdkModulePath: LegacyGoSDKModulePath},
-		{name: "legacy alias", imports: "import (\n\t\"os\"\n\tpig \"github.com/mainstai/ompig/extensions/sdk\"\n)\nvar _ = os.Getenv", sdkModulePath: LegacyGoSDKModulePath},
+		{name: "legacy alias", imports: "import (\n\t\"os\"\n\tompig \"github.com/mainstai/ompig/extensions/sdk\"\n)\nvar _ = os.Getenv", sdkModulePath: LegacyGoSDKModulePath},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {

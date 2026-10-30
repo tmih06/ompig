@@ -86,7 +86,7 @@ func TestPublishNPMDryRunShowsThePlanAndPublishesNothing(t *testing.T) {
 		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout, stderr)
 	}
 	for _, want := range []string{
-		"Ompiglet npm publish dry run\nPiglet: porter@1.2.3 (not on npm yet)\n",
+		"Ompiglet npm publish dry run\nOmpiglet: porter@1.2.3 (not on npm yet)\n",
 		"Package review: npm:@acme/review@^1.2.0\n",
 		"Signed Binary: none recorded\n",
 		"Would run: npm publish ",

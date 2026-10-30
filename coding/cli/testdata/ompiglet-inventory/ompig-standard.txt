@@ -22,6 +22,7 @@ extensions.llama.cpp loaded
 extensions.mcp loaded
 extensions.ompig-login stripped
 extensions.tool-search loaded
+commands./agents kept
 commands./bug kept
 commands./changelog kept
 commands./clone kept
