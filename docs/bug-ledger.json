@@ -8817,6 +8817,28 @@
       ]
     },
     {
+      "id": "BF-5027a9d",
+      "title": "fix(cli): align the builder strip tag and refresh the SDK bundles",
+      "symptom": "fix(cli): align the builder strip tag and refresh the SDK bundles",
+      "rootCause": "- The strip feature id became ompiglet-builder, but the build tags that compile the builder out still spelled ompig_strip_piglet_builder, so a stripped binary kept the builder and two CLI tests asserted the wrong tag. - The embedded Python and Rust SDK bundles were frozen before the rebrand and still told extensions to look at PIG_EXT_SOCKET, so every scaffolded extension failed to connect. Regenerate them from the current sources. - Two expectations still spelled the pre-rename prefix or hash.",
+      "rootCauseSource": "commit",
+      "userImpact": "Behavior differed from Pi",
+      "platform": "All platforms",
+      "class": "own",
+      "fixedIn": "Unreleased",
+      "origin": "commit",
+      "commits": [
+        {
+          "hash": "5027a9d8bd",
+          "date": "2026-10-30"
+        }
+      ],
+      "tests": [
+        "coding/cli/git_checkout_path_test.go::TestGitCheckoutRelativePerPlatform",
+        "coding/cli/readonly_config_root_test.go::TestVerifyCacheWarningIsQuietOnlyOnAReadOnlyConfigRoot"
+      ]
+    },
+    {
       "id": "BF-504869b",
       "title": "The MCP client uses JavaScript's `trim()` and `\\s` where Pi does: in stdio and Streamable HTTP blank-line and…",
       "symptom": "The MCP client uses JavaScript's `trim()` and `\\s` where Pi does: in stdio and Streamable HTTP blank-line and blank-event checks, HTTP error bodies, the `insufficient_scope` challenge check and the `offline_access` consent check.",

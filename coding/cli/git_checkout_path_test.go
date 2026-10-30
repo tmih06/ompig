@@ -53,14 +53,14 @@ func TestGitCheckoutRelativePerPlatform(t *testing.T) {
 		want         []string
 		refused      bool
 	}{
-		{"windows", "git:file://localhost/C:/Users/me/owner/ompiglet.git", []string{"localhost", "a91ac64502db", "ompiglet"}, false},
-		{"windows", "git:file://localhost/d:/src/owner/ompiglet", []string{"localhost", "31ec0c491be0", "ompiglet"}, false},
+		{"windows", "git:file://localhost/C:/Users/me/owner/ompiglet.git", []string{"localhost", "a7ceb009cf5b", "ompiglet"}, false},
+		{"windows", "git:file://localhost/d:/src/owner/ompiglet", []string{"localhost", "2ad64727ea5a", "ompiglet"}, false},
 		{"windows", "git:https://example.com/owner/repo", []string{"example.com", "owner", "repo"}, false},
 		{"windows", "git:https://example.com/owner/repo:stream", nil, true},
 		{"windows", "git:https://example.com/C:/owner/repo", nil, true},
 		{"windows", "git:file://localhost/src/owner/ompiglet:stream", nil, true},
-		{"linux", "git:file://localhost/C:/Users/me/owner/ompiglet.git", []string{"localhost", "a91ac64502db", "ompiglet"}, false},
-		{"linux", "git:file://localhost/tmp/x/ompiglet", []string{"localhost", "fdb4f8773215", "ompiglet"}, false},
+		{"linux", "git:file://localhost/C:/Users/me/owner/ompiglet.git", []string{"localhost", "a7ceb009cf5b", "ompiglet"}, false},
+		{"linux", "git:file://localhost/tmp/x/ompiglet", []string{"localhost", "72460493469a", "ompiglet"}, false},
 		{"darwin", "git:https://example.com/owner/repo:stream", []string{"example.com", "owner", "repo:stream"}, false},
 	} {
 		ref, err := sourceref.Parse(tc.source, sourceref.Options{Bare: sourceref.BareReject})

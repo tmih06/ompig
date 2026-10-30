@@ -304,6 +304,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-4fe779e](#bf-4fe779e) | A `/reload` that arrived while the supervisor was restarting a crashed isolated extension could end the… | Ompig's own defect | All platforms | 0.5.2 |
 | [BF-4ff1a44](#bf-4ff1a44) | Fix in shipped code | Ompig's own defect | All platforms | Unreleased |
 | [BF-50233fd](#bf-50233fd) | An `env` SSH command that runs past its timeout now receives SIGTERM, as in Pi, instead of SIGKILL, and the… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-5027a9d](#bf-5027a9d) | fix(cli): align the builder strip tag and refresh the SDK bundles | Ompig's own defect | All platforms | Unreleased |
 | [BF-504869b](#bf-504869b) | The MCP client uses JavaScript's `trim()` and `\s` where Pi does: in stdio and Streamable HTTP blank-line and… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-504869b-2](#bf-504869b-2) | MCP response headers are read as Node's `fetch` returns them, one Latin-1 character per byte | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-504869b-3](#bf-504869b-3) | A JSON-RPC number id is a JavaScript number | Ompig's own defect | All platforms | 0.5.0 |
@@ -5190,6 +5191,19 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fix commits:** `d4e4a82ed9` (2026-10-08), `50233fd0d4` (2026-10-10)
 - **Tests:** `coding/cli/session_replacement_interactive_test.go::TestInteractiveExtensionNewSessionKeepsTheCallerAliveUntilItReturns`, `coding/cli/session_resume_ui_test.go::TestInteractiveResumeIntoAnUntrustedProjectPromptsForTrust`, `coding/cli/session_resume_ui_test.go::TestInteractiveResumeWithAMissingCWDShowsPisStatuses`, `env/ssh_known_hosts_semantics_test.go::TestConcurrentHostKeyChangesToOneFileAreAppliedOneAtATime`, `env/ssh_timeout_test.go::TestRunSshTimeoutTerminatesTheChildAndFailsWithoutWaitingForItsOutputToClose`, `internal/codingagent/interactive_runtime_host_test.go::TestNewInteractiveModeRoutesSessionWorkThroughItsRuntimeHost`, `internal/codingagent/interactive_runtime_host_test.go::TestNewInteractiveModeWithoutRuntimeHostCannotImport`
 - **Release note:** An `env` SSH command that runs past its timeout now receives SIGTERM, as in Pi, instead of SIGKILL, and the operation fails as soon as the timeout expires, even when a process started by `ssh` keeps its output open.
+
+### BF-5027a9d
+
+**fix(cli): align the builder strip tag and refresh the SDK bundles**
+
+- **Source:** Ompig's own defect
+- **Symptom:** fix(cli): align the builder strip tag and refresh the SDK bundles
+- **Root cause:** - The strip feature id became ompiglet-builder, but the build tags that compile the builder out still spelled ompig_strip_piglet_builder, so a stripped binary kept the builder and two CLI tests asserted the wrong tag. - The embedded Python and Rust SDK bundles were frozen before the rebrand and still told extensions to look at PIG_EXT_SOCKET, so every scaffolded extension failed to connect. Regenerate them from the current sources. - Two expectations still spelled the pre-rename prefix or hash.
+- **User impact:** Behavior differed from Pi
+- **Platform:** All platforms
+- **Fixed in:** Unreleased
+- **Fix commits:** `5027a9d8bd` (2026-10-30)
+- **Tests:** `coding/cli/git_checkout_path_test.go::TestGitCheckoutRelativePerPlatform`, `coding/cli/readonly_config_root_test.go::TestVerifyCacheWarningIsQuietOnlyOnAReadOnlyConfigRoot`
 
 ### BF-504869b
 

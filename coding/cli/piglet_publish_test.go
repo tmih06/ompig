@@ -1,4 +1,4 @@
-//go:build !ompig_strip_piglet_builder
+//go:build !ompig_strip_ompiglet_builder
 
 package cli
 

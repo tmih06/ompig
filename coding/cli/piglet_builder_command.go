@@ -1,4 +1,4 @@
-//go:build !ompig_strip_piglet_builder
+//go:build !ompig_strip_ompiglet_builder
 
 package cli
 
@@ -10,7 +10,7 @@ import (
 )
 
 // This file and its coding/pigletbuild import are the boundary a Ompiglet
-// Binary compiles out with the ompig_strip_piglet_builder tag.
+// Binary compiles out with the ompig_strip_ompiglet_builder tag.
 
 // runPigletBuilderCommand runs `ompig ompiglet build` and `ompig ompiglet publish`
 // and returns the exit code, or -1 when args target another command.

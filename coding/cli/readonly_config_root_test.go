@@ -47,7 +47,7 @@ func TestVerifyCacheWarningIsQuietOnlyOnAReadOnlyConfigRoot(t *testing.T) {
 		reportVerifyCacheError(&stderr, tc.err)
 		want := ""
 		if tc.warn {
-			want = "ompig: warning: " + tc.err.Error() + "\npig: startup will continue; the next start verifies this Ompiglet Binary in full again\n"
+			want = "ompig: warning: " + tc.err.Error() + "\nompig: startup will continue; the next start verifies this Ompiglet Binary in full again\n"
 		}
 		if stderr.String() != want {
 			t.Errorf("reportVerifyCacheError(%v) wrote %q, want %q", tc.err, stderr.String(), want)

@@ -38,7 +38,7 @@ func TestStripDocsBuildOmitsPigdocs(t *testing.T) {
 	assertStripBuildOmits(t, pigstrip.Docs, "github.com/tmih06/ompig/internal/pigdocs")
 }
 
-// A ompig_strip_piglet_builder build compiles coding/cli's piglet_builder_command.go out, so it does not link
+// A ompig_strip_ompiglet_builder build compiles coding/cli's piglet_builder_command.go out, so it does not link
 // coding/pigletbuild.
 func TestStripPigletBuilderBuildOmitsPigletbuild(t *testing.T) {
 	assertStripBuildOmits(t, pigstrip.PigletBuilder, "github.com/tmih06/ompig/coding/pigletbuild")
