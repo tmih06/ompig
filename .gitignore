@@ -62,8 +62,11 @@ test/parity/artifacts/
 .ompig-faux-tool-started
 
 # Live-integration test bookkeeping (in case anyone overrides OMPIG_HOME
-# into the repo: we never want auth.json committed).
-.ompig/
+# into the repo: we never want auth.json committed). Anchored to the repository
+# root: the parity fixtures are project config roots, and the rebrand moved them
+# from .pi/ to .ompig/, where an unanchored rule ignored them and a clean
+# checkout then ran those scenarios without their project settings.
+/.ompig/
 auth.json
 # Exception: a hermetic, non-secret auth.json fixture for the
 # 02-list-models-oauth-builtins parity scenario. It stages a placeholder
@@ -75,6 +78,14 @@ auth.json
 !test/parity/scenarios/tools/testdata/.ompig/
 !test/parity/scenarios/tools/testdata/.ompig/extensions/
 !test/parity/scenarios/tools/testdata/.ompig/extensions/parity-echo.mjs
+# Exception: the parity fixtures are hermetic project config roots, and the
+# rebrand moved them from .pi/ to .ompig/, where the broad rule above started
+# ignoring them. A clean checkout then ran the scenarios without their project
+# settings, which is how the npm-command and trust-warning scenarios diverged
+# in CI while passing locally.
+!test/parity/scenarios/*/testdata/.ompig/
+!test/parity/scenarios/*/*/testdata/.ompig/
+!test/parity/scenarios/*/testdata/*/.ompig/
 !test/parity/scenarios/footer/testdata/multi-ompig-agent/auth.json
 !test/parity/scenarios/footer/testdata/multi-pi-agent/auth.json
 # Exception: 05-footer-experimental-indicator needs a configured provider in

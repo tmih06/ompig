@@ -582,6 +582,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-7809364](#bf-7809364) | Schema errors of a `ChordError` of code `invalid` list their members in the order the value arrived in, as… | Ompig's own defect | All platforms | Unreleased |
 | [BF-78c4c6c](#bf-78c4c6c) | `pig piglet add` now names the offending bundled path and where it came from (for example `Package herdr… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-78f2d55](#bf-78f2d55) | `pig mcp login --help` described `--timeout` as only the wait for the browser; it limits the whole sign-in… | A fix Pi shipped that Ompig ported | All platforms | 0.5.0 |
+| [BF-793fb17](#bf-793fb17) | fix(fixtures): stop ignoring the parity project config roots | Ompig's own defect | All platforms | Unreleased |
 | [BF-797fa58](#bf-797fa58) | fix(fixtures): require the tagged SDK in every Go fixture module | Ompig's own defect | All platforms | Unreleased |
 | [BF-79eadcf](#bf-79eadcf) | Long sessions no longer slow down each streamed frame in the main screen: a frame redraws from the first line… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-79f9a9e](#bf-79f9a9e) | fix(agent): convert a live partial with one clone and keep events at an unchanged publication (TU-T7 rest) | Ompig's own defect | All platforms | Unreleased |
@@ -9054,6 +9055,19 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fix commits:** `78f2d55ded` (2026-10-12)
 - **Tests:** `coding/cli/mcp_command_test.go::TestPigMcpHelpIsPisHelpWithPiGsIdentity`, `coding/mcpext/cli_oracle_test.go::TestMcpCommandMatchesPi`, `coding/mcpext/cli_test.go::TestMcpCommandHelpIsPisHelpWithPiGsIdentity`
 - **Release note:** `pig mcp login --help` described `--timeout` as only the wait for the browser; it limits the whole sign-in, as Pi 148622bc now says.
+
+### BF-793fb17
+
+**fix(fixtures): stop ignoring the parity project config roots**
+
+- **Source:** Ompig's own defect
+- **Symptom:** fix(fixtures): stop ignoring the parity project config roots
+- **Root cause:** The broad `.ompig/` ignore rule was written for a config root overridden into the repository. The rebrand moved the parity fixtures from `.pi/` to `.ompig/`, so that rule started ignoring their project settings and they were never committed: a clean checkout ran those scenarios with no project config, which is why the npm-command and trust-warning scenarios diverged in CI while passing against a developer tree that still had the files.
+- **User impact:** Behavior differed from Pi
+- **Platform:** All platforms
+- **Fixed in:** Unreleased
+- **Fix commits:** `793fb17ee9` (2026-10-30)
+- **Tests:** None recorded.
 
 ### BF-797fa58
 

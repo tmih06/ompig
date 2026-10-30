@@ -16897,6 +16897,25 @@
       ]
     },
     {
+      "id": "BF-793fb17",
+      "title": "fix(fixtures): stop ignoring the parity project config roots",
+      "symptom": "fix(fixtures): stop ignoring the parity project config roots",
+      "rootCause": "The broad `.ompig/` ignore rule was written for a config root overridden into the repository. The rebrand moved the parity fixtures from `.pi/` to `.ompig/`, so that rule started ignoring their project settings and they were never committed: a clean checkout ran those scenarios with no project config, which is why the npm-command and trust-warning scenarios diverged in CI while passing against a developer tree that still had the files.",
+      "rootCauseSource": "commit",
+      "userImpact": "Behavior differed from Pi",
+      "platform": "All platforms",
+      "class": "own",
+      "fixedIn": "Unreleased",
+      "origin": "commit",
+      "commits": [
+        {
+          "hash": "793fb17ee9",
+          "date": "2026-10-30"
+        }
+      ],
+      "tests": []
+    },
+    {
       "id": "BF-797fa58",
       "title": "fix(fixtures): require the tagged SDK in every Go fixture module",
       "symptom": "fix(fixtures): require the tagged SDK in every Go fixture module",
