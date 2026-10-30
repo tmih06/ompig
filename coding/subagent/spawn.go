@@ -75,7 +75,7 @@ type Result struct {
 }
 
 // Spawner runs one spawn. A session implements it by creating a child session;
-// a test implements it with a stub. It returns the final text and the
+// a test implements it with a fake. It returns the final text and the
 // structured payload.
 type Spawner interface {
 	Spawn(ctx context.Context, req SpawnRequest) (SpawnResult, error)

@@ -1178,6 +1178,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-f2c8b02](#bf-f2c8b02) | After `await ctx.reload()`, a command's captured `pi` and `ctx` now throw Pi's stale message for every… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f34b545](#bf-f34b545) | Durable: resolving harness settings no longer shares the default retry policy's max agent delay between… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f3b4045](#bf-f3b4045) | `.gitignore`, `.ignore` and `.fdignore` rules that skills, packages and extension entry discovery read now… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-f4d7276](#bf-f4d7276) | fix(hygiene): match the divergence marker under both spellings | Ompig's own defect | All platforms | Unreleased |
 | [BF-f4d85f8](#bf-f4d85f8) | A large file written through a tool call no longer slows down as it streams: each streamed piece of the… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f5ecdc2](#bf-f5ecdc2) | Settings and `models.json` compat objects keep the members PiG does not model, as Pi 1.2.0 does | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-f6305d9](#bf-f6305d9) | A `new_session`, `fork`, `clone` or `switch_session` in the same RPC batch as a `compact` aborts the… | Ompig's own defect | All platforms | 0.5.0 |
@@ -17350,6 +17351,19 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fix commits:** `2b3403045b` (2026-10-09), `4333619e20` (2026-10-09), `5cec6423ef` (2026-10-09), `794d676720` (2026-10-09), `7cfdcb77b3` (2026-10-09), `ea72139272` (2026-10-09), `f3b4045e8a` (2026-10-10)
 - **Tests:** `ai/anthropic_messages_payload_oracle_test.go::TestAnthropicMessagesPayloadMatchesPi`, `ai/anthropic_oauth_test.go::TestAnthropicHistoryToolNames`, `ai/auth_file_bytes_oracle_test.go::TestAuthFileBytesMatchPi`, `ai/google_generative_ai_payload_oracle_test.go::TestGoogleGenerativeAIPayloadMatchesPi`, `ai/google_generative_ai_payload_oracle_test.go::TestGoogleVertexPayloadMatchesPi`, `ai/mistral_payload_oracle_test.go::TestMistralPayloadModeAndEffortMatchPi`, `ai/oauth_credential_members_test.go::TestOAuthBuildersWriteCredentialMembersInPiOrder`, `ai/openai_responses_payload_oracle_test.go::TestOpenAICodexResponsesPayloadMatchesPi` and 7 more in docs/bug-ledger.json
 - **Release note:** `.gitignore`, `.ignore` and `.fdignore` rules that skills, packages and extension entry discovery read now follow the `ignore` package Pi uses: a pattern ending in a slash ignores directories only (a file named `build` survives `build/`), patterns match case-insensitively, a path inside an ignored directory stays ignored, a pattern with a slash before its end is anchored, `[a-c]` and `[!a]` bracket expressions work, and `**/x`, `x/**` and `x/**/y` follow Pi's forms. A leading space in a pattern is kept, as in Pi.
+
+### BF-f4d7276
+
+**fix(hygiene): match the divergence marker under both spellings**
+
+- **Source:** Ompig's own defect
+- **Symptom:** fix(hygiene): match the divergence marker under both spellings
+- **Root cause:** SH005 looks for an untyped "pig divergence:"/"pig additive:" comment. The rule's word boundary stopped matching once the product became "ompig", so the marker it exists to catch went unreported. List both spellings, as the typed D<N> form still has to pass.
+- **User impact:** Behavior differed from Pi
+- **Platform:** All platforms
+- **Fixed in:** Unreleased
+- **Fix commits:** `f4d7276e41` (2026-10-30)
+- **Tests:** None recorded.
 
 ### BF-f4d85f8
 

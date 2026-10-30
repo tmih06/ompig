@@ -35662,6 +35662,25 @@
       ]
     },
     {
+      "id": "BF-f4d7276",
+      "title": "fix(hygiene): match the divergence marker under both spellings",
+      "symptom": "fix(hygiene): match the divergence marker under both spellings",
+      "rootCause": "SH005 looks for an untyped \"pig divergence:\"/\"pig additive:\" comment. The rule's word boundary stopped matching once the product became \"ompig\", so the marker it exists to catch went unreported. List both spellings, as the typed D\u003cN\u003e form still has to pass.",
+      "rootCauseSource": "commit",
+      "userImpact": "Behavior differed from Pi",
+      "platform": "All platforms",
+      "class": "own",
+      "fixedIn": "Unreleased",
+      "origin": "commit",
+      "commits": [
+        {
+          "hash": "f4d7276e41",
+          "date": "2026-10-30"
+        }
+      ],
+      "tests": []
+    },
+    {
       "id": "BF-f4d85f8",
       "title": "A large file written through a tool call no longer slows down as it streams: each streamed piece of the…",
       "symptom": "A large file written through a tool call no longer slows down as it streams: each streamed piece of the tool-call arguments is parsed on its own instead of re-parsing all the arguments so far after a provider opened the call with empty arguments, so the cost of the whole call grows with its size instead of with the square of its size.",
