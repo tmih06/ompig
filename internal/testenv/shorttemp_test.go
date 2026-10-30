@@ -23,3 +23,23 @@ func TestShortTempBase(t *testing.T) {
 		}
 	}
 }
+
+// The Windows CI fallback base leaves less room than the longest prefixes the
+// extension-host tests use, and every such test needs a directory whose socket
+// path still fits: the prefix is trimmed to the budget rather than the test
+// failing, and the trimmed name still starts with the caller's prefix.
+func TestShortTempPrefixFitsTheWindowsBudget(t *testing.T) {
+	const base = `C:\Users\runneradmin\AppData\Local\ompig\s`
+	for _, prefix := range []string{"ompig", "ompig-rust-packed-", "ompig-python-packed-"} {
+		got := fitShortTempPrefix("windows", base, prefix)
+		if !strings.HasPrefix(prefix, got) {
+			t.Errorf("prefix %q became %q, which is not a prefix of it", prefix, got)
+		}
+		if total := len(base) + 1 + len(got) + uint32Digits; total > maxShortTempDirBytes {
+			t.Errorf("prefix %q became %q; %d bytes with the base and suffix, want at most %d", prefix, got, total, maxShortTempDirBytes)
+		}
+	}
+	if got := fitShortTempPrefix("linux", base, "ompig-python-packed-"); got != "ompig-python-packed-" {
+		t.Errorf("linux prefix = %q, want it untouched", got)
+	}
+}

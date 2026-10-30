@@ -855,6 +855,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-ac6fcea](#bf-ac6fcea) | A `session_start` handler that calls `ctx.shutdown()` during `/reload` ends the session and exits 0, as Pi… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-aca35e7](#bf-aca35e7) | In print and JSON mode, a Node extension no longer runs a timer or other callback between a prompt's last… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-ad49f9f](#bf-ad49f9f) | `pig status` no longer reports a shared extension name as an unhealthy duplicate | Ompig's own defect | All platforms | Unreleased |
+| [BF-ad632f6](#bf-ad632f6) | fix(testenv): trim the short-temp prefix to the Windows budget | Ompig's own defect | Windows | Unreleased |
 | [BF-ad9ed64](#bf-ad9ed64) | Appending a tool result whose details are a tool's own value (a truncated `read`, `bash` output details, an… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-ad9ed64-2](#bf-ad9ed64-2) | A large message's session record no longer keeps a regrown buffer when its text has escapes such as newlines… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-ae1ee6d](#bf-ae1ee6d) | The login dialog opens and prints only `http:` and `https:` URLs, in their normalized form (percent-encoded… | Ompig's own defect | All platforms | Unreleased |
@@ -12864,6 +12865,19 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fix commits:** `ad49f9f02e` (2026-10-23), `ee5fdb16d8` (2026-10-25, #348)
 - **Tests:** `coding/cli/status_command_test.go::TestStatusStillFailsOnDuplicateNonExtensionResourceIdentity`, `coding/cli/status_command_test.go::TestStatusWarnsOnDuplicatePackageExtensionIdentity`
 - **Release note:** `pig status` no longer reports a shared extension name as an unhealthy duplicate. Two Packages that both expose `src/index.ts` resolve to the same `"src"` public name, and the loader identifies an extension by its path: it renames the later copies (`"src:2"`) and loads them all, as Pi loads every extension path. The report keeps them enabled and moves the finding to a new `warnings` list, so `pig status` exits 0 and `pig status --json` stays `"healthy": true`. Skills, prompts and themes key their runtime set by name, so their duplicates remain errors.
+
+### BF-ad632f6
+
+**fix(testenv): trim the short-temp prefix to the Windows budget**
+
+- **Source:** Ompig's own defect
+- **Symptom:** fix(testenv): trim the short-temp prefix to the Windows budget
+- **Root cause:** "ompig" is two characters wider than the name the Windows fallback base was sized for, so the fallback itself no longer left room for the longest test prefixes and twenty-odd Windows tests failed on the budget rather than on anything they assert. The prefix is a label: trim it to the room that remains, and keep failing only when the base leaves none.
+- **User impact:** Behavior differed from Pi
+- **Platform:** Windows
+- **Fixed in:** Unreleased
+- **Fix commits:** `ad632f67e5` (2026-10-30)
+- **Tests:** `internal/testenv/shorttemp_test.go::TestShortTempPrefixFitsTheWindowsBudget`
 
 ### BF-ad9ed64
 

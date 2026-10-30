@@ -24836,6 +24836,27 @@
       ]
     },
     {
+      "id": "BF-ad632f6",
+      "title": "fix(testenv): trim the short-temp prefix to the Windows budget",
+      "symptom": "fix(testenv): trim the short-temp prefix to the Windows budget",
+      "rootCause": "\"ompig\" is two characters wider than the name the Windows fallback base was sized for, so the fallback itself no longer left room for the longest test prefixes and twenty-odd Windows tests failed on the budget rather than on anything they assert. The prefix is a label: trim it to the room that remains, and keep failing only when the base leaves none.",
+      "rootCauseSource": "commit",
+      "userImpact": "Behavior differed from Pi",
+      "platform": "Windows",
+      "class": "own",
+      "fixedIn": "Unreleased",
+      "origin": "commit",
+      "commits": [
+        {
+          "hash": "ad632f67e5",
+          "date": "2026-10-30"
+        }
+      ],
+      "tests": [
+        "internal/testenv/shorttemp_test.go::TestShortTempPrefixFitsTheWindowsBudget"
+      ]
+    },
+    {
       "id": "BF-ad9ed64",
       "title": "Appending a tool result whose details are a tool's own value (a truncated `read`, `bash` output details, an…",
       "symptom": "Appending a tool result whose details are a tool's own value (a truncated `read`, `bash` output details, an extension's details object) no longer parses the session record it has just written.",
